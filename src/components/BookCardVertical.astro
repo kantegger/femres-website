@@ -1,0 +1,216 @@
+---
+import { createT, getLocalizedPath, getLocaleFromUrl } from "../i18n/index";
+
+export interface Props {
+  title: string;
+  author: string;
+  description: string;
+  coverImage?: string;
+  publishDate: Date;
+  slug: string;
+  topics: string[];
+  isbn?: string;
+  locale?: string;
+}
+
+const {
+  title,
+  author,
+  description,
+  coverImage,
+  publishDate,
+  slug,
+  topics,
+  isbn,
+  locale,
+} = Astro.props;
+
+const currentLocale = locale || getLocaleFromUrl(Astro.url);
+const t = createT(currentLocale as any);
+// 移除语言后缀以生成干净的URL路径
+const cleanSlug =
+  slug.endsWith("-en") || slug.endsWith("-ja") || slug.endsWith("-fr")
+    ? slug.slice(0, -3)
+    : slug;
+const bookLink = getLocalizedPath(`books/${cleanSlug}`, currentLocale as any);
+
+const formatYear = (date: Date) => {
+  return date.getFullYear();
+};
+---
+
+<article
+  class="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+>
+  <a href={bookLink} class="block">
+    <div class="flex flex-col h-full">
+      <!-- Book Cover -->
+      <div class="relative">
+        <div
+          class="aspect-[4/3] bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 relative overflow-hidden"
+        >
+          {
+            coverImage ? (
+              <img
+                src={coverImage}
+                alt={title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            ) : (
+              <div class="w-full h-full flex items-center justify-center">
+                <div class="text-center p-6">
+                  <span class="text-6xl mb-3 block">📚</span>
+                  <p class="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                    {t("common.loading")}
+                  </p>
+                </div>
+              </div>
+            )
+          }
+
+          <!-- Category Badge -->
+          <div
+            class="absolute bottom-3 left-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full px-3 py-1"
+          >
+            <span
+              class="text-xs font-medium text-purple-600 dark:text-purple-400"
+            >
+              📖 {currentLocale === "zh-CN" ? "经典著作" : "Classic Work"}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book Info -->
+      <div class="p-5 flex flex-col flex-1">
+        <!-- Publication Year -->
+        <div class="text-right mb-2">
+          <span class="text-xs text-gray-500 dark:text-gray-400">
+            {formatYear(publishDate)}
+            {currentLocale === "zh-CN" ? "年出版" : "Published"}
+          </span>
+        </div>
+
+        <!-- Title -->
+        <h3
+          class="text-lg font-bold text-gray-900 dark:text-white mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-2 leading-tight"
+        >
+          {title}
+        </h3>
+
+        <!-- Author -->
+        <p
+          class="text-sm text-gray-600 dark:text-gray-400 mb-3 flex items-center"
+        >
+          <svg
+            class="w-4 h-4 mr-1.5 text-gray-400 flex-shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            ></path>
+          </svg>
+          <span class="truncate">{author}</span>
+        </p>
+
+        <!-- Description -->
+        <p
+          class="text-gray-700 dark:text-gray-300 text-sm mb-4 line-clamp-4 flex-1 leading-relaxed"
+        >
+          {description}
+        </p>
+
+        <!-- Topics -->
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          {
+            topics
+              .slice(0, 3)
+              .map((topic) => (
+                <span class="inline-block px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-md">
+                  {topic}
+                </span>
+              ))
+          }
+          {
+            topics.length > 3 && (
+              <span class="inline-block px-2 py-1 text-xs text-gray-500 dark:text-gray-500">
+                +{topics.length - 3}
+              </span>
+            )
+          }
+        </div>
+
+        <!-- Action Row -->
+        <div
+          class="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700 mt-auto"
+        >
+          <div class="flex items-center space-x-4">
+            <button
+              class="text-gray-400 hover:text-red-500 transition-colors"
+              title={currentLocale === "zh-CN" ? "收藏" : "Favorite"}
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                ></path>
+              </svg>
+            </button>
+            <button
+              class="text-gray-400 hover:text-blue-500 transition-colors"
+              title={currentLocale === "zh-CN" ? "分享" : "Share"}
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+
+          <span
+            class="text-purple-600 dark:text-purple-400 text-sm font-medium group-hover:underline"
+          >
+            {t("common.readMore")} →
+          </span>
+        </div>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

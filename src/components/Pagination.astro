@@ -1,0 +1,144 @@
+---
+import { createT, getLocalizedPath, getLocaleFromUrl } from '../i18n/index';
+
+export interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string;
+  locale?: string;
+}
+
+const { currentPage, totalPages, baseUrl, locale } = Astro.props;
+
+const currentLocale = locale || getLocaleFromUrl(Astro.url);
+const t = createT(currentLocale as any);
+
+// 生成分页数字数组
+const generatePageNumbers = (current: number, total: number) => {
+  const pages: (number | string)[] = [];
+  
+  if (total <= 7) {
+    // 如果总页数小于等于7，显示所有页码
+    for (let i = 1; i <= total; i++) {
+      pages.push(i);
+    }
+  } else {
+    // 复杂逻辑：显示首页、末页和当前页附近的页码
+    pages.push(1);
+    
+    if (current > 3) {
+      pages.push('...');
+    }
+    
+    // 当前页前后的页码
+    const start = Math.max(2, current - 1);
+    const end = Math.min(total - 1, current + 1);
+    
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    
+    if (current < total - 2) {
+      pages.push('...');
+    }
+    
+    if (total > 1) {
+      pages.push(total);
+    }
+  }
+  
+  return pages;
+};
+
+const pageNumbers = generatePageNumbers(currentPage, totalPages);
+
+// 处理包含查询参数的baseUrl并生成本地化链接
+const hasQueryParams = baseUrl.includes('?');
+const separator = hasQueryParams ? '&' : '?';
+const buildPageUrl = (page: number) => {
+  if (page === 1) {
+    return getLocalizedPath(baseUrl, currentLocale as any);
+  }
+
+  // 提取基础路径 (移除语言前缀如果存在)
+  let basePath = baseUrl;
+  if (basePath.startsWith(`/${currentLocale}/`)) {
+    basePath = basePath.substring(`/${currentLocale}`.length);
+  }
+  if (basePath.startsWith('/')) {
+    basePath = basePath.substring(1);
+  }
+
+  const pageUrl = hasQueryParams
+    ? `${basePath}&page=${page}`
+    : `${basePath}?page=${page}`;
+
+  return getLocalizedPath(pageUrl, currentLocale as any);
+};
+---
+
+{totalPages > 1 && (
+  <nav class="flex items-center justify-center space-x-2" aria-label={t('common.pagination.navigation')}>
+    <!-- 上一页按钮 -->
+    {currentPage > 1 ? (
+      <a
+        href={buildPageUrl(currentPage - 1)}
+        class="px-3 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+        aria-label={t('common.pagination.previous')}
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </a>
+    ) : (
+      <span class="px-3 py-2 bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg opacity-50 cursor-not-allowed">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </span>
+    )}
+
+    <!-- 页码按钮 -->
+    {pageNumbers.map(page => 
+      typeof page === 'string' ? (
+        <span class="px-2 text-gray-500 dark:text-gray-400">
+          {page}
+        </span>
+      ) : page === currentPage ? (
+        <span 
+          class="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium"
+          aria-current="page"
+        >
+          {page}
+        </span>
+      ) : (
+        <a
+          href={buildPageUrl(page)}
+          class="px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+        >
+          {page}
+        </a>
+      )
+    )}
+
+    <!-- 下一页按钮 -->
+    {currentPage < totalPages ? (
+      <a
+        href={buildPageUrl(currentPage + 1)}
+        class="px-3 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+        aria-label={t('common.pagination.next')}
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </a>
+    ) : (
+      <span class="px-3 py-2 bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg opacity-50 cursor-not-allowed">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </span>
+    )}
+  </nav>
+)}
+

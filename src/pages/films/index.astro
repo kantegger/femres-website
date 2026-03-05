@@ -1,0 +1,867 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import FilmCard from "../../components/FilmCard.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import { createT, getLocalizedPath } from "../../i18n/index";
+import { getTopicTranslation, findTopicByName } from "../../i18n/topicsUtils";
+import FatefulDeckMiniPromo from "../../components/promo/FatefulDeckMiniPromo.astro";
+
+const currentLocale = "zh-CN";
+const t = createT(currentLocale);
+
+const films = await getCollection("films");
+
+// Filter films (zh-CN only - no suffixes)
+const publishedFilms = films.filter((film) => {
+  const isPublished = film.data.status === "published";
+  if (!isPublished) return false;
+
+  return (
+    !film.slug.endsWith("-en") &&
+    !film.slug.endsWith("-tw") &&
+    !film.slug.endsWith("-ja") &&
+    !film.slug.endsWith("-fr")
+  );
+});
+
+// Sort by release date
+const sortedFilms = publishedFilms.sort((a, b) => {
+  return (
+    new Date(b.data.releaseDate).getTime() -
+    new Date(a.data.releaseDate).getTime()
+  );
+});
+
+// Get all metadata for filters
+const allTopics = [
+  ...new Set(publishedFilms.flatMap((film) => film.data.topics)),
+].sort();
+const allCountries = [
+  ...new Set(publishedFilms.map((film) => film.data.country)),
+]
+  .filter(Boolean)
+  .sort();
+const allGenres = [
+  ...new Set(publishedFilms.flatMap((film) => film.data.genre || [])),
+]
+  .filter(Boolean)
+  .sort();
+
+// Pagination settings
+const FILMS_PER_PAGE = 12;
+const totalFilms = publishedFilms.length;
+const totalPages = Math.ceil(totalFilms / FILMS_PER_PAGE);
+
+// Get current page number
+const currentPage = Number(Astro.url.searchParams.get("page") || "1");
+const validPage = Math.max(1, Math.min(currentPage, totalPages));
+
+// Calculate current page films
+const startIndex = (validPage - 1) * FILMS_PER_PAGE;
+const endIndex = startIndex + FILMS_PER_PAGE;
+const currentPageFilms = sortedFilms.slice(startIndex, endIndex);
+
+// Clean slug function not strictly needed for zh-CN as we filtered them out, but good for safety
+function cleanSlug(slug: string): string {
+  // It shouldn't have suffixes if logic is correct, but let's keep it safe
+  const suffixes = ["-en", "-tw", "-ja", "-fr"];
+  for (const suffix of suffixes) {
+    if (slug.endsWith(suffix)) return slug.slice(0, -suffix.length);
+  }
+  return slug;
+}
+
+const baseUrl = "/films";
+
+// Generate page numbers array
+const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+const middlePages = pageNumbers.filter(
+  (num) => num !== 1 && num !== totalPages && Math.abs(num - validPage) <= 1,
+);
+---
+
+<Layout
+  title={`${t("filmsPage.title")} - FemRes`}
+  description={t("filmsPage.subtitle")}
+>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Page Header with Glass Effect -->
+    <PageHeader
+      title={t("filmsPage.title")}
+      description={t("filmsPage.subtitle")}
+      gradient="purple"
+      stats={[
+        {
+          icon: "🎞️",
+          text: t("filmsPage.stats.totalFilms", { count: totalFilms }),
+        },
+        {
+          icon: "🌍",
+          text: t("filmsPage.stats.countries", { count: allCountries.length }),
+        },
+        {
+          icon: "🎭",
+          text: t("filmsPage.stats.genres", { count: allGenres.length }),
+        },
+      ]}
+    />
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <!-- Filter Section -->
+      <div class="mb-12 space-y-6">
+        <!-- Topics -->
+        <div>
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+            {t("filmsPage.topics.title")}
+          </h2>
+          <div class="relative">
+            <div
+              id="topics-container"
+              class="flex flex-wrap gap-3 overflow-hidden transition-all duration-300"
+              style="max-height: 90px;"
+            >
+              <button
+                class="filter-btn inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+                data-filter="all"
+                data-filter-type="topic"
+              >
+                {t("filmsPage.topics.all")}
+              </button>
+              {
+                allTopics.map((topic) => {
+                  const topicInfo = findTopicByName(topic);
+                  const translatedTopic = topicInfo
+                    ? getTopicTranslation(topic, currentLocale as any)
+                    : topic;
+                  return (
+                    <button
+                      class="filter-btn inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:border-purple-500 dark:hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm"
+                      data-filter={topic}
+                      data-filter-type="topic"
+                    >
+                      {translatedTopic}
+                    </button>
+                  );
+                })
+              }
+            </div>
+
+            {/* Show More Button */}
+            {
+              allTopics.length > 20 && (
+                <div class="flex justify-center mt-4">
+                  <button
+                    id="toggle-topics-btn"
+                    class="inline-flex items-center px-4 py-2 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-200 transition-colors text-sm font-medium"
+                  >
+                    <span id="toggle-topics-text">
+                      {t("filmsPage.topics.showMore")}
+                    </span>
+                    <svg
+                      id="toggle-topics-icon"
+                      class="ml-2 w-4 h-4 transform transition-transform duration-200"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              )
+            }
+          </div>
+        </div>
+
+        <!-- Country Filter -->
+        <div>
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+            {t("filmsPage.country.title")}
+          </h2>
+          <div class="flex flex-wrap gap-3">
+            <button
+              class="country-btn inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+              data-country="all"
+            >
+              {t("filmsPage.country.all")}
+            </button>
+            {
+              allCountries.map((country) => (
+                <button
+                  class="country-btn inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm"
+                  data-country={country}
+                >
+                  {country}
+                </button>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Films Grid -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+            <span id="current-filter">{t("filmsPage.allFilmsHeading")}</span>
+            <span
+              id="film-count"
+              class="text-base font-normal text-gray-600 dark:text-gray-400 ml-2"
+            >
+              ({t("filmsPage.countFormat", { count: totalFilms })})
+            </span>
+          </h2>
+          <div class="flex items-center gap-4">
+            <select
+              id="sort-select"
+              class="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white"
+            >
+              <option value="date-desc">{t("filmsPage.sort.latest")}</option>
+              <option value="date-asc">{t("filmsPage.sort.oldest")}</option>
+              <option value="title-asc">{t("filmsPage.sort.titleAZ")}</option>
+              <option value="title-desc">{t("filmsPage.sort.titleZA")}</option>
+              <option value="year-desc">{t("filmsPage.sort.yearNewest")}</option
+              >
+              <option value="year-asc">{t("filmsPage.sort.yearOldest")}</option>
+            </select>
+          </div>
+        </div>
+
+        <div
+          id="films-grid"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        >
+          {
+            currentPageFilms.map((film) => (
+              <div
+                class="film-item"
+                data-topics={JSON.stringify(film.data.topics)}
+                data-title={film.data.title}
+                data-date={film.data.releaseDate.toISOString()}
+                data-country={film.data.country}
+                data-year={film.data.year}
+              >
+                <FilmCard
+                  title={film.data.title}
+                  director={film.data.director}
+                  description={film.data.description}
+                  slug={cleanSlug(film.slug)}
+                  posterImage={film.data.posterImage}
+                  releaseDate={film.data.releaseDate}
+                  topics={film.data.topics}
+                  year={film.data.year}
+                  country={film.data.country}
+                  duration={film.data.duration}
+                  genre={film.data.genre}
+                  locale={currentLocale}
+                />
+              </div>
+            ))
+          }
+        </div>
+
+        <!-- Pagination -->
+        {
+          totalPages > 1 && (
+            <div id="original-pagination" class="mt-12 flex justify-center">
+              <nav class="flex items-center space-x-2" aria-label="Pagination">
+                {/* Previous URL generation */}
+                {validPage > 1 ? (
+                  <a
+                    href={`${baseUrl}?page=${validPage - 1}`}
+                    class="px-3 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    aria-label={t("common.pagination.previous")}
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                  </a>
+                ) : (
+                  <span class="px-3 py-2 bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg opacity-50 cursor-not-allowed">
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                  </span>
+                )}
+
+                {/* Page Numbers */}
+                <div class="flex items-center space-x-2">
+                  {validPage === 1 ? (
+                    <span class="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium">
+                      1
+                    </span>
+                  ) : (
+                    <a
+                      href={`${baseUrl}?page=1`}
+                      class="px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      1
+                    </a>
+                  )}
+
+                  {validPage > 3 && (
+                    <span class="px-2 text-gray-500 dark:text-gray-400">
+                      ...
+                    </span>
+                  )}
+
+                  {middlePages.map((pageNum) =>
+                    pageNum === validPage ? (
+                      <span class="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium">
+                        {pageNum}
+                      </span>
+                    ) : (
+                      <a
+                        href={`${baseUrl}?page=${pageNum}`}
+                        class="px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                      >
+                        {pageNum}
+                      </a>
+                    ),
+                  )}
+
+                  {validPage < totalPages - 2 && (
+                    <span class="px-2 text-gray-500 dark:text-gray-400">
+                      ...
+                    </span>
+                  )}
+
+                  {totalPages > 1 &&
+                    (validPage === totalPages ? (
+                      <span class="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium">
+                        {totalPages}
+                      </span>
+                    ) : (
+                      <a
+                        href={`${baseUrl}?page=${totalPages}`}
+                        class="px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                      >
+                        {totalPages}
+                      </a>
+                    ))}
+                </div>
+
+                {/* Next */}
+                {validPage < totalPages ? (
+                  <a
+                    href={`${baseUrl}?page=${validPage + 1}`}
+                    class="px-3 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    aria-label={t("common.pagination.next")}
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </a>
+                ) : (
+                  <span class="px-3 py-2 bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg opacity-50 cursor-not-allowed">
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </span>
+                )}
+              </nav>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Empty State -->
+      {
+        sortedFilms.length === 0 && (
+          <div class="text-center py-16">
+            <div class="text-6xl mb-4">🎬</div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              {t("filmsPage.emptyState.title")}
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              {t("filmsPage.emptyState.description")}
+            </p>
+          </div>
+        )
+      }
+
+      <div class="mb-16">
+        <FatefulDeckMiniPromo />
+      </div>
+
+      <!-- Guide -->
+      <div
+        class="mt-16 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-8"
+      >
+        <div class="text-center">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            🎞️ {t("filmsPage.guide.title")}
+          </h2>
+          <div class="grid md:grid-cols-3 gap-6 text-left mt-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">👁️</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("filmsPage.guide.criticalViewing.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("filmsPage.guide.criticalViewing.description")}
+              </p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">💭</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("filmsPage.guide.deepReflection.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("filmsPage.guide.deepReflection.description")}
+              </p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">💬</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("filmsPage.guide.discussion.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("filmsPage.guide.discussion.description")}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<!-- Pass data to client -->
+<script
+  is:inline
+  define:vars={{
+    allFilmsData: sortedFilms.map((film) => ({
+      slug: cleanSlug(film.slug),
+      title: film.data.title,
+      director: film.data.director,
+      description: film.data.description,
+      posterImage: film.data.posterImage,
+      releaseDate: film.data.releaseDate.toISOString(),
+      topics: film.data.topics.map((topic) => {
+        const info = findTopicByName(topic);
+        return info ? info.key : topic;
+      }),
+      year: film.data.year,
+      country: film.data.country,
+      duration: film.data.duration,
+      genre: film.data.genre || [],
+    })),
+    topicTranslations: Object.fromEntries(
+      allTopics.map((topic) => {
+        const topicInfo = findTopicByName(topic);
+        return [
+          topic,
+          topicInfo ? getTopicTranslation(topic, currentLocale) : topic,
+        ];
+      }),
+    ),
+    i18n: {
+      allTopics: t("filmsPage.topics.all"),
+      showMore: t("filmsPage.topics.showMore"),
+      showLess: t("filmsPage.topics.showLess"),
+      allRegions: t("filmsPage.country.all"),
+      allFilms: t("filmsPage.allFilmsHeading"),
+      emptyTitle: t("filmsPage.emptyState.title"),
+      emptyDescription: t("filmsPage.emptyState.description"),
+      countFormat: t("filmsPage.countFormat"),
+    },
+    currentLocale: currentLocale,
+  }}
+>
+  window.ALL_FILMS_DATA = allFilmsData;
+  window.TOPIC_TRANSLATIONS = topicTranslations;
+  window.I18N = i18n;
+  window.CURRENT_LOCALE = currentLocale;
+</script>
+
+<script>
+  import { type Film } from "../../i18n/types";
+
+  function initPage() {
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const countryButtons = document.querySelectorAll(".country-btn");
+    const sortSelect = document.getElementById(
+      "sort-select",
+    ) as HTMLSelectElement | null;
+    const filmsGrid = document.getElementById("films-grid");
+    const currentFilter = document.getElementById("current-filter");
+    const filmCount = document.getElementById("film-count");
+
+    // Topic toggling
+    const topicsContainer = document.getElementById("topics-container");
+    const toggleBtn = document.getElementById("toggle-topics-btn");
+    const toggleText = document.getElementById("toggle-topics-text");
+    const toggleIcon = document.getElementById("toggle-topics-icon");
+    let isTopicsExpanded = false;
+
+    if (toggleBtn && topicsContainer && toggleText && toggleIcon) {
+      toggleBtn.addEventListener("click", function () {
+        if (isTopicsExpanded) {
+          topicsContainer.style.maxHeight = "90px";
+          toggleText.textContent = window.I18N.showMore;
+          toggleIcon.style.transform = "rotate(0deg)";
+          isTopicsExpanded = false;
+        } else {
+          topicsContainer.style.maxHeight = "none";
+          toggleText.textContent = window.I18N.showLess;
+          toggleIcon.style.transform = "rotate(180deg)";
+          isTopicsExpanded = true;
+        }
+      });
+    }
+
+    let currentTopic = "all";
+    let currentCountry = "all";
+    const FILMS_PER_PAGE = 12;
+    let currentPage = 1;
+
+    // Initial Filter from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageParam = urlParams.get("page");
+    if (pageParam) {
+      currentPage = parseInt(pageParam);
+    }
+
+    // Filter Handlers
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        const btn = e.currentTarget as HTMLElement;
+        const filterValue = btn.dataset.filter || "all";
+        currentTopic = filterValue;
+        currentPage = 1;
+
+        filterButtons.forEach((b) => {
+          b.classList.remove("bg-purple-600", "text-white");
+          b.classList.add(
+            "bg-white",
+            "dark:bg-gray-800",
+            "border",
+            "border-gray-300",
+            "dark:border-gray-600",
+            "text-gray-700",
+            "dark:text-gray-300",
+          );
+        });
+        btn.classList.remove(
+          "bg-white",
+          "dark:bg-gray-800",
+          "border",
+          "border-gray-300",
+          "dark:border-gray-600",
+          "text-gray-700",
+          "dark:text-gray-300",
+        );
+        btn.classList.add("bg-purple-600", "text-white");
+
+        updateFilterTitle();
+        filterAndSort();
+      });
+    });
+
+    countryButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        const btn = e.currentTarget as HTMLElement;
+        const countryValue = btn.dataset.country || "all";
+        currentCountry = countryValue;
+        currentPage = 1;
+
+        countryButtons.forEach((b) => {
+          b.classList.remove("bg-blue-600", "text-white");
+          b.classList.add(
+            "bg-white",
+            "dark:bg-gray-800",
+            "border",
+            "border-gray-300",
+            "dark:border-gray-600",
+            "text-gray-700",
+            "dark:text-gray-300",
+          );
+        });
+        btn.classList.remove(
+          "bg-white",
+          "dark:bg-gray-800",
+          "border",
+          "border-gray-300",
+          "dark:border-gray-600",
+          "text-gray-700",
+          "dark:text-gray-300",
+        );
+        btn.classList.add("bg-blue-600", "text-white");
+
+        updateFilterTitle();
+        filterAndSort();
+      });
+    });
+
+    if (sortSelect) {
+      sortSelect.addEventListener("change", function () {
+        currentPage = 1;
+        filterAndSort();
+      });
+    }
+
+    function updateFilterTitle() {
+      let title = "";
+      const translatedTopic =
+        currentTopic === "all"
+          ? window.I18N.allTopics
+          : window.TOPIC_TRANSLATIONS[currentTopic] || currentTopic;
+      const translatedCountry =
+        currentCountry === "all" ? window.I18N.allRegions : currentCountry;
+
+      if (currentTopic !== "all" && currentCountry !== "all") {
+        title = `${translatedTopic} · ${translatedCountry}`;
+      } else if (currentTopic !== "all") {
+        title = translatedTopic;
+      } else if (currentCountry !== "all") {
+        title = translatedCountry;
+      } else {
+        title = window.I18N.allFilms;
+      }
+      if (currentFilter) currentFilter.textContent = title;
+    }
+
+    function filterAndSort() {
+      const sortValue = (sortSelect as HTMLSelectElement)?.value || "date-desc";
+      const allData: Film[] = (window as any).ALL_FILMS_DATA || [];
+
+      // Filter
+      let filteredFilms: Film[] = allData.filter((item) => {
+        const topicMatch =
+          currentTopic === "all" || item.topics.includes(currentTopic);
+        const countryMatch =
+          currentCountry === "all" || item.country === currentCountry;
+        return topicMatch && countryMatch;
+      });
+
+      // Sort
+      filteredFilms.sort((a, b) => {
+        switch (sortValue) {
+          case "date-desc":
+            return (
+              new Date(b.releaseDate).getTime() -
+              new Date(a.releaseDate).getTime()
+            );
+          case "date-asc":
+            return (
+              new Date(a.releaseDate).getTime() -
+              new Date(b.releaseDate).getTime()
+            );
+          case "title-asc":
+            return a.title.localeCompare(b.title);
+          case "title-desc":
+            return b.title.localeCompare(a.title);
+          case "year-desc":
+            return b.year - a.year;
+          case "year-asc":
+            return a.year - b.year;
+          default:
+            return 0;
+        }
+      });
+
+      // Hide original pagination
+      const originalPagination = document.getElementById("original-pagination");
+      if (originalPagination) originalPagination.style.display = "none";
+
+      // Clear grid
+      if (filmsGrid) filmsGrid.innerHTML = "";
+
+      // Pagination Calc
+      const totalFiltered = filteredFilms.length;
+      const totalPages = Math.ceil(totalFiltered / FILMS_PER_PAGE);
+      const startIndex = (currentPage - 1) * FILMS_PER_PAGE;
+      const endIndex = startIndex + FILMS_PER_PAGE;
+      const currentPageFilms = filteredFilms.slice(startIndex, endIndex);
+
+      // Render Grid
+      currentPageFilms.forEach((item) => {
+        const card = createFilmCard(item);
+        if (filmsGrid) filmsGrid.appendChild(card);
+      });
+
+      // Update Count
+      if (filmCount)
+        filmCount.textContent = `(${window.I18N.countFormat.replace("{count}", totalFiltered)})`;
+
+      // Update Pagination
+      updatePagination(totalPages);
+
+      // Empty State
+      if (filteredFilms.length === 0 && filmsGrid) {
+        const emptyDiv = document.createElement("div");
+        emptyDiv.className = "col-span-full text-center py-16";
+        emptyDiv.innerHTML = `
+           <div class="text-6xl mb-6">🎬</div>
+           <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">${window.I18N.emptyTitle}</h3>
+           <p class="text-gray-600 dark:text-gray-400">${window.I18N.emptyDescription}</p>
+         `;
+        filmsGrid.appendChild(emptyDiv);
+      }
+    }
+
+    function createFilmCard(film: Film) {
+      const div = document.createElement("div");
+      div.className = "film-item";
+      // Root version logic:
+      // The slug is already cleaned server-side (no locale suffix if logic correct)
+      // And we want simple /films/[slug] link
+      div.innerHTML = `
+        <a href="/films/${film.slug}" class="group block bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all" aria-label="${film.title}">
+          <div class="aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-700 relative">
+            <img src="${film.posterImage}" alt="${film.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+              <p class="text-white text-xs line-clamp-2">${film.description}</p>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-gray-900 dark:text-white mb-1 line-clamp-1 group-hover:text-purple-600 transition-colors">${film.title}</h3>
+            <div class="flex items-center text-sm text-gray-500 mb-2 space-x-2">
+              <span>${film.year}</span>
+              <span>•</span>
+              <span class="line-clamp-1">${film.director}</span>
+            </div>
+            <div class="flex flex-wrap gap-1">
+              ${(film.genre || [])
+                .slice(0, 2)
+                .map(
+                  (g) =>
+                    `<span class="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-xs rounded-full">${g}</span>`,
+                )
+                .join("")}
+            </div>
+          </div>
+        </a>
+       `;
+      return div;
+    }
+
+    function updatePagination(totalPages: number) {
+      const existingPagination = document.getElementById("filter-pagination");
+      if (existingPagination) existingPagination.remove();
+
+      if (totalPages <= 1 || !filmsGrid || !filmsGrid.parentElement) return;
+
+      let html = `<div id="filter-pagination" class="mt-12 flex justify-center"><nav class="flex items-center space-x-2">`;
+
+      // Prev
+      const prevDisabled = currentPage <= 1;
+      html += `
+        <button class="pagination-prev px-3 py-2 text-gray-700 dark:text-gray-300 ${!prevDisabled ? "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-gray-100 dark:bg-gray-900 opacity-50 cursor-not-allowed"} border border-gray-300 dark:border-gray-600 rounded-lg transition-colors" ${prevDisabled ? "disabled" : ""}>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+      `;
+
+      // Numbers
+      html += `<div class="flex items-center space-x-2">`;
+      for (let i = 1; i <= totalPages; i++) {
+        const show =
+          i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1;
+        if (show) {
+          if (i === currentPage) {
+            html += `<span class="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium">${i}</span>`;
+          } else {
+            html += `<button class="page-number px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-page="${i}">${i}</button>`;
+          }
+        } else if (
+          (i === 2 && currentPage > 4) ||
+          (i === totalPages - 1 && currentPage < totalPages - 3)
+        ) {
+          html += `<span class="px-2 text-gray-500 dark:text-gray-400">...</span>`;
+        }
+      }
+      html += `</div>`;
+
+      // Next
+      const nextDisabled = currentPage >= totalPages;
+      html += `
+        <button class="pagination-next px-3 py-2 text-gray-700 dark:text-gray-300 ${!nextDisabled ? "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-gray-100 dark:bg-gray-900 opacity-50 cursor-not-allowed"} border border-gray-300 dark:border-gray-600 rounded-lg transition-colors" ${nextDisabled ? "disabled" : ""}>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </button>
+      `;
+
+      html += `</nav></div>`;
+
+      if (filmsGrid?.parentElement)
+        filmsGrid.parentElement.insertAdjacentHTML("beforeend", html);
+
+      // Events
+      const paginationDiv = document.getElementById("filter-pagination");
+      if (paginationDiv) {
+        paginationDiv
+          .querySelector(".pagination-prev")
+          ?.addEventListener("click", () => {
+            if (currentPage > 1) {
+              currentPage--;
+              filterAndSort();
+            }
+          });
+        paginationDiv
+          .querySelector(".pagination-next")
+          ?.addEventListener("click", () => {
+            if (currentPage < totalPages) {
+              currentPage++;
+              filterAndSort();
+            }
+          });
+        paginationDiv.querySelectorAll(".page-number").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            const target = e.currentTarget as HTMLElement;
+            currentPage = parseInt(target.dataset.page || "1");
+            filterAndSort();
+          });
+        });
+      }
+    }
+  }
+
+  document.addEventListener("astro:page-load", initPage);
+</script>

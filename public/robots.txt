@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Allow access to ads.txt for ad networks
+Allow: /ads.txt
+
+# Sitemap location (update if you have a sitemap)
+# Sitemap: https://yourdomain.com/sitemap.xml

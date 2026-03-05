@@ -1,0 +1,22 @@
+---
+title: "Climate action's hidden opportunities for women"
+author: "Zineb Sqalli"
+description: "In this TED@BCG talk, gender and climate researcher Zineb Sqalli critiques the gender-neutral framing of climate policy and reveals how it often perpetuates inequality. She highlights Vienna’s gender-equal urban planning as a model and calls for climate strategies that intentionally integrate gender equity at every stage."
+publishDate: 2022-09-01
+contentLanguage: "en"
+topics: ["Climate Justice", "Gender Equality", "Patriarchy Critique", "Social Movements"]
+sourceUrl: "https://www.ted.com/talks/zineb_sqalli_climate_action_s_hidden_opportunities_for_women"
+embedUrl: "https://embed.ted.com/talks/zineb_sqalli_climate_action_s_hidden_opportunities_for_women"
+duration: 900
+thumbnail: "https://media.femres.org/images/videos/zineb-sqalli-climate-women.jpg"
+status: "published"
+---
+
+Zineb Sqalli takes the stage at TED@BCG to deliver a critical intervention in the global climate crisis, arguing that "gender-neutral" policy is a dangerous myth that perpetuates existing injustices. As a researcher dedicated to the intersection of environmental and social systems, Sqalli reveals how the climate emergency acts as a risk multiplier, disproportionately impacting women and girls who are often excluded from the very decision-making tables where solutions are forged. She posits that the absence of intentional gender analysis in climate strategy doesn't result in neutrality, but rather in the automatic reproduction of patriarchal power structures. Her talk serves as a call to move beyond simple reform toward a radical "undunbling" of environmental policy from the gender-blind status quo, insisting that we cannot achieve a green future if we leave half of humanity behind.
+
+The centerpiece of Sqalli's evidence is the transformative model of Vienna, a city that systematically integrated gender analysis into its urban development. This "pedagogy of spatial justice" proved that when cities are designed for the complex, care-centered journeys of women—who often manage school runs, grocery shopping, and elderly care alongside work—the resulting infrastructure benefits everyone, including children, the elderly, and the disabled. By widening sidewalks and improving public transit flow, Vienna demonstrated that "gender-responsive" planning is not about special favors, but about recognizing the reality of diverse human needs. Sqalli argues that a similar shift in consciousness is required for climate action; from the placement of EV charging stations to the creation of green jobs, every technical solution must be cross-referenced with its impact on social equity.
+
+A vital dimension of Sqalli's critique is the "silence" that surrounds unpaid care labor in economic climate models. She points out that the millions of hours women spend securing water, food, and fuel—labor that increases exponentially during droughts or floods—remain invisible in traditional GDP calculations and cost-benefit analyses. This "pink think" of economics fails to recognize that women’s labor is the bedrock of community resilience. By failing to value this work or include indigenous women’s ecological knowledge in planning, current climate strategies are effectively working with one hand tied behind their backs. Sqalli calls for a redistribution of climate finance, noting that currently less than 3% of funding explicitly targets gender equality, a staggering misalignment that overlooks the proven effectiveness of women-led grassroots adaptation.
+
+Ultimately, Sqalli reframes women not as passive victims of climate change, but as the essential "warriors" of the green transition. She envisions a future where climate action and gender justice reinforce each other in a cycle of "pleasure activism"—where the work of saving the planet is synonymous with the work of building a more respectful and equitable society. Her message is a soaring invitation to seize the narrow window for climate action as a once-in-a-generation opportunity for systemic transformation. By rebuilding our "common house" to be intentionally inclusive, we can ensure that the transition to renewable energy is not just a technological fix, but a profound evolution in how we value human dignity. Sqalli concludes with the reminder that the best hope for a sustainable future lies in the courage to rebuild our world for everyone, starting with the voices that have too long been marginalized.
+

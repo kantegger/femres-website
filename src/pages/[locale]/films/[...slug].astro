@@ -1,0 +1,512 @@
+---
+export const prerender = true;
+
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import SchemaMarkup from '../../../components/seo/SchemaMarkup.astro';
+import InteractionButtons from '../../../components/InteractionButtons';
+import Discussion from '../../../components/Discussion';
+import { createT, getLocalizedPath } from '../../../i18n/index';
+import FatefulDeckMiniPromo from '../../../components/promo/FatefulDeckMiniPromo.astro';
+import { getTopicTranslation } from '../../../i18n/topicsUtils';
+import { getGenreTranslation, translateAward } from '../../../i18n/genreUtils';
+
+const LOCALE_CONFIG = {
+  'en': { suffix: '-en', name: 'English', dateLocale: 'en-US' },
+  'zh-CN': { suffix: '', name: '简体中文', dateLocale: 'zh-CN' },
+  'zh-TW': { suffix: '-tw', name: '繁體中文', dateLocale: 'zh-TW' },
+  'ja': { suffix: '-ja', name: '日本語', dateLocale: 'ja-JP' },
+  'fr': { suffix: '-fr', name: 'Français', dateLocale: 'fr-FR' }
+} as const;
+
+type SupportedLocale = keyof typeof LOCALE_CONFIG;
+
+export async function getStaticPaths() {
+  const LOCALE_CONFIG_INTERNAL = {
+    'en': { suffix: '-en', name: 'English', dateLocale: 'en-US' },
+    'zh-CN': { suffix: '', name: '简体中文', dateLocale: 'zh-CN' },
+    'zh-TW': { suffix: '-tw', name: '繁體中文', dateLocale: 'zh-TW' },
+    'ja': { suffix: '-ja', name: '日本語', dateLocale: 'ja-JP' },
+    'fr': { suffix: '-fr', name: 'Français', dateLocale: 'fr-FR' }
+  } as const;
+  type SupportedLocaleInternal = keyof typeof LOCALE_CONFIG_INTERNAL;
+  
+  const films = await getCollection('films');
+  const locales: SupportedLocaleInternal[] = ['en', 'zh-CN', 'zh-TW', 'ja', 'fr'];
+  const paths = [];
+
+  for (const locale of locales) {
+    const config = LOCALE_CONFIG_INTERNAL[locale];
+    const localeFilms = films.filter(film => {
+      if (locale === 'zh-CN') {
+        return !film.slug.endsWith('-en') && !film.slug.endsWith('-tw') && !film.slug.endsWith('-ja') && !film.slug.endsWith('-fr');
+      }
+      return film.slug.endsWith(config.suffix);
+    });
+
+    for (const film of localeFilms) {
+      let cleanSlug = film.slug;
+      if (config.suffix && film.slug.endsWith(config.suffix)) cleanSlug = film.slug.slice(0, -config.suffix.length);
+      paths.push({ params: { locale: locale, slug: cleanSlug }, props: { film, locale } });
+    }
+  }
+  return paths;
+}
+
+const { film, locale } = Astro.props;
+const currentLocale = locale as SupportedLocale;
+const config = LOCALE_CONFIG[currentLocale];
+const t = createT(currentLocale);
+
+const { Content } = await film.render();
+
+// Related films
+const allFilms = await getCollection('films');
+const relatedFilms = allFilms
+  .filter(f => {
+    const isDifferent = f.slug !== film.slug;
+    const sameLocale = currentLocale === 'zh-CN' 
+      ? (!f.slug.endsWith('-en') && !f.slug.endsWith('-tw') && !f.slug.endsWith('-ja') && !f.slug.endsWith('-fr'))
+      : f.slug.endsWith(config.suffix);
+    if (!isDifferent || !sameLocale) return false;
+    const hasCommonTopic = f.data.topics.some(topic => film.data.topics.includes(topic));
+    return hasCommonTopic;
+  })
+  .slice(0, 4);
+
+// Clean proper slug for links (related films)
+function getCleanSlug(slug: string) {
+  const suffix = config.suffix;
+  if (suffix && slug.endsWith(suffix)) return slug.slice(0, -suffix.length);
+  return slug;
+}
+
+const formatDate = (date: Date) => date.toLocaleDateString(config.dateLocale, { year: 'numeric', month: 'long', day: 'numeric' });
+const getLanguageName = (code: string | undefined) => {
+  if (!code) return '';
+  const key = `languages.${code}`;
+  const trans = t(key);
+  return trans === key ? code : trans;
+};
+
+const homeLink = getLocalizedPath('/', currentLocale);
+const filmsLink = getLocalizedPath('films', currentLocale);
+---
+
+<Layout 
+  title={`${film.data.title} - ${film.data.director} - FemRes`}
+  description={film.data.description}
+>
+  <SchemaMarkup slot="head" type="Movie" data={{ ...film.data, coverImage: film.data.posterImage }} />
+  <article class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- Breadcrumb -->
+    <nav class="mb-8">
+      <div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+        <a href={homeLink} class="hover:text-purple-600 dark:hover:text-purple-400">{t('nav.home')}</a>
+        <span>/</span>
+        <a href={filmsLink} class="hover:text-purple-600 dark:hover:text-purple-400">{t('nav.films')}</a>
+        <span>/</span>
+        <span class="text-gray-900 dark:text-white line-clamp-1">{film.data.title}</span>
+      </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="mb-12">
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Poster and Genre -->
+        <div class="lg:w-96 flex-shrink-0">
+          <div class="aspect-[2/3] bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 relative overflow-hidden rounded-xl shadow-2xl mb-4">
+            {film.data.posterImage ? (
+              <img
+                src={film.data.posterImage}
+                alt={film.data.title}
+                class="w-full h-full object-cover"
+              />
+            ) : (
+              <div class="w-full h-full flex items-center justify-center">
+                <div class="text-center p-8">
+                  <span class="text-7xl mb-4 block">🎬</span>
+                  <p class="text-gray-600 dark:text-gray-400">{t('common.noPoster')}</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <!-- Genre under poster -->
+          {film.data.genre && film.data.genre.length > 0 && (
+            <div class="flex flex-wrap gap-3">
+              {film.data.genre.map(g => (
+                <span class="px-4 py-2 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-lg text-base font-semibold shadow-md border border-blue-200 dark:border-blue-700">
+                  {getGenreTranslation(g, currentLocale as any)}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        <!-- Film Info -->
+        <div class="flex-1">
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+            {film.data.title}
+          </h1>
+          {film.data.originalTitle && (
+            <p class="text-lg text-gray-600 dark:text-gray-400 mb-6">
+              {film.data.originalTitle}
+            </p>
+          )}
+          
+          <!-- Description -->
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 mb-6">
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-base">
+              {film.data.description}
+            </p>
+          </div>
+          
+          <!-- Film Details Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+              <span class="text-sm text-gray-500 dark:text-gray-400 block mb-1">{t('film.director')}</span>
+              <span class="font-semibold text-gray-900 dark:text-white">{film.data.director}</span>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+              <span class="text-sm text-gray-500 dark:text-gray-400 block mb-1">{t('film.year')}</span>
+              <span class="font-semibold text-gray-900 dark:text-white">{film.data.year}</span>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+              <span class="text-sm text-gray-500 dark:text-gray-400 block mb-1">{t('filmsPage.country.title')}</span>
+              <span class="font-semibold text-gray-900 dark:text-white">{film.data.country}</span>
+            </div>
+            {film.data.duration && (
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                <span class="text-sm text-gray-500 dark:text-gray-400 block mb-1">{t('film.duration')}</span>
+                <span class="font-semibold text-gray-900 dark:text-white">{film.data.duration}</span>
+              </div>
+            )}
+            {film.data.contentLanguage && (
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                <span class="text-sm text-gray-500 dark:text-gray-400 block mb-1">{t('common.language')}</span>
+                <span class="font-semibold text-gray-900 dark:text-white">{getLanguageName(film.data.contentLanguage)}</span>
+              </div>
+            )}
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+              <span class="text-sm text-gray-500 dark:text-gray-400 block mb-1">{t('film.releaseDate')}</span>
+              <span class="font-semibold text-gray-900 dark:text-white">{formatDate(film.data.releaseDate)}</span>
+            </div>
+          </div>
+          
+          <!-- Cast -->
+          {film.data.cast && film.data.cast.length > 0 && (
+            <div class="mb-6">
+              <h3 class="text-sm text-gray-500 dark:text-gray-400 mb-2">{t('film.cast')}</h3>
+              <div class="flex flex-wrap gap-2">
+                {film.data.cast.map(actor => (
+                  <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm">
+                    {actor}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <!-- Topics -->
+          <div class="mb-6">
+            <h3 class="text-sm text-gray-500 dark:text-gray-400 mb-2">{t('common.topics')}</h3>
+            <div class="flex flex-wrap gap-2">
+              {film.data.topics.map(topic => (
+                <a 
+                  href={getLocalizedPath(`topics/${encodeURIComponent(topic)}`, currentLocale)}
+                  class="inline-flex items-center px-3 py-1 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 dark:border-purple-700 text-purple-700 dark:text-purple-300 rounded-full text-sm font-medium hover:from-purple-100 hover:to-pink-100 dark:hover:from-purple-900/40 dark:hover:to-pink-900/40 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-sm transition-all duration-200"
+                >
+                  #{getTopicTranslation(topic, currentLocale as any)}
+                </a>
+              ))}
+            </div>
+          </div>
+          
+          <!-- Interaction Buttons -->
+          <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+            <InteractionButtons
+              contentId={`film-${film.slug}`}
+              contentType="film"
+              client:load
+              t={{
+                like: t('interactions.like'),
+                unlike: t('interactions.unlike'),
+                bookmark: t('interactions.bookmark'),
+                unbookmark: t('interactions.unbookmark'),
+                loginToInteract: t('interactions.loginToInteract')
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Film Review -->
+      <div class="flex-1">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+            <span class="text-purple-600 dark:text-purple-400 mr-3">🎥</span>
+            {t('film.review')}
+          </h2>
+          <div class="prose prose-lg dark:prose-invert max-w-none mb-12 hyphens-auto text-justify"
+               style="hyphens: auto; -webkit-hyphens: auto; -ms-hyphens: auto;"
+               lang={currentLocale}>
+            <Content />
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-80 flex-shrink-0">
+        <div class="sticky top-20 space-y-6">
+          <!-- Awards & Recognition -->
+          {film.data.awards && film.data.awards.length > 0 && (
+            <div class="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-xl p-6 shadow-sm border border-yellow-200 dark:border-yellow-800/30">
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                <span class="text-yellow-600 dark:text-yellow-400 mr-2">🏆</span>
+                {t('film.awards')}
+              </h3>
+              <ul class="space-y-2 text-sm">
+                {film.data.awards.map(award => (
+                  <li class="flex items-start">
+                    <span class="text-yellow-500 mr-2">•</span>
+                    <span class="text-gray-700 dark:text-gray-300">{translateAward(award, currentLocale as any)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          
+          <!-- Ratings & Links -->
+          <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 shadow-sm border border-blue-200 dark:border-blue-800/30">
+            <h3 class="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+              <span class="text-blue-600 dark:text-blue-400 mr-2">⭐</span>
+              {t('film.ratingsAndLinks')}
+            </h3>
+            <div class="space-y-3">
+              {/* IMDB Rating & Link */}
+              {film.data.sourceUrl?.find(link => link.platform === 'IMDB') && (
+                <a 
+                  href={film.data.sourceUrl.find(link => link.platform === 'IMDB')?.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="block w-full px-4 py-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-blue-300 dark:border-blue-700 rounded-lg transition-all duration-200"
+                >
+                  <div class="flex justify-between items-center">
+                    <span class="text-blue-700 dark:text-blue-300 font-medium">IMDB</span>
+                    {film.data.imdbRating && (
+                      <span class="font-bold text-lg text-yellow-600 dark:text-yellow-400">
+                        {film.data.imdbRating}/10
+                      </span>
+                    )}
+                  </div>
+                </a>
+              )}
+              
+              {/* Douban Rating & Link */}
+              {film.data.sourceUrl?.find(link => link.platform === '豆瓣' || link.platform === 'Douban') && (
+                <a
+                  href={film.data.sourceUrl.find(link => link.platform === '豆瓣' || link.platform === 'Douban')?.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="block w-full px-4 py-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-blue-300 dark:border-blue-700 rounded-lg transition-all duration-200"
+                >
+                  <div class="flex justify-between items-center">
+                    <span class="text-blue-700 dark:text-blue-300 font-medium">Douban</span>
+                    {film.data.doubanRating && film.data.doubanRating !== "N/A" && (
+                      <span class="font-bold text-lg text-green-600 dark:text-green-400">
+                        {film.data.doubanRating}/10
+                      </span>
+                    )}
+                  </div>
+                </a>
+              )}
+              
+              {/* Other Links without ratings */}
+              {film.data.sourceUrl?.filter(link => link.platform !== 'IMDB' && link.platform !== '豆瓣' && link.platform !== 'Douban').map(link => (
+                <a 
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="block w-full px-4 py-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 font-medium rounded-lg transition-all duration-200 text-center"
+                >
+                  {link.platform}
+                </a>
+              ))}
+              
+              {/* If no source links at all */}
+              {(!film.data.sourceUrl || film.data.sourceUrl.length === 0) && (
+                <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                  {t('common.noLinks')}
+                </p>
+              )}
+            </div>
+          </div>
+          
+          <!-- Support Us -->
+          <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 shadow-sm border border-purple-200 dark:border-purple-800/30">
+            <h3 class="font-semibold text-gray-900 dark:text-white mb-3 text-center">{t('common.support')}</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 text-center">
+              {t('common.supportMessage')}
+            </p>
+            <a
+              href="https://buymeacoffee.com/femres"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block w-full px-4 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-semibold rounded-lg transition-all duration-200 text-center"
+            >
+              {t("contribute.support.button")}
+            </a>
+          </div>
+
+          <FatefulDeckMiniPromo className="mt-8" />
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Related Films -->
+    {relatedFilms.length > 0 && (
+      <section class="border-t border-gray-200 dark:border-gray-700 pt-12 mt-16">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">{t('book.relatedBooks').replace('Books', 'Films')}</h2> 
+        <!-- Note: common 'relatedContents' would be better but I'll stick to 'book.relatedBooks' which is 'related recommendations' in zh-CN, so it fits. -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {relatedFilms.map(relatedFilm => (
+            <a 
+              href={getLocalizedPath(`films/${getCleanSlug(relatedFilm.slug)}`, currentLocale)}
+              class="group block bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+            >
+              <div class="aspect-[2/3] bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 relative">
+                {relatedFilm.data.posterImage ? (
+                  <img 
+                    src={relatedFilm.data.posterImage} 
+                    alt={relatedFilm.data.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div class="w-full h-full flex items-center justify-center">
+                    <span class="text-5xl">🎬</span>
+                  </div>
+                )}
+                <div class="absolute top-2 left-2 px-2 py-1 bg-black/60 backdrop-blur-sm text-white rounded text-xs font-semibold">
+                  {relatedFilm.data.year}
+                </div>
+              </div>
+              <div class="p-4">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-1">
+                  {relatedFilm.data.title}
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm mb-2">
+                  {relatedFilm.data.director}
+                </p>
+                <p class="text-gray-500 dark:text-gray-500 text-xs">
+                  {relatedFilm.data.country} · {relatedFilm.data.duration || 'N/A'}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Newsletter/Share Section -->
+    <section class="border-t border-gray-200 dark:border-gray-700 pt-12 mt-16">
+      <div class="bg-gray-100 dark:bg-gray-800/50 rounded-2xl p-8 text-center">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('newsletter.title')}</h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-6">{t('newsletter.description')}</p>
+        <form id="newsletter-form" class="flex flex-col sm:flex-row gap-4 justify-center" data-message-success={t('newsletter.success')} data-message-error={t('newsletter.error')} data-message-generic-error={t('newsletter.genericError')}>
+          <input 
+            type="email" 
+            name="email"
+            placeholder={t('auth.emailPlaceholder')} 
+            required
+            class="px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none min-w-[300px]"
+          />
+          <button type="submit" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            {t('common.subscribe')}
+          </button>
+        </form>
+        <p id="newsletter-message" class="mt-4 text-sm hidden"></p>
+      </div>
+    </section>
+
+    <script>
+      const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
+      const messageEl = document.getElementById('newsletter-message');
+      
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const emailInput = form.querySelector('input[name="email"]') as HTMLInputElement;
+          const button = form.querySelector('button');
+          if (!emailInput || !button) return;
+
+          const email = emailInput.value;
+          const successMsg = form.dataset.messageSuccess || null;
+          const errorMsg = form.dataset.messageError || null;
+          const genericMsg = form.dataset.messageGenericError || null;
+          
+          // Disable button
+          button.disabled = true;
+          const originalText = button.textContent;
+          button.textContent = '...';
+
+          try {
+            const response = await fetch('/api/subscribe', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, source: 'film_detail' })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              if (messageEl) {
+                messageEl.textContent = successMsg;
+                messageEl.className = 'mt-4 text-sm text-green-600 dark:text-green-400 font-medium';
+                messageEl.classList.remove('hidden');
+              }
+              form.reset();
+            } else {
+               if (messageEl) {
+                messageEl.textContent = errorMsg;
+                messageEl.className = 'mt-4 text-sm text-red-600 dark:text-red-400 font-medium';
+                messageEl.classList.remove('hidden');
+              }
+            }
+          } catch (error) {
+            if (messageEl) {
+                messageEl.textContent = genericMsg;
+                messageEl.className = 'mt-4 text-sm text-red-600 dark:text-red-400 font-medium';
+                messageEl.classList.remove('hidden');
+            }
+          } finally {
+            button.disabled = false;
+            button.textContent = originalText;
+          }
+        });
+      }
+    </script>
+
+    <!-- Discussion Section -->
+    <Discussion 
+      contentId={`film-${film.slug}`}
+      contentType="film"
+      locale={currentLocale}
+      client:load
+    />
+  </article>
+</Layout>
+
+<style>
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

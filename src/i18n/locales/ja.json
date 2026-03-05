@@ -1,0 +1,1211 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "content": "コンテンツ",
+    "books": "書籍",
+    "articles": "記事",
+    "films": "映画",
+    "videos": "動画",
+    "podcasts": "ポッドキャスト",
+    "papers": "論文",
+    "topics": "トピック",
+    "search": "検索",
+    "contribute": "投稿"
+  },
+  "homepage": {
+    "metaTitle": "FemRes - フェミニズム・コンテンツ集約プラットフォーム",
+    "hero": {
+      "badge": "世界中の優良なフェミニズムコンテンツを集約",
+      "title": "発見する",
+      "titleHighlight": "フェミニズム",
+      "titleEnd": "の力",
+      "subtitle": "書籍、映画、記事、動画、ポッドキャスト、論文を探索<br/>ジェンダー平等の理論と実践を深く理解し、社会の進歩を推進",
+      "startExploring": "探索を始める",
+      "learnMore": "プロジェクトについて"
+    },
+    "features": {
+      "richContent": {
+        "title": "豊富なコンテンツ",
+        "description": "書籍、記事、動画など多様な優良コンテンツを網羅"
+      },
+      "smartCategories": {
+        "title": "スマート分類",
+        "description": "トピックとタイプで正確に分類、必要なコンテンツを素早く検索"
+      },
+      "globalPerspective": {
+        "title": "グローバルな視点",
+        "description": "世界中のフェミニズム学者と活動家の視点を集約"
+      }
+    },
+    "sections": {
+      "featured": "注目のコンテンツ",
+      "featuredDescription": "最新のフェミニズム思想、研究、実践を探索し、世界中の高品質なコンテンツを集約",
+      "latestBooks": "厳選書籍",
+      "latestFilms": "厳選映画",
+      "latestArticles": "厳選記事",
+      "latestVideos": "厳選動画",
+      "latestPodcasts": "厳選ポッドキャスト",
+      "latestPapers": "厳選論文",
+      "popularTopics": "人気トピック",
+      "popularTopicsDescription": "最も注目されているフェミニズムトピックを探索し、各分野を深く理解しましょう",
+      "featuredContent": "{count} 件の厳選コンテンツ"
+    },
+    "cta": {
+      "title": "一緒にジェンダー平等を推進しましょう",
+      "description": "私たちのコミュニティに参加し、あなたの洞察を共有し、より多くの優良コンテンツを発見しましょう",
+      "contribute": "コンテンツを投稿",
+      "aboutUs": "詳しく見る"
+    }
+  },
+  "userMenu": {
+    "login": "ログイン",
+    "profile": "マイページ",
+    "myLikes": "いいね一覧",
+    "myBookmarks": "ブックマーク",
+    "logout": "ログアウト"
+  },
+  "common": {
+    "watchVideo": "動画を見る",
+    "readMore": "続きを読む",
+    "viewAll": "すべて見る",
+    "loading": "読み込み中...",
+    "language": "言語",
+    "publishDate": "公開日",
+    "description": "説明",
+    "author": "著者",
+    "director": "監督",
+    "duration": "上映時間",
+    "pages": "ページ数",
+    "toggleTheme": "テーマを切り替え",
+    "toggleMenu": "メニューを切り替え",
+    "itemsCount": "{count}件",
+    "favorite": "お気に入り",
+    "share": "共有",
+    "contentTypes": {
+      "book": "書籍",
+      "film": "映画",
+      "article": "記事",
+      "video": "動画",
+      "podcast": "ポッドキャスト",
+      "paper": "論文"
+    },
+    "minutes": "分",
+    "readTimeFormat": "{time}分で読めます",
+    "readTimeFormatShort": "{time}分",
+    "readFull": "全文を読む",
+    "articleTypes": {
+      "opinion": "オピニオン",
+      "analysis": "分析",
+      "news": "ニュース",
+      "blog": "ブログ",
+      "research": "研究"
+    },
+    "viewAllTopics": "すべてのトピックを表示",
+    "siteDescription": "FemRes - フェミニズムコンテンツ集約プラットフォーム、世界中の優良なフェミニズムコンテンツを集約",
+    "copyright": "© 2025 FemRes. All rights reserved.",
+    "pagination": {
+      "navigation": "ページネーション",
+      "previous": "前へ",
+      "next": "次へ"
+    },
+    "noCover": "カバー画像なし",
+    "topics": "関連トピック",
+    "support": "サポート",
+    "supportMessage": "このコンテンツがお役に立ちましたら",
+    "subscribe": "購読する",
+    "countries": "国/地域",
+    "genres": "ジャンル",
+    "noPoster": "ポスターなし",
+    "noLinks": "関連リンクなし",
+    "genre": "ジャンル",
+    "listenNow": "今すぐ聴く",
+    "listenPodcast": "オンラインで聴く",
+    "episode": "第{number}回",
+    "journalsCount": "{count}誌のジャーナル",
+    "readPaper": "論文を読む",
+    "showMore": "もっと見る",
+    "showLess": "閉じる",
+    "paperTypes": {
+      "research": "研究",
+      "review": "レビュー",
+      "case-study": "ケーススタディ",
+      "theoretical": "理論研究"
+    },
+    "durationFormat": {
+      "hoursMins": "{hours}時間{mins}分",
+      "mins": "{mins}分"
+    }
+  },
+  "footer": {
+    "description": "オープンソースのフェミニズムコンテンツ集約プラットフォーム。ジェンダー平等の推進と、世界中の優れたフェミニズムリソースの集約に尽力しています。",
+    "resourceTypes": "リソースタイプ",
+    "community": "コミュニティ参加",
+    "links": {
+      "books": "📚 書籍推薦",
+      "films": "🎬 映画解説",
+      "articles": "📰 厳選記事",
+      "videos": "🎬 動画リソース",
+      "podcasts": "🎧 ポッドキャストチャンネル",
+      "papers": "📄 学術論文",
+      "about": "📋 私たちについて",
+      "contact": "📧 お問い合わせ",
+      "contribute": "💡 コンテンツ投稿",
+      "feedback": "🐛 フィードバック",
+      "source": "⭐ オープンソース",
+      "privacy": "プライバシーポリシー",
+      "terms": "利用規約"
+    },
+    "copyright": "© 2025 FemRes. MITライセンスの下でオープンソース。"
+  },
+  "errorPage": {
+    "title": "ページが見つかりません",
+    "message": "申し訳ありませんが、お探しのページは存在しないか、移動されました。",
+    "backHome": "ホームに戻る",
+    "goBack": "前のページに戻る",
+    "tagline": "— FemRes フェミニズムリソースプラットフォーム —"
+  },
+  "languages": {
+    "en": "英語",
+    "zh-CN": "中国語",
+    "zh-TW": "中国語（繁体字）",
+    "ja": "日本語",
+    "fr": "フランス語",
+    "es": "スペイン語",
+    "bem": "ベンバ語",
+    "tr": "トルコ語",
+    "cs": "チェコ語",
+    "fa": "ペルシャ語",
+    "hi": "ヒンディー語",
+    "ko": "韓国語",
+    "it": "イタリア語",
+    "ro": "ルーマニア語",
+    "pl": "ポーランド語",
+    "de": "ドイツ語",
+    "pt": "ポルトガル語",
+    "ar": "アラビア語"
+  },
+  "booksPage": {
+    "title": "📚 書籍",
+    "subtitle": "理論から実践まで、フェミニズムの古典と現代の名著を厳選。思考に深みと広がりを。",
+    "stats": {
+      "totalBooks": "合計 {count} 冊",
+      "topicCategories": "{count} 個のトピックカテゴリー"
+    },
+    "topics": {
+      "title": "トピックカテゴリー",
+      "all": "すべての書籍",
+      "showMore": "もっと見る",
+      "showLess": "閉じる"
+    },
+    "list": {
+      "latest": "新着順",
+      "oldest": "古い順",
+      "titleAsc": "タイトル (A-Z)",
+      "titleDesc": "タイトル (Z-A)"
+    },
+    "emptyState": {
+      "title": "書籍が見つかりません",
+      "description": "このトピックの書籍が見つかりません。他のトピックを試すか、全ての書籍を表示してください。"
+    },
+    "countFormat": "{count}冊",
+    "guide": {
+      "title": "リーディングガイド",
+      "beginner": {
+        "title": "初心者",
+        "description": "『第二の性』や『男も女もみんなフェミニストでなきゃ』のような古典から始めましょう。"
+      },
+      "deepReading": {
+        "title": "深読み",
+        "description": "理論的基礎から実践的応用まで、トピックごとに体系的に読みましょう。"
+      },
+      "discussion": {
+        "title": "議論",
+        "description": "読書後は詳細ページをチェックし、主要な論点を理解して現実に結びつけましょう。"
+      }
+    }
+  },
+  "filmsPage": {
+    "title": "🎬 厳選映画",
+    "subtitle": "映画のレンズを通してジェンダーの問題を探求。物語が持つ社会変革の力を感じてください。",
+    "stats": {
+      "totalFilms": "全{count}作品",
+      "topicCategories": "{count}個のトピックカテゴリー",
+      "countries": "{count} カ国・地域",
+      "genres": "{count} ジャンル"
+    },
+    "topics": {
+      "title": "トピックカテゴリー",
+      "all": "全てのトピック",
+      "showMore": "もっと見る",
+      "showLess": "閉じる"
+    },
+    "country": {
+      "title": "国・地域",
+      "all": "全ての地域"
+    },
+    "allFilmsHeading": "すべての映画作品",
+    "allFilms": "すべての映画",
+    "countFormat": "{count}作品",
+    "sort": {
+      "latest": "最新公開",
+      "oldest": "最古公開",
+      "titleAZ": "タイトル A-Z",
+      "titleZA": "タイトル Z-A",
+      "yearNewest": "年（新しい順）",
+      "yearOldest": "年（古い順）"
+    },
+    "emptyState": {
+      "title": "映画が見つかりません",
+      "description": "このフィルター条件では映画が見つかりません。他の条件を試すか、全ての映画を表示してください。"
+    },
+    "guide": {
+      "title": "ビューイングガイド",
+      "criticalViewing": {
+        "title": "批判的鑑賞",
+        "description": "キャラクター開発、物語のアプローチ、価値観の伝達などを通じて、ジェンダーの視点から映画を鑑賞しましょう。"
+      },
+      "deepReflection": {
+        "title": "深い省察",
+        "description": "鑑賞後、映画に反映されている社会問題について考え、それらを現実の生活と結びつけてみましょう。"
+      },
+      "discussion": {
+        "title": "受容と対話",
+        "description": "鑑賞した感想を友人やコミュニティで共有し、対話を通じて理解を深めましょう。"
+      }
+    }
+  },
+  "videosPage": {
+    "title": "🎥 動画",
+    "subtitle": "講義、ドキュメンタリー、インタビューを通じて、視覚的にフェミニズムの理論と実践を学びましょう。",
+    "stats": {
+      "totalVideos": "全{count}動画",
+      "topicCategories": "{count}個のトピックカテゴリー"
+    },
+    "topicsTitle": "トピックカテゴリー",
+    "allVideos": "すべての動画",
+    "videosCount": "（{count}動画）",
+    "sort": {
+      "latest": "最新順",
+      "oldest": "古い順",
+      "titleAZ": "タイトル A-Z",
+      "titleZA": "タイトル Z-A",
+      "durationShort": "短い順",
+      "durationLong": "長い順"
+    },
+    "emptyState": {
+      "title": "動画が見つかりません",
+      "description": "このトピックの動画が見つかりません。他のトピックを試すか、全ての動画を表示してください。"
+    },
+    "guide": {
+      "title": "ビューイングガイド",
+      "documentaries": {
+        "title": "ドキュメンタリーから始める",
+        "description": "まずは『RBG』のような古典的なフェミニズム・ドキュメンタリーから始めて、歴史的な人物や重要な出来事を理解しましょう。"
+      },
+      "talks": {
+        "title": "講演とインタビュー",
+        "description": "学者や活動家によるスピーチやインタビューを視聴し、多様なフェミニストの視点に触れましょう。"
+      },
+      "reflection": {
+        "title": "批判的思考",
+        "description": "視聴後、自身の経験や現状と照らし合わせ、独立した判断力を養いましょう。"
+      }
+    }
+  },
+  "podcastsPage": {
+    "title": "🎙️ ポッドキャスト",
+    "subtitle": "多様な視点からの声を聞く。フェミニズムの議論を音声で。",
+    "stats": {
+      "totalPodcasts": "全{count}番組",
+      "topicCategories": "{count}個のトピックカテゴリー"
+    },
+    "topicsTitle": "トピックカテゴリー",
+    "allPodcasts": "すべてのポッドキャスト",
+    "sort": {
+      "latest": "最新順",
+      "oldest": "古い順",
+      "titleAZ": "タイトル A-Z",
+      "titleZA": "タイトル Z-A"
+    },
+    "emptyState": {
+      "noContent": "ポッドキャストが見つかりません",
+      "workingOnIt": "現在、より高品質なフェミニズムポッドキャストのリストを準備しています。",
+      "viewAll": "すべて見る"
+    },
+    "countFormat": "{count}エピソード",
+    "guide": {
+      "title": "リスニングガイド",
+      "diverseVoices": {
+        "title": "多様な声",
+        "description": "異なる文化的背景を持つフェミニストの声に耳を傾け、視野を広げましょう。"
+      },
+      "deepConversations": {
+        "title": "深い対話",
+        "description": "長時間の対話やインタビューを通じて、複雑なジェンダー問題や社会現象を深く理解しましょう。"
+      },
+      "anytimeAnywhere": {
+        "title": "いつでもどこでも",
+        "description": "通勤中や休憩時間などの隙間時間を活用して学び、思考を日常生活に統合しましょう。"
+      }
+    }
+  },
+  "papersPage": {
+    "title": "📄 学術論文",
+    "subtitle": "最新の学術研究と理論的枠組みを通じて、ジェンダー問題への深い学際的洞察を提供します。",
+    "stats": {
+      "totalPapers": "全{count}論文",
+      "topicCategories": "{count}個のトピックカテゴリー"
+    },
+    "topicsTitle": "トピックカテゴリー",
+    "allPapers": "すべての論文",
+    "sort": {
+      "latest": "最新順",
+      "oldest": "古い順",
+      "titleAZ": "タイトル (A-Z)",
+      "titleZA": "タイトル (Z-A)",
+      "citationsDesc": "引用数 (多い順)",
+      "citationsAsc": "引用数 (少ない順)"
+    },
+    "emptyState": {
+      "noContent": "論文が見つかりません",
+      "workingOnIt": "このトピックの論文はまだありません。",
+      "viewAll": "すべて見る"
+    },
+    "guide": {
+      "title": "学術誌・論文ガイド",
+      "empirical": {
+        "title": "実証研究",
+        "description": "データに基づいたフィールドリサーチに焦点を当て、フェミニズム理論の応用を理解しましょう。"
+      },
+      "critical": {
+        "title": "批判的分析",
+        "description": "既存のジェンダー構造と社会システムに対する詳細な批判的分析。"
+      },
+      "interdisciplinary": {
+        "title": "学際的な視点",
+        "description": "社会学、心理学、経済学など様々な分野を横断した研究を探求し、フェミニズムへの包括的な理解を深めましょう。"
+      }
+    }
+  },
+  "paper": {
+    "info": "論文情報",
+    "abstract": "要旨",
+    "keywords": "キーワード",
+    "relatedPapers": "関連おすすめ",
+    "citationCount": "引用数",
+    "doi": "DOI",
+    "journal": "ジャーナル",
+    "language": "言語",
+    "readPaper": "論文を読む",
+    "viewPdf": "PDFを読む",
+    "types": {
+      "research": "研究",
+      "review": "レビュー",
+      "caseStudy": "ケーススタディ",
+      "theoretical": "理論研究"
+    }
+  },
+  "interactions": {
+    "like": "いいね",
+    "unlike": "いいね解除",
+    "bookmark": "お気に入り",
+    "unbookmark": "お気に入り解除",
+    "loginToInteract": "操作するにはログインしてください"
+  },
+  "book": {
+    "review": "書評・ガイド",
+    "info": "書籍情報",
+    "originalTitle": "原題",
+    "author": "著者",
+    "published": "出版",
+    "purchase": "この本を購入",
+    "buyOnAmazon": "Amazonで購入",
+    "affiliateNotice": "このリンクから購入すると、当サイトは少額の手数料を受け取ります。購入価格には影響しません。ご支援ありがとうございます！",
+    "relatedBooks": "関連おすすめ"
+  },
+  "podcast": {
+    "info": "ポッドキャスト情報",
+    "host": "ホスト",
+    "originalName": "原題",
+    "added": "収録",
+    "episodes": "エピソード数",
+    "listenOnline": "オンラインで聴く",
+    "visitSource": "下のボタンをクリックしてオリジナルプラットフォームで聴く",
+    "related": "関連ポッドキャスト",
+    "websiteNote": "完全なトランスクリプトとリソースはポッドキャストのウェブサイトで利用可能"
+  },
+  "newsletter": {
+    "title": "ニュースレターを購読",
+    "description": "最新のフェミニズムコンテンツや詳細な分析をお届けします。重要な視点を見逃しません。",
+    "success": "登録が完了しました！",
+    "error": "登録に失敗しました。もう一度お試しください。",
+    "genericError": "エラーが発生しました。"
+  },
+  "about": {
+    "title": "FemResについて",
+    "subtitle": "世界中のフェミニズムの声を集約し、ジェンダー平等事業の発展を推進",
+    "mission": {
+      "title": "私たちの使命",
+      "description1": "FemResは、世界最高品質のフェミニズムコンテンツ集約プラットフォームを目指しています。私たちは、知識と情報の力が社会変革を推進できると信じており、世界中のフェミニズムの思想、研究、実践を集約することで、ジェンダー平等に関心を持つすべての人に豊富な学習リソースを提供します。",
+      "description2": "情報が断片化する時代において、私たちはインテリジェントなコンテンツフィルタリングと分類により、推奨するすべてのコンテンツが厳格な品質管理を経ていることを保証し、ユーザーが効率的に価値ある情報を取得し、フェミニズムの多様な視点を深く理解できるようにします。",
+      "globalPerspective": "グローバルな視野",
+      "globalDescription": "多様な文化的背景",
+      "curatedContent": "厳選コンテンツ",
+      "curatedDescription": "厳格な品質管理",
+      "values": "平等・多様性・包摂",
+      "buildBetter": "より公正な世界を構築"
+    },
+    "coreValues": {
+      "title": "コアバリュー",
+      "subtitle": "私たちを導く基本原則",
+      "genderEquality": {
+        "title": "ジェンダー平等",
+        "description": "政治、経済、社会、文化などあらゆる分野で、すべてのジェンダーが平等な権利、機会、尊厳を享受することを提唱"
+      },
+      "intersectionality": {
+        "title": "交差性の視点",
+        "description": "ジェンダーと人種、階級、性的指向、障害などのアイデンティティの交差的影響を認識し、包括的な社会正義を追求"
+      },
+      "knowledgeEmpowerment": {
+        "title": "知識のエンパワーメント",
+        "description": "教育と知識の普及がジェンダー平等を実現する重要な手段であると信じ、より多くの人々にフェミニズムを理解してもらうことに尽力"
+      },
+      "openInclusion": {
+        "title": "開放性と包摂性",
+        "description": "異なる背景、視点、経験を持つ人々の対話への参加を歓迎し、多様性の中でコンセンサスを求め、違いの中で理解を促進"
+      }
+    },
+    "features": {
+      "title": "プラットフォームの特徴",
+      "subtitle": "最高品質のコンテンツ体験を提供",
+      "smartAggregation": {
+        "title": "スマートコンテンツ集約",
+        "description": "先進的なAI技術と人的レビューを組み合わせ、膨大な情報から高品質なフェミニズムコンテンツを選別",
+        "features": [
+          "多様なソースからのコンテンツ収集",
+          "品質スコアリングアルゴリズム",
+          "リアルタイム更新メカニズム"
+        ]
+      },
+      "preciseClassification": {
+        "title": "正確な分類システム",
+        "description": "完全なトピック分類システムを構築し、ユーザーが興味のあるコンテンツ領域を素早く見つけられるよう支援",
+        "features": [
+          "8つのコアトピック",
+          "多次元タグ",
+          "クロス検索機能"
+        ]
+      },
+      "diverseContent": {
+        "title": "多様なコンテンツ形式",
+        "description": "書籍、記事、動画、ポッドキャスト、学術論文など多様なコンテンツ形式を網羅し、異なる学習スタイルに対応",
+        "features": [
+          "5種類のコンテンツタイプ",
+          "グローバルリソース",
+          "マルチメディア表示"
+        ]
+      }
+    },
+    "contentTypes": {
+      "title": "コンテンツタイプ",
+      "subtitle": "多様なコンテンツ形式で、異なる学習ニーズに対応",
+      "books": {
+        "title": "書籍",
+        "description": "古典と新作"
+      },
+      "articles": {
+        "title": "記事",
+        "description": "深い分析"
+      },
+      "videos": {
+        "title": "動画",
+        "description": "視覚的表現"
+      },
+      "podcasts": {
+        "title": "ポッドキャスト",
+        "description": "音声で伝える"
+      },
+      "papers": {
+        "title": "論文",
+        "description": "学術研究"
+      },
+      "films": {
+        "title": "映画",
+        "description": "映像ナラティブ"
+      }
+    },
+    "coreTopics": {
+      "title": "コアトピック",
+      "subtitle": "フェミニズムが注目する重要な領域を網羅",
+      "workplaceEquality": {
+        "title": "職場の平等",
+        "description": "職場でのジェンダー差別を撤廃し、同一労働同一賃金を推進し、ガラスの天井を打破"
+      },
+      "bodilyAutonomy": {
+        "title": "身体の自律性",
+        "description": "女性が自分の身体に対する決定権を維持し、生殖権と健康権を含む"
+      },
+      "educationRights": {
+        "title": "教育の権利",
+        "description": "すべてのジェンダーが平等に教育を受ける機会を確保し、教育分野の偏見を撤廃"
+      },
+      "politicalParticipation": {
+        "title": "政治参加",
+        "description": "政治的意思決定における女性の代表性と参加度を向上"
+      },
+      "familyRoles": {
+        "title": "家族の役割",
+        "description": "家族責任の配分を再定義し、伝統的なジェンダー役割の束縛を打破"
+      },
+      "genderViolence": {
+        "title": "ジェンダー暴力",
+        "description": "あらゆる形態のジェンダー暴力に注目し阻止し、被害者の権利を保護"
+      },
+      "mediaRepresentation": {
+        "title": "メディア表象",
+        "description": "メディアにおけるジェンダーステレオタイプを批判し、多様な表現を推進"
+      },
+      "historicalFigures": {
+        "title": "歴史上の人物",
+        "description": "歴史上の傑出した女性とその貢献を再発見し認識"
+      }
+    },
+    "team": {
+      "title": "チームの理念",
+      "subtitle": "フェミニズム事業を愛するボランティアが共同で維持",
+      "description": "FemResはボランティア主導のオープンソースプロジェクトです。私たちのチームメンバーは、技術開発者、コンテンツ編集者、フェミニズム研究者、社会活動家など、異なる背景を持っています。私たちは共通の信念で集まりました：知識の力を信じ、ジェンダー平等の未来を信じています。",
+      "openSource": {
+        "title": "オープンソース・透明性",
+        "description": "コードとコンテンツ戦略を完全に公開"
+      },
+      "communityDriven": {
+        "title": "コミュニティ主導",
+        "description": "すべての人の貢献を歓迎"
+      },
+      "nonProfit": {
+        "title": "非営利",
+        "description": "純粋に平等を推進するために努力"
+      }
+    },
+    "joinUs": {
+      "title": "一緒に成長しましょう",
+      "description": "コンテンツクリエイター、技術開発者、研究学者、熱心な読者など、どなたでもFemResコミュニティへの参加を歓迎します。一緒にジェンダー平等事業に貢献しましょう",
+      "contributeContent": "コンテンツを投稿",
+      "githubProject": "GitHubプロジェクト"
+    },
+    "contact": {
+      "title": "お問い合わせ",
+      "description": "ご質問、ご提案、協力のご意向がございましたら、以下の方法でお気軽にお問い合わせください"
+    }
+  },
+  "contactPage": {
+    "metaTitle": "お問い合わせ",
+    "metaDescription": "皆様からのフィードバックを大切にし、繋がることを楽しみにしています",
+    "hero": {
+      "title": "お問い合わせ",
+      "titleHighlight": "FemRes",
+      "subtitle": "皆様からのフィードバックを大切にし、繋がることを楽しみにしています"
+    },
+    "options": {
+      "general": {
+        "title": "一般的なお問い合わせ",
+        "description": "FemResについてのご質問ですか？喜んでお手伝いします。"
+      },
+      "submission": {
+        "title": "コンテンツ投稿",
+        "description": "素晴らしいコンテンツをお持ちですか？あなたの貢献を楽しみにしています。"
+      },
+      "partnership": {
+        "title": "パートナーシップ",
+        "description": "コラボレーションをご希望ですか？一緒にジェンダー平等を推進しましょう。"
+      },
+      "volunteer": {
+        "title": "ボランティア",
+        "description": "チームに参加しませんか？今すぐ参加しましょう。"
+      }
+    },
+    "form": {
+      "title": "メッセージを送る",
+      "subtitle": "以下のフォームにご記入ください。できるだけ早く返信いたします。",
+      "name": "お名前",
+      "placeholderName": "お名前を入力してください",
+      "email": "メールアドレス",
+      "placeholderEmail": "your@email.com",
+      "subject": "件名",
+      "placeholderSubject": "件名を選択",
+      "message": "メッセージ",
+      "placeholderMessage": "ご依頼やご質問の内容をご記入ください...",
+      "agreement": "以下を読み、同意します：",
+      "privacy": "プライバシーポリシー",
+      "terms": "利用規約",
+      "submit": "メッセージを送信",
+      "required": "*",
+      "subjects": {
+        "general": "一般的なお問い合わせ",
+        "content": "コンテンツ投稿",
+        "partnership": "パートナーシップ",
+        "volunteer": "ボランティア",
+        "feedback": "フィードバック",
+        "other": "その他"
+      }
+    },
+    "faq": {
+      "title": "よくある質問",
+      "subtitle": "よくある質問と回答",
+      "items": [
+        {
+          "question": "FemResにコンテンツを投稿するには？",
+          "answer": "タイトル、著者、概要、リンクを記載して submissions@femres.org までメールをお送りください。編集チームが7営業日以内に審査し、返信いたします。"
+        },
+        {
+          "question": "FemResはどのようにコンテンツを選別していますか？",
+          "answer": "AI技術と人間によるレビューを組み合わせています。アルゴリズムによる初期スクリーニングの後、専門家が正確性、関連性、価値を審査し、多様性を重視しています。"
+        },
+        {
+          "question": "ボランティアになるには？",
+          "answer": "あらゆる分野のボランティアを歓迎します！経歴と興味のある分野を volunteer@femres.org までメールでご連絡ください。編集者、開発者、デザイナー、翻訳者を募集しています。"
+        },
+        {
+          "question": "FemResは寄付を受け付けていますか？",
+          "answer": "非営利プロジェクトとして、コミュニティの支援に頼っています。支援をご希望の場合は partnership@femres.org までご連絡ください。資金はすべてプラットフォームの維持とコンテンツ開発に使われます。"
+        },
+        {
+          "question": "コンテンツの問題やエラーを報告するには？",
+          "answer": "エラーやリンク切れを見つけましたか？ページリンクと説明を info@femres.org までお送りください。早急に対応いたします。"
+        }
+      ]
+    },
+    "info": {
+      "title": "連絡先情報",
+      "email": "代表メールアドレス：",
+      "response": "対応時間：月〜金 9:00 - 18:00 (UTC+8)",
+      "scope": "対応範囲：グローバル",
+      "note": "FemResはボランティア運営のオープンソースプロジェクトです。48時間以内の返信を目指しています。"
+    }
+  },
+  "searchPage": {
+    "title": "検索",
+    "metaDescription": "FemResでフェミニズムに関する書籍、記事、動画、ポッドキャスト、論文を検索",
+    "heroTitle": "コンテンツ検索",
+    "subtitle": "{count}件の厳選リソースから発見する",
+    "placeholder": "タイトル、著者、説明、トピックで検索...",
+    "filters": {
+      "clear": "フィルターをクリア",
+      "allTopics": "すべてのトピック"
+    },
+    "sort": {
+      "relevance": "関連度順",
+      "newest": "新しい順",
+      "oldest": "古い順",
+      "az": "タイトル昇順 (A-Z)",
+      "za": "タイトル降順 (Z-A)"
+    },
+    "results": {
+      "count": "{count}件の結果を表示",
+      "emptyTitle": "結果が見つかりません",
+      "emptyMessage": "キーワードやフィルターを調整してみてください"
+    }
+  },
+  "profilePage": {
+    "title": "マイページ",
+    "description": "プロフィールとコンテンツを管理",
+    "ui": {
+      "usernameEmpty": "ユーザー名は必須です",
+      "updateFailed": "更新に失敗しました",
+      "loginRequired": "ログインしてください",
+      "loginDesc": "ログインしてプロフィールとコンテンツを表示",
+      "home": "ホームに戻る",
+      "editUsername": "ユーザー名を編集",
+      "likes": "いいね",
+      "bookmarks": "ブックマーク",
+      "joinDate": "参加日",
+      "logout": "ログアウト",
+      "myLikes": "いいねしたコンテンツ",
+      "myBookmarks": "ブックマーク",
+      "contentCount": "件のコンテンツ",
+      "quickActions": "クイックアクション",
+      "browseBooks": "書籍を閲覧",
+      "readArticles": "記事を読む",
+      "exploreTopics": "トピックを探索"
+    },
+    "bookmarks": {
+      "title": "ブックマーク",
+      "description": "ブックマークしたすべてのコンテンツを表示",
+      "emptyMessage": "ここにはあなたの個人的なコレクションが表示されます"
+    },
+    "likes": {
+      "title": "いいねしたコンテンツ",
+      "description": "「いいね」したすべてのコンテンツを表示",
+      "emptyMessage": "あなたが気に入った瞬間がここに記録されます"
+    },
+    "breadcrumb": {
+      "home": "ホーム",
+      "profile": "マイページ"
+    },
+    "contentList": {
+      "loginRequired": "ログインしてください",
+      "loginDesc": "ログインして{type}したコンテンツを表示",
+      "loading": "読み込み中...",
+      "noContent": "{type}したコンテンツはまだありません",
+      "browseDesc": "コンテンツを閲覧して、お気に入りの作品を{action}しましょう",
+      "author": "著者：",
+      "viewDetails": "詳細を見る →",
+      "types": {
+        "book": "書籍",
+        "book_plural": "書籍",
+        "article": "記事",
+        "article_plural": "記事",
+        "video": "動画",
+        "video_plural": "動画",
+        "podcast": "ポッドキャスト",
+        "podcast_plural": "ポッドキャスト",
+        "paper": "論文",
+        "paper_plural": "論文",
+        "film": "映画",
+        "film_plural": "映画",
+        "default": "コンテンツ"
+      },
+      "actions": {
+        "like": "いいね",
+        "bookmark": "ブックマーク"
+      },
+      "items": {
+        "likes": "いいね",
+        "bookmarks": "ブックマーク"
+      }
+    }
+  },
+  "discussion": {
+    "title": "ディスカッション",
+    "description": "あなたの考えを共有してください",
+    "contentType": {
+      "default": {
+        "title": "💬 ディスカッション",
+        "description": "このコンテンツについてのご意見をお聞かせください"
+      },
+      "book": {
+        "title": "📚 読書ディスカッション",
+        "description": "読後の感想や考えをシェアしてください"
+      },
+      "article": {
+        "title": "📰 記事ディスカッション",
+        "description": "この記事についてのご意見をお聞かせください"
+      },
+      "video": {
+        "title": "🎥 動画ディスカッション",
+        "description": "視聴後の感想をシェアしてください"
+      },
+      "podcast": {
+        "title": "🎧 ポッドキャストディスカッション",
+        "description": "聴取後の感想をシェアしてください"
+      },
+      "paper": {
+        "title": "📄 論文ディスカッション",
+        "description": "この研究についてのご意見をお聞かせください"
+      }
+    },
+    "noCommentsYet": "まだコメントはありません。最初のコメントを投稿してください！",
+    "shareYourThoughts": "あなたの考えを共有...",
+    "postComment": "コメントを投稿",
+    "reply": "返信",
+    "posting": "投稿中...",
+    "joinDiscussion": "ディスカッションに参加",
+    "loginToDiscuss": "ログインして参加",
+    "loadingComments": "コメントを読み込み中...",
+    "totalComments": "{count}件のコメント",
+    "loginRequired": "ログインしてください",
+    "replyTo": "{name}さんに返信"
+  },
+  "contribute": {
+    "title": "コンテンツを",
+    "content": "投稿",
+    "subtitle": "あなたの貢献は、より多くの人々がフェミニズムを理解し、ジェンダー平等を共に推進するのに役立ちます",
+    "types": {
+      "title": "何を投稿できますか？",
+      "subtitle": "FemResはあらゆる形式の高品質なコンテンツ投稿を歓迎します",
+      "books": {
+        "title": "書籍推薦",
+        "description": "優れたフェミニズム関連書籍を推薦してください。理論書、文学作品、伝記などを含みます",
+        "requirements": [
+          "書籍はフェミニズムまたはジェンダー研究に関連している必要があります",
+          "詳細な書籍情報と推薦理由を提供してください",
+          "書籍情報が正確であることを確認してください"
+        ]
+      },
+      "articles": {
+        "title": "記事共有",
+        "description": "学術論文、評論記事、ニュースレポートなど、高品質な記事を共有してください",
+        "requirements": [
+          "記事内容に権威性と信頼性があること",
+          "記事のソースとリンクを提供してください",
+          "内容がフェミニズムの議題に関連していること"
+        ]
+      },
+      "videos": {
+        "title": "動画コンテンツ",
+        "description": "講義、ドキュメンタリー、インタビューなどの教育的動画を推薦または作成してください",
+        "requirements": [
+          "動画内容に高い教育性があること",
+          "完全な動画情報を提供してください",
+          "動画と音声の品質が明瞭であることを確認してください"
+        ]
+      },
+      "podcasts": {
+        "title": "ポッドキャストコンテンツ",
+        "description": "フェミニズム関連のポッドキャスト番組とオーディオコンテンツを共有してください",
+        "requirements": [
+          "ポッドキャスト内容がテーマに関連していること",
+          "ポッドキャストプラットフォームのリンクを提供してください",
+          "ポッドキャストの言語と長さを明記してください"
+        ]
+      },
+      "academic": {
+        "title": "学術論文",
+        "description": "査読済みの学術研究と論文を共有してください",
+        "requirements": [
+          "査読済みの学術論文である必要があります",
+          "完全な引用情報を提供してください",
+          "論文が公開アクセス可能であることを確認してください"
+        ]
+      },
+      "translation": {
+        "title": "翻訳作業",
+        "description": "優良コンテンツの翻訳を手伝い、より多くの人に学習機会を提供してください",
+        "requirements": [
+          "関連言語能力を有すること",
+          "翻訳の品質と正確性を保証してください",
+          "原作の著作権を尊重してください"
+        ]
+      }
+    },
+    "process": {
+      "title": "投稿プロセス",
+      "subtitle": "簡単なステップで、あなたのコンテンツを共有できます",
+      "steps": [
+        {
+          "title": "コンテンツを提出",
+          "description": "フォームまたはGitHubでコンテンツの提案を提出してください",
+          "icon": "📧"
+        },
+        {
+          "title": "品質審査",
+          "description": "私たちのチームがコンテンツの品質と関連性を慎重に審査します",
+          "icon": "🔍"
+        },
+        {
+          "title": "公開・共有",
+          "description": "審査に合格したコンテンツはプラットフォームで正式に公開されます",
+          "icon": "🚀"
+        }
+      ]
+    },
+    "guidelines": {
+      "title": "投稿ガイドライン",
+      "subtitle": "以下のガイドラインに従い、コンテンツの品質を確保してください",
+      "rules": [
+        {
+          "title": "コンテンツの関連性",
+          "description": "すべてのコンテンツはフェミニズム、ジェンダー研究、または関連議題に直接関連している必要があります"
+        },
+        {
+          "title": "品質基準",
+          "description": "コンテンツに教育的価値、正確性、信頼性があることを確保してください"
+        },
+        {
+          "title": "著作権の尊重",
+          "description": "知的財産権を尊重し、共有するコンテンツが他者の著作権を侵害しないことを確認してください"
+        },
+        {
+          "title": "包摂性",
+          "description": "多様な視点を歓迎しますが、差別的またはヘイトスピーチは受け付けません"
+        }
+      ]
+    },
+    "recognition": {
+      "title": "貢献者の認識",
+      "subtitle": "FemResに貢献してくださったすべての方に感謝します",
+      "benefits": [
+        "関連コンテンツページに貢献者情報を表示",
+        "FemResコミュニティ認定バッジを取得",
+        "プラットフォーム機能テストへの優先参加",
+        "オンライン/オフラインイベントへの招待",
+        "専用貢献者ニュースレターの受信"
+      ],
+      "honors": {
+        "title": "貢献者認定",
+        "subtitle": "すべての貢献者の努力に感謝します。優秀な貢献者には以下の特典があります：",
+        "items": [
+          {
+            "title": "貢献者バッジ",
+            "description": "プロフィールページに特別バッジを表示",
+            "icon": "🏆"
+          },
+          {
+            "title": "帰属表示",
+            "description": "コンテンツページに貢献者情報を表示",
+            "icon": "📜"
+          },
+          {
+            "title": "限定特典",
+            "description": "新機能やイベントへの優先アクセス",
+            "icon": "🎁"
+          }
+        ]
+      }
+    },
+    "submission": {
+      "title": "投稿を開始",
+      "subtitle": "以下のフォームに記入して、コンテンツを提出してください",
+      "form": {
+        "name": "お名前",
+        "namePlaceholder": "お名前を入力してください",
+        "email": "メールアドレス",
+        "emailPlaceholder": "your@email.com",
+        "contentType": "コンテンツタイプ",
+        "contentTypePlaceholder": "コンテンツタイプを選択してください",
+        "contentTypes": {
+          "book": "書籍推薦",
+          "article": "記事共有",
+          "video": "動画リソース",
+          "podcast": "ポッドキャスト番組",
+          "paper": "学術論文",
+          "original": "オリジナルコンテンツ"
+        },
+        "title": "コンテンツタイトル",
+        "titlePlaceholder": "コンテンツタイトルを入力してください",
+        "link": "関連リンク（ある場合）",
+        "linkPlaceholder": "https://example.com",
+        "topics": "関連トピック（複数選択可）",
+        "topicCategories": {
+          "theoretical": "理論学派",
+          "movement": "運動議題",
+          "critique": "批判領域",
+          "historical": "歴史的文脈",
+          "special": "特別概念"
+        },
+        "topicsList": {
+          "intersectional": "交差的フェミニズム",
+          "marxist": "マルクス主義フェミニズム",
+          "decolonial": "脱植民地フェミニズム",
+          "radical": "ラディカルフェミニズム",
+          "liberal": "リベラルフェミニズム",
+          "black": "ブラックフェミニズム",
+          "trans": "トランスジェンダーフェミニズム",
+          "eco": "エコフェミニズム",
+          "workplace": "職場の平等",
+          "equalPay": "同一労働同一賃金",
+          "reproductive": "生殖の自律性",
+          "abortion": "中絶の権利",
+          "antiViolence": "性暴力反対",
+          "political": "政治参加",
+          "education": "教育の平等",
+          "family": "家族の解放",
+          "sports": "スポーツの平等",
+          "economic": "経済的エンパワーメント",
+          "patriarchy": "家父長制批判",
+          "capitalism": "資本主義批判",
+          "media": "メディア表象批判",
+          "religious": "宗教的家父長制批判",
+          "cultural": "文化批判",
+          "secondWave": "第二波フェミニズム",
+          "thirdWave": "第三波フェミニズム",
+          "fourthWave": "第四波フェミニズム",
+          "metoo": "MeToo運動",
+          "chinese": "中国フェミニズム運動",
+          "emotional": "感情労働",
+          "care": "ケア倫理",
+          "psychology": "フェミニスト心理学",
+          "art": "フェミニストアート"
+        },
+        "customTopics": "その他のトピック（カスタム入力可）",
+        "customTopicsPlaceholder": "他のトピックがある場合は、カンマで区切ってください",
+        "description": "コンテンツの説明",
+        "descriptionPlaceholder": "主な論点、推薦理由などを含め、コンテンツを詳しく説明してください...",
+        "terms": "提出するコンテンツが真実で有効であることを確認し、FemResの",
+        "termsLink": "投稿規約",
+        "submit": "投稿を提出"
+      }
+    },
+    "github": {
+      "title": "GitHubで貢献",
+      "subtitle": "FemResはオープンソースプロジェクトです。GitHubから直接コンテンツを提出したり、コードを改善したりすることもできます",
+      "visitRepo": "GitHubリポジトリを訪問",
+      "viewGuide": "貢献ガイドを見る"
+    },
+    "support": {
+      "title": "寄付でサポート",
+      "subtitle": "FemResのコンテンツが価値があると感じたら、コーヒーをおごってください。あなたのサポートは私たちを助けます：",
+      "benefits": [
+        {
+          "title": "より多くのコンテンツを発見",
+          "description": "高品質なリソースのキュレーションにより多くの時間を投資",
+          "icon": "🔍"
+        },
+        {
+          "title": "プラットフォーム機能の改善",
+          "description": "新機能を開発し、ユーザー体験を向上",
+          "icon": "⚡"
+        },
+        {
+          "title": "プロジェクトを無料に保つ",
+          "description": "すべてのユーザーがこれらのリソースに無料でアクセスできるようにする",
+          "icon": "💝"
+        }
+      ],
+      "button": "☕ コーヒーをおごって",
+      "thankYou": "どんな金額のサポートでも私たちを温かくします 💝"
+    }
+  },
+  "film": {
+    "info": "映画情報",
+    "director": "監督",
+    "cast": "出演",
+    "releaseDate": "公開日",
+    "year": "年",
+    "duration": "上映時間",
+    "awards": "受賞・ノミネート",
+    "ratingsAndLinks": "評価とリンク",
+    "trailer": "予告編",
+    "imdbRating": "IMDB評価",
+    "review": "レビューと分析"
+  },
+  "video": {
+    "description": "説明",
+    "watchOriginal": "オリジナルを見る",
+    "originalLink": "オリジナルリンク",
+    "videoInfo": "動画情報",
+    "relatedTopics": "関連トピック",
+    "relatedVideos": "関連おすすめ",
+    "language": "言語",
+    "addToPlaylist": "プレイリストに追加",
+    "unavailable": "動画は再生できません",
+    "supportUs": "サポート",
+    "supportMessage": "このコンテンツがお役に立ちましたら"
+  },
+  "articlesPage": {
+    "title": "記事",
+    "subtitle": "学術的な分析から時事評論まで、フェミニズムに関する多角的な視点を提供する重要な論考を収集しています。",
+    "stats": {
+      "totalArticles": "全{count}記事",
+      "topicCategories": "{count}個のトピックカテゴリー"
+    },
+    "topicsTitle": "トピックカテゴリー",
+    "allArticles": "すべての記事",
+    "allArticlesHeading": "すべての記事",
+    "articlesCount": "（{count}記事）",
+    "noArticles": "条件に一致する記事は見つかりませんでした。",
+    "sort": {
+      "latest": "最新順",
+      "oldest": "古い順",
+      "titleAZ": "タイトル A-Z",
+      "titleZA": "タイトル Z-A"
+    },
+    "guide": {
+      "title": "リーディングガイド",
+      "deepReading": {
+        "title": "精読",
+        "description": "著者の中心的な論点と論理的構成を注意深く追い、その理論的背景を理解しましょう。"
+      },
+      "intersectionalPerspective": {
+        "title": "交差的な視点",
+        "description": "ジェンダーが人種、階級、セクシュアリティなど他のアイデンティティとどのように交差しているかを分析しながら読みましょう。"
+      },
+      "criticalThinking": {
+        "title": "批判的思考",
+        "description": "記事の主張を鵜呑みにせず、提示された証拠や論理、そして無視されている視点がないかを批判的に検討しましょう。"
+      }
+    }
+  },
+  "topicsPage": {
+    "title": "フェミニストトピックカテゴリー",
+    "subtitle": "理論から実践まで、フェミニズムコンテンツの豊かな多様性を発見",
+    "popularTopics": "人気トピック",
+    "popularTopicsDesc": "最も議論されているフェミニストトピック",
+    "categories": {
+      "theoreticalschools": "理論的流派",
+      "movementissues": "運動課題",
+      "criticaldomains": "批判的領域",
+      "historicalcontext": "歴史的背景",
+      "literature&creation": "文学と創作",
+      "specialconcepts": "特別概念"
+    },
+    "categoryDescriptions": {
+      "theoreticalschools": "理論的流派",
+      "movementissues": "運動課題",
+      "criticaldomains": "批判的領域",
+      "historicalcontext": "歴史的背景",
+      "literature&creation": "文学と創作",
+      "specialconcepts": "特別概念"
+    },
+    "contributeTitle": "新しいコンテンツを投稿",
+    "contributeDesc": "質の高いフェミニズム関連コンテンツをお持ちの場合は、ぜひ共有してください",
+    "submitContent": "コンテンツを投稿",
+    "searchContent": "コンテンツを検索",
+    "topicsCount": "{count} 個のトピック",
+    "totalContent": "総コンテンツ数：{count}",
+    "comingSoon": "近日公開"
+  },
+  "auth": {
+    "login": "ログイン",
+    "loginPrompt": "続行するにはログインしてください",
+    "passwordMismatch": "パスワードが一致しません",
+    "invalidEmail": "無効なメールアドレス",
+    "loginFailed": "ログインに失敗しました",
+    "registerFailed": "登録に失敗しました",
+    "networkError": "ネットワークエラー",
+    "register": "登録",
+    "username": "ユーザー名",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "confirmPassword": "パスワード（確認）",
+    "usernamePlaceholder": "ユーザー名を入力",
+    "emailPlaceholder": "メールアドレスを入力",
+    "passwordPlaceholder": "パスワードを入力",
+    "confirmPasswordPlaceholder": "パスワードを再入力",
+    "registerPrompt": "アカウント作成",
+    "haveAccount": "アカウントをお持ちですか？ログイン",
+    "noAccount": "アカウントをお持ちでないですか？登録",
+    "loginInProgress": "ログイン中...",
+    "registerInProgress": "登録中...",
+    "fillAllFields": "すべての項目を入力してください",
+    "fillEmailPassword": "メールアドレスとパスワードを入力してください"
+  },
+  "topicDetailPage": {
+    "description": "{topic}に関する厳選されたフェミニズムコンテンツを探索",
+    "itemsFound": "件のコンテンツ",
+    "noRelatedContent": "関連コンテンツはありません",
+    "comingSoon": "「{topic}」に関する質の高いコンテンツを収集中です。お楽しみに！",
+    "browseOtherTopics": "他のトピックを見る",
+    "relatedTopics": "関連トピック",
+    "discoverMoreTitle": "もっと見る",
+    "discoverMoreDesc": "より多くのフェミニズムトピックやリソースを探索",
+    "contentTypes": {
+      "book": "書籍",
+      "film": "映画",
+      "article": "記事",
+      "video": "動画",
+      "podcast": "ポッドキャスト",
+      "paper": "論文"
+    }
+  },
+  "article": {
+    "relatedArticles": "関連記事"
+  },
+  "promo": {
+    "fatefuldeck": {
+      "supportedBy": "このプロジェクトは FatefulDeck.com の提供により運営されています",
+      "title": "FatefulDeck AI タロット",
+      "description": "AIを搭載した10言語対応のプレミアム・タロット占いプラットフォーム。あなたの母語で運命を切り拓きましょう。",
+      "cta": "占いを開始する",
+      "insightTitle": "もっと洞察が必要ですか？",
+      "insightDescription": "今日のガイダンスとして、カードを1枚引いてみましょう。",
+      "insightCta": "カードを引く",
+      "thanksSupport": "本プロジェクトは FatefulDeck.com によってサポートされています",
+      "thanksSupportMessage": "FatefulDeck AI タロット - AIを搭載したプレミアムな10言語対応のタロット占いプラットフォーム。",
+      "checkFortune": "今日の運勢をチェック",
+      "showcaseTitle": "あなたの運命を探求する",
+      "showcaseDescription": "タロットカードを選んで、探求の旅を始めましょう。",
+      "showcaseCTA": "すべてのデッキを見る"
+    }
+  }
+}

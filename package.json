@@ -1,0 +1,39 @@
+{
+  "name": "femres",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "FemRes - 女性主义内容聚合平台",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "lint": "astro check",
+    "migrate": "tsx scripts/migrate-to-supabase.ts",
+    "upload:r2": "tsx scripts/upload-to-r2.ts",
+    "upload:r2:single": "tsx scripts/upload-single-to-r2.ts",
+    "update:cdn": "tsx scripts/update-cdn-urls.ts"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/react": "^4.3.1",
+    "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/vercel": "^8.2.8",
+    "@aws-sdk/client-s3": "^3.974.0",
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/react": "^18.3.24",
+    "@types/react-dom": "^18.3.7",
+    "astro": "^5.13.6",
+    "mime": "^4.1.0",
+    "postgres": "^3.4.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.3",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.7",
+    "tsx": "^4.19.2"
+  }
+}

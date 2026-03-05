@@ -1,0 +1,74 @@
+---
+// PageHeader component for consistent page headers with glass effect
+export interface Props {
+  title: string;
+  description: string;
+  icon?: string;
+  stats?: Array<{ icon: string; text: string }>;
+  gradient?: 'purple' | 'emerald' | 'blue' | 'pink' | 'red' | 'indigo' | 'slate';
+}
+
+const { title, description, icon, stats, gradient = 'purple' } = Astro.props;
+
+// Define gradient styles based on the gradient prop
+const gradientStyles = {
+  purple: 'from-purple-600 to-pink-600 dark:from-purple-900 dark:to-pink-900',
+  emerald: 'from-emerald-600 to-teal-600 dark:from-emerald-900 dark:to-teal-900',
+  blue: 'from-blue-600 to-indigo-600 dark:from-blue-900 dark:to-indigo-900',
+  pink: 'from-pink-600 to-rose-600 dark:from-pink-900 dark:to-rose-900',
+  red: 'from-red-600 to-orange-600 dark:from-red-900 dark:to-orange-900',
+  indigo: 'from-indigo-600 to-purple-600 dark:from-indigo-900 dark:to-purple-900',
+  slate: 'from-slate-600 to-gray-600 dark:from-slate-900 dark:to-gray-900'
+};
+
+const selectedGradient = gradientStyles[gradient];
+---
+
+<div class="relative text-white border-b border-white/20">
+  <!-- Gradient Background Layer with Glass Effect -->
+  <div class={`absolute inset-0 bg-gradient-to-r ${selectedGradient}`} style="filter: saturate(1.3) contrast(1.15);"></div>
+
+  <!-- Glass Effect Layers -->
+  <div class="absolute inset-0 glass-header"></div>
+
+  <!-- Subtle Pattern Overlay -->
+  <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.4) 1px, transparent 0); background-size: 20px 20px;"></div>
+
+  <!-- Light Gradient Overlay -->
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.15),transparent)]"></div>
+
+  <div class="relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="relative backdrop-blur-sm">
+        <div class="text-center">
+          <h1 class="text-4xl md:text-5xl font-bold mb-4">
+            {icon && <span class="mr-3">{icon}</span>}
+            {title}
+          </h1>
+          <p class="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
+            {description}
+          </p>
+
+          <!-- Stats Section -->
+          {stats && stats.length > 0 && (
+            <div class="flex flex-wrap justify-center gap-6 text-sm">
+              {stats.map(stat => (
+                <div class="flex items-center glass-light px-4 py-2 rounded-full shadow-lg shadow-black/10">
+                  <span class="text-white mr-2">{stat.icon}</span>
+                  <span class="text-white">{stat.text}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* 确保磨玻璃效果的层叠正确 */
+  .glass-header {
+    backdrop-filter: blur(8px);
+  }
+</style>

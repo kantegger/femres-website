@@ -1,0 +1,77 @@
+---
+export const prerender = true;
+
+import Layout from "../../../layouts/Layout.astro";
+import UserContentList from "../../../components/UserContentList";
+import { createT, getLocalizedPath } from "../../../i18n/index";
+import { type Locale } from "../../../i18n/types";
+
+export function getStaticPaths() {
+  const locales = ["en", "zh-CN", "zh-TW", "ja", "fr"];
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const { locale } = Astro.params;
+const currentLocale = locale as Locale;
+const t = createT(currentLocale);
+---
+
+<Layout
+  title={`${t("profilePage.bookmarks.title")} - FemRes`}
+  description={t("profilePage.bookmarks.description")}
+>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div
+      class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <nav class="mb-8">
+          <div
+            class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400"
+          >
+            <a
+              href={getLocalizedPath("/", currentLocale)}
+              class="hover:text-purple-600 dark:hover:text-purple-400"
+              >{t("profilePage.breadcrumb.home")}</a
+            >
+            <span>/</span>
+            <a
+              href={getLocalizedPath("profile", currentLocale)}
+              class="hover:text-purple-600 dark:hover:text-purple-400"
+              >{t("profilePage.breadcrumb.profile")}</a
+            >
+            <span>/</span>
+            <span class="text-gray-900 dark:text-white font-bold"
+              >{t("profilePage.bookmarks.title")}</span
+            >
+          </div>
+        </nav>
+
+        <div class="text-center">
+          <div
+            class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900 dark:to-orange-900 rounded-full mb-4"
+          >
+            <span class="text-4xl">⭐</span>
+          </div>
+          <h1
+            class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4"
+          >
+            {t("profilePage.bookmarks.title")}
+          </h1>
+          <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            {t("profilePage.bookmarks.emptyMessage")}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <UserContentList
+        type="bookmarks"
+        locale={currentLocale}
+        uiStrings={t("profilePage.contentList") as any}
+        client:load
+      />
+    </div>
+  </div>
+</Layout>

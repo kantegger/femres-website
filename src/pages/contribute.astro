@@ -1,0 +1,637 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { createT, getLocalizedPath } from '../i18n/index';
+
+const currentLocale = 'zh-CN';
+const t = createT(currentLocale);
+---
+
+<Layout title={`${t('contribute.title')} - FemRes`} description={t('contribute.subtitle')}>
+  <!-- Hero Section -->
+  <section class="relative py-12 sm:py-16 lg:py-20 overflow-hidden">
+    <!-- Background decorative elements -->
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute top-20 left-20 w-32 sm:w-48 lg:w-72 h-32 sm:h-48 lg:h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+      <div class="absolute top-10 right-10 w-32 sm:w-48 lg:w-72 h-32 sm:h-48 lg:h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+      <div class="absolute bottom-20 left-1/3 w-32 sm:w-48 lg:w-72 h-32 sm:h-48 lg:h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
+          {t('contribute.title')}
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">{t('contribute.content')}</span>
+        </h1>
+        <p class="text-lg sm:text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto px-4">
+          {t('contribute.subtitle')}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- Contribution Types -->
+    <section class="mb-16 sm:mb-20">
+      <div class="text-center mb-12">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          {t('contribute.types.title')}
+        </h2>
+        <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          {t('contribute.types.subtitle')}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <!-- Books -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all hover:-translate-y-1">
+          <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-2xl mb-4">
+            📚
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{t('contribute.types.books.title')}</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            {t('contribute.types.books.description')}
+          </p>
+          <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+            {(t('contribute.types.books.requirements') as any).map((requirement: string) => (
+              <li class="flex items-start">
+                <span class="text-purple-500 mr-2">✓</span>
+                <span>{requirement}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Articles -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all hover:-translate-y-1">
+          <div class="w-14 h-14 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl flex items-center justify-center text-white text-2xl mb-4">
+            📝
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{t('contribute.types.articles.title')}</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            {t('contribute.types.articles.description')}
+          </p>
+          <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+            {(t('contribute.types.articles.requirements') as any).map((requirement: string) => (
+              <li class="flex items-start">
+                <span class="text-purple-500 mr-2">✓</span>
+                <span>{requirement}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Videos -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all hover:-translate-y-1">
+          <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-2xl mb-4">
+            🎬
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{t('contribute.types.videos.title')}</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            {t('contribute.types.videos.description')}
+          </p>
+          <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+            {(t('contribute.types.videos.requirements') as any).map((requirement: string) => (
+              <li class="flex items-start">
+                <span class="text-purple-500 mr-2">✓</span>
+                <span>{requirement}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Podcasts -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all hover:-translate-y-1">
+          <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center text-white text-2xl mb-4">
+            🎧
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{t('contribute.types.podcasts.title')}</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            {t('contribute.types.podcasts.description')}
+          </p>
+          <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+            {(t('contribute.types.podcasts.requirements') as any).map((requirement: string) => (
+              <li class="flex items-start">
+                <span class="text-purple-500 mr-2">✓</span>
+                <span>{requirement}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Academic Papers -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all hover:-translate-y-1">
+          <div class="w-14 h-14 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center text-white text-2xl mb-4">
+            📄
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{t('contribute.types.academic.title')}</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            {t('contribute.types.academic.description')}
+          </p>
+          <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+            {(t('contribute.types.academic.requirements') as any).map((requirement: string) => (
+              <li class="flex items-start">
+                <span class="text-purple-500 mr-2">✓</span>
+                <span>{requirement}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Translation -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all hover:-translate-y-1">
+          <div class="w-14 h-14 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center text-white text-2xl mb-4">
+            🌐
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{t('contribute.types.translation.title')}</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            {t('contribute.types.translation.description')}
+          </p>
+          <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+            {(t('contribute.types.translation.requirements') as any).map((requirement: string) => (
+              <li class="flex items-start">
+                <span class="text-purple-500 mr-2">✓</span>
+                <span>{requirement}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contribution Process -->
+    <section class="mb-20">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          {t('contribute.process.title')}
+        </h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          {t('contribute.process.subtitle')}
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {(t('contribute.process.steps') as any).map((step: any, index: number) => (
+          <div class="text-center">
+            <div class="w-20 h-20 mx-auto bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-3xl mb-6 shadow-lg">
+              {step.icon}
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              {index + 1}. {step.title}
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              {step.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Guidelines -->
+    <section class="mb-20">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          {t('contribute.guidelines.title')}
+        </h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          {t('contribute.guidelines.subtitle')}
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {(t('contribute.guidelines.rules') as any).map((rule: any) => (
+          <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+              {rule.title}
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              {rule.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Recognition -->
+    <section class="mb-20">
+      <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl p-12">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            {t('contribute.recognition.title')}
+          </h2>
+          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            {t('contribute.recognition.subtitle')}
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {(t('contribute.recognition.benefits') as any).map((benefit: string) => (
+            <div class="flex items-start">
+              <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                <span class="text-purple-600 dark:text-purple-400">✓</span>
+              </div>
+              <span class="text-gray-700 dark:text-gray-300">{benefit}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Submission Form -->
+    <section class="mb-16 sm:mb-20">
+      <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 sm:p-12 border border-gray-200 dark:border-gray-700">
+        <div class="max-w-3xl mx-auto">
+          <div class="text-center mb-10">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              {t('contribute.submission.title')}
+            </h2>
+            <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300">
+              {t('contribute.submission.subtitle')}
+            </p>
+          </div>
+
+          <form action="https://formspree.io/f/095b5cdff33f424185e21befd3273767" method="POST" class="space-y-6">
+            <!-- Hidden field to identify this as a contribution -->
+            <input type="hidden" name="_subject" value="New Content Submission - FemRes">
+            <input type="hidden" name="locale" value={currentLocale} />
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="contributor-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('contribute.submission.form.name')} *
+                </label>
+                <input
+                  type="text"
+                  id="contributor-name"
+                  name="name"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                  placeholder={t('contribute.submission.form.namePlaceholder')}
+                />
+              </div>
+              <div>
+                <label for="contributor-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('contribute.submission.form.email')} *
+                </label>
+                <input
+                  type="email"
+                  id="contributor-email"
+                  name="email"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                  placeholder={t('contribute.submission.form.emailPlaceholder')}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="content-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('contribute.submission.form.contentType')} *
+              </label>
+              <select
+                id="content-type"
+                name="content_type"
+                required
+                class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+              >
+                <option value="">{t('contribute.submission.form.contentTypePlaceholder')}</option>
+                <option value="book">{t('contribute.submission.form.contentTypes.book')}</option>
+                <option value="article">{t('contribute.submission.form.contentTypes.article')}</option>
+                <option value="video">{t('contribute.submission.form.contentTypes.video')}</option>
+                <option value="podcast">{t('contribute.submission.form.contentTypes.podcast')}</option>
+                <option value="paper">{t('contribute.submission.form.contentTypes.paper')}</option>
+                <option value="original">{t('contribute.submission.form.contentTypes.original')}</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="content-title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('contribute.submission.form.title')} *
+              </label>
+              <input
+                type="text"
+                id="content-title"
+                name="title"
+                required
+                class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                placeholder={t('contribute.submission.form.titlePlaceholder')}
+              />
+            </div>
+
+            <div>
+              <label for="content-link" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('contribute.submission.form.link')}
+              </label>
+              <input
+                type="url"
+                id="content-link"
+                name="link"
+                class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                placeholder={t('contribute.submission.form.linkPlaceholder')}
+              />
+            </div>
+
+            <div>
+              <label for="content-topics" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('contribute.submission.form.topics')}
+              </label>
+
+              <!-- Theoretical Schools -->
+              <div class="mb-4">
+                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('contribute.submission.form.topicCategories.theoretical')}</h4>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="intersectional" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.intersectional')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="marxist" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.marxist')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="decolonial" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.decolonial')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="radical" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.radical')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="liberal" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.liberal')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="black" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.black')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="trans" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.trans')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="eco" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.eco')}</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Movement Issues -->
+              <div class="mb-4">
+                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('contribute.submission.form.topicCategories.movement')}</h4>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="workplace" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.workplace')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="equalPay" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.equalPay')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="reproductive" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.reproductive')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="abortion" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.abortion')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="antiViolence" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.antiViolence')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="political" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.political')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="education" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.education')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="family" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.family')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="sports" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.sports')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="economic" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.economic')}</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Critical Domains -->
+              <div class="mb-4">
+                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('contribute.submission.form.topicCategories.critique')}</h4>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="patriarchy" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.patriarchy')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="capitalism" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.capitalism')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="media" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.media')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="religious" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.religious')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="cultural" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.cultural')}</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Historical Context -->
+              <div class="mb-4">
+                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('contribute.submission.form.topicCategories.historical')}</h4>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="secondWave" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.secondWave')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="thirdWave" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.thirdWave')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="fourthWave" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.fourthWave')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="metoo" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.metoo')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="chinese" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.chinese')}</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Special Concepts -->
+              <div class="mb-4">
+                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('contribute.submission.form.topicCategories.special')}</h4>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="emotional" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.emotional')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="care" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.care')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="psychology" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.psychology')}</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="topics" value="art" class="mr-2 text-purple-600 rounded focus:ring-purple-500">
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{t('contribute.submission.form.topicsList.art')}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label for="custom-topics" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('contribute.submission.form.customTopics')}
+                </label>
+                <input
+                  type="text"
+                  id="custom-topics"
+                  name="custom_topics"
+                  class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                  placeholder={t('contribute.submission.form.customTopicsPlaceholder')}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="content-description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('contribute.submission.form.description')} *
+              </label>
+              <textarea
+                id="content-description"
+                name="description"
+                rows="6"
+                required
+                class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors resize-none"
+                placeholder={t('contribute.submission.form.descriptionPlaceholder')}
+              ></textarea>
+            </div>
+
+            <div class="flex items-start">
+              <input
+                type="checkbox"
+                id="contribution-terms"
+                name="terms"
+                required
+                class="mt-1 w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+              />
+              <label for="contribution-terms" class="ml-3 text-sm text-gray-600 dark:text-gray-400">
+                {t('contribute.submission.form.terms')} <a href={getLocalizedPath('terms', currentLocale)} class="text-purple-600 dark:text-purple-400 hover:underline">{t('contribute.submission.form.termsLink')}</a>
+              </label>
+            </div>
+
+            <div class="text-center">
+              <button
+                type="submit"
+                class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-xl text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200"
+              >
+                {t('contribute.submission.form.submit')}
+                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Buy Me a Coffee Support -->
+    <section class="mb-16 sm:mb-20">
+      <div class="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/10 dark:to-orange-900/10 rounded-3xl p-8 sm:p-12 border border-yellow-200 dark:border-yellow-800/30">
+        <div class="max-w-3xl mx-auto text-center">
+          <div class="text-5xl mb-6">☕</div>
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            {t('contribute.support.title')}
+          </h2>
+          <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+            {t('contribute.support.subtitle')}
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            {(t('contribute.support.benefits') as any).map((benefit: any) => (
+              <div class="flex flex-col items-center">
+                <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-white text-xl mb-3">
+                  {benefit.icon}
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{benefit.title}</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 text-center">{benefit.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <a
+            href="https://buymeacoffee.com/femres"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center px-10 py-5 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold text-xl rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+          >
+            <svg class="w-8 h-8 mr-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.216 6.415l-.132-.666c-.119-.598-.388-1.163-.766-1.658a4.655 4.655 0 0 0-1.364-1.196c-.477-.298-1.009-.497-1.57-.588C15.999 2.193 15.618 2.124 15.232 2.124H8.768c-.386 0-.767.069-1.152.183-.561.091-1.093.29-1.57.588a4.655 4.655 0 0 0-1.364 1.196c-.378.495-.647 1.06-.766 1.658l-.132.666C3.657 6.79 3.563 7.168 3.563 7.548v8.9c0 .38.094.758.221 1.133l.132.666c.119.598.388 1.163.766 1.658.35.486.798.902 1.314 1.217.477.298 1.009.497 1.57.588.385.114.766.183 1.152.183h6.464c.386 0 .767-.069 1.152-.183.561-.091 1.093-.29 1.57-.588a4.655 4.655 0 0 0 1.364-1.217c.378-.495.647-1.06.766-1.658l.132-.666c.127-.375.221-.753.221-1.133v-8.9c0-.38-.094-.758-.221-1.133zM12 18.307c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.784 1.764-1.75 1.764zm1.75-6.711c0 .966-.784 1.75-1.75 1.75s-1.75-.784-1.75-1.75v-3.5c0-.966.784-1.75 1.75-1.75s1.75.784 1.75 1.75v3.5z"/>
+            </svg>
+            {t('contribute.support.button')}
+          </a>
+
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-6">
+            {t('contribute.support.thankYou')}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recognition -->
+    <section class="text-center mb-16 sm:mb-20">
+      <div class="bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 rounded-3xl p-8 sm:p-12">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          {t('contribute.recognition.honors.title')}
+        </h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+          {t('contribute.recognition.honors.subtitle')}
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
+          {(t('contribute.recognition.honors.items') as any).map((item: any) => (
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+              <div class="text-3xl mb-3">{item.icon}</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{item.title}</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style>
+    @keyframes blob {
+      0% { transform: translate(0px, 0px) scale(1); }
+      33% { transform: translate(30px, -50px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.9); }
+      100% { transform: translate(0px, 0px) scale(1); }
+    }
+    .animate-blob {
+      animation: blob 7s infinite;
+    }
+    .animation-delay-2000 {
+      animation-delay: 2s;
+    }
+    .animation-delay-4000 {
+      animation-delay: 4s;
+    }
+  </style>
+</Layout>

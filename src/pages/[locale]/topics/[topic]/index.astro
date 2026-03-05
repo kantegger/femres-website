@@ -1,0 +1,379 @@
+---
+export const prerender = true;
+
+import Layout from '../../../../layouts/Layout.astro';
+import ContentCard from '../../../../components/ContentCard.astro';
+import BookCard from '../../../../components/BookCard.astro';
+import FilmCard from '../../../../components/FilmCard.astro';
+import PodcastCard from '../../../../components/PodcastCard.astro';
+import VideoCard from '../../../../components/VideoCard.astro';
+import { getCollection } from 'astro:content';
+import { createT, getLocalizedPath } from '../../../../i18n/index';
+import { getTopicTranslation, getTopicIcon } from '../../../../i18n/topicsUtils';
+import { type Locale } from '../../../../i18n/types';
+
+const LOCALE_CONFIG = {
+  'en': { suffix: '-en', name: 'English' },
+  'zh-CN': { suffix: '', name: '简体中文' },
+  'zh-TW': { suffix: '-tw', name: '繁體中文' },
+  'ja': { suffix: '-ja', name: '日本語' },
+  'fr': { suffix: '-fr', name: 'Français' }
+} as const;
+
+type SupportedLocale = keyof typeof LOCALE_CONFIG;
+
+export async function getStaticPaths() {
+  const books = await getCollection('books');
+  const articles = await getCollection('articles');
+  const videos = await getCollection('videos');
+  const podcasts = await getCollection('podcasts');
+  const papers = await getCollection('papers');
+  const films = await getCollection('films');
+
+  const allContent = [
+    ...books.map(item => ({ ...item, contentType: 'book' as const })),
+    ...articles.map(item => ({ ...item, contentType: 'article' as const })),
+    ...videos.map(item => ({ ...item, contentType: 'video' as const })),
+    ...podcasts.map(item => ({ ...item, contentType: 'podcast' as const })),
+    ...papers.map(item => ({ ...item, contentType: 'paper' as const })),
+    ...films.map(item => ({ ...item, contentType: 'film' as const }))
+  ];
+
+  const allTopics = [...new Set(allContent.flatMap(item => item.data.topics))];
+  const locales: SupportedLocale[] = ['en', 'zh-CN', 'zh-TW', 'ja', 'fr'];
+
+  const paths = [];
+  for (const locale of locales) {
+    for (const topic of allTopics) {
+      paths.push({
+        params: { locale, topic },
+        props: { topic, allContent }
+      });
+    }
+  }
+  return paths;
+}
+
+const { locale, topic } = Astro.params;
+const { allContent } = Astro.props;
+const currentLocale = locale as Locale;
+const t = createT(currentLocale);
+const decodedTopic = decodeURIComponent(topic || "");
+const translatedTopic = getTopicTranslation(decodedTopic, currentLocale);
+
+const getItemDate = (item: any) => {
+  return new Date(item.data.publishDate || item.data.releaseDate || 0);
+};
+
+// Filter content
+const topicContent = allContent.filter(item => {
+  if (!item.data.topics.includes(decodedTopic)) return false;
+  
+  if (currentLocale === 'zh-CN') {
+    return !item.slug.endsWith('-en') && !item.slug.endsWith('-tw') && !item.slug.endsWith('-ja') && !item.slug.endsWith('-fr');
+  }
+  const config = LOCALE_CONFIG[currentLocale];
+  return item.slug.endsWith(config.suffix);
+}).sort((a, b) => getItemDate(b).getTime() - getItemDate(a).getTime());
+
+const relatedTopics = topicContent
+  .flatMap(item => item.data.topics)
+  .filter(t => t !== decodedTopic)
+  .reduce((acc, t) => { acc[t] = (acc[t] || 0) + 1; return acc; }, {} as Record<string, number>);
+
+const topRelatedTopics = Object.entries(relatedTopics)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 6)
+  .map(([topic]) => topic);
+
+const homeLink = getLocalizedPath('/', currentLocale);
+
+function cleanSlug(slug: string): string {
+  const suffixes = ['-en', '-tw', '-ja', '-fr'];
+  for (const s of suffixes) if (slug.endsWith(s)) return slug.slice(0, -s.length);
+  return slug;
+}
+---
+
+<Layout
+  title={`${translatedTopic} - ${t('nav.topics')} - FemRes`}
+  description={t('topicDetailPage.description').replace('{topic}', translatedTopic)}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- Topic Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center justify-center w-24 h-24 bg-purple-100 dark:bg-purple-900 rounded-full mb-6">
+        <span class="text-4xl">
+          {getTopicIcon(decodedTopic)}
+        </span>
+      </div>
+      
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+        {translatedTopic}
+      </h1>
+      
+      <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+        {t('common.itemsCount', { count: topicContent.length })}
+      </p>
+
+      <!-- Breadcrumb -->
+      <nav class="flex justify-center mb-8">
+        <ol class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+          <li><a href={getLocalizedPath('/', currentLocale)} class="hover:text-purple-600 dark:hover:text-purple-400">{t('nav.home')}</a></li>
+          <li><span class="mx-2">/</span></li>
+          <li><a href={getLocalizedPath('topics', currentLocale)} class="hover:text-purple-600 dark:hover:text-purple-400">{t('nav.topics')}</a></li>
+          <li><span class="mx-2">/</span></li>
+          <li class="text-gray-900 dark:text-white font-medium">{translatedTopic}</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Content by Type -->
+    {topicContent.length > 0 ? (
+      <section class="mb-16">
+
+        <!-- Books Section -->
+        {topicContent.filter(item => item.contentType === 'book').length > 0 && (
+          <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-semibold text-gray-900 dark:text-white flex items-center">
+                <span class="text-3xl mr-3">📚</span>
+                {t('nav.books')}
+                <span class="ml-2 px-2 py-1 text-sm bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full">
+                  {topicContent.filter(item => item.contentType === 'book').length}
+                </span>
+              </h3>
+              {topicContent.filter(item => item.contentType === 'book').length > 6 && (
+                <a href={getLocalizedPath(`topics/${topic}/books`, currentLocale)} class="text-sm font-medium text-purple-600 hover:text-purple-500 hover:underline">
+                  {t('common.viewAll')} &rarr;
+                </a>
+              )}
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                {topicContent.filter(item => item.contentType === 'book').slice(0, 6).map(item => {
+                  const cSlug = cleanSlug(item.slug);
+                  return <BookCard
+                    title={item.data.title}
+                    originalTitle={item.data.originalTitle?.toString()}
+                    author={item.data.author}
+                    description={item.data.description}
+                    coverImage={item.data.coverImage}
+                    publishDate={item.data.publishDate}
+                    slug={cSlug}
+                    locale={currentLocale as any}
+                    topics={item.data.topics}
+                    isbn={item.data.isbn?.toString()}
+                  />
+                })}
+            </div>
+          </div>
+        )}
+
+        <!-- Films Section -->
+        {topicContent.filter(item => item.contentType === 'film').length > 0 && (
+          <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-semibold text-gray-900 dark:text-white flex items-center">
+                <span class="text-3xl mr-3">🎬</span>
+                {t('nav.films')}
+                <span class="ml-2 px-2 py-1 text-sm bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full">
+                  {topicContent.filter(item => item.contentType === 'film').length}
+                </span>
+              </h3>
+              {topicContent.filter(item => item.contentType === 'film').length > 6 && (
+                <a href={getLocalizedPath(`topics/${topic}/films`, currentLocale)} class="text-sm font-medium text-purple-600 hover:text-purple-500 hover:underline">
+                  {t('common.viewAll')} &rarr;
+                </a>
+              )}
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {topicContent.filter(item => item.contentType === 'film').slice(0, 6).map(item => {
+                 const cSlug = cleanSlug(item.slug);
+                 return <FilmCard {...item.data} slug={cSlug} locale={currentLocale} topics={item.data.topics} />
+              })}
+            </div>
+          </div>
+        )}
+
+        <!-- Articles Section -->
+        {topicContent.filter(item => item.contentType === 'article').length > 0 && (
+          <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-semibold text-gray-900 dark:text-white flex items-center">
+                <span class="text-3xl mr-3">📰</span>
+                {t('nav.articles')}
+                <span class="ml-2 px-2 py-1 text-sm bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full">
+                  {topicContent.filter(item => item.contentType === 'article').length}
+                </span>
+              </h3>
+              {topicContent.filter(item => item.contentType === 'article').length > 6 && (
+                <a href={getLocalizedPath(`topics/${topic}/articles`, currentLocale)} class="text-sm font-medium text-purple-600 hover:text-purple-500 hover:underline">
+                  {t('common.viewAll')} &rarr;
+                </a>
+              )}
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {topicContent.filter(item => item.contentType === 'article').slice(0, 6).map(item => {
+                 const cSlug = cleanSlug(item.slug);
+                 return <ContentCard {...item.data} contentType={item.contentType} slug={cSlug} locale={currentLocale} topics={item.data.topics} />
+              })}
+            </div>
+          </div>
+        )}
+
+        <!-- Videos Section -->
+        {topicContent.filter(item => item.contentType === 'video').length > 0 && (
+          <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-semibold text-gray-900 dark:text-white flex items-center">
+                <span class="text-3xl mr-3">🎥</span>
+                {t('nav.videos')}
+                <span class="ml-2 px-2 py-1 text-sm bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full">
+                  {topicContent.filter(item => item.contentType === 'video').length}
+                </span>
+              </h3>
+              {topicContent.filter(item => item.contentType === 'video').length > 6 && (
+                <a href={getLocalizedPath(`topics/${topic}/videos`, currentLocale)} class="text-sm font-medium text-purple-600 hover:text-purple-500 hover:underline">
+                  {t('common.viewAll')} &rarr;
+                </a>
+              )}
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {topicContent.filter(item => item.contentType === 'video').slice(0, 6).map(item => {
+                 const cSlug = cleanSlug(item.slug);
+                 return <VideoCard {...item.data} slug={cSlug} locale={currentLocale} topics={item.data.topics} />
+              })}
+            </div>
+          </div>
+        )}
+
+        <!-- Podcasts Section -->
+        {topicContent.filter(item => item.contentType === 'podcast').length > 0 && (
+          <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-semibold text-gray-900 dark:text-white flex items-center">
+                <span class="text-3xl mr-3">🎧</span>
+                {t('nav.podcasts')}
+                <span class="ml-2 px-2 py-1 text-sm bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full">
+                  {topicContent.filter(item => item.contentType === 'podcast').length}
+                </span>
+              </h3>
+              {topicContent.filter(item => item.contentType === 'podcast').length > 6 && (
+                <a href={getLocalizedPath(`topics/${topic}/podcasts`, currentLocale)} class="text-sm font-medium text-purple-600 hover:text-purple-500 hover:underline">
+                  {t('common.viewAll')} &rarr;
+                </a>
+              )}
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {topicContent.filter(item => item.contentType === 'podcast').slice(0, 6).map(item => {
+                 const cSlug = cleanSlug(item.slug);
+                 return <PodcastCard {...item.data} slug={cSlug} locale={currentLocale} topics={item.data.topics} />
+              })}
+            </div>
+          </div>
+        )}
+
+        <!-- Papers Section -->
+        {topicContent.filter(item => item.contentType === 'paper').length > 0 && (
+          <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-semibold text-gray-900 dark:text-white flex items-center">
+                <span class="text-3xl mr-3">📄</span>
+                {t('nav.papers')}
+                <span class="ml-2 px-2 py-1 text-sm bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full">
+                  {topicContent.filter(item => item.contentType === 'paper').length}
+                </span>
+              </h3>
+              {topicContent.filter(item => item.contentType === 'paper').length > 6 && (
+                <a href={getLocalizedPath(`topics/${topic}/papers`, currentLocale)} class="text-sm font-medium text-purple-600 hover:text-purple-500 hover:underline">
+                  {t('common.viewAll')} &rarr;
+                </a>
+              )}
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {topicContent.filter(item => item.contentType === 'paper').slice(0, 6).map(item => {
+                 const cSlug = cleanSlug(item.slug);
+                 return <ContentCard {...item.data} contentType={item.contentType} slug={cSlug} locale={currentLocale} topics={item.data.topics} />
+              })}
+            </div>
+          </div>
+        )}
+      </section>
+    ) : (
+      <section class="text-center py-16">
+        <div class="max-w-md mx-auto">
+          <div class="text-6xl mb-6">🔍</div>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            {t('topicDetailPage.noRelatedContent')}
+          </h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-8">
+            {t('topicDetailPage.comingSoon', { topic: translatedTopic })}
+          </p>
+          <a 
+            href={getLocalizedPath('topics', currentLocale)}
+            class="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-md transition-colors"
+          >
+            {t('topicDetailPage.browseOtherTopics')}
+          </a>
+        </div>
+      </section>
+    )}
+
+    <!-- Related Topics -->
+    {topRelatedTopics.length > 0 && (
+      <section class="mb-16">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          {t('topicDetailPage.relatedTopics')}
+        </h2>
+        <div class="flex flex-wrap justify-center gap-3">
+          {topRelatedTopics.map(relatedTopic => (
+            <a 
+              href={getLocalizedPath(`topics/${encodeURIComponent(relatedTopic)}`, currentLocale)}
+              class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-full hover:border-purple-500 dark:hover:border-purple-400 hover:shadow-md transition-all duration-200 group"
+            >
+              <span class="text-xl mr-2">
+                {getTopicIcon(relatedTopic)}
+              </span>
+              <span class="font-medium text-gray-700 dark:text-gray-300 group-hover:text-purple-600 dark:group-hover:text-purple-400">
+                {getTopicTranslation(relatedTopic, currentLocale)}
+              </span>
+              <span class="ml-2 px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">
+                {relatedTopics[relatedTopic]}
+              </span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Call to Action -->
+    <section class="text-center">
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-12">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          {t('topicDetailPage.discoverMoreTitle')}
+        </h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
+          {t('topicDetailPage.discoverMoreDesc')}
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href={getLocalizedPath('search', currentLocale)}
+            class="inline-flex items-center justify-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-md transition-colors"
+          >
+            {t('nav.search')}
+            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </a>
+          <a 
+            href={getLocalizedPath('topics', currentLocale)}
+            class="inline-flex items-center justify-center px-6 py-3 border border-purple-600 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 font-medium rounded-md transition-colors"
+          >
+            {t('common.viewAllTopics')}
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>

@@ -1,0 +1,575 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import VideoCard from "../../components/VideoCard.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import Pagination from "../../components/Pagination.astro";
+import { createT, formatRelativeTime } from "../../i18n/index";
+import { getTopicTranslation, findTopicByName } from "../../i18n/topicsUtils";
+import FatefulDeckMiniPromo from "../../components/promo/FatefulDeckMiniPromo.astro";
+
+const currentLocale = "zh-CN";
+const t = createT(currentLocale);
+
+const videos = await getCollection("videos");
+
+const publishedVideos = videos.filter((video) => {
+  const isPublished = video.data.status === "published";
+  if (!isPublished) return false;
+  // Root logic: no suffixes
+  return (
+    !video.slug.endsWith("-en") &&
+    !video.slug.endsWith("-tw") &&
+    !video.slug.endsWith("-ja") &&
+    !video.slug.endsWith("-fr")
+  );
+});
+
+const sortedVideos = publishedVideos.sort(
+  (a, b) =>
+    new Date(b.data.publishDate).getTime() -
+    new Date(a.data.publishDate).getTime(),
+);
+
+const allTopics = [
+  ...new Set(
+    publishedVideos.flatMap((video) =>
+      video.data.topics.map((topic) => {
+        const info = findTopicByName(topic);
+        return info ? info.key : topic;
+      }),
+    ),
+  ),
+].sort();
+
+const VIDEOS_PER_PAGE = 12;
+const totalVideos = publishedVideos.length;
+const totalPages = Math.ceil(totalVideos / VIDEOS_PER_PAGE);
+
+const currentPage = Number(Astro.url.searchParams.get("page") || "1");
+const validPage = Math.max(1, Math.min(currentPage, totalPages));
+const currentVideos = sortedVideos.slice(
+  (validPage - 1) * VIDEOS_PER_PAGE,
+  validPage * VIDEOS_PER_PAGE,
+);
+
+const formatDateLocal = (date: Date) =>
+  formatRelativeTime(date, currentLocale as any);
+
+function cleanSlug(slug: string): string {
+  const suffixes = ["-en", "-tw", "-ja", "-fr"];
+  for (const s of suffixes) {
+    if (slug.endsWith(s)) return slug.slice(0, -s.length);
+  }
+  return slug;
+}
+---
+
+<Layout
+  title={`${t("nav.videos")} - FemRes`}
+  description={t("videosPage.subtitle")}
+>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Page Header -->
+    <PageHeader
+      title={t("nav.videos")}
+      description={t("videosPage.subtitle")}
+      icon="🎥"
+      gradient="red"
+      stats={[
+        {
+          icon: "📹",
+          text: t("videosPage.stats.totalVideos", { count: totalVideos }),
+        },
+        {
+          icon: "🏷️",
+          text: t("videosPage.stats.topicCategories", {
+            count: allTopics.length,
+          }),
+        },
+      ]}
+    />
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <!-- Topics -->
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
+          {t("videosPage.topicsTitle")}
+        </h2>
+        <div class="relative">
+          <div
+            id="topics-container"
+            class="flex flex-wrap gap-3 overflow-hidden transition-all duration-300"
+            style="max-height: 90px;"
+          >
+            <button
+              class="filter-btn inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+              data-filter="all"
+            >
+              {t("videosPage.allVideos")}
+            </button>
+            {
+              allTopics.map((topic) => {
+                const topicInfo = findTopicByName(topic);
+                const translatedTopic = topicInfo
+                  ? getTopicTranslation(topic, currentLocale as any)
+                  : topic;
+                return (
+                  <button
+                    class="filter-btn inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:border-purple-500 dark:hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm"
+                    data-filter={topic}
+                  >
+                    {translatedTopic}
+                  </button>
+                );
+              })
+            }
+          </div>
+          {
+            allTopics.length > 20 && (
+              <div class="text-center mt-4">
+                <button
+                  id="toggle-topics-btn"
+                  class="inline-flex items-center px-4 py-2 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-200 transition-colors text-sm font-medium"
+                >
+                  <span id="toggle-topics-text">
+                    {t("booksPage.topics.showMore")}
+                  </span>
+                  <svg
+                    id="toggle-topics-icon"
+                    class="ml-2 w-4 h-4 transform transition-transform duration-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )
+          }
+        </div>
+      </div>
+
+      <!-- List -->
+      <div class="mb-12">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+            <span id="current-filter">{t("videosPage.allVideos")}</span>
+            <span
+              id="videos-count"
+              class="text-base font-normal text-gray-600 dark:text-gray-400 ml-2"
+              >({t("common.itemsCount", { count: totalVideos })})</span
+            >
+          </h2>
+          <select
+            id="sort-select"
+            class="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white"
+          >
+            <option value="date-desc">{t("videosPage.sort.latest")}</option>
+            <option value="date-asc">{t("videosPage.sort.oldest")}</option>
+            <option value="title-asc">{t("videosPage.sort.titleAZ")}</option>
+            <option value="title-desc">{t("videosPage.sort.titleZA")}</option>
+            <option value="duration-asc"
+              >{t("videosPage.sort.durationShort")}</option
+            >
+            <option value="duration-desc"
+              >{t("videosPage.sort.durationLong")}</option
+            >
+          </select>
+        </div>
+
+        <div
+          id="videos-grid"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          {
+            currentVideos.map((video) => (
+              <div class="video-item">
+                <VideoCard
+                  title={video.data.title}
+                  author={video.data.author}
+                  description={video.data.description}
+                  thumbnail={video.data.thumbnail}
+                  publishDate={video.data.publishDate}
+                  duration={video.data.duration}
+                  sourceUrl={video.data.sourceUrl}
+                  slug={cleanSlug(video.slug)}
+                  topics={video.data.topics}
+                  locale={currentLocale}
+                />
+              </div>
+            ))
+          }
+        </div>
+
+        {
+          totalPages > 1 && (
+            <div id="original-pagination" class="flex justify-center mt-12">
+              <Pagination
+                currentPage={validPage}
+                totalPages={totalPages}
+                baseUrl="/videos"
+                locale={currentLocale}
+              />
+            </div>
+          )
+        }
+        <div id="dynamic-pagination" class="flex justify-center mt-12"></div>
+
+        {
+          currentVideos.length === 0 && (
+            <div class="text-center py-16">
+              <div class="text-6xl mb-4">🎥</div>
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                {t("videosPage.emptyState.title")}
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400">
+                {t("videosPage.emptyState.description")}
+              </p>
+            </div>
+          )
+        }
+      </div>
+
+      <div class="mb-16">
+        <FatefulDeckMiniPromo />
+      </div>
+
+      <!-- Viewing Guide -->
+      <div
+        class="mt-16 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-2xl p-8"
+      >
+        <div class="text-center">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            🎯 {t("videosPage.guide.title")}
+          </h2>
+          <div class="grid md:grid-cols-3 gap-6 text-left mt-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">📽️</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("videosPage.guide.documentaries.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("videosPage.guide.documentaries.description")}
+              </p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">🎤</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("videosPage.guide.talks.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("videosPage.guide.talks.description")}
+              </p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">💭</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("videosPage.guide.reflection.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("videosPage.guide.reflection.description")}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script
+  is:inline
+  define:vars={{
+    allVideosData: sortedVideos.map((video) => ({
+      slug: cleanSlug(video.slug),
+      title: video.data.title,
+      author: video.data.author,
+      description: video.data.description,
+      thumbnail: video.data.thumbnail,
+      publishDate: video.data.publishDate.toISOString(),
+      formattedDate: formatDateLocal(video.data.publishDate),
+      topics: video.data.topics.map((topic) => {
+        const info = findTopicByName(topic);
+        return info ? info.key : topic;
+      }),
+      sourceUrl: video.data.sourceUrl,
+      duration: video.data.duration,
+    })),
+    topicTranslations: Object.fromEntries(
+      allTopics.map((topic) => [
+        topic,
+        findTopicByName(topic)
+          ? getTopicTranslation(topic, currentLocale)
+          : topic,
+      ]),
+    ),
+    i18n: {
+      allVideos: t("videosPage.allVideos"),
+      showMore: t("booksPage.topics.showMore"),
+      showLess: t("booksPage.topics.showLess"),
+      countFormat: t("common.itemsCount"),
+      watchVideo: t("common.watchVideo"),
+      emptyTitle: t("videosPage.emptyState.title"),
+      emptyDescription: t("videosPage.emptyState.description"),
+    },
+    currentLocale: currentLocale,
+  }}
+>
+  window.ALL_VIDEOS_DATA = allVideosData;
+  window.TOPIC_TRANSLATIONS = topicTranslations;
+  window.I18N = i18n;
+  window.CURRENT_LOCALE = currentLocale;
+</script>
+
+<script>
+  import { type Video } from "../../i18n/types";
+
+  function initPage() {
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    const sortSelect = document.getElementById(
+      "sort-select",
+    ) as HTMLSelectElement | null;
+    const videosGrid = document.getElementById("videos-grid");
+    const videoCount = document.getElementById("videos-count");
+    const curFilter = document.getElementById("current-filter");
+    const toggleBtn = document.getElementById("toggle-topics-btn");
+    const topicsContainer = document.getElementById("topics-container");
+    const toggleText = document.getElementById("toggle-topics-text");
+    const toggleIcon = document.getElementById("toggle-topics-icon");
+
+    const allVideos: Video[] = (window as any).ALL_VIDEOS_DATA || [];
+    let currentTopic = "all";
+    let currentPage = 1;
+    const PER_PAGE = 12;
+
+    if (toggleBtn && topicsContainer) {
+      toggleBtn.addEventListener("click", () => {
+        const isExp = topicsContainer.style.maxHeight === "none";
+        topicsContainer.style.maxHeight = isExp ? "90px" : "none";
+        if (toggleText)
+          toggleText.textContent = isExp
+            ? window.I18N.showMore
+            : window.I18N.showLess;
+        if (toggleIcon)
+          toggleIcon.style.transform = isExp
+            ? "rotate(0deg)"
+            : "rotate(180deg)";
+      });
+    }
+
+    if (filterBtns) {
+      filterBtns.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          const target = e.currentTarget as HTMLElement;
+          currentTopic = target.dataset.filter || "all";
+          currentPage = 1;
+          filterBtns.forEach((b) => {
+            b.className =
+              "filter-btn inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:border-purple-500 dark:hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm";
+          });
+          target.className =
+            "filter-btn inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium";
+
+          const translatedTopic =
+            currentTopic === "all"
+              ? window.I18N.allVideos
+              : window.TOPIC_TRANSLATIONS[currentTopic] || currentTopic;
+          if (curFilter) curFilter.textContent = translatedTopic;
+          filterAndSort();
+        });
+      });
+    }
+
+    if (sortSelect)
+      sortSelect.addEventListener("change", () => {
+        currentPage = 1;
+        filterAndSort();
+      });
+
+    function getPlatform(url: string) {
+      if (!url) return { name: "Video", icon: "🎥", color: "bg-gray-500" };
+      if (url.includes("youtube.com") || url.includes("youtu.be"))
+        return { name: "YouTube", icon: "🎬", color: "bg-red-500" };
+      if (url.includes("bilibili.com"))
+        return { name: "Bilibili", icon: "📺", color: "bg-blue-500" };
+      if (url.includes("vimeo.com"))
+        return { name: "Vimeo", icon: "🎥", color: "bg-sky-500" };
+      if (url.includes("ted.com"))
+        return { name: "TED", icon: "💡", color: "bg-red-600" };
+      return { name: "Video", icon: "🎥", color: "bg-gray-500" };
+    }
+
+    function formatDuration(seconds: number | string) {
+      if (!seconds) return "";
+      const secs = typeof seconds === "string" ? parseInt(seconds) : seconds;
+      if (isNaN(secs)) return "";
+      const hours = Math.floor(secs / 3600);
+      const mins = Math.floor((secs % 3600) / 60);
+      const s = secs % 60;
+      if (hours > 0)
+        return `${hours}:${mins.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+      return `${mins}:${s.toString().padStart(2, "0")}`;
+    }
+
+    function filterAndSort() {
+      const sortVal = (sortSelect as HTMLSelectElement)?.value || "date-desc";
+      let filtered: Video[] = allVideos.filter(
+        (v) => currentTopic === "all" || v.topics.includes(currentTopic),
+      );
+
+      filtered.sort((a, b) => {
+        switch (sortVal) {
+          case "date-desc":
+            return (
+              new Date(b.publishDate).getTime() -
+              new Date(a.publishDate).getTime()
+            );
+          case "date-asc":
+            return (
+              new Date(a.publishDate).getTime() -
+              new Date(b.publishDate).getTime()
+            );
+          case "title-asc":
+            return a.title.localeCompare(b.title);
+          case "title-desc":
+            return b.title.localeCompare(a.title);
+          case "duration-asc":
+            return (Number(a.duration) || 0) - (Number(b.duration) || 0);
+          case "duration-desc":
+            return (Number(b.duration) || 0) - (Number(a.duration) || 0);
+          default:
+            return 0;
+        }
+      });
+
+      const total = filtered.length;
+      const totalPages = Math.ceil(total / PER_PAGE);
+      const startIndex = (currentPage - 1) * PER_PAGE;
+      const endIndex = startIndex + PER_PAGE;
+
+      if (videosGrid) {
+        videosGrid.innerHTML = "";
+        filtered.slice(startIndex, endIndex).forEach((v) => {
+          const card = createVideoCard(v);
+          videosGrid.appendChild(card);
+        });
+      }
+
+      if (videoCount)
+        videoCount.textContent = `(${window.I18N.countFormat.replace("{count}", total)})`;
+
+      const origPag = document.getElementById("original-pagination");
+      if (currentTopic === "all") {
+        if (origPag) origPag.style.display = "none";
+      } else {
+        if (origPag) origPag.style.display = "none";
+      }
+      createDynamicPag(totalPages);
+
+      if (total === 0 && videosGrid) {
+        videosGrid.innerHTML = `
+           <div class="col-span-full text-center py-16">
+             <div class="text-6xl mb-4">🎥</div>
+             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">${window.I18N.emptyTitle}</h3>
+             <p class="text-gray-600 dark:text-gray-400">${window.I18N.emptyDescription}</p>
+           </div>
+         `;
+      }
+    }
+
+    function createDynamicPag(totalPages: number) {
+      const container = document.getElementById("dynamic-pagination");
+      if (!container) return;
+      container.innerHTML = "";
+      if (totalPages <= 1) return;
+      const nav = document.createElement("nav");
+      nav.className = "flex items-center space-x-2";
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) {
+          const btn = document.createElement("button");
+          btn.className = `px-4 py-2 rounded-lg ${i === currentPage ? "bg-purple-600 text-white" : "bg-white dark:bg-gray-800"}`;
+          btn.textContent = i.toString();
+          btn.onclick = () => {
+            currentPage = i;
+            filterAndSort();
+            window.scrollTo(0, 0);
+          };
+          nav.appendChild(btn);
+        } else if (i === 2 || i === totalPages - 1) {
+          const dots = document.createElement("span");
+          dots.textContent = "...";
+          nav.appendChild(dots);
+        }
+      }
+      container.appendChild(nav);
+    }
+
+    function createVideoCard(video: Video) {
+      const platform = getPlatform(video.sourceUrl);
+      const durationStr = formatDuration(video.duration || 0);
+      const topicsHtml = video.topics
+        .slice(0, 6)
+        .map((t) => {
+          const trans = window.TOPIC_TRANSLATIONS[t] || t;
+          return `<span class="inline-block px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-md">${trans}</span>`;
+        })
+        .join("");
+      const extraTopics =
+        video.topics.length > 6
+          ? `<span class="inline-block px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 rounded-md">+${video.topics.length - 6}</span>`
+          : "";
+
+      const div = document.createElement("div");
+      div.className = "video-item";
+      // ROOT CHANGE: Link has NO locale prefix: /videos/slug
+      div.innerHTML = `
+        <article class="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl glass-card glass-hover transition-all duration-300 overflow-hidden">
+          <a href="/videos/${video.slug}" class="block">
+            <div class="relative aspect-video bg-gray-900 overflow-hidden">
+              ${
+                video.thumbnail
+                  ? `<img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />`
+                  : `<div class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center"><span class="text-6xl text-white/80">🎬</span></div>`
+              }
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 opacity-0 group-hover:opacity-100 flex items-center justify-center">
+                <div class="w-12 h-12 bg-white/70 backdrop-blur-sm rounded-full flex items-center justify-center scale-90 group-hover:scale-100 transition-all duration-200">
+                   <svg class="w-6 h-6 text-gray-800 ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/></svg>
+                </div>
+              </div>
+              ${video.duration ? `<div class="absolute bottom-2 right-2 bg-black/80 text-white text-xs font-medium px-2 py-1 rounded">${durationStr}</div>` : ""}
+              <div class="absolute top-2 left-2 ${platform.color} text-white text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1"><span>${platform.icon}</span><span>${platform.name}</span></div>
+            </div>
+            <div class="p-5">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-purple-600 transition-colors">${video.title}</h3>
+              <div class="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-3">
+                 <div class="flex items-center">
+                   <div class="w-6 h-6 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white text-xs font-semibold mr-2">${video.author.charAt(0).toUpperCase()}</div>
+                   <span class="font-medium">${video.author}</span>
+                 </div>
+                 <span class="mx-2">•</span>
+                 <span>${video.formattedDate}</span>
+              </div>
+              <p class="text-gray-700 dark:text-gray-300 text-sm mb-3 line-clamp-2">${video.description}</p>
+              <div class="flex flex-wrap gap-1.5">${topicsHtml}${extraTopics}</div>
+              <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-gray-700">
+                <div></div>
+                <span class="text-purple-600 dark:text-purple-400 text-sm font-medium group-hover:underline flex items-center">
+                  ${window.I18N.watchVideo}
+                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        </article>`;
+      return div;
+    }
+  }
+  document.addEventListener("astro:page-load", initPage);
+</script>

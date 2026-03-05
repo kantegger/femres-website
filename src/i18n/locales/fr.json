@@ -1,0 +1,1211 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "content": "Contenu",
+    "books": "Livres",
+    "articles": "Articles",
+    "films": "Films",
+    "videos": "Vidéos",
+    "podcasts": "Podcasts",
+    "papers": "Publications",
+    "topics": "Thèmes",
+    "search": "Recherche",
+    "contribute": "Contribuer"
+  },
+  "homepage": {
+    "metaTitle": "FemRes - Plateforme d'agrégation de contenu féministe",
+    "hero": {
+      "badge": "Rassemblant le meilleur contenu féministe du monde",
+      "title": "Découvrez",
+      "titleHighlight": "le féminisme",
+      "titleEnd": "sa puissance",
+      "subtitle": "Explorez les livres, films, articles, vidéos, podcasts et publications académiques<br/>Comprenez en profondeur la théorie et la pratique de l'égalité des genres",
+      "startExploring": "Commencer l'exploration",
+      "learnMore": "En savoir plus"
+    },
+    "features": {
+      "richContent": {
+        "title": "Contenu riche",
+        "description": "Couvrant livres, articles, vidéos et autres ressources de qualité"
+      },
+      "smartCategories": {
+        "title": "Classification intelligente",
+        "description": "Classement précis par thèmes et types pour trouver rapidement ce que vous cherchez"
+      },
+      "globalPerspective": {
+        "title": "Perspective mondiale",
+        "description": "Rassemblant les points de vue de féministes et militantes du monde entier"
+      }
+    },
+    "sections": {
+      "featured": "Contenu à la une",
+      "featuredDescription": "Explorez les dernières réflexions, recherches et pratiques féministes, rassemblant du contenu de qualité du monde entier",
+      "latestBooks": "Livres sélectionnés",
+      "latestFilms": "Films sélectionnés",
+      "latestArticles": "Articles sélectionnés",
+      "latestVideos": "Vidéos sélectionnées",
+      "latestPodcasts": "Podcasts sélectionnés",
+      "latestPapers": "Publications sélectionnées",
+      "popularTopics": "Thèmes populaires",
+      "popularTopicsDescription": "Explorez les thèmes féministes les plus discutés et approfondissez votre compréhension de chaque domaine",
+      "featuredContent": "{count} contenus sélectionnés"
+    },
+    "cta": {
+      "title": "Ensemble, promouvons l'égalité des genres",
+      "description": "Rejoignez notre communauté, partagez vos réflexions et découvrez plus de contenu de qualité",
+      "contribute": "Contribuer du contenu",
+      "aboutUs": "En savoir plus"
+    }
+  },
+  "userMenu": {
+    "login": "Connexion",
+    "profile": "Mon profil",
+    "myLikes": "Mes favoris",
+    "myBookmarks": "Mes marque-pages",
+    "logout": "Déconnexion"
+  },
+  "common": {
+    "watchVideo": "Regarder la vidéo",
+    "readMore": "Lire la suite",
+    "viewAll": "Tout voir",
+    "loading": "Chargement...",
+    "language": "Langue",
+    "publishDate": "Date de publication",
+    "description": "Description",
+    "author": "Auteur",
+    "director": "Réalisateur",
+    "duration": "Durée",
+    "pages": "Pages",
+    "toggleTheme": "Changer de thème",
+    "toggleMenu": "Ouvrir/fermer le menu",
+    "itemsCount": "{count} éléments",
+    "favorite": "Favoris",
+    "share": "Partager",
+    "contentTypes": {
+      "book": "Livres",
+      "film": "Films",
+      "article": "Articles",
+      "video": "Vidéos",
+      "podcast": "Podcasts",
+      "paper": "Articles académiques"
+    },
+    "minutes": "minutes",
+    "readTimeFormat": "Lecture de {time} min",
+    "readTimeFormatShort": "{time} min",
+    "readFull": "Lire l'article complet",
+    "articleTypes": {
+      "opinion": "Opinion",
+      "analysis": "Analyse",
+      "news": "Actualités",
+      "blog": "Blog",
+      "research": "Recherche"
+    },
+    "viewAllTopics": "Voir tous les sujets",
+    "siteDescription": "FemRes - Plateforme d'agrégation de contenu féministe, rassemblant des ressources féministes de qualité du monde entier",
+    "copyright": "© 2025 FemRes. All rights reserved.",
+    "pagination": {
+      "navigation": "Pagination",
+      "previous": "Précédent",
+      "next": "Suivant"
+    },
+    "noCover": "Pas de couverture",
+    "topics": "Thèmes associés",
+    "support": "Soutenir",
+    "supportMessage": "Si ce contenu vous a été utile",
+    "subscribe": "S'abonner",
+    "countries": "Pays",
+    "genres": "Genres",
+    "noPoster": "Pas d'affiche",
+    "noLinks": "Aucun lien disponible",
+    "genre": "Genre",
+    "listenNow": "Écouter maintenant",
+    "listenPodcast": "Écouter en ligne",
+    "episode": "Épisode {number}",
+    "journalsCount": "{count} revues",
+    "readPaper": "Lire la publication",
+    "showMore": "Voir plus",
+    "showLess": "Réduire",
+    "paperTypes": {
+      "research": "Recherche",
+      "review": "Revue",
+      "case-study": "Étude de cas",
+      "theoretical": "Théorique"
+    },
+    "durationFormat": {
+      "hoursMins": "{hours}h {mins}min",
+      "mins": "{mins}min"
+    }
+  },
+  "footer": {
+    "description": "Une plateforme open-source d'agrégation de contenu féministe dédiée à promouvoir l'égalité des genres en rassemblant des ressources féministes de qualité du monde entier.",
+    "resourceTypes": "Types de ressources",
+    "community": "Communauté",
+    "links": {
+      "books": "📚 Livres recommandés",
+      "films": "🎬 Analyses de films",
+      "articles": "📰 Articles sélectionnés",
+      "videos": "🎬 Ressources vidéo",
+      "podcasts": "🎧 Chaînes podcast",
+      "papers": "📄 Publications académiques",
+      "about": "📋 À propos de nous",
+      "contact": "📧 Nous contacter",
+      "contribute": "💡 Contribuer du contenu",
+      "feedback": "🐛 Signaler un problème",
+      "source": "⭐ Open Source",
+      "privacy": "Politique de confidentialité",
+      "terms": "Conditions d'utilisation"
+    },
+    "copyright": "© 2025 FemRes. Open source sous licence MIT."
+  },
+  "errorPage": {
+    "title": "Page non trouvée",
+    "message": "Désolé, la page que vous recherchez n'existe pas ou a été déplacée.",
+    "backHome": "Retour à l'accueil",
+    "goBack": "Page précédente",
+    "tagline": "— FemRes Plateforme de Ressources Féministes —"
+  },
+  "languages": {
+    "en": "Anglais",
+    "zh-CN": "Chinois",
+    "zh-TW": "Chinois traditionnel",
+    "ja": "Japonais",
+    "fr": "Français",
+    "es": "Espagnol",
+    "bem": "Bemba",
+    "tr": "Turc",
+    "cs": "Tchèque",
+    "fa": "Persan",
+    "hi": "Hindi",
+    "ko": "Coréen",
+    "it": "Italien",
+    "ro": "Roumain",
+    "pl": "Polonais",
+    "de": "Allemand",
+    "pt": "Portugais",
+    "ar": "Arabe"
+  },
+  "booksPage": {
+    "title": "📚 Livres",
+    "subtitle": "Des classiques aux œuvres contemporaines, une sélection de lectures féministes essentielles pour approfondir votre réflexion.",
+    "stats": {
+      "totalBooks": "{count} livres au total",
+      "topicCategories": "{count} catégories de thèmes"
+    },
+    "topics": {
+      "title": "Catégories de thèmes",
+      "all": "Tous les livres",
+      "showMore": "Voir plus",
+      "showLess": "Réduire"
+    },
+    "list": {
+      "latest": "Plus récents",
+      "oldest": "Plus anciens",
+      "titleAsc": "Titre (A-Z)",
+      "titleDesc": "Titre (Z-A)"
+    },
+    "emptyState": {
+      "title": "Aucun livre trouvé",
+      "description": "Aucun livre trouvé pour ce thème. Essayez un autre thème ou affichez tous les livres."
+    },
+    "countFormat": "{count} livres",
+    "guide": {
+      "title": "Guide de lecture",
+      "beginner": {
+        "title": "Débutant",
+        "description": "Commencez par des classiques comme 'Le Deuxième Sexe' ou 'Nous sommes tous des féministes'."
+      },
+      "deepReading": {
+        "title": "Lecture approfondie",
+        "description": "Lisez systématiquement par sujet, des fondements théoriques aux applications pratiques."
+      },
+      "discussion": {
+        "title": "Discussion",
+        "description": "Après la lecture, consultez les pages détaillées pour comprendre les arguments centraux et réfléchir à la réalité."
+      }
+    }
+  },
+  "filmsPage": {
+    "title": "🎬 Films recommandés",
+    "subtitle": "Explorer les questions de genre à travers le cinéma. Ressentez le pouvoir des histoires pour le changement social.",
+    "stats": {
+      "totalFilms": "{count} films au total",
+      "topicCategories": "{count} catégories de thèmes",
+      "countries": "{count} Pays",
+      "genres": "{count} Genres"
+    },
+    "topics": {
+      "title": "Catégories de thèmes",
+      "all": "Tous les thèmes",
+      "showMore": "Voir plus",
+      "showLess": "Réduire"
+    },
+    "country": {
+      "title": "Pays/Région",
+      "all": "Toutes les régions"
+    },
+    "allFilmsHeading": "Tous les films",
+    "allFilms": "Tous les films",
+    "countFormat": "{count} films",
+    "sort": {
+      "latest": "Plus récents",
+      "oldest": "Plus anciens",
+      "titleAZ": "Titre A-Z",
+      "titleZA": "Titre Z-A",
+      "yearNewest": "Année (récent)",
+      "yearOldest": "Année (ancien)"
+    },
+    "emptyState": {
+      "title": "Aucun film trouvé",
+      "description": "Aucun film trouvé pour ces critères. Essayez d'autres filtres ou affichez tous les films."
+    },
+    "guide": {
+      "title": "Guide de visionnage",
+      "criticalViewing": {
+        "title": "Visionnage critique",
+        "description": "Regardez les films avec une perspective de genre, en analysant le développement des personnages, l'approche narrative et la transmission des valeurs."
+      },
+      "deepReflection": {
+        "title": "Réflexion approfondie",
+        "description": "Après le visionnage, réfléchissez aux problèmes sociaux reflétés dans le film et connectez-les à la réalité."
+      },
+      "discussion": {
+        "title": "Dialogue et échange",
+        "description": "Partagez vos impressions avec vos amis et votre communauté, approfondissez votre compréhension par le dialogue."
+      }
+    }
+  },
+  "videosPage": {
+    "title": "🎥 Vidéos",
+    "subtitle": "Apprenez la théorie et la pratique féministes visuellement à travers des conférences, documentaires et interviews.",
+    "stats": {
+      "totalVideos": "{count} vidéos au total",
+      "topicCategories": "{count} catégories de thèmes"
+    },
+    "topicsTitle": "Catégories de thèmes",
+    "allVideos": "Toutes les vidéos",
+    "videosCount": "({count} vidéos)",
+    "sort": {
+      "latest": "Plus récentes",
+      "oldest": "Plus anciennes",
+      "titleAZ": "Titre A-Z",
+      "titleZA": "Titre Z-A",
+      "durationShort": "Durée (courte)",
+      "durationLong": "Durée (longue)"
+    },
+    "emptyState": {
+      "title": "Aucune vidéo trouvée",
+      "description": "Aucune vidéo trouvée pour ce thème. Essayez un autre thème ou affichez toutes les vidéos."
+    },
+    "guide": {
+      "title": "Guide de visionnage",
+      "documentaries": {
+        "title": "Commencer par les documentaires",
+        "description": "Commencez par des documentaires féministes classiques comme 'RBG' pour comprendre les figures historiques et les événements importants."
+      },
+      "talks": {
+        "title": "Conférences et interviews",
+        "description": "Regardez des discours et interviews d'universitaires et de militants pour découvrir diverses perspectives féministes."
+      },
+      "reflection": {
+        "title": "Pensée critique",
+        "description": "Après le visionnage, reliez le contenu à vos propres expériences et à la réalité, développez votre jugement indépendant."
+      }
+    }
+  },
+  "podcastsPage": {
+    "title": "🎙️ Podcasts",
+    "subtitle": "Écouter des voix de diverses perspectives. Le féminisme en format audio.",
+    "stats": {
+      "totalPodcasts": "{count} émissions au total",
+      "topicCategories": "{count} catégories de thèmes"
+    },
+    "topicsTitle": "Catégories de thèmes",
+    "allPodcasts": "Tous les podcasts",
+    "sort": {
+      "latest": "Plus récents",
+      "oldest": "Plus anciens",
+      "titleAZ": "Titre A-Z",
+      "titleZA": "Titre Z-A"
+    },
+    "emptyState": {
+      "noContent": "Aucun podcast trouvé",
+      "workingOnIt": "Nous préparons actuellement une liste de podcasts féministes de qualité.",
+      "viewAll": "Tout voir"
+    },
+    "countFormat": "{count} épisodes",
+    "guide": {
+      "title": "Guide d'écoute",
+      "diverseVoices": {
+        "title": "Voix diverses",
+        "description": "Écoutez des féministes de différents horizons culturels pour élargir votre perspective."
+      },
+      "deepConversations": {
+        "title": "Conversations approfondies",
+        "description": "À travers des dialogues et interviews approfondis, comprenez les questions de genre complexes et les phénomènes sociaux."
+      },
+      "anytimeAnywhere": {
+        "title": "Partout et n'importe quand",
+        "description": "Utilisez les moments libres comme les trajets ou les pauses pour apprendre et intégrer la réflexion à votre quotidien."
+      }
+    }
+  },
+  "papersPage": {
+    "title": "📄 Publications académiques",
+    "subtitle": "Fournir des perspectives interdisciplinaires approfondies sur les questions de genre à travers les dernières recherches et cadres théoriques.",
+    "stats": {
+      "totalPapers": "{count} publications au total",
+      "topicCategories": "{count} catégories de thèmes"
+    },
+    "topicsTitle": "Catégories de thèmes",
+    "allPapers": "Toutes les publications",
+    "sort": {
+      "latest": "Plus récentes",
+      "oldest": "Plus anciennes",
+      "titleAZ": "Titre (A-Z)",
+      "titleZA": "Titre (Z-A)",
+      "citationsDesc": "Citations (Haut-Bas)",
+      "citationsAsc": "Citations (Bas-Haut)"
+    },
+    "emptyState": {
+      "noContent": "Aucune publication trouvée",
+      "workingOnIt": "Aucune publication disponible pour ce sujet.",
+      "viewAll": "Tout voir"
+    },
+    "guide": {
+      "title": "Guide des publications académiques",
+      "empirical": {
+        "title": "Recherche empirique",
+        "description": "Concentrez-vous sur les données et la recherche sur le terrain pour comprendre l'application des théories féministes."
+      },
+      "critical": {
+        "title": "Analyse critique",
+        "description": "Analyse critique approfondie des structures de genre et des systèmes sociaux existants."
+      },
+      "interdisciplinary": {
+        "title": "Perspective interdisciplinaire",
+        "description": "Explorez les recherches en sociologie, psychologie, économie et autres domaines pour une compréhension globale du féminisme."
+      }
+    }
+  },
+  "paper": {
+    "info": "Infos publication",
+    "abstract": "Résumé",
+    "keywords": "Mots-clés",
+    "relatedPapers": "Publications recommandées",
+    "citationCount": "Citations",
+    "doi": "DOI",
+    "journal": "Journal",
+    "language": "Langue",
+    "readPaper": "Lire la publication",
+    "viewPdf": "Lire le PDF",
+    "types": {
+      "research": "Recherche",
+      "review": "Revue",
+      "caseStudy": "Étude de cas",
+      "theoretical": "Théorique"
+    }
+  },
+  "interactions": {
+    "like": "J'aime",
+    "unlike": "Je n'aime plus",
+    "bookmark": "Ajouter aux favoris",
+    "unbookmark": "Retirer des favoris",
+    "loginToInteract": "Connectez-vous pour interagir"
+  },
+  "book": {
+    "review": "Critique et guide",
+    "info": "Informations sur le livre",
+    "originalTitle": "Titre original",
+    "author": "Auteur",
+    "published": "Publication",
+    "purchase": "Acheter ce livre",
+    "buyOnAmazon": "Acheter sur Amazon",
+    "affiliateNotice": "Si vous achetez via ce lien, nous recevons une petite commission sans aucun surcoût pour vous. Merci de votre soutien !",
+    "relatedBooks": "Recommandations associées"
+  },
+  "podcast": {
+    "info": "Informations sur le podcast",
+    "host": "Animateur",
+    "originalName": "Nom original",
+    "added": "Ajouté",
+    "episodes": "Épisodes",
+    "listenOnline": "Écouter en ligne",
+    "visitSource": "Cliquez sur le bouton ci-dessous pour écouter sur la plateforme d'origine",
+    "related": "Podcasts associés",
+    "websiteNote": "Transcriptions complètes et ressources disponibles sur le site du podcast"
+  },
+  "newsletter": {
+    "title": "S'abonner aux mises à jour",
+    "description": "Recevez les dernières analyses et contenus féministes approfondis, ne manquez aucune perspective importante",
+    "success": "Inscription réussie !",
+    "error": "Échec de l'inscription. Veuillez réessayer.",
+    "genericError": "Une erreur est survenue."
+  },
+  "about": {
+    "title": "À propos de FemRes",
+    "subtitle": "Rassembler les voix féministes du monde entier pour promouvoir l'égalité des genres",
+    "mission": {
+      "title": "Notre mission",
+      "description1": "FemRes vise à créer la plateforme d'agrégation de contenu féministe de la plus haute qualité au monde. Nous croyons que la connaissance et l'information peuvent être des moteurs de changement social. En rassemblant les pensées, recherches et pratiques féministes du monde entier, nous fournissons des ressources d'apprentissage riches à tous ceux qui s'intéressent à l'égalité des genres.",
+      "description2": "À l'ère de l'information fragmentée, grâce à un filtrage intelligent et une classification rigoureuse, nous garantissons que chaque contenu recommandé a passé un contrôle de qualité strict, permettant aux utilisateurs d'accéder efficacement à des informations de valeur et de comprendre en profondeur les diverses perspectives féministes.",
+      "globalPerspective": "Vision mondiale",
+      "globalDescription": "Diversité culturelle",
+      "curatedContent": "Contenu sélectionné",
+      "curatedDescription": "Contrôle qualité rigoureux",
+      "values": "Égalité · Diversité · Inclusion",
+      "buildBetter": "Construire un monde plus juste"
+    },
+    "coreValues": {
+      "title": "Valeurs fondamentales",
+      "subtitle": "Les principes qui nous guident",
+      "genderEquality": {
+        "title": "Égalité des genres",
+        "description": "Promouvoir l'égalité des droits, opportunités et dignité pour tous les genres dans les domaines politique, économique, social et culturel"
+      },
+      "intersectionality": {
+        "title": "Intersectionnalité",
+        "description": "Reconnaître l'impact croisé du genre avec la race, la classe, l'orientation sexuelle, le handicap et autres identités, et poursuivre une justice sociale globale"
+      },
+      "knowledgeEmpowerment": {
+        "title": "Autonomisation par le savoir",
+        "description": "Croire que l'éducation et la diffusion des connaissances sont des moyens essentiels pour atteindre l'égalité des genres"
+      },
+      "openInclusion": {
+        "title": "Ouverture et inclusion",
+        "description": "Accueillir le dialogue de personnes d'horizons, de points de vue et d'expériences différents"
+      }
+    },
+    "features": {
+      "title": "Caractéristiques de la plateforme",
+      "subtitle": "Offrir une expérience de contenu de la plus haute qualité",
+      "smartAggregation": {
+        "title": "Agrégation intelligente",
+        "description": "Combinant technologie IA et révision humaine pour sélectionner du contenu féministe de qualité parmi une vaste quantité d'informations",
+        "features": [
+          "Collecte depuis de multiples sources",
+          "Algorithme de notation qualité",
+          "Mécanisme de mise à jour en temps réel"
+        ]
+      },
+      "preciseClassification": {
+        "title": "Classification précise",
+        "description": "Système complet de classification thématique pour aider les utilisateurs à trouver rapidement les domaines de contenu qui les intéressent",
+        "features": [
+          "8 thèmes principaux",
+          "Étiquetage multidimensionnel",
+          "Recherche croisée"
+        ]
+      },
+      "diverseContent": {
+        "title": "Formats diversifiés",
+        "description": "Couvrant livres, articles, vidéos, podcasts et publications académiques pour différents styles d'apprentissage",
+        "features": [
+          "5 types de contenu",
+          "Ressources mondiales",
+          "Affichage multimédia"
+        ]
+      }
+    },
+    "contentTypes": {
+      "title": "Types de contenu",
+      "subtitle": "Formats variés pour différents besoins d'apprentissage",
+      "books": {
+        "title": "Livres",
+        "description": "Classiques et nouveautés"
+      },
+      "articles": {
+        "title": "Articles",
+        "description": "Analyses approfondies"
+      },
+      "videos": {
+        "title": "Vidéos",
+        "description": "Expression visuelle"
+      },
+      "podcasts": {
+        "title": "Podcasts",
+        "description": "Transmission audio"
+      },
+      "papers": {
+        "title": "Publications",
+        "description": "Recherche académique"
+      },
+      "films": {
+        "title": "Films",
+        "description": "Narration cinématographique"
+      }
+    },
+    "coreTopics": {
+      "title": "Thèmes principaux",
+      "subtitle": "Couvrant les domaines clés du féminisme",
+      "workplaceEquality": {
+        "title": "Égalité au travail",
+        "description": "Éliminer la discrimination au travail, promouvoir l'égalité salariale et briser le plafond de verre"
+      },
+      "bodilyAutonomy": {
+        "title": "Autonomie corporelle",
+        "description": "Maintenir le droit des femmes à décider de leur propre corps, y compris les droits reproductifs et de santé"
+      },
+      "educationRights": {
+        "title": "Droits à l'éducation",
+        "description": "Garantir à tous les genres un accès égal à l'éducation et éliminer les préjugés dans le domaine éducatif"
+      },
+      "politicalParticipation": {
+        "title": "Participation politique",
+        "description": "Améliorer la représentativité et la participation des femmes dans la prise de décision politique"
+      },
+      "familyRoles": {
+        "title": "Rôles familiaux",
+        "description": "Redéfinir la répartition des responsabilités familiales et briser les contraintes des rôles de genre traditionnels"
+      },
+      "genderViolence": {
+        "title": "Violence de genre",
+        "description": "Attirer l'attention et mettre fin à toutes les formes de violence de genre, protéger les droits des victimes"
+      },
+      "mediaRepresentation": {
+        "title": "Représentation médiatique",
+        "description": "Critiquer les stéréotypes de genre dans les médias et promouvoir une représentation diversifiée"
+      },
+      "historicalFigures": {
+        "title": "Figures historiques",
+        "description": "Redécouvrir et reconnaître les femmes remarquables et leurs contributions dans l'histoire"
+      }
+    },
+    "team": {
+      "title": "Philosophie de l'équipe",
+      "subtitle": "Maintenu par des bénévoles passionnés par le féminisme",
+      "description": "FemRes est un projet open source géré par des bénévoles. Notre équipe comprend des développeurs, des éditeurs de contenu, des chercheurs en féminisme et des militants sociaux de divers horizons. Nous sommes unis par une conviction commune : nous croyons au pouvoir du savoir et en un avenir d'égalité des genres.",
+      "openSource": {
+        "title": "Open source et transparent",
+        "description": "Code et stratégie de contenu entièrement publics"
+      },
+      "communityDriven": {
+        "title": "Communautaire",
+        "description": "Les contributions de tous sont bienvenues"
+      },
+      "nonProfit": {
+        "title": "Non lucratif",
+        "description": "Entièrement dédié à la promotion de l'égalité"
+      }
+    },
+    "joinUs": {
+      "title": "Grandissons ensemble",
+      "description": "Que vous soyez créateur de contenu, développeur, chercheur ou lecteur passionné, vous êtes les bienvenus dans la communauté FemRes. Ensemble, contribuons à l'égalité des genres",
+      "contributeContent": "Contribuer du contenu",
+      "githubProject": "Projet GitHub"
+    },
+    "contact": {
+      "title": "Nous contacter",
+      "description": "Si vous avez des questions, suggestions ou souhaitez collaborer, n'hésitez pas à nous contacter"
+    }
+  },
+  "contactPage": {
+    "metaTitle": "Nous contacter",
+    "metaDescription": "Nous apprécions chaque retour et sommes impatients de nous connecter avec vous",
+    "hero": {
+      "title": "Contact",
+      "titleHighlight": "FemRes",
+      "subtitle": "Nous apprécions chaque retour et sommes impatients de nous connecter avec vous"
+    },
+    "options": {
+      "general": {
+        "title": "Demande générale",
+        "description": "Des questions sur FemRes ? Nous sommes là pour aider."
+      },
+      "submission": {
+        "title": "Soumission de contenu",
+        "description": "Du contenu à partager ? Nous attendons votre contribution."
+      },
+      "partnership": {
+        "title": "Partenariat",
+        "description": "Vous cherchez une collaboration ? Promouvons ensemble l'égalité des genres."
+      },
+      "volunteer": {
+        "title": "Bénévolat",
+        "description": "Envie de rejoindre notre équipe ? Rejoignez-nous maintenant."
+      }
+    },
+    "form": {
+      "title": "Envoyez-nous un message",
+      "subtitle": "Remplissez le formulaire ci-dessous et nous vous répondrons dès que possible.",
+      "name": "Nom",
+      "placeholderName": "Entrez votre nom",
+      "email": "E-mail",
+      "placeholderEmail": "votre@email.com",
+      "subject": "Sujet",
+      "placeholderSubject": "Sélectionnez un sujet",
+      "message": "Message",
+      "placeholderMessage": "Veuillez décrire votre demande ou question...",
+      "agreement": "J'ai lu et j'accepte les",
+      "privacy": "Politique de confidentialité",
+      "terms": "Conditions d'utilisation",
+      "submit": "Envoyer le message",
+      "required": "*",
+      "subjects": {
+        "general": "Demande générale",
+        "content": "Soumission de contenu",
+        "partnership": "Partenariat",
+        "volunteer": "Bénévolat",
+        "feedback": "Retour",
+        "other": "Autre"
+      }
+    },
+    "faq": {
+      "title": "FAQ",
+      "subtitle": "Questions et réponses fréquentes",
+      "items": [
+        {
+          "question": "Comment soumettre du contenu à FemRes ?",
+          "answer": "Vous pouvez soumettre par e-mail à submissions@femres.org avec le titre, l'auteur, le résumé et le lien. Notre équipe éditoriale examinera et répondra sous 7 jours ouvrables."
+        },
+        {
+          "question": "Comment FemRes filtre-t-il le contenu ?",
+          "answer": "Nous combinons l'IA avec une révision humaine. Les algorithmes effectuent un tri initial, suivi d'un examen expert pour garantir l'exactitude, la pertinence et la valeur, en mettant l'accent sur la diversité."
+        },
+        {
+          "question": "Comment devenir bénévole ?",
+          "answer": "Nous accueillons des bénévoles de tous les domaines ! E-mail à volunteer@femres.org avec votre parcours et vos intérêts. Nous cherchons des éditeurs, développeurs, designers et traducteurs."
+        },
+        {
+          "question": "FemRes accepte-t-il les dons ?",
+          "answer": "En tant que projet à but non lucratif, nous comptons sur le soutien de la communauté. Pour aider, contactez partnership@femres.org. Tous les fonds vont à la maintenance et au développement du contenu."
+        },
+        {
+          "question": "Comment signaler un problème de contenu ?",
+          "answer": "Une erreur ou un lien cassé ? Contactez info@femres.org avec le lien et la description. Nous traiterons cela dès que possible."
+        }
+      ]
+    },
+    "info": {
+      "title": "Infos de contact",
+      "email": "E-mail principal :",
+      "response": "Temps de réponse : Lun-Ven 9:00 - 18:00 (UTC+8)",
+      "scope": "Portée : Mondiale",
+      "note": "FemRes est un projet open source géré par des bénévoles ; nous visons à répondre sous 48 heures."
+    }
+  },
+  "searchPage": {
+    "title": "Recherche",
+    "metaDescription": "Recherchez du contenu féministe sur FemRes : livres, articles, vidéos, podcasts et publications",
+    "heroTitle": "Recherche de contenu",
+    "subtitle": "Découvrez des ressources féministes parmi {count} éléments sélectionnés",
+    "placeholder": "Rechercher par titre, auteur, description ou sujet...",
+    "filters": {
+      "clear": "Effacer les filtres",
+      "allTopics": "Tous les sujets"
+    },
+    "sort": {
+      "relevance": "Pertinence",
+      "newest": "Plus récents",
+      "oldest": "Plus anciens",
+      "az": "Titre A-Z",
+      "za": "Titre Z-A"
+    },
+    "results": {
+      "count": "Affichage de {count} résultats",
+      "emptyTitle": "Aucun résultat trouvé",
+      "emptyMessage": "Essayez d'ajuster vos mots-clés ou filtres"
+    }
+  },
+  "profilePage": {
+    "title": "Profil",
+    "description": "Gérer votre profil et vos contenus",
+    "ui": {
+      "usernameEmpty": "Le nom d'utilisateur ne peut pas être vide",
+      "updateFailed": "Échec de la mise à jour",
+      "loginRequired": "Veuillez vous connecter",
+      "loginDesc": "Connectez-vous pour voir votre profil et votre contenu",
+      "home": "Retour à l'accueil",
+      "editUsername": "Modifier le nom d'utilisateur",
+      "likes": "Favoris",
+      "bookmarks": "Marque-pages",
+      "joinDate": "Inscrit le",
+      "logout": "Déconnexion",
+      "myLikes": "Mes favoris",
+      "myBookmarks": "Mes marque-pages",
+      "contentCount": "éléments",
+      "quickActions": "Actions rapides",
+      "browseBooks": "Parcourir les livres",
+      "readArticles": "Lire les articles",
+      "exploreTopics": "Explorer les thèmes"
+    },
+    "bookmarks": {
+      "title": "Mes marque-pages",
+      "description": "Voir tout votre contenu favori",
+      "emptyMessage": "Voici votre collection personnelle"
+    },
+    "likes": {
+      "title": "Mes favoris",
+      "description": "Voir tout le contenu que vous aimez",
+      "emptyMessage": "Ici sont enregistrés les moments que vous appréciez"
+    },
+    "breadcrumb": {
+      "home": "Accueil",
+      "profile": "Profil"
+    },
+    "contentList": {
+      "loginRequired": "Veuillez vous connecter",
+      "loginDesc": "Connectez-vous pour voir vos {type}",
+      "loading": "Chargement...",
+      "noContent": "Pas encore de {type}",
+      "browseDesc": "Parcourez le contenu et ajoutez vos favoris aux {action}",
+      "author": "Auteur : ",
+      "viewDetails": "Voir les détails →",
+      "types": {
+        "book": "Livre",
+        "book_plural": "Livres",
+        "article": "Article",
+        "article_plural": "Articles",
+        "video": "Vidéo",
+        "video_plural": "Vidéos",
+        "podcast": "Podcast",
+        "podcast_plural": "Podcasts",
+        "paper": "Publication",
+        "paper_plural": "Publications",
+        "film": "Film",
+        "film_plural": "Films",
+        "default": "Contenu"
+      },
+      "actions": {
+        "like": "favoris",
+        "bookmark": "marque-pages"
+      },
+      "items": {
+        "likes": "favoris",
+        "bookmarks": "marque-pages"
+      }
+    }
+  },
+  "discussion": {
+    "title": "Discussion",
+    "description": "Partagez vos réflexions et perspectives",
+    "contentType": {
+      "default": {
+        "title": "💬 Discussion",
+        "description": "Partagez vos réflexions sur ce contenu"
+      },
+      "book": {
+        "title": "📚 Discussion du livre",
+        "description": "Partagez vos impressions de lecture"
+      },
+      "article": {
+        "title": "📰 Discussion de l'article",
+        "description": "Partagez votre avis sur cet article"
+      },
+      "video": {
+        "title": "🎥 Discussion vidéo",
+        "description": "Partagez vos impressions après visionnage"
+      },
+      "podcast": {
+        "title": "🎧 Discussion podcast",
+        "description": "Partagez vos impressions après écoute"
+      },
+      "paper": {
+        "title": "📄 Discussion de l'article",
+        "description": "Partagez votre avis sur cette recherche"
+      }
+    },
+    "noCommentsYet": "Aucun commentaire pour le moment. Soyez le premier à partager vos pensées !",
+    "shareYourThoughts": "Partagez vos réflexions...",
+    "postComment": "Publier le commentaire",
+    "reply": "Répondre",
+    "posting": "Publication...",
+    "joinDiscussion": "Rejoindre la discussion",
+    "loginToDiscuss": "Se connecter pour participer",
+    "loadingComments": "Chargement des commentaires...",
+    "totalComments": "{count} commentaires",
+    "loginRequired": "Veuillez vous connecter",
+    "replyTo": "Répondre à {name}"
+  },
+  "contribute": {
+    "title": "Contribuer du contenu",
+    "content": "Content",
+    "subtitle": "Votre contribution aide plus de personnes à comprendre le féminisme et à promouvoir ensemble l'égalité des genres",
+    "types": {
+      "title": "Que pouvez-vous soumettre ?",
+      "subtitle": "FemRes accueille toutes les formes de contenu de qualité",
+      "books": {
+        "title": "Recommandations de livres",
+        "description": "Recommandez d'excellents livres liés au féminisme, y compris ouvrages théoriques, littérature, biographies, etc.",
+        "requirements": [
+          "Le livre doit être lié au féminisme ou aux études de genre",
+          "Fournissez des informations détaillées et les raisons de votre recommandation",
+          "Assurez-vous de l'exactitude des informations"
+        ]
+      },
+      "articles": {
+        "title": "Partage d'articles",
+        "description": "Partagez des articles de qualité : travaux académiques, critiques, reportages, etc.",
+        "requirements": [
+          "Contenu faisant autorité et fiable",
+          "Fournissez la source et le lien",
+          "Pertinent aux questions féministes"
+        ]
+      },
+      "videos": {
+        "title": "Contenu vidéo",
+        "description": "Recommandez ou créez des vidéos éducatives : conférences, documentaires, interviews, etc.",
+        "requirements": [
+          "Contenu à forte valeur éducative",
+          "Fournissez des informations complètes",
+          "Qualité audio et vidéo correcte"
+        ]
+      },
+      "podcasts": {
+        "title": "Contenu podcast",
+        "description": "Partagez des podcasts et contenus audio liés au féminisme",
+        "requirements": [
+          "Contenu pertinent au thème",
+          "Fournissez le lien de la plateforme",
+          "Indiquez la langue et la durée"
+        ]
+      },
+      "academic": {
+        "title": "Publications académiques",
+        "description": "Partagez des recherches et publications académiques évaluées par les pairs",
+        "requirements": [
+          "Doit être une publication évaluée par les pairs",
+          "Fournissez les informations de citation complètes",
+          "Assurez-vous que la publication est en accès libre"
+        ]
+      },
+      "translation": {
+        "title": "Travail de traduction",
+        "description": "Aidez à traduire du contenu de qualité pour le rendre accessible à plus de personnes",
+        "requirements": [
+          "Compétences linguistiques requises",
+          "Garantissez la qualité et l'exactitude de la traduction",
+          "Respectez les droits d'auteur"
+        ]
+      }
+    },
+    "process": {
+      "title": "Processus de soumission",
+      "subtitle": "Quelques étapes simples pour partager votre contenu",
+      "steps": [
+        {
+          "title": "Soumettre le contenu",
+          "description": "Soumettez votre proposition via le formulaire ou GitHub",
+          "icon": "📧"
+        },
+        {
+          "title": "Évaluation qualité",
+          "description": "Notre équipe évalue soigneusement la qualité et la pertinence du contenu",
+          "icon": "🔍"
+        },
+        {
+          "title": "Publication et partage",
+          "description": "Le contenu approuvé est officiellement publié sur la plateforme",
+          "icon": "🚀"
+        }
+      ]
+    },
+    "guidelines": {
+      "title": "Lignes directrices de soumission",
+      "subtitle": "Suivez ces directives pour garantir la qualité du contenu",
+      "rules": [
+        {
+          "title": "Pertinence du contenu",
+          "description": "Tout contenu doit être directement lié au féminisme, aux études de genre ou aux sujets connexes"
+        },
+        {
+          "title": "Standards de qualité",
+          "description": "Assurez-vous que le contenu a une valeur éducative, est exact et fiable"
+        },
+        {
+          "title": "Respect des droits d'auteur",
+          "description": "Respectez la propriété intellectuelle et assurez-vous que le contenu partagé ne viole pas les droits d'autrui"
+        },
+        {
+          "title": "Inclusivité",
+          "description": "Les perspectives diverses sont les bienvenues, mais les discours discriminatoires ou haineux sont interdits"
+        }
+      ]
+    },
+    "recognition": {
+      "title": "Reconnaissance des contributeurs",
+      "subtitle": "Nous remercions tous ceux qui ont contribué à FemRes",
+      "benefits": [
+        "Affichage des informations du contributeur sur les pages de contenu",
+        "Badge de reconnaissance de la communauté FemRes",
+        "Accès prioritaire aux tests de nouvelles fonctionnalités",
+        "Invitation aux événements en ligne/hors ligne",
+        "Newsletter exclusive pour les contributeurs"
+      ],
+      "honors": {
+        "title": "Reconnaissance des contributeurs",
+        "subtitle": "Nous apprécions les efforts de tous les contributeurs. Les contributeurs exceptionnels bénéficient des avantages suivants :",
+        "items": [
+          {
+            "title": "Badge contributeur",
+            "description": "Badge spécial affiché sur votre profil",
+            "icon": "🏆"
+          },
+          {
+            "title": "Attribution",
+            "description": "Informations du contributeur sur les pages de contenu",
+            "icon": "📜"
+          },
+          {
+            "title": "Avantages exclusifs",
+            "description": "Accès prioritaire aux nouvelles fonctionnalités et événements",
+            "icon": "🎁"
+          }
+        ]
+      }
+    },
+    "submission": {
+      "title": "Commencer la soumission",
+      "subtitle": "Remplissez le formulaire ci-dessous pour soumettre votre contenu",
+      "form": {
+        "name": "Votre nom",
+        "namePlaceholder": "Entrez votre nom",
+        "email": "Adresse e-mail",
+        "emailPlaceholder": "votre@email.com",
+        "contentType": "Type de contenu",
+        "contentTypePlaceholder": "Sélectionnez le type de contenu",
+        "contentTypes": {
+          "book": "Recommandation de livre",
+          "article": "Partage d'article",
+          "video": "Ressource vidéo",
+          "podcast": "Programme podcast",
+          "paper": "Publication académique",
+          "original": "Contenu original"
+        },
+        "title": "Titre du contenu",
+        "titlePlaceholder": "Entrez le titre du contenu",
+        "link": "Lien associé (si disponible)",
+        "linkPlaceholder": "https://exemple.com",
+        "topics": "Thèmes associés (sélection multiple)",
+        "topicCategories": {
+          "theoretical": "Écoles théoriques",
+          "movement": "Questions militantes",
+          "critique": "Domaines critiques",
+          "historical": "Contexte historique",
+          "special": "Concepts spéciaux"
+        },
+        "topicsList": {
+          "intersectional": "Féminisme intersectionnel",
+          "marxist": "Féminisme marxiste",
+          "decolonial": "Féminisme décolonial",
+          "radical": "Féminisme radical",
+          "liberal": "Féminisme libéral",
+          "black": "Féminisme noir",
+          "trans": "Féminisme trans",
+          "eco": "Écoféminisme",
+          "workplace": "Égalité au travail",
+          "equalPay": "Égalité salariale",
+          "reproductive": "Autonomie reproductive",
+          "abortion": "Droits à l'avortement",
+          "antiViolence": "Contre les violences sexuelles",
+          "political": "Participation politique",
+          "education": "Égalité éducative",
+          "family": "Libération familiale",
+          "sports": "Égalité sportive",
+          "economic": "Autonomisation économique",
+          "patriarchy": "Critique du patriarcat",
+          "capitalism": "Critique du capitalisme",
+          "media": "Critique des représentations médiatiques",
+          "religious": "Critique du patriarcat religieux",
+          "cultural": "Critique culturelle",
+          "secondWave": "Deuxième vague féministe",
+          "thirdWave": "Troisième vague féministe",
+          "fourthWave": "Quatrième vague féministe",
+          "metoo": "Mouvement MeToo",
+          "chinese": "Mouvement féministe chinois",
+          "emotional": "Travail émotionnel",
+          "care": "Éthique du care",
+          "psychology": "Psychologie féministe",
+          "art": "Art féministe"
+        },
+        "customTopics": "Autres thèmes (saisie personnalisée)",
+        "customTopicsPlaceholder": "Si vous avez d'autres thèmes, séparez-les par des virgules",
+        "description": "Description du contenu",
+        "descriptionPlaceholder": "Décrivez le contenu en détail, y compris les points principaux, les raisons de recommandation, etc.",
+        "terms": "Je confirme que le contenu soumis est authentique et valide, et j'accepte les",
+        "termsLink": "conditions de soumission",
+        "submit": "Soumettre la contribution"
+      }
+    },
+    "github": {
+      "title": "Contribuer sur GitHub",
+      "subtitle": "FemRes est un projet open source. Vous pouvez également soumettre du contenu ou améliorer le code directement via GitHub",
+      "visitRepo": "Visiter le dépôt GitHub",
+      "viewGuide": "Voir le guide de contribution"
+    },
+    "support": {
+      "title": "Soutenir par un don",
+      "subtitle": "Si vous trouvez le contenu de FemRes utile, offrez-nous un café. Votre soutien nous aide à :",
+      "benefits": [
+        {
+          "title": "Découvrir plus de contenu",
+          "description": "Investir plus de temps dans la curation de ressources de qualité",
+          "icon": "🔍"
+        },
+        {
+          "title": "Améliorer la plateforme",
+          "description": "Développer de nouvelles fonctionnalités et améliorer l'expérience utilisateur",
+          "icon": "⚡"
+        },
+        {
+          "title": "Rester gratuit",
+          "description": "Garantir l'accès gratuit à ces ressources pour tous",
+          "icon": "💝"
+        }
+      ],
+      "button": "☕ Offre-moi un café",
+      "thankYou": "Tout soutien nous réchauffe le cœur 💝"
+    }
+  },
+  "film": {
+    "info": "Informations sur le film",
+    "director": "Réalisateur",
+    "cast": "Distribution",
+    "releaseDate": "Date de sortie",
+    "year": "Année",
+    "duration": "Durée",
+    "awards": "Prix et nominations",
+    "ratingsAndLinks": "Notes et liens",
+    "trailer": "Bande-annonce",
+    "imdbRating": "Note IMDB",
+    "review": "Critique et analyse"
+  },
+  "video": {
+    "description": "Description",
+    "watchOriginal": "Regarder l'original",
+    "originalLink": "Lien original",
+    "videoInfo": "Informations vidéo",
+    "relatedTopics": "Sujets associés",
+    "relatedVideos": "Vidéos recommandées",
+    "language": "Langue",
+    "addToPlaylist": "Ajouter à la playlist",
+    "unavailable": "Vidéo indisponible",
+    "supportUs": "Soutenez-nous",
+    "supportMessage": "Si vous trouvez ce contenu utile"
+  },
+  "articlesPage": {
+    "title": "Articles",
+    "subtitle": "De l'analyse académique au commentaire d'actualité, une collection d'essais importants offrant des perspectives multiples sur le féminisme.",
+    "stats": {
+      "totalArticles": "{count} articles au total",
+      "topicCategories": "{count} catégories de thèmes"
+    },
+    "topicsTitle": "Catégories de thèmes",
+    "allArticles": "Tous les articles",
+    "allArticlesHeading": "Tous les articles",
+    "articlesCount": "({count} articles)",
+    "noArticles": "Aucun article trouvé correspondant à vos critères.",
+    "sort": {
+      "latest": "Plus récents",
+      "oldest": "Plus anciens",
+      "titleAZ": "Titre A-Z",
+      "titleZA": "Titre Z-A"
+    },
+    "guide": {
+      "title": "Guide de lecture",
+      "deepReading": {
+        "title": "Lecture approfondie",
+        "description": "Suivez attentivement les arguments centraux de l'auteur et sa structure logique, comprenez le contexte théorique."
+      },
+      "intersectionalPerspective": {
+        "title": "Perspective intersectionnelle",
+        "description": "Analysez comment le genre interagit avec d'autres identités comme la race, la classe et la sexualité."
+      },
+      "criticalThinking": {
+        "title": "Pensée critique",
+        "description": "N'acceptez pas les affirmations sans les questionner, examinez les preuves, la logique et les perspectives potentiellement ignorées."
+      }
+    }
+  },
+  "topicsPage": {
+    "title": "Catégories de thèmes féministes",
+    "subtitle": "De la théorie à la pratique, découvrez la riche diversité du contenu féministe",
+    "popularTopics": "Thèmes populaires",
+    "popularTopicsDesc": "Les thèmes féministes les plus discutés",
+    "categories": {
+      "theoreticalschools": "Écoles Théoriques",
+      "movementissues": "Questions de Mouvement",
+      "criticaldomains": "Domaines Critiques",
+      "historicalcontext": "Contexte Historique",
+      "literature&creation": "Littérature et Création",
+      "specialconcepts": "Concepts Spéciaux"
+    },
+    "categoryDescriptions": {
+      "theoreticalschools": "Écoles Théoriques",
+      "movementissues": "Questions de Mouvement",
+      "criticaldomains": "Domaines Critiques",
+      "historicalcontext": "Contexte Historique",
+      "literature&creation": "Littérature et Création",
+      "specialconcepts": "Concepts Spéciaux"
+    },
+    "contributeTitle": "Contribuer du nouveau contenu",
+    "contributeDesc": "Si vous avez du contenu féministe de qualité, n'hésitez pas à le partager",
+    "submitContent": "Soumettre du contenu",
+    "searchContent": "Rechercher du contenu",
+    "topicsCount": "{count} thèmes",
+    "totalContent": "Contenu total : {count}",
+    "comingSoon": "Bientôt disponible"
+  },
+  "auth": {
+    "login": "Connexion",
+    "loginPrompt": "Veuillez vous connecter pour continuer",
+    "passwordMismatch": "Mot de passe incorrect",
+    "invalidEmail": "Adresse e-mail invalide",
+    "loginFailed": "Échec de la connexion",
+    "registerFailed": "Échec de l'inscription",
+    "networkError": "Erreur réseau",
+    "register": "S'inscrire",
+    "username": "Nom d'utilisateur",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "usernamePlaceholder": "Entrez votre nom d'utilisateur",
+    "emailPlaceholder": "Entrez votre e-mail",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "confirmPasswordPlaceholder": "Confirmez votre mot de passe",
+    "registerPrompt": "Créer un compte",
+    "haveAccount": "Vous avez déjà un compte ? Connexion",
+    "noAccount": "Pas encore de compte ? S'inscrire",
+    "loginInProgress": "Connexion en cours...",
+    "registerInProgress": "Inscription en cours...",
+    "fillAllFields": "Veuillez remplir tous les champs",
+    "fillEmailPassword": "Veuillez entrer l'e-mail et le mot de passe"
+  },
+  "topicDetailPage": {
+    "description": "Découvrez du contenu féministe sélectionné sur {topic}",
+    "itemsFound": "éléments trouvés",
+    "noRelatedContent": "Aucun contenu associé trouvé",
+    "comingSoon": "Nous travaillons à la collecte de contenu de qualité sur « {topic} », restez à l'écoute !",
+    "browseOtherTopics": "Parcourir d'autres sujets",
+    "relatedTopics": "Sujets associés",
+    "discoverMoreTitle": "Découvrir plus",
+    "discoverMoreDesc": "Explorez davantage de sujets et de ressources féministes",
+    "contentTypes": {
+      "book": "Livres",
+      "film": "Films",
+      "article": "Articles",
+      "video": "Vidéos",
+      "podcast": "Podcasts",
+      "paper": "Articles académiques"
+    }
+  },
+  "article": {
+    "relatedArticles": "Articles connexes"
+  },
+  "promo": {
+    "fatefuldeck": {
+      "supportedBy": "Ce projet est soutenu par FatefulDeck.com",
+      "title": "Tarot IA FatefulDeck",
+      "description": "Plateforme premium de tirage de tarot en 10 langues propulsée par l'IA. Explorez votre destin dans votre propre langue.",
+      "cta": "Commencer le tirage",
+      "insightTitle": "Besoin de plus d'inspiration ?",
+      "insightDescription": "Tirez une carte pour obtenir votre guide du jour.",
+      "insightCta": "Tirer une carte",
+      "thanksSupport": "Ce projet est soutenu par FatefulDeck.com",
+      "thanksSupportMessage": "FatefulDeck AI Tarot - Plateforme premium de tirage de tarot en 10 langues propulsée par l'IA.",
+      "checkFortune": "Consultez votre horoscope du jour",
+      "showcaseTitle": "Explorez votre destin",
+      "showcaseDescription": "Choisissez un jeu de tarot pour commencer votre voyage d'exploration.",
+      "showcaseCTA": "Voir tous les jeux"
+    }
+  }
+}

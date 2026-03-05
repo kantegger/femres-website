@@ -1,0 +1,118 @@
+---
+// Footer component
+import '../i18n/translations';
+import { createT, getLocalizedPath, type Locale } from '../i18n/index';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = createT(locale);
+
+// 生成本地化链接的辅助函数
+const localizedLink = (path: string) => {
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  return getLocalizedPath(cleanPath, locale);
+};
+
+// GitHub repository URL
+const GITHUB_URL = 'https://github.com/kantegger/femres-website';
+---
+
+<footer class="bg-gray-900 dark:bg-black text-white">
+  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8">
+      <!-- Brand -->
+      <div class="col-span-2 md:col-span-2">
+        <div class="flex items-center mb-4">
+          <span class="text-2xl font-bold text-purple-400">FemRes</span>
+          <span class="ml-3 px-2 py-1 text-xs font-medium bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">
+            Open Source
+          </span>
+        </div>
+        <p class="text-gray-400 max-w-md">
+          {t('footer.description')}
+        </p>
+        <!-- Open Source Badge -->
+        <div class="mt-4 flex items-center space-x-4">
+          <a 
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center text-gray-400 hover:text-white transition-colors"
+            aria-label="View source on GitHub"
+          >
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-sm">GitHub</span>
+          </a>
+          <span class="text-gray-600">|</span>
+          <span class="text-xs text-gray-500">
+            MIT License
+          </span>
+        </div>
+      </div>
+
+      <!-- Resource Types -->
+      <div class="col-span-1">
+        <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase mb-4">{t('footer.resourceTypes')}</h3>
+        <ul class="space-y-3">
+          <li><a href={localizedLink('/books')} class="text-gray-400 hover:text-white transition-colors">{t('footer.links.books')}</a></li>
+          <li><a href={localizedLink('/films')} class="text-gray-400 hover:text-white transition-colors">{t('footer.links.films')}</a></li>
+          <li><a href={localizedLink('/articles')} class="text-gray-400 hover:text-white transition-colors">{t('footer.links.articles')}</a></li>
+          <li><a href={localizedLink('/videos')} class="text-gray-400 hover:text-white transition-colors">{t('footer.links.videos')}</a></li>
+          <li><a href={localizedLink('/podcasts')} class="text-gray-400 hover:text-white transition-colors">{t('footer.links.podcasts')}</a></li>
+          <li><a href={localizedLink('/papers')} class="text-gray-400 hover:text-white transition-colors">{t('footer.links.papers')}</a></li>
+        </ul>
+      </div>
+
+      <!-- Community -->
+      <div class="col-span-1">
+        <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase mb-4">{t('footer.community')}</h3>
+        <ul class="space-y-3">
+          <li><a href={localizedLink('/about')} class="text-gray-400 hover:text-white transition-colors">{t('footer.links.about')}</a></li>
+          <li><a href={localizedLink('/contact')} class="text-gray-400 hover:text-white transition-colors">{t('footer.links.contact')}</a></li>
+          <li><a href={localizedLink('/contribute')} class="text-gray-400 hover:text-white transition-colors">{t('footer.links.contribute')}</a></li>
+          <li><a href={localizedLink('/contact')} class="text-gray-400 hover:text-white transition-colors">{t('footer.links.feedback')}</a></li>
+          <li>
+            <a 
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-gray-400 hover:text-white transition-colors inline-flex items-center"
+            >
+              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+              </svg>
+              {locale === 'zh-CN' || locale === 'zh-TW' ? '开源代码' : 'Open Source'}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-8 pt-8 border-t border-gray-800">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-gray-400 text-sm">
+          {t('footer.copyright')}
+        </p>
+        <div class="flex items-center space-x-6">
+          <a href={localizedLink('/privacy')} class="text-gray-400 hover:text-white text-sm transition-colors">{t('footer.links.privacy')}</a>
+          <a href={localizedLink('/terms')} class="text-gray-400 hover:text-white text-sm transition-colors">{t('footer.links.terms')}</a>
+          <span class="text-gray-600">|</span>
+          <span class="text-gray-500 text-sm">MIT License</span>
+        </div>
+      </div>
+      <!-- Open Source Statement -->
+      <div class="mt-4 text-center">
+        <p class="text-xs text-gray-500">
+          {locale === 'zh-CN' || locale === 'zh-TW' 
+            ? 'FemRes 是一个开源项目。我们欢迎您的贡献！' 
+            : 'FemRes is an open-source project. We welcome your contributions!'}
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>

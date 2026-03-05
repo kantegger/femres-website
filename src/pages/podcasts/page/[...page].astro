@@ -1,0 +1,328 @@
+---
+export const prerender = true;
+import { getCollection } from "astro:content";
+import Layout from "../../../layouts/Layout.astro";
+import PodcastCard from "../../../components/PodcastCard.astro";
+import Pagination from "../../../components/Pagination.astro";
+
+export async function getStaticPaths({ paginate }: { paginate: any }) {
+  const podcasts = await getCollection("podcasts");
+  const publishedPodcasts = podcasts.filter(
+    (podcast) => podcast.data.status === "published",
+  );
+
+  // 按发布日期排序
+  const sortedPodcasts = publishedPodcasts.sort((a, b) => {
+    return (
+      new Date(b.data.publishDate).getTime() -
+      new Date(a.data.publishDate).getTime()
+    );
+  });
+
+  return paginate(sortedPodcasts, { pageSize: 12 });
+}
+
+const { page } = Astro.props as { page: any };
+const allPodcasts = await getCollection("podcasts");
+const publishedPodcasts = allPodcasts.filter(
+  (podcast) => podcast.data.status === "published",
+);
+
+// 获取所有主题标签
+const allTopics = [
+  ...new Set(publishedPodcasts.flatMap((podcast) => podcast.data.topics)),
+].sort();
+
+// 统计信息
+const totalPodcasts = publishedPodcasts.length;
+---
+
+<Layout
+  title={`播客 - 第 ${page.currentPage} 页 - FemRes`}
+  description="精选女性主义播客内容，聆听来自全球的女性声音，探讨性别议题的深度对话与思辨。"
+>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Header -->
+    <div
+      class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center">
+          <h1
+            class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4"
+          >
+            🎧 播客频道
+          </h1>
+          <p
+            class="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto"
+          >
+            聆听全球女性主义学者、活动家和思想家的声音，在对话中启发思考
+          </p>
+
+          <!-- 统计信息 -->
+          <div class="flex flex-wrap justify-center gap-6 text-sm">
+            <div
+              class="flex items-center bg-purple-50 dark:bg-purple-900/20 px-4 py-2 rounded-full"
+            >
+              <span class="text-purple-600 dark:text-purple-400 mr-2">🎙️</span>
+              <span class="text-purple-800 dark:text-purple-200"
+                >共 {totalPodcasts} 档播客</span
+              >
+            </div>
+            <div
+              class="flex items-center bg-orange-50 dark:bg-orange-900/20 px-4 py-2 rounded-full"
+            >
+              <span class="text-orange-600 dark:text-orange-400 mr-2">🏷️</span>
+              <span class="text-orange-800 dark:text-orange-200"
+                >{allTopics.length} 个主题分类</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <!-- 主题标签筛选 -->
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          主题分类
+        </h2>
+        <div class="relative">
+          <!-- 主题标签容器 -->
+          <div
+            id="topics-container"
+            class="flex flex-wrap gap-3 overflow-hidden transition-all duration-300"
+            style="max-height: 90px;"
+          >
+            <a
+              href="/podcasts"
+              class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+            >
+              全部播客
+            </a>
+            {
+              allTopics.map((topic) => (
+                <button
+                  class="filter-btn inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:border-purple-500 dark:hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm"
+                  data-filter={topic}
+                >
+                  {topic}
+                </button>
+              ))
+            }
+          </div>
+
+          <!-- 展开/折叠按钮 - 只在需要时显示 -->
+          {
+            allTopics.length > 20 && (
+              <div class="flex justify-center mt-4">
+                <button
+                  id="toggle-topics-btn"
+                  class="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-lg transition-colors text-sm font-medium"
+                >
+                  <span id="toggle-topics-text">展开更多主题</span>
+                  <svg
+                    id="toggle-topics-icon"
+                    class="ml-2 w-4 h-4 transform transition-transform duration-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )
+          }
+        </div>
+      </div>
+
+      <!-- 播客网格 -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+            全部播客
+            <span
+              class="text-base font-normal text-gray-600 dark:text-gray-400 ml-2"
+            >
+              ({totalPodcasts} 档)
+            </span>
+          </h2>
+          <div class="flex items-center gap-4">
+            <select
+              id="sort-select"
+              class="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white"
+            >
+              <option value="date-desc">最新发布</option>
+              <option value="date-asc">最早发布</option>
+              <option value="title-asc">标题 A-Z</option>
+              <option value="title-desc">标题 Z-A</option>
+              <option value="duration-asc">时长（短）</option>
+              <option value="duration-desc">时长（长）</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="podcasts-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {
+            page.data.map((podcast: any) => (
+              <div
+                class="podcast-item"
+                data-topics={JSON.stringify(podcast.data.topics)}
+                data-title={podcast.data.title}
+                data-date={podcast.data.publishDate.toISOString()}
+                data-duration={podcast.data.duration || 0}
+              >
+                <PodcastCard
+                  title={podcast.data.title}
+                  author={podcast.data.author}
+                  description={podcast.data.description}
+                  slug={podcast.slug}
+                  thumbnail={podcast.data.thumbnail}
+                  publishDate={podcast.data.publishDate}
+                  duration={podcast.data.duration}
+                  sourceUrl={podcast.data.sourceUrl}
+                  topics={podcast.data.topics}
+                  episodeNumber={podcast.data.episodeNumber}
+                />
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- 分页组件 -->
+      <div class="flex justify-center mb-12">
+        <Pagination
+          currentPage={page.currentPage}
+          totalPages={page.lastPage}
+          baseUrl="/podcasts"
+        />
+      </div>
+
+      <!-- 空状态 -->
+      {
+        page.data.length === 0 && (
+          <div class="text-center py-16">
+            <div class="text-6xl mb-4">🎧</div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              暂无播客内容
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              我们正在努力添加更多优质的女性主义播客资源
+            </p>
+          </div>
+        )
+      }
+
+      <!-- 收听指南 -->
+      <div
+        class="mt-16 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-2xl p-8"
+      >
+        <div class="text-center">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            🎯 收听建议
+          </h2>
+          <div class="grid md:grid-cols-3 gap-6 text-left mt-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">🌍</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                多元声音
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                聆听来自不同文化背景的女性主义者的声音，拓展全球视野和理解
+              </p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">💭</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                深度对话
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                通过长篇对话和访谈，深入了解复杂的性别议题和社会现象
+              </p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">📱</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                随时随地
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                利用碎片化时间学习，在通勤或休息时收听，让思考融入日常生活
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const sortSelect = document.getElementById("sort-select");
+    const podcastsGrid = document.getElementById("podcasts-grid");
+
+    // 主题展开/折叠功能
+    const topicsContainer = document.getElementById("topics-container");
+    const toggleBtn = document.getElementById("toggle-topics-btn");
+    const toggleText = document.getElementById("toggle-topics-text");
+    const toggleIcon = document.getElementById("toggle-topics-icon");
+    let isTopicsExpanded = false;
+
+    // 只在按钮存在时添加事件监听器
+    if (toggleBtn) {
+      toggleBtn.addEventListener("click", function () {
+        if (isTopicsExpanded) {
+          // 折叠主题
+          if (topicsContainer) topicsContainer.style.maxHeight = "90px"; // 约2行高度
+          if (toggleText) toggleText.textContent = "展开更多主题";
+          if (toggleIcon) toggleIcon.style.transform = "rotate(0deg)";
+          isTopicsExpanded = false;
+        } else {
+          // 展开主题
+          if (topicsContainer) topicsContainer.style.maxHeight = "none";
+          if (toggleText) toggleText.textContent = "收起主题";
+          if (toggleIcon) toggleIcon.style.transform = "rotate(180deg)";
+          isTopicsExpanded = true;
+        }
+      });
+    }
+
+    let currentTopic = "all";
+
+    // 筛选功能（在分页页面中，筛选会重定向到首页）
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", function (this: HTMLElement) {
+        const filterValue = this.dataset.filter;
+        // 重定向到首页，并在URL中加入筛选参数
+        window.location.href = `/podcasts?filter=${filterValue}`;
+      });
+    });
+
+    // 排序功能
+    if (sortSelect) {
+      sortSelect.addEventListener("change", function (this: HTMLSelectElement) {
+        const sortValue = this.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set("sort", sortValue);
+        window.location.href = url.toString();
+      });
+    }
+
+    // 从URL参数中恢复排序状态
+    const urlParams = new URLSearchParams(window.location.search);
+    const sortParam = urlParams.get("sort");
+    if (sortParam && sortSelect) {
+      (sortSelect as HTMLSelectElement).value = sortParam;
+    }
+  });
+</script>

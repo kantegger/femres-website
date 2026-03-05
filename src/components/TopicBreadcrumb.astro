@@ -1,0 +1,101 @@
+---
+import { createT, getLocalizedPath, getLocaleFromUrl } from "../i18n/index";
+
+export interface Props {
+  currentTopic: string;
+  locale?: string;
+}
+
+const { currentTopic, locale } = Astro.props;
+
+const currentLocale = locale || getLocaleFromUrl(Astro.url);
+const t = createT(currentLocale as any);
+
+// 主题分类映射
+const topicCategories: Record<string, string> = {
+  教育权利: "权利与法律",
+  法律权利: "权利与法律",
+  政治参与: "权利与法律",
+  身体自主: "权利与法律",
+  职场平等: "社会与文化",
+  媒体表征: "社会与文化",
+  家庭角色: "社会与文化",
+  性别暴力: "安全与保护",
+  人身安全: "安全与保护",
+  心理健康: "安全与保护",
+  历史人物: "历史与理论",
+  女性理论: "历史与理论",
+  存在主义: "历史与理论",
+  性别研究: "历史与理论",
+};
+
+const category = topicCategories[currentTopic];
+const localizedCategory = category
+  ? t(`common.breadcrumb.topicCategories.${category}`)
+  : null;
+const homeLink = getLocalizedPath("/", currentLocale as any);
+const topicsLink = getLocalizedPath("topics", currentLocale as any);
+---
+
+<nav
+  class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400 mb-8"
+  aria-label={t("common.breadcrumb.navigation")}
+>
+  <a
+    href={homeLink}
+    class="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+  >
+    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+      <path
+        d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
+      ></path>
+    </svg>
+  </a>
+
+  <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+    <path
+      fill-rule="evenodd"
+      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+      clip-rule="evenodd"></path>
+  </svg>
+
+  <a
+    href={topicsLink}
+    class="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+  >
+    {t("common.breadcrumb.topics")}
+  </a>
+
+  {
+    localizedCategory && (
+      <>
+        <svg
+          class="w-4 h-4 text-gray-400"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+
+        <span class="text-gray-600 dark:text-gray-300">
+          {localizedCategory}
+        </span>
+      </>
+    )
+  }
+
+  <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+    <path
+      fill-rule="evenodd"
+      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+      clip-rule="evenodd"></path>
+  </svg>
+
+  <span class="text-gray-900 dark:text-white font-medium">
+    {currentTopic}
+  </span>
+</nav>

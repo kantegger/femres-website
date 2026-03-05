@@ -1,0 +1,709 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../../layouts/Layout.astro";
+import PaperCard from "../../../components/PaperCard.astro";
+import PageHeader from "../../../components/PageHeader.astro";
+import Pagination from "../../../components/Pagination.astro";
+import { createT, getLocalizedPath } from "../../../i18n/index";
+import {
+  getTopicTranslation,
+  findTopicByName,
+} from "../../../i18n/topicsUtils";
+import FatefulDeckMiniPromo from "../../../components/promo/FatefulDeckMiniPromo.astro";
+
+const LOCALE_CONFIG = {
+  en: { suffix: "-en", name: "English", dateLocale: "en-US" },
+  "zh-CN": { suffix: "", name: "简体中文", dateLocale: "zh-CN" },
+  "zh-TW": { suffix: "-tw", name: "繁體中文", dateLocale: "zh-TW" },
+  ja: { suffix: "-ja", name: "日本語", dateLocale: "ja-JP" },
+  fr: { suffix: "-fr", name: "Français", dateLocale: "fr-FR" },
+} as const;
+
+type SupportedLocale = keyof typeof LOCALE_CONFIG;
+
+export function getStaticPaths() {
+  const locales = ["en", "zh-TW", "ja", "fr"];
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const { locale } = Astro.params;
+const currentLocale = locale as SupportedLocale;
+const config = LOCALE_CONFIG[currentLocale];
+const t = createT(currentLocale);
+
+const papers = await getCollection("papers");
+const publishedPapers = papers.filter((p) => {
+  const isPub = p.data.status === "published";
+  if (!isPub) return false;
+  return p.slug.endsWith(config.suffix);
+});
+
+const sortedPapers = publishedPapers.sort(
+  (a, b) =>
+    new Date(b.data.publishDate).getTime() -
+    new Date(a.data.publishDate).getTime(),
+);
+
+const allTopics = [
+  ...new Set(
+    publishedPapers.flatMap((paper) =>
+      paper.data.topics.map((topic) => {
+        const info = findTopicByName(topic);
+        return info ? info.key : topic;
+      }),
+    ),
+  ),
+].sort();
+
+const journalCount = new Set(
+  publishedPapers.map((p) => p.data.journal).filter(Boolean),
+).size;
+
+const PER_PAGE = 12;
+const total = publishedPapers.length;
+const totalPages = Math.ceil(total / PER_PAGE);
+const currentPage = Number(Astro.url.searchParams.get("page") || "1");
+const validPage = Math.max(1, Math.min(currentPage, totalPages));
+const items = sortedPapers.slice(
+  (validPage - 1) * PER_PAGE,
+  validPage * PER_PAGE,
+);
+
+function cleanSlug(slug: string) {
+  const s = ["-en", "-tw", "-ja", "-fr"];
+  for (const suf of s)
+    if (slug.endsWith(suf)) return slug.slice(0, -suf.length);
+  return slug;
+}
+
+const baseUrl = `/${currentLocale}/papers`;
+---
+
+<Layout
+  title={`${t("nav.papers")} - FemRes`}
+  description={t("papersPage.subtitle")}
+>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Page Header -->
+    <PageHeader
+      title={t("nav.papers")}
+      description={t("papersPage.subtitle")}
+      icon="📄"
+      gradient="slate"
+      stats={[
+        {
+          icon: "📄",
+          text: t("papersPage.stats.totalPapers", { count: total }),
+        },
+        {
+          icon: "📚",
+          text: t("common.journalsCount", { count: journalCount }),
+        },
+        {
+          icon: "🏷️",
+          text: t("papersPage.stats.topicCategories", {
+            count: allTopics.length,
+          }),
+        },
+      ]}
+    />
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <!-- Topic Filter (Collapsible) -->
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          {t("papersPage.topicsTitle")}
+        </h2>
+        <div class="relative">
+          <div
+            id="topics-container"
+            class="flex flex-wrap gap-3 overflow-hidden transition-all duration-300"
+            style="max-height: 90px;"
+          >
+            <button
+              class="filter-btn inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+              data-filter="all"
+            >
+              {t("papersPage.allPapers")}
+            </button>
+            {
+              allTopics.map((topic) => {
+                const translatedTopic = getTopicTranslation(
+                  topic,
+                  currentLocale as any,
+                );
+                return (
+                  <button
+                    class="filter-btn inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:border-purple-500 dark:hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm"
+                    data-filter={topic}
+                  >
+                    {translatedTopic}
+                  </button>
+                );
+              })
+            }
+          </div>
+
+          <!-- Show More Button -->
+          {
+            allTopics.length > 15 && (
+              <div class="text-center mt-4">
+                <button
+                  id="toggle-topics-btn"
+                  class="inline-flex items-center px-4 py-2 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-200 transition-colors text-sm font-medium"
+                >
+                  <span class="mr-2 btn-text">{t("common.showMore")}</span>
+                  <svg
+                    class="w-4 h-4 transform transition-transform duration-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )
+          }
+        </div>
+      </div>
+
+      <!-- Papers Grid -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+            <span id="current-filter">{t("papersPage.allPapers")}</span>
+            <span
+              id="papers-count"
+              class="text-base font-normal text-gray-600 dark:text-gray-400 ml-2"
+            >
+              ({t("common.itemsCount", { count: total })})
+            </span>
+          </h2>
+          <select
+            id="sort-select"
+            class="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white"
+          >
+            <option value="date-desc">{t("papersPage.sort.latest")}</option>
+            <option value="date-asc">{t("papersPage.sort.oldest")}</option>
+            <option value="title-asc">{t("papersPage.sort.titleAZ")}</option>
+            <option value="title-desc">{t("papersPage.sort.titleZA")}</option>
+            <option value="citations-desc"
+              >{t("papersPage.sort.citationsDesc")}</option
+            >
+            <option value="citations-asc"
+              >{t("papersPage.sort.citationsAsc")}</option
+            >
+          </select>
+        </div>
+
+        <div
+          id="papers-grid"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          {
+            items.map((paper) => (
+              <div class="paper-item">
+                <PaperCard
+                  title={paper.data.title}
+                  author={paper.data.author}
+                  description={paper.data.description}
+                  publishDate={paper.data.publishDate}
+                  slug={cleanSlug(paper.slug)}
+                  topics={paper.data.topics}
+                  journal={paper.data.journal}
+                  doi={paper.data.doi}
+                  citationCount={paper.data.citationCount}
+                  paperType={paper.data.paperType}
+                  keywords={paper.data.keywords}
+                  locale={currentLocale}
+                />
+              </div>
+            ))
+          }
+        </div>
+
+        {
+          totalPages > 1 && (
+            <div id="original-pagination" class="flex justify-center mt-12">
+              <Pagination
+                currentPage={validPage}
+                totalPages={totalPages}
+                baseUrl={baseUrl}
+                locale={currentLocale}
+              />
+            </div>
+          )
+        }
+        <div id="dynamic-pagination" class="flex justify-center mt-12"></div>
+
+        {
+          items.length === 0 && (
+            <div class="text-center py-16">
+              <div class="text-6xl mb-4">📄</div>
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                {t("papersPage.emptyState.noContent")}
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400">
+                {t("papersPage.emptyState.workingOnIt")}
+              </p>
+            </div>
+          )
+        }
+      </div>
+
+      <div class="mb-16">
+        <FatefulDeckMiniPromo />
+      </div>
+
+      <!-- Research Guide -->
+      <div
+        class="mt-16 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-8"
+      >
+        <div class="text-center">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            🎓 {t("papersPage.guide.title")}
+          </h2>
+          <div class="grid md:grid-cols-3 gap-6 text-left mt-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">📊</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("papersPage.guide.empirical.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("papersPage.guide.empirical.description")}
+              </p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">🔍</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("papersPage.guide.critical.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("papersPage.guide.critical.description")}
+              </p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">🌐</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("papersPage.guide.interdisciplinary.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("papersPage.guide.interdisciplinary.description")}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script
+  is:inline
+  define:vars={{
+    allPapersData: sortedPapers.map((p) => ({
+      slug: cleanSlug(p.slug),
+      title: p.data.title,
+      author: p.data.author,
+      description: p.data.description,
+      publishDate: p.data.publishDate.toISOString(),
+      topics: p.data.topics.map((topic) => {
+        const info = findTopicByName(topic);
+        return info ? info.key : topic;
+      }),
+      journal: p.data.journal,
+      doi: p.data.doi,
+      citationCount: p.data.citationCount,
+      paperType: p.data.paperType || "research",
+      keywords: p.data.keywords,
+    })),
+    topicTranslations: Object.fromEntries(
+      allTopics.map((t) => [t, getTopicTranslation(t, currentLocale)]),
+    ),
+    i18n: {
+      allPapers: t("papersPage.allPapers"),
+      countFormat: t("common.itemsCount"),
+      emptyTitle: t("papersPage.emptyState.noContent"),
+      emptyDescription: t("papersPage.emptyState.workingOnIt"),
+      citations: t("paper.citationCount"),
+      readPaper: t("common.readPaper") || t("paper.readPaper"),
+      showMore: t("common.showMore"),
+      showLess: t("common.showLess"),
+      paperTypes: {
+        research: {
+          label: t("common.paperTypes.research"),
+          icon: "🔬",
+          color:
+            "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+        },
+        review: {
+          label: t("common.paperTypes.review"),
+          icon: "📊",
+          color:
+            "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+        },
+        "case-study": {
+          label: t("common.paperTypes.case-study"),
+          icon: "📋",
+          color:
+            "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+        },
+        theoretical: {
+          label: t("common.paperTypes.theoretical"),
+          icon: "💭",
+          color:
+            "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+        },
+      },
+    },
+    currentLocale: currentLocale,
+  }}
+>
+  window.ALL_PAPERS_DATA = allPapersData;
+  window.TOPIC_TRANSLATIONS = topicTranslations;
+  window.I18N = i18n;
+  window.CURRENT_LOCALE = currentLocale;
+</script>
+
+<script>
+  import type { Paper } from "../../../i18n/types";
+
+  function initPage() {
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    const sortSelect = document.getElementById(
+      "sort-select",
+    ) as HTMLSelectElement | null;
+    const papersGrid = document.getElementById(
+      "papers-grid",
+    ) as HTMLElement | null;
+    const papersCount = document.getElementById("papers-count");
+    const currentFilterTitle = document.getElementById("current-filter");
+
+    // Topics Collapse Logic
+    const topicsContainer = document.getElementById("topics-container");
+    const toggleTopicsBtn = document.getElementById("toggle-topics-btn");
+    let isTopicsExpanded = false;
+
+    if (topicsContainer && toggleTopicsBtn) {
+      toggleTopicsBtn.addEventListener("click", () => {
+        isTopicsExpanded = !isTopicsExpanded;
+        const btnText = toggleTopicsBtn.querySelector(".btn-text");
+        const btnIcon = toggleTopicsBtn.querySelector("svg");
+
+        if (isTopicsExpanded) {
+          topicsContainer.style.maxHeight = "none";
+          if (btnText) btnText.textContent = window.I18N.showLess;
+          if (btnIcon) btnIcon.style.transform = "rotate(180deg)";
+        } else {
+          topicsContainer.style.maxHeight = "90px";
+          if (btnText) btnText.textContent = window.I18N.showMore;
+          if (btnIcon) btnIcon.style.transform = "rotate(0deg)";
+        }
+      });
+    }
+
+    let currentTopic = "all";
+    let currentPage = 1;
+    const PAPERS_PER_PAGE = 12;
+
+    const allPapersData = (window.ALL_PAPERS_DATA || []) as Paper[];
+
+    filterBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const target = e.currentTarget as HTMLElement;
+        currentTopic = target.dataset.filter || "all";
+        currentPage = 1;
+
+        filterBtns.forEach((b) => {
+          b.classList.remove("bg-purple-600", "text-white");
+          b.classList.add(
+            "bg-white",
+            "dark:bg-gray-800",
+            "border",
+            "border-gray-300",
+            "dark:border-gray-600",
+            "text-gray-700",
+            "dark:text-gray-300",
+          );
+        });
+        target.classList.remove(
+          "bg-white",
+          "dark:bg-gray-800",
+          "border",
+          "border-gray-300",
+          "dark:border-gray-600",
+          "text-gray-700",
+          "dark:text-gray-300",
+        );
+        target.classList.add("bg-purple-600", "text-white");
+
+        filterAndSort();
+      });
+    });
+
+    if (sortSelect) {
+      sortSelect.addEventListener("change", () => {
+        currentPage = 1;
+        filterAndSort();
+      });
+    }
+
+    function filterAndSort() {
+      const sortValue = (sortSelect as HTMLSelectElement)?.value || "date-desc";
+      const filtered = allPapersData.filter(
+        (p: Paper) =>
+          currentTopic === "all" || p.topics.includes(currentTopic || "all"),
+      );
+
+      filtered.sort((a: Paper, b: Paper) => {
+        switch (sortValue) {
+          case "date-desc":
+            return (
+              new Date(b.publishDate).getTime() -
+              new Date(a.publishDate).getTime()
+            );
+          case "date-asc":
+            return (
+              new Date(a.publishDate).getTime() -
+              new Date(b.publishDate).getTime()
+            );
+          case "title-asc":
+            return a.title.localeCompare(b.title);
+          case "title-desc":
+            return b.title.localeCompare(a.title);
+          case "citations-desc":
+            return (b.citationCount || 0) - (a.citationCount || 0);
+          case "citations-asc":
+            return (a.citationCount || 0) - (b.citationCount || 0);
+          default:
+            return 0;
+        }
+      });
+
+      const total = filtered.length;
+      const totalPages = Math.ceil(total / PAPERS_PER_PAGE);
+      const items: Paper[] = filtered.slice(
+        (currentPage - 1) * PAPERS_PER_PAGE,
+        currentPage * PAPERS_PER_PAGE,
+      );
+
+      if (papersGrid) papersGrid.innerHTML = "";
+      if (total === 0) {
+        if (papersGrid) {
+          papersGrid.innerHTML = `
+            <div class="col-span-full text-center py-16">
+              <div class="text-6xl mb-4">📄</div>
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                ${window.I18N.emptyTitle}
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400">
+                ${window.I18N.emptyDescription}
+              </p>
+            </div>
+          `;
+        }
+      } else {
+        items.forEach((paper: Paper) => {
+          const card = createPaperCard(paper);
+          if (papersGrid) papersGrid.appendChild(card);
+        });
+      }
+
+      if (currentFilterTitle)
+        currentFilterTitle.textContent =
+          currentTopic === "all"
+            ? window.I18N.allPapers
+            : window.TOPIC_TRANSLATIONS[currentTopic] || currentTopic;
+      if (papersCount)
+        papersCount.textContent = `(${window.I18N.countFormat.replace("{count}", total)})`;
+
+      const originalPagination = document.getElementById("original-pagination");
+      const filterPagination = document.getElementById("filter-pagination");
+      if (filterPagination) filterPagination.remove();
+
+      if (currentTopic === "all") {
+        if (originalPagination) originalPagination.style.display = "none";
+        if (totalPages > 1) createDynamicPagination(totalPages);
+      } else {
+        if (originalPagination) originalPagination.style.display = "none";
+        if (totalPages > 1) createDynamicPagination(totalPages);
+      }
+    }
+
+    function createDynamicPagination(totalPages: number) {
+      const paginationDiv = document.createElement("div");
+      paginationDiv.id = "filter-pagination";
+      paginationDiv.className = "mt-12 flex justify-center";
+      const nav = document.createElement("nav");
+      nav.className = "flex items-center space-x-2";
+
+      // Prev
+      const prevBtn = document.createElement("button");
+      prevBtn.className = `px-3 py-2 rounded-lg transition-colors ${currentPage > 1 ? "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 opacity-50 cursor-not-allowed"}`;
+      prevBtn.innerHTML =
+        '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>';
+      if (currentPage > 1) {
+        prevBtn.onclick = () => {
+          currentPage--;
+          filterAndSort();
+          window.scrollTo(0, 0);
+        };
+      }
+      nav.appendChild(prevBtn);
+
+      // Numbers
+      const pageNumbersDiv = document.createElement("div");
+      pageNumbersDiv.className = "flex items-center space-x-2";
+      for (let i = 1; i <= totalPages; i++) {
+        const showPage =
+          i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1;
+        if (showPage) {
+          const btn = document.createElement(
+            i === currentPage ? "span" : "button",
+          );
+          btn.className =
+            i === currentPage
+              ? "px-4 py-2 bg-purple-600 text-white rounded-lg font-medium"
+              : "px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors";
+          btn.textContent = i.toString();
+          if (i !== currentPage) {
+            btn.onclick = () => {
+              currentPage = i;
+              filterAndSort();
+              window.scrollTo(0, 0);
+            };
+          }
+          pageNumbersDiv.appendChild(btn);
+        } else if (i === 2 && currentPage > 4) {
+          const dots = document.createElement("span");
+          dots.className = "px-2 text-gray-500";
+          dots.textContent = "...";
+          pageNumbersDiv.appendChild(dots);
+        } else if (i === totalPages - 1 && currentPage < totalPages - 3) {
+          const dots = document.createElement("span");
+          dots.className = "px-2 text-gray-500";
+          dots.textContent = "...";
+          pageNumbersDiv.appendChild(dots);
+        }
+      }
+      nav.appendChild(pageNumbersDiv);
+
+      // Next
+      const nextBtn = document.createElement("button");
+      nextBtn.className = `px-3 py-2 rounded-lg transition-colors ${currentPage < totalPages ? "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700" : "bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 opacity-50 cursor-not-allowed"}`;
+      nextBtn.innerHTML =
+        '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>';
+      if (currentPage < totalPages) {
+        nextBtn.onclick = () => {
+          currentPage++;
+          filterAndSort();
+          window.scrollTo(0, 0);
+        };
+      }
+      nav.appendChild(nextBtn);
+      paginationDiv.appendChild(nav);
+      if (papersGrid?.parentElement) {
+        papersGrid.parentElement.appendChild(paginationDiv);
+      }
+    }
+
+    function createPaperCard(paper: Paper) {
+      const typeConfig =
+        (window.I18N as any).paperTypes[paper.paperType || "research"] ||
+        (window.I18N as any).paperTypes["research"];
+      const keywordsHtml =
+        paper.keywords && paper.keywords.length > 0
+          ? paper.keywords
+              .slice(0, 5)
+              .map(
+                (k: string) =>
+                  `<span class="inline-block px-2 py-1 text-xs bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-md border border-indigo-200 dark:border-indigo-800">${k}</span>`,
+              )
+              .join("")
+          : paper.topics
+              .slice(0, 3)
+              .map((t: string) => {
+                const trans = (window.TOPIC_TRANSLATIONS as any)[t] || t;
+                return `<span class="inline-block px-2 py-1 text-xs bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-md border border-indigo-200 dark:border-indigo-800">${trans}</span>`;
+              })
+              .join("");
+
+      const div = document.createElement("div");
+      div.className = "paper-item";
+
+      div.innerHTML = `
+        <article class="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl glass-card glass-hover transition-all duration-300 overflow-hidden border-l-4 border-indigo-500">
+          <a href="/${window.CURRENT_LOCALE}/papers/${paper.slug}" class="block">
+            <div class="p-6">
+              <!-- Header -->
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${typeConfig.color}">
+                    <span class="mr-1">${typeConfig.icon}</span>
+                    ${typeConfig.label}
+                  </span>
+                  ${paper.journal ? `<span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-1 rounded-md">${paper.journal}</span>` : ""}
+                </div>
+              </div>
+
+              <!-- Title -->
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight">
+                ${paper.title}
+                <time class="text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md font-mono ml-2">
+                  ${new Date(paper.publishDate).getFullYear()}
+                </time>
+              </h3>
+
+              <!-- Author -->
+              <div class="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-3">
+                 <svg class="w-4 h-4 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path></svg>
+                 <span class="font-medium">${paper.author}</span>
+              </div>
+
+              <!-- Abstract -->
+              <p class="text-gray-700 dark:text-gray-300 text-sm mb-4 line-clamp-3 leading-relaxed">
+                ${paper.description}
+              </p>
+
+              <!-- Keywords/Topics -->
+              <div class="flex flex-wrap gap-1.5 mb-4">
+                ${keywordsHtml}
+              </div>
+
+              <!-- Metrics -->
+              <div class="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                  ${
+                    paper.citationCount
+                      ? `
+                    <div class="flex items-center gap-1">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                      <span class="font-medium">${paper.citationCount}</span>
+                      <span class="text-xs">${window.I18N.citations}</span>
+                    </div>
+                  `
+                      : ""
+                  }
+                </div>
+
+                <span class="text-indigo-600 dark:text-indigo-400 text-sm font-medium group-hover:underline flex items-center">
+                  ${window.I18N.readPaper}
+                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        </article>
+      `;
+      return div;
+    }
+  }
+
+  document.addEventListener("astro:page-load", initPage);
+</script>

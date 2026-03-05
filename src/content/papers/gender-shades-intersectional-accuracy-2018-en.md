@@ -1,0 +1,36 @@
+---
+title: "Gender Shades: Intersectional Accuracy Disparities in Commercial Gender Classification"
+originalTitle: "Gender Shades: Intersectional Accuracy Disparities in Commercial Gender Classification"
+author: "Joy Buolamwini, Timnit Gebru"
+description: "A groundbreaking 2018 FAccT study revealing severe bias in commercial facial recognition systems against darker-skinned women, with error rates up to 34.7% compared to just 0.8% for lighter-skinned males."
+publishDate: 2018-02-23
+journal: "Proceedings of the 1st Conference on Fairness, Accountability and Transparency"
+contentLanguage: en
+topics: ["AI Ethics", "Intersectional Feminism", "Race and Gender", "Digital Feminism", "Technology Critique", "Critical Race Theory"]
+doi: "10.48550/arXiv.1802.03797"
+sourceUrl: "https://proceedings.mlr.press/v81/buolamwini18a.html"
+keywords: ["algorithmic bias", "facial recognition", "intersectionality", "machine learning", "fairness"]
+paperType: research
+status: published
+abstract: "This study presents an approach to evaluate bias in automated facial analysis algorithms and datasets with respect to phenotypic subgroups. Using the dermatologist-approved Fitzpatrick Skin Type classification system, the researchers found severe gender and skin-tone bias in commercial gender classification systems, with darker-skinned females showing error rates of up to 34.7% compared to just 0.8% for lighter-skinned males. This finding reveals intersectional discrimination in AI systems and demands urgent attention for building fair, transparent, and accountable facial analysis algorithms."
+---
+
+"Gender Shades: Intersectional Accuracy Disparities in Commercial Gender Classification" is a groundbreaking research paper by Joy Buolamwini and Timnit Gebru, published at the inaugural Conference on Fairness, Accountability, and Transparency (FAccT) in 2018. This paper was the first to systematically quantify severe gender and skin-tone biases in commercial facial recognition systems, revealing how artificial intelligence algorithms systematically discriminate against darker-skinned women—a discovery that shook the academic world and sparked global policy discussions about AI ethics and algorithmic fairness.
+
+Joy Buolamwini is a computer scientist at the MIT Media Lab and founder of the Algorithmic Justice League. Timnit Gebru is a computer scientist who was formerly co-lead of Google's Ethical AI team. Both researchers are Black women in computer science, and their personal experiences are deeply connected to this research—Buolamwini's own experience of facial recognition systems failing to detect her dark skin directly inspired this study. As women of color in a field dominated by white men, their very presence serves as powerful proof of the importance of diversity in technology.
+
+The core methodology of this research involved creating a new dataset called the Pilot Parliaments Benchmark (PPB), balanced by gender and skin tone. Unlike the dominant IJB-A dataset (79.6% lighter-skinned subjects) and Adience dataset (86.2% lighter-skinned subjects) at the time, the PPB dataset incorporated photos of parliament members from African and European countries, ensuring balanced representation of darker and lighter skin tones, as well as males and females. The researchers used the dermatologist-approved Fitzpatrick Skin Type Classification system to categorize images into lighter (Types I-II) and darker (Types III-VI) skin types.
+
+The findings were shocking. After evaluating three major commercial gender classification systems (Microsoft, IBM, and Face++), the data revealed that darker-skinned females were the most misclassified group, with error rates ranging from 20.8% to 34.7%. In contrast, the error rate for lighter-skinned males was at most 0.8%. This disparity is not a minor technical issue but systemic discrimination—darker-skinned females were misclassified at rates more than 40 times higher than lighter-skinned males. The study also found that all systems had higher error rates for females than males, and higher error rates for darker skin than lighter skin, with darker-skinned females bearing the double penalty.
+
+Buolamwini and Gebru's analysis reveals the structural causes of these biases. First, the benchmark datasets used to train these systems were severely representationally biased, consisting primarily of images of lighter-skinned males. Second, gender classification in facial recognition technology often relies on binary gender frameworks, ignoring the existence of transgender and non-binary individuals. Third, the development of commercial systems lacked understanding of intersectionality—that is, how racial and gender discrimination intersect to produce unique impacts.
+
+The methodological contributions of this paper are equally significant. The researchers proposed an "intersectional auditing" framework, emphasizing that AI systems must be evaluated across multiple identity dimensions simultaneously rather than treating them in isolation. This methodological innovation laid the groundwork for numerous subsequent studies, driving the evaluation of algorithmic fairness from single "accuracy" metrics toward multidimensional "fairness" metrics.
+
+"Gender Shades" had enormous social impact after its publication. In 2018, this research directly led IBM, Microsoft, and Amazon to announce pauses or restrictions on selling facial recognition technology to law enforcement. The U.S. Congress held hearings on algorithmic accountability, with multiple senators citing this study's findings. The EU's draft AI Act also classified facial recognition as a "high-risk" application requiring rigorous fairness assessments.
+
+In academia, this paper pioneered the emerging research field of "algorithmic justice." It inspired hundreds of subsequent studies covering hiring algorithms, criminal justice risk assessments, medical diagnostic AI, and other application areas. The researchers' subsequent work, including Buolamwini's "Gender Shades" documentary short and Gebru's critique of the environmental costs of large language models, continues to drive public discussion about AI ethics.
+
+In the contemporary context, this research's importance has only grown. With the proliferation of generative AI (such as ChatGPT, DALL-E), algorithmic bias has expanded from "inaccurate recognition" to "generating harmful content." From facial recognition to text generation, from image synthesis to voice synthesis, AI system biases are everywhere. "Gender Shades" reminds us that technological progress does not automatically bring social progress—if we do not consciously address biases in algorithms, AI systems will become amplifiers of existing social inequalities rather than eliminators.
+
+As Buolamwini and Gebru emphasize, "if commercial companies are to build genuinely fair, transparent and accountable facial analysis algorithms, urgent attention must be paid to these substantial accuracy disparities." This is not merely a technical issue but a question of whose technology serves whom. In an increasingly algorithmically-mediated society, this research provides a crucial perspective: technology's "objectivity" is often just a disguise for power relations, and exposing these disguises is the first step toward technological justice.

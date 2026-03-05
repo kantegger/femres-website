@@ -1,0 +1,549 @@
+---
+export const prerender = true;
+
+import { getCollection } from "astro:content";
+import Layout from "../../../layouts/Layout.astro";
+import SchemaMarkup from "../../../components/seo/SchemaMarkup.astro";
+import InteractionButtons from "../../../components/InteractionButtons";
+import Discussion from "../../../components/Discussion";
+import { createT, getLocalizedPath } from "../../../i18n/index";
+import FatefulDeckMiniPromo from "../../../components/promo/FatefulDeckMiniPromo.astro";
+import { getTopicTranslation } from "../../../i18n/topicsUtils";
+
+// Define supported locales and their content suffixes
+const LOCALE_CONFIG = {
+  en: { suffix: "-en", name: "English", dateLocale: "en-US" },
+  "zh-CN": { suffix: "", name: "简体中文", dateLocale: "zh-CN" },
+  "zh-TW": { suffix: "-tw", name: "繁體中文", dateLocale: "zh-TW" },
+  ja: { suffix: "-ja", name: "日本語", dateLocale: "ja-JP" },
+  fr: { suffix: "-fr", name: "Français", dateLocale: "fr-FR" },
+} as const;
+
+type SupportedLocale = keyof typeof LOCALE_CONFIG;
+
+export async function getStaticPaths() {
+  const LOCALE_CONFIG_INTERNAL = {
+    en: { suffix: "-en", name: "English", dateLocale: "en-US" },
+    "zh-CN": { suffix: "", name: "简体中文", dateLocale: "zh-CN" },
+    "zh-TW": { suffix: "-tw", name: "繁體中文", dateLocale: "zh-TW" },
+    ja: { suffix: "-ja", name: "日本語", dateLocale: "ja-JP" },
+    fr: { suffix: "-fr", name: "Français", dateLocale: "fr-FR" },
+  } as const;
+  type SupportedLocaleInternal = keyof typeof LOCALE_CONFIG_INTERNAL;
+
+  const articles = await getCollection("articles");
+  const locales: SupportedLocaleInternal[] = [
+    "en",
+    "zh-CN",
+    "zh-TW",
+    "ja",
+    "fr",
+  ];
+
+  const paths = [];
+
+  for (const locale of locales) {
+    const config = LOCALE_CONFIG_INTERNAL[locale];
+
+    // Filter articles for this locale
+    const localeArticles = articles.filter((article) => {
+      if (locale === "zh-CN") {
+        return (
+          !article.slug.endsWith("-en") &&
+          !article.slug.endsWith("-tw") &&
+          !article.slug.endsWith("-ja") &&
+          !article.slug.endsWith("-fr")
+        );
+      }
+      return article.slug.endsWith(config.suffix);
+    });
+
+    for (const article of localeArticles) {
+      // Clean slug by removing locale suffix
+      let cleanSlug = article.slug;
+      if (config.suffix && article.slug.endsWith(config.suffix)) {
+        cleanSlug = article.slug.slice(0, -config.suffix.length);
+      }
+
+      paths.push({
+        params: {
+          locale: locale,
+          slug: cleanSlug,
+        },
+        props: { article, locale },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { article, locale } = Astro.props;
+const currentLocale = locale as SupportedLocale;
+const config = LOCALE_CONFIG[currentLocale];
+const t = createT(currentLocale);
+
+const { Content } = await article.render();
+
+// Get related articles
+const allArticles = await getCollection("articles");
+const relatedArticles = allArticles
+  .filter((a) => {
+    const isDifferent = a.slug !== article.slug;
+    const sameLocale =
+      currentLocale === "zh-CN"
+        ? !a.slug.endsWith("-en") &&
+          !a.slug.endsWith("-tw") &&
+          !a.slug.endsWith("-ja") &&
+          !a.slug.endsWith("-fr")
+        : a.slug.endsWith(config.suffix);
+    const hasCommonTopic = a.data.topics.some((topic) =>
+      article.data.topics.includes(topic),
+    );
+    return isDifferent && sameLocale && hasCommonTopic;
+  })
+  .slice(0, 3);
+
+// Format date
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString(config.dateLocale, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+// Author initial and color
+const getAuthorInitial = (author: string) => author.charAt(0).toUpperCase();
+const getAuthorColor = (author: string) => {
+  const colors = [
+    "bg-purple-500",
+    "bg-blue-500",
+    "bg-green-500",
+    "bg-yellow-500",
+    "bg-pink-500",
+    "bg-indigo-500",
+    "bg-red-500",
+    "bg-teal-500",
+  ];
+  let hash = 0;
+  for (let i = 0; i < author.length; i++) {
+    hash = author.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
+};
+
+// Breadcrumb links
+const homeLink = getLocalizedPath("/", currentLocale);
+const articlesLink = getLocalizedPath("articles", currentLocale);
+---
+
+<Layout
+  title={`${article.data.title} - FemRes`}
+  description={article.data.description}
+>
+  <SchemaMarkup
+    slot="head"
+    type="Article"
+    data={{ ...article.data, image: article.data.featuredImage }}
+  />
+  <article class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-8">
+      <div
+        class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400"
+      >
+        <a
+          href={homeLink}
+          class="hover:text-purple-600 dark:hover:text-purple-400"
+          >{t("nav.home")}</a
+        >
+        <span>/</span>
+        <a
+          href={articlesLink}
+          class="hover:text-purple-600 dark:hover:text-purple-400"
+          >{t("nav.articles")}</a
+        >
+        <span>/</span>
+        <span class="text-gray-900 dark:text-white">{article.data.title}</span>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-12">
+      <h1
+        class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight"
+      >
+        {article.data.title}
+      </h1>
+
+      <!-- Article Meta -->
+      <div
+        class="flex flex-col md:flex-row md:items-center md:justify-between bg-gray-50 dark:bg-gray-800 rounded-xl p-6 mb-8"
+      >
+        <div
+          class="flex flex-col md:flex-row md:items-center space-y-3 md:space-y-0 md:space-x-8"
+        >
+          <div class="flex items-center text-gray-700 dark:text-gray-300">
+            <div
+              class={`w-6 h-6 rounded-full ${getAuthorColor(article.data.author)} flex items-center justify-center text-white text-xs font-semibold mr-3`}
+            >
+              {getAuthorInitial(article.data.author)}
+            </div>
+            <span class="font-medium">{article.data.author}</span>
+          </div>
+
+          <div class="flex items-center text-gray-700 dark:text-gray-300">
+            <svg
+              class="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              ></path>
+            </svg>
+            <time datetime={article.data.publishDate.toISOString()}>
+              {formatDate(article.data.publishDate)}
+            </time>
+          </div>
+
+          {
+            article.data.readingTime && (
+              <div class="flex items-center text-gray-700 dark:text-gray-300">
+                <svg
+                  class="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>
+                  {t("common.readTimeFormat", {
+                    time: article.data.readingTime,
+                  })}
+                </span>
+              </div>
+            )
+          }
+        </div>
+
+        <div class="flex items-center mt-4 md:mt-0"></div>
+      </div>
+
+      <!-- Featured Image -->
+      {
+        article.data.featuredImage && (
+          <div class="aspect-[21/9] rounded-2xl overflow-hidden mb-8">
+            <img
+              src={article.data.featuredImage}
+              alt={article.data.title}
+              class="w-full h-full object-cover"
+            />
+          </div>
+        )
+      }
+
+      <!-- Description -->
+      <div
+        class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 rounded-xl p-6 mb-8"
+      >
+        <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+          {article.data.description}
+        </p>
+      </div>
+
+      <!-- Topics -->
+      <div class="mb-8">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+          {t("common.topics")}
+        </h2>
+        <div class="flex flex-wrap gap-2">
+          {
+            article.data.topics.map((topic) => (
+              <a
+                href={getLocalizedPath(
+                  `topics/${encodeURIComponent(topic)}`,
+                  currentLocale,
+                )}
+                class="inline-block px-3 py-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-full text-sm hover:border-purple-500 dark:hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+              >
+                {getTopicTranslation(topic, currentLocale as any)}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Action Bar -->
+      <div
+        class="flex items-center justify-between py-4 border-y border-gray-200 dark:border-gray-700 mb-8"
+      >
+        <div class="flex items-center">
+          <InteractionButtons
+            contentId={`article-${article.slug}`}
+            contentType="article"
+            client:visible
+          />
+        </div>
+
+        {
+          article.data.sourceUrl && (
+            <a
+              href={article.data.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors"
+            >
+              <svg
+                class="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+              {t("common.readFull")}
+            </a>
+          )
+        }
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div
+      class="prose prose-lg max-w-none
+                 prose-headings:text-gray-900 dark:prose-headings:text-white
+                 prose-p:text-gray-700 dark:prose-p:text-gray-300
+                 prose-a:text-purple-600 hover:prose-a:text-purple-800
+                 prose-strong:text-gray-900 dark:prose-strong:text-white
+                 prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300
+                 prose-blockquote:border-purple-500
+                 prose-code:text-purple-600 dark:prose-code:text-purple-400
+                 prose-pre:bg-gray-800 dark:prose-pre:bg-gray-900
+                 prose-th:text-gray-900 dark:prose-th:text-white
+                 prose-td:text-gray-700 dark:prose-td:text-gray-300
+                 mb-16"
+    >
+      <Content />
+    </div>
+
+    <!-- Related Articles -->
+    {
+      relatedArticles.length > 0 && (
+        <section class="border-t border-gray-200 dark:border-gray-700 pt-12">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">
+            {t("article.relatedArticles")}
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {relatedArticles.map((rel) => {
+              let relSlug = rel.slug;
+              if (config.suffix && relSlug.endsWith(config.suffix))
+                relSlug = relSlug.slice(0, -config.suffix.length);
+              return (
+                <a
+                  href={`/${currentLocale}/articles/${relSlug}`}
+                  class="group block bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+                >
+                  {rel.data.featuredImage && (
+                    <div class="aspect-[16/9] overflow-hidden">
+                      <img
+                        src={rel.data.featuredImage}
+                        alt={rel.data.title}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  )}
+                  <div class="p-6">
+                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                      <span>{rel.data.author}</span>
+                      <span class="mx-2">•</span>
+                      <time>{formatDate(rel.data.publishDate)}</time>
+                      {rel.data.readingTime && (
+                        <>
+                          <span class="mx-2">•</span>
+                          <span>{rel.data.readingTime}min</span>
+                        </>
+                      )}
+                    </div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-2">
+                      {rel.data.title}
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-3">
+                      {rel.data.description}
+                    </p>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Buy Me a Coffee Section -->
+    <section class="border-t border-gray-200 dark:border-gray-700 pt-12 mt-16">
+      <div class="text-center">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          {t("common.support")}
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-8">
+          {t("common.supportMessage")}
+        </p>
+        <a
+          href="https://buymeacoffee.com/femres"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200"
+        >
+          <svg class="w-6 h-6 mr-3" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M20.216 6.415l-.132-.666c-.119-.598-.388-1.163-.766-1.658a4.655 4.655 0 0 0-1.364-1.196c-.477-.298-1.009-.497-1.57-.588C15.999 2.193 15.618 2.124 15.232 2.124H8.768c-.386 0-.767.069-1.152.183-.561.091-1.093.29-1.57.588a4.655 4.655 0 0 0-1.364 1.196c-.378.495-.647 1.06-.766 1.658l-.132.666C3.657 6.79 3.563 7.168 3.563 7.548v8.9c0 .38.094.758.221 1.133l.132.666c.119.598.388 1.163.766 1.658.35.486.798.902 1.314 1.217.477.298 1.009.497 1.57.588.385.114.766.183 1.152.183h6.464c.386 0 .767-.069 1.152-.183.561-.091 1.093-.29 1.57-.588a4.655 4.655 0 0 0 1.364-1.217c.378-.495.647-1.06.766-1.658l.132-.666c.127-.375.221-.753.221-1.133v-8.9c0-.38-.094-.758-.221-1.133zM12 18.307c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.784 1.764-1.75 1.764zm1.75-6.711c0 .966-.784 1.75-1.75 1.75s-1.75-.784-1.75-1.75v-3.5c0-.966.784-1.75 1.75-1.75s1.75.784 1.75 1.75v3.5z"
+            ></path>
+          </svg>
+          {t("contribute.support.button")}
+        </a>
+      </div>
+    </section>
+
+    <FatefulDeckMiniPromo className="mt-12" />
+
+    <!-- Newsletter/Share Section -->
+    <section class="border-t border-gray-200 dark:border-gray-700 pt-12 mt-16">
+      <div class="bg-gray-100 dark:bg-gray-800/50 rounded-2xl p-8 text-center">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          {t("newsletter.title")}
+        </h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-6">
+          {t("newsletter.description")}
+        </p>
+        <form
+          id="newsletter-form"
+          class="flex flex-col sm:flex-row gap-4 justify-center"
+          data-message-success={t("newsletter.success")}
+          data-message-error={t("newsletter.error")}
+          data-message-generic-error={t("newsletter.genericError")}
+        >
+          <input
+            type="email"
+            name="email"
+            placeholder={t("auth.emailPlaceholder")}
+            required
+            class="px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none min-w-[300px]"
+          />
+          <button
+            type="submit"
+            class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {t("common.subscribe")}
+          </button>
+        </form>
+        <p id="newsletter-message" class="mt-4 text-sm hidden"></p>
+      </div>
+    </section>
+
+    <script>
+      const form = document.getElementById(
+        "newsletter-form",
+      ) as HTMLFormElement | null;
+      const messageEl = document.getElementById("newsletter-message");
+
+      if (form) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const emailInput = form.querySelector(
+            'input[name="email"]',
+          ) as HTMLInputElement;
+          const button = form.querySelector("button") as HTMLButtonElement;
+          if (!emailInput || !button) return;
+
+          const email = emailInput.value;
+          const successMsg = form.dataset.messageSuccess || "";
+          const errorMsg = form.dataset.messageError || "";
+          const genericMsg = form.dataset.messageGenericError || "";
+
+          // Disable button
+          button.disabled = true;
+          const originalText = button.textContent;
+          button.textContent = "...";
+
+          try {
+            const response = await fetch("/api/subscribe", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, source: "article_detail" }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              if (messageEl) {
+                messageEl.textContent = successMsg;
+                messageEl.className =
+                  "mt-4 text-sm text-green-600 dark:text-green-400 font-medium";
+                messageEl.classList.remove("hidden");
+              }
+              form.reset();
+            } else {
+              if (messageEl) {
+                messageEl.textContent = errorMsg;
+                messageEl.className =
+                  "mt-4 text-sm text-red-600 dark:text-red-400 font-medium";
+                messageEl.classList.remove("hidden");
+              }
+            }
+          } catch (error) {
+            if (messageEl) {
+              messageEl.textContent = genericMsg;
+              messageEl.className =
+                "mt-4 text-sm text-red-600 dark:text-red-400 font-medium";
+              messageEl.classList.remove("hidden");
+            }
+          } finally {
+            button.disabled = false;
+            button.textContent = originalText;
+          }
+        });
+      }
+    </script>
+
+    <!-- Discussion Session -->
+    <Discussion
+      contentId={`article-${article.slug}`}
+      contentType="article"
+      locale={currentLocale}
+      client:load
+    />
+  </article>
+</Layout>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

@@ -1,0 +1,1211 @@
+{
+  "nav": {
+    "home": "首页",
+    "content": "内容",
+    "books": "书籍",
+    "articles": "文章",
+    "films": "电影",
+    "videos": "视频",
+    "podcasts": "播客",
+    "papers": "论文",
+    "topics": "话题",
+    "search": "搜索",
+    "contribute": "投稿"
+  },
+  "homepage": {
+    "metaTitle": "FemRes - 女性主义资源聚合平台",
+    "hero": {
+      "badge": "全新发布 2.0",
+      "title": "探索",
+      "titleHighlight": "女性主义",
+      "titleEnd": "的无限可能",
+      "subtitle": "汇聚全球优质书籍、电影、播客与学术资源<br>构建开放包容的女性主义知识图谱",
+      "startExploring": "开始探索",
+      "learnMore": "了解更多"
+    },
+    "features": {
+      "richContent": {
+        "title": "海量资源",
+        "description": "涵盖书籍、影视、播客、论文等多种形式的精选内容"
+      },
+      "smartCategories": {
+        "title": "智能分类",
+        "description": "基于深度标签体系，轻松找到您感兴趣的特定话题"
+      },
+      "globalPerspective": {
+        "title": "全球视野",
+        "description": "收录多语言、跨文化的女性主义视角与实践经验"
+      }
+    },
+    "sections": {
+      "featured": "精选内容",
+      "featuredDescription": "为您甄选的最新、最热女性主义资源",
+      "latestBooks": "最新书籍",
+      "latestFilms": "最新影视",
+      "latestArticles": "最新文章",
+      "latestVideos": "最新视频",
+      "latestPodcasts": "最新播客",
+      "latestPapers": "最新论文",
+      "popularTopics": "热门话题",
+      "popularTopicsDescription": "探索当下最受关注的女性主义议题",
+      "featuredContent": "{count} 个内容"
+    },
+    "cta": {
+      "title": "共建女性主义知识库",
+      "description": "您的每一次分享，都在丰富这个世界的女性声音",
+      "contribute": "参与投稿",
+      "aboutUs": "关于我们"
+    }
+  },
+  "userMenu": {
+    "login": "登录",
+    "profile": "个人中心",
+    "myLikes": "我的点赞",
+    "myBookmarks": "我的收藏",
+    "logout": "退出登录"
+  },
+  "common": {
+    "watchVideo": "观看视频",
+    "readMore": "阅读更多",
+    "viewAll": "查看全部",
+    "loading": "加载中...",
+    "language": "语言",
+    "publishDate": "发布日期",
+    "description": "描述",
+    "author": "作者",
+    "director": "导演",
+    "duration": "时长",
+    "pages": "页数",
+    "toggleTheme": "切换主题",
+    "toggleMenu": "切换菜单",
+    "itemsCount": "{count} 个内容",
+    "favorite": "收藏",
+    "share": "分享",
+    "contentTypes": {
+      "book": "书籍",
+      "film": "电影",
+      "article": "文章",
+      "video": "视频",
+      "podcast": "播客",
+      "paper": "论文"
+    },
+    "minutes": "分钟",
+    "readTimeFormat": "{time} 分钟阅读",
+    "readTimeFormatShort": "{time} 分钟",
+    "readFull": "阅读全文",
+    "articleTypes": {
+      "opinion": "观点",
+      "analysis": "分析",
+      "news": "新闻",
+      "blog": "博客",
+      "research": "研究"
+    },
+    "viewAllTopics": "查看所有话题",
+    "siteDescription": "FemRes - 女性主义内容聚合平台，汇聚全球优质女性主义资源",
+    "copyright": "© 2025 FemRes. 保留所有权利。",
+    "pagination": {
+      "navigation": "分页导航",
+      "previous": "上一页",
+      "next": "下一页"
+    },
+    "noCover": "暂无封面",
+    "topics": "相关话题",
+    "support": "支持我们",
+    "supportMessage": "如果您觉得这些内容有价值，欢迎支持FemRes的持续运营。",
+    "subscribe": "订阅",
+    "countries": "个国家/地区",
+    "genres": "种类型",
+    "noPoster": "暂无海报",
+    "noLinks": "暂无相关链接",
+    "genre": "类型",
+    "listenNow": "立即收听",
+    "listenPodcast": "收听",
+    "episode": "第 {number} 期",
+    "journalsCount": "{count} 本期刊",
+    "readPaper": "阅读论文",
+    "showMore": "显示更多",
+    "showLess": "收起",
+    "paperTypes": {
+      "research": "研究论文",
+      "review": "综述文章",
+      "case-study": "案例研究",
+      "theoretical": "理论研究"
+    },
+    "durationFormat": {
+      "hoursMins": "{hours}小时 {mins}分",
+      "mins": "{mins}分"
+    }
+  },
+  "footer": {
+    "description": "一个开源的女性主义内容聚合平台。致力于推动性别平等事业，汇聚全球优质女性主义资源。",
+    "resourceTypes": "资源类型",
+    "community": "社区参与",
+    "links": {
+      "books": "📚 书籍推荐",
+      "films": "🎬 电影解析",
+      "articles": "📰 精选文章",
+      "videos": "🎬 视频资源",
+      "podcasts": "🎧 播客频道",
+      "papers": "📄 学术论文",
+      "about": "📋 关于我们",
+      "contact": "📧 联络我们",
+      "contribute": "💡 提交内容",
+      "feedback": "🐛 反馈建议",
+      "source": "⭐ 开源代码",
+      "privacy": "隐私政策",
+      "terms": "服务条款"
+    },
+    "copyright": "© 2025 FemRes. MIT 许可证开源。"
+  },
+  "errorPage": {
+    "title": "页面未找到",
+    "message": "抱歉，您访问的页面不存在或已被移动。",
+    "backHome": "返回首页",
+    "goBack": "返回上一页",
+    "tagline": "— FemRes 女性主义资源平台 —"
+  },
+  "languages": {
+    "en": "英语",
+    "zh-CN": "简体中文",
+    "zh-TW": "繁体中文",
+    "ja": "日语",
+    "fr": "法语",
+    "es": "西班牙语",
+    "bem": "本巴语",
+    "tr": "土耳其语",
+    "cs": "捷克语",
+    "fa": "波斯语",
+    "hi": "印地语",
+    "ko": "韩语",
+    "it": "意大利语",
+    "ro": "罗马尼亚语",
+    "pl": "波兰语",
+    "de": "德语",
+    "pt": "葡萄牙语",
+    "ar": "阿拉伯语"
+  },
+  "booksPage": {
+    "title": "📚 书籍",
+    "subtitle": "精选女性主义书籍合集，涵盖理论、实践、历史等多个方面，为女性主义学习提供优质阅读资源。",
+    "stats": {
+      "totalBooks": "共 {count} 本书籍",
+      "topicCategories": "{count} 个话题分类"
+    },
+    "topics": {
+      "title": "话题分类",
+      "all": "全部书籍",
+      "showMore": "展开更多",
+      "showLess": "收起"
+    },
+    "list": {
+      "latest": "最新发布",
+      "oldest": "最早发布",
+      "titleAsc": "标题 (A-Z)",
+      "titleDesc": "标题 (Z-A)"
+    },
+    "emptyState": {
+      "title": "暂无相关书籍",
+      "description": "该主题下暂无书籍，试试其他主题或查看全部书籍"
+    },
+    "countFormat": "{count} 本",
+    "guide": {
+      "title": "阅读建议",
+      "beginner": {
+        "title": "新手入门",
+        "description": "建议从经典代表作品开始，如《第二性》、《我们都应该是女性主义者》等"
+      },
+      "deepReading": {
+        "title": "深度阅读",
+        "description": "可按主题分类进行系统性阅读，从理论基础到实践应用逐步深入"
+      },
+      "discussion": {
+        "title": "思考讨论",
+        "description": "阅读后可查看详细内容页面，了解核心观点，结合现实进行思考"
+      }
+    }
+  },
+  "filmsPage": {
+    "title": "🎬 电影推荐",
+    "subtitle": "通过镜头探索性别议题，感受影像叙事推动社会变革的力量。",
+    "stats": {
+      "totalFilms": "全 {count} 部作品",
+      "topicCategories": "{count} 个话题分类",
+      "countries": "{count} 个国家/地区",
+      "genres": "{count} 种类型"
+    },
+    "topics": {
+      "title": "话题分类",
+      "all": "全部主题",
+      "showMore": "展开更多",
+      "showLess": "收起"
+    },
+    "country": {
+      "title": "国家/地区",
+      "all": "全部地区"
+    },
+    "allFilmsHeading": "全部电影",
+    "allFilms": "全部电影",
+    "countFormat": "{count} 部",
+    "sort": {
+      "latest": "最新上映",
+      "oldest": "最早上映",
+      "titleAZ": "片名 A-Z",
+      "titleZA": "片名 Z-A",
+      "yearNewest": "年份倒序",
+      "yearOldest": "年份顺序"
+    },
+    "emptyState": {
+      "title": "暂无电影内容",
+      "description": "我们正在努力添加更多优质的女性主义电影推荐"
+    },
+    "guide": {
+      "title": "观影建议",
+      "criticalViewing": {
+        "title": "批判性观看",
+        "description": "带着性别视角审视电影中的人物塑造、叙事方式和价值观传递"
+      },
+      "deepReflection": {
+        "title": "深度思考",
+        "description": "观影后思考影片反映的社会议题，与现实生活建立联系"
+      },
+      "discussion": {
+        "title": "交流讨论",
+        "description": "与朋友分享观影感受，在讨论中碰撞思想，深化理解"
+      }
+    }
+  },
+  "videosPage": {
+    "title": "🎥 视频资源",
+    "subtitle": "汇聚全球女性主义视频内容，包括讲座、纪录片、访谈等。",
+    "stats": {
+      "totalVideos": "共 {count} 个视频",
+      "topicCategories": "{count} 个话题分类"
+    },
+    "topicsTitle": "按主题筛选",
+    "allVideos": "全部视频",
+    "videosCount": "{count} 项",
+    "sort": {
+      "latest": "最新发布",
+      "oldest": "最早发布",
+      "titleAZ": "标题 (A-Z)",
+      "titleZA": "标题 (Z-A)",
+      "durationShort": "时长 (短-长)",
+      "durationLong": "时长 (长-短)"
+    },
+    "emptyState": {
+      "title": "暂无视频",
+      "description": "我们正在努力添加更多优质的女性主义视频。"
+    },
+    "guide": {
+      "title": "观看指南",
+      "documentaries": {
+        "title": "纪录片",
+        "description": "通过女性主义视角探索真实故事和历史事件。"
+      },
+      "talks": {
+        "title": "TED演讲与讲座",
+        "description": "聆听有影响力的声音，分享前沿观点和研究。"
+      },
+      "reflection": {
+        "title": "思考与反思",
+        "description": "思考视觉媒体如何影响我们对性别的认知。"
+      }
+    }
+  },
+  "podcastsPage": {
+    "title": "🎙️ 播客",
+    "subtitle": "汇聚优质女性主义播客节目，深度探讨性别、文化与社会议题。",
+    "stats": {
+      "totalPodcasts": "共 {count} 个播客",
+      "topicCategories": "{count} 个话题分类"
+    },
+    "topicsTitle": "按主题筛选",
+    "allPodcasts": "全部播客",
+    "sort": {
+      "latest": "最新发布",
+      "oldest": "最早发布",
+      "titleAZ": "标题 (A-Z)",
+      "titleZA": "标题 (Z-A)"
+    },
+    "emptyState": {
+      "noContent": "暂无播客内容",
+      "workingOnIt": "我们正在努力添加更多内容。",
+      "viewAll": "查看全部"
+    },
+    "countFormat": "{count} 项",
+    "guide": {
+      "title": "收听指南",
+      "diverseVoices": {
+        "title": "多元声音",
+        "description": "聆听不同背景和经历女性的声音。"
+      },
+      "deepConversations": {
+        "title": "深度对话",
+        "description": "关于复杂女性主义议题的深入探讨。"
+      },
+      "anytimeAnywhere": {
+        "title": "随时随地",
+        "description": "利用碎片时间学习与思考。"
+      }
+    }
+  },
+  "papersPage": {
+    "title": "📄 学术论文",
+    "subtitle": "汇聚女性主义学术研究的前沿成果，探索性别研究的理论创新与实证分析",
+    "stats": {
+      "totalPapers": "共 {count} 篇论文",
+      "topicCategories": "{count} 个研究领域"
+    },
+    "topicsTitle": "研究领域",
+    "allPapers": "全部论文",
+    "sort": {
+      "latest": "最新发布",
+      "oldest": "最早发布",
+      "titleAZ": "标题 (A-Z)",
+      "titleZA": "标题 (Z-A)",
+      "citationsDesc": "引用次数 (高-低)",
+      "citationsAsc": "引用次数 (低-高)"
+    },
+    "emptyState": {
+      "noContent": "暂无相关论文",
+      "workingOnIt": "该主题下暂无论文，试试其他主题或查看全部论文",
+      "viewAll": "查看全部"
+    },
+    "guide": {
+      "title": "研究指南",
+      "empirical": {
+        "title": "实证研究",
+        "description": "关注基于数据和实地调研的实证研究，了解女性主义理论在现实中的应用效果"
+      },
+      "critical": {
+        "title": "批判性分析",
+        "description": "深入阅读对现有性别结构和社会制度的批判性分析，培养独立思考能力"
+      },
+      "interdisciplinary": {
+        "title": "跨学科视角",
+        "description": "结合社会学、心理学、经济学等跨学科视角，全面理解复杂的性别议题"
+      }
+    }
+  },
+  "paper": {
+    "info": "论文信息",
+    "abstract": "摘要",
+    "keywords": "关键词",
+    "relatedPapers": "相关论文",
+    "citationCount": "引用次数",
+    "doi": "DOI",
+    "journal": "期刊",
+    "language": "语言",
+    "readPaper": "阅读论文",
+    "viewPdf": "阅读原文",
+    "types": {
+      "research": "研究论文",
+      "review": "综述文章",
+      "caseStudy": "案例研究",
+      "theoretical": "理论研究"
+    }
+  },
+  "interactions": {
+    "like": "点赞",
+    "unlike": "取消点赞",
+    "bookmark": "收藏",
+    "unbookmark": "取消收藏",
+    "loginToInteract": "登录后参与互动"
+  },
+  "book": {
+    "review": "内容详情",
+    "info": "出版信息",
+    "originalTitle": "原版标题",
+    "author": "作者",
+    "published": "出版时间",
+    "purchase": "购买/获取",
+    "buyOnAmazon": "前往 Amazon 购买",
+    "affiliateNotice": "注：此为推广链接。如果您通过此链接购买，我们可能会获得少量佣金以支持网站运营，但这不会增加您的购买成本。",
+    "relatedBooks": "相关推荐"
+  },
+  "podcast": {
+    "info": "播客信息",
+    "host": "主播",
+    "originalName": "原名",
+    "added": "收录",
+    "episodes": "集数",
+    "listenOnline": "在线收听",
+    "visitSource": "点击下方按钮前往原始平台收听",
+    "related": "相关播客",
+    "websiteNote": "完整文字稿与资源请访问播客官网"
+  },
+  "newsletter": {
+    "title": "订阅更新",
+    "description": "加入我们的邮件列表，定期获取最新的女性主义资源和深度文章。",
+    "success": "订阅成功！",
+    "error": "订阅失败，请重试。",
+    "genericError": "发生错误。"
+  },
+  "about": {
+    "title": "关于 FemRes",
+    "subtitle": "汇聚全球女性主义声音，推动性别平等事业发展",
+    "mission": {
+      "title": "我们的使命",
+      "description1": "FemRes 致力于成为全球最高质量的女性主义内容聚合平台。我们相信知识和信息的力量可以推动社会变革，通过汇集全球女性主义思想、研究和实践，为所有关注性别平等的人提供丰富的学习资源。",
+      "description2": "在这个信息碎片化的时代，我们通过智能的内容筛选和分类，确保推荐的每一份内容都经过严格的质量把关，帮助用户高效地获取有价值的信息，深入理解女性主义的多元视角。",
+      "globalPerspective": "全球视野",
+      "globalDescription": "跨越多元文化背景",
+      "curatedContent": "严选内容",
+      "curatedDescription": "严格的质量控制",
+      "values": "平等·多元·包容",
+      "buildBetter": "构建更公正的世界"
+    },
+    "coreValues": {
+      "title": "核心价值观",
+      "subtitle": "引导我们的基本原则",
+      "genderEquality": {
+        "title": "性别平等",
+        "description": "倡导在政治、经济、社会、文化等所有领域，所有性别都享有平等的权利、机会和尊严"
+      },
+      "intersectionality": {
+        "title": "交叉性视角",
+        "description": "认识到性别与种族、阶级、性取向、残障等其他身份标签的交叉影响，追求更全面的社会公正"
+      },
+      "knowledgeEmpowerment": {
+        "title": "知识赋权",
+        "description": "相信教育和知识普及是实现性别平等的关键途径，致力于让更多人接触并理解女性主义"
+      },
+      "openInclusion": {
+        "title": "开放与包容",
+        "description": "欢迎来自不同背景、观点和经验的人参与对话，在多样性中寻求共识，在差异中促进理解"
+      }
+    },
+    "features": {
+      "title": "平台特点",
+      "subtitle": "为你提供最优质的内容体验",
+      "smartAggregation": {
+        "title": "智能内容聚合",
+        "description": "结合先进的 AI 技术与人工审核，从海量信息中筛选出高质量的女性主义内容",
+        "features": [
+          "多渠道内容抓取",
+          "质量评分算法",
+          "实时更新机制"
+        ]
+      },
+      "preciseClassification": {
+        "title": "精确分类系统",
+        "description": "建立了完整的话题分类体系，帮助用户快速锁定感兴趣的内容领域",
+        "features": [
+          "8 大核心话题",
+          "多维度标签",
+          "交叉搜索功能"
+        ]
+      },
+      "diverseContent": {
+        "title": "多样化内容形式",
+        "description": "涵盖书籍、文章、视频、播客、学术论文等多种形式，满足不同的学习习惯",
+        "features": [
+          "5 种内容类型",
+          "全球资源整合",
+          "多媒体展示"
+        ]
+      }
+    },
+    "contentTypes": {
+      "title": "内容类型",
+      "subtitle": "多元内容形式，满足不同学习需求",
+      "books": {
+        "title": "书籍",
+        "description": "经典与新著"
+      },
+      "articles": {
+        "title": "文章",
+        "description": "深度解析"
+      },
+      "videos": {
+        "title": "视频",
+        "description": "视觉呈现"
+      },
+      "podcasts": {
+        "title": "播客",
+        "description": "声音传递"
+      },
+      "papers": {
+        "title": "论文",
+        "description": "学术研究"
+      },
+      "films": {
+        "title": "电影",
+        "description": "影像叙事"
+      }
+    },
+    "coreTopics": {
+      "title": "核心话题",
+      "subtitle": "涵盖女性主义关注的重要领域",
+      "workplaceEquality": {
+        "title": "职场平等",
+        "description": "消除职场性别歧视，推动同工同酬，打破玻璃天花板"
+      },
+      "bodilyAutonomy": {
+        "title": "身体自主权",
+        "description": "关注女性对自己身体的决定权，包括生育权和健康权"
+      },
+      "educationRights": {
+        "title": "受教育权",
+        "description": "确保所有性别平等的受教育机会，消除教育领域的偏见"
+      },
+      "politicalParticipation": {
+        "title": "政治参与",
+        "description": "提升女性在政治决策中的代表性和参与度"
+      },
+      "familyRoles": {
+        "title": "家庭角色",
+        "description": "重新定义家庭责任分配，打破传统性别角色的束缚"
+      },
+      "genderViolence": {
+        "title": "性别暴力",
+        "description": "关注并制止任何形式的性别暴力，保护受害者权利"
+      },
+      "mediaRepresentation": {
+        "title": "媒体呈现",
+        "description": "批判媒体中的性别刻板印象，推动多元化的表达"
+      },
+      "historicalFigures": {
+        "title": "历史人物",
+        "description": "重新发现和认识历史上的杰出女性及其贡献"
+      }
+    },
+    "team": {
+      "title": "团队理念",
+      "subtitle": "由热爱女性主义事业的志愿者共同维护",
+      "description": "FemRes 是一个由志愿者驱动的开源项目。我们的团队成员来自不同背景，包括技术开发者、内容编辑、女性主义研究者和社会活动家。我们因共同的信念走到一起：相信知识的力量，相信性别平等的未来。",
+      "openSource": {
+        "title": "开源透明",
+        "description": "代码与内容策略完全公开"
+      },
+      "communityDriven": {
+        "title": "社区驱动",
+        "description": "欢迎每一个人的贡献"
+      },
+      "nonProfit": {
+        "title": "非盈利",
+        "description": "纯粹为推动平等而努力"
+      }
+    },
+    "joinUs": {
+      "title": "与我们一同成长",
+      "description": "无论你是内容创作者、技术开发者、研究学者还是热心读者，我们都欢迎你加入 FemRes 社区，共同为性别平等事业贡献力量",
+      "contributeContent": "提交内容",
+      "githubProject": "GitHub 项目"
+    },
+    "contact": {
+      "title": "联络我们",
+      "description": "如果你有任何问题、建议或合作意向，请随时通过以下方式与我们联系"
+    }
+  },
+  "contactPage": {
+    "metaTitle": "联络我们",
+    "metaDescription": "我们珍视每一份反馈，期待与你的连接",
+    "hero": {
+      "title": "联络我们",
+      "titleHighlight": "FemRes",
+      "subtitle": "我们珍视每一份反馈，期待与你的连接"
+    },
+    "options": {
+      "general": {
+        "title": "一般咨询",
+        "description": "对 FemRes 有任何疑问？我们很乐意为你解答"
+      },
+      "submission": {
+        "title": "内容提交",
+        "description": "有优质内容想要分享？期待你的投稿"
+      },
+      "partnership": {
+        "title": "合作伙伴",
+        "description": "寻求合作机会？让我们共同推动性别平等"
+      },
+      "volunteer": {
+        "title": "志愿者招募",
+        "description": "想要加入志愿者团队？期待你的参与"
+      }
+    },
+    "form": {
+      "title": "给我们留言",
+      "subtitle": "请填写下方表格，我们会尽快回复你",
+      "name": "姓名",
+      "placeholderName": "请输入你的姓名",
+      "email": "电子邮箱",
+      "placeholderEmail": "your@email.com",
+      "subject": "主题",
+      "placeholderSubject": "请选择留言主题",
+      "message": "消息内容",
+      "placeholderMessage": "请详细描述你的需求或问题...",
+      "agreement": "我已阅读并同意",
+      "privacy": "隐私政策",
+      "terms": "服务条款",
+      "submit": "发送消息",
+      "required": "*",
+      "subjects": {
+        "general": "一般咨询",
+        "content": "内容提交",
+        "partnership": "合作洽谈",
+        "volunteer": "加入志愿者",
+        "feedback": "反馈建议",
+        "other": "其他"
+      }
+    },
+    "faq": {
+      "title": "常见问题",
+      "subtitle": "以下是一些常见问题的解答",
+      "items": [
+        {
+          "question": "如何向 FemRes 提交内容？",
+          "answer": "你可以通过发送邮件至 submissions@femres.org 进行提交。请在邮件中包含内容的标题、作者、简介及相关链接等信息。我们的编辑团队会认真审核每一份提交，并在 7 个工作日内回复。"
+        },
+        {
+          "question": "FemRes 是如何筛选内容的？",
+          "answer": "我们采用 AI 技术与人工审核相结合的方式。首先通过算法初步筛选出高质量内容，随后由专业的编辑团队进行二次审核，确保内容的准确性、相关性和价值。我们特别关注内容的多元性和包容性。"
+        },
+        {
+          "question": "如何成为 FemRes 的志愿者？",
+          "answer": "我们欢迎各领域的志愿者加入！请发送邮件至 volunteer@femres.org，介绍你的背景、专长以及想要贡献的领域。我们需要内容编辑、技术开发、设计、翻译等多个方向的志愿者。"
+        },
+        {
+          "question": "FemRes 接受捐助吗？",
+          "answer": "作为一个非盈利项目，我们依靠志愿者和社区的支持运作。如果你希望通过捐助支持我们的工作，请联系 partnership@femres.org。所有的捐助都将用于平台的维护和内容开发。"
+        },
+        {
+          "question": "如何报告内容问题或错误？",
+          "answer": "如果你发现内容错误、失效链接或不当内容，请立即联系 info@femres.org。请提供具体的页面链接和问题描述，我们会尽快处理。"
+        }
+      ]
+    },
+    "info": {
+      "title": "联系信息",
+      "email": "主邮箱：",
+      "response": "回复时间：周一至周五 9:00 - 18:00 (UTC+8)",
+      "scope": "服务范围：全球",
+      "note": "FemRes 是由志愿者运营的开源项目，我们会努力在 48 小时内回复所有咨询"
+    }
+  },
+  "searchPage": {
+    "title": "搜索",
+    "metaDescription": "搜索FemRes平台上的女性主义内容，包括书籍、文章、视频、播客和学术论文",
+    "heroTitle": "内容搜索",
+    "subtitle": "在 {count} 个精选内容中发现您需要的女性主义资源",
+    "placeholder": "搜索标题、作者、简介或主题...",
+    "filters": {
+      "clear": "清除筛选",
+      "allTopics": "所有主题"
+    },
+    "sort": {
+      "relevance": "相关度",
+      "newest": "最新发布",
+      "oldest": "最早发布",
+      "az": "标题 A-Z",
+      "za": "标题 Z-A"
+    },
+    "results": {
+      "count": "显示 {count} 个结果",
+      "emptyTitle": "未找到相关内容",
+      "emptyMessage": "请尝试调整关键词或筛选条件"
+    }
+  },
+  "profilePage": {
+    "title": "个人资料",
+    "description": "管理您的FemRes个人资料、收藏和点赞内容",
+    "ui": {
+      "usernameEmpty": "用户名不能为空",
+      "updateFailed": "更新失败",
+      "loginRequired": "请先登录",
+      "loginDesc": "登录后即可查看您的个人资料和内容",
+      "home": "返回首页",
+      "editUsername": "编辑用户名",
+      "likes": "点赞",
+      "bookmarks": "收藏",
+      "joinDate": "加入日期",
+      "logout": "退出登录",
+      "myLikes": "我的点赞",
+      "myBookmarks": "我的收藏",
+      "contentCount": "个内容",
+      "quickActions": "快速操作",
+      "browseBooks": "浏览书籍",
+      "readArticles": "阅读文章",
+      "exploreTopics": "探索主题"
+    },
+    "bookmarks": {
+      "title": "我的收藏",
+      "description": "查看您收藏的所有内容",
+      "emptyMessage": "这里是您的私人收藏夹"
+    },
+    "likes": {
+      "title": "我的点赞",
+      "description": "查看您点赞过的所有内容",
+      "emptyMessage": "这里记录了您喜欢的每一刻"
+    },
+    "breadcrumb": {
+      "home": "首页",
+      "profile": "个人资料"
+    },
+    "contentList": {
+      "loginRequired": "请先登录",
+      "loginDesc": "登录后即可查看您的{type}内容",
+      "loading": "加载中...",
+      "noContent": "暂无{type}内容",
+      "browseDesc": "浏览内容并{action}您喜欢的作品",
+      "author": "作者：",
+      "viewDetails": "查看详情 →",
+      "types": {
+        "book": "书籍",
+        "book_plural": "书籍",
+        "article": "文章",
+        "article_plural": "文章",
+        "video": "视频",
+        "video_plural": "视频",
+        "podcast": "播客",
+        "podcast_plural": "播客",
+        "paper": "论文",
+        "paper_plural": "论文",
+        "film": "电影",
+        "film_plural": "电影",
+        "default": "内容"
+      },
+      "actions": {
+        "like": "点赞",
+        "bookmark": "收藏"
+      },
+      "items": {
+        "likes": "点赞",
+        "bookmarks": "收藏"
+      }
+    }
+  },
+  "discussion": {
+    "title": "讨论区",
+    "description": "分享您的想法和观点",
+    "contentType": {
+      "default": {
+        "title": "💬 讨论区",
+        "description": "分享您对这个内容的看法和见解"
+      },
+      "book": {
+        "title": "📚 读书讨论",
+        "description": "分享您的阅读感想和思考"
+      },
+      "article": {
+        "title": "📰 文章讨论",
+        "description": "分享您对这篇文章的看法"
+      },
+      "video": {
+        "title": "🎥 视频讨论",
+        "description": "分享您观看后的想法"
+      },
+      "podcast": {
+        "title": "🎧 播客讨论",
+        "description": "分享您收听后的感想"
+      },
+      "paper": {
+        "title": "📄 论文讨论",
+        "description": "分享您对这篇研究的见解"
+      }
+    },
+    "noCommentsYet": "暂无评论，成为第一个发言的人吧！",
+    "shareYourThoughts": "分享您的想法...",
+    "postComment": "发表评论",
+    "reply": "回复",
+    "posting": "发送中...",
+    "joinDiscussion": "加入讨论",
+    "loginToDiscuss": "登录参与讨论",
+    "loadingComments": "加载评论中...",
+    "totalComments": "共 {count} 条评论",
+    "loginRequired": "请先登录",
+    "replyTo": "回复 {name}"
+  },
+  "contribute": {
+    "title": "提交",
+    "content": "内容",
+    "subtitle": "你的贡献将帮助更多人了解女性主义，共同推动性别平等",
+    "types": {
+      "title": "你可以提交什么？",
+      "subtitle": "FemRes 欢迎任何形式的高质量女性主义内容投稿",
+      "books": {
+        "title": "书籍推荐",
+        "description": "向我们推荐优秀的女性主义相关书籍，包括理论著作、文学作品、传记等",
+        "requirements": [
+          "书籍需与女性主义或性别研究相关",
+          "提供详细的书籍信息及推荐理由",
+          "确保书籍信息的准确性"
+        ]
+      },
+      "articles": {
+        "title": "文章分享",
+        "description": "分享高质量的文章，如学术论文、评论性文章、新闻报道等",
+        "requirements": [
+          "文章内容具有权威性或启发性",
+          "提供文章来源和链接",
+          "内容与女性主义议题相关"
+        ]
+      },
+      "videos": {
+        "title": "视频资源",
+        "description": "推荐或创作具有教育意义的视频，包括讲座、纪录片、访谈等",
+        "requirements": [
+          "视频内容具有较高的教育价值",
+          "提供完整的视频信息",
+          "确保视频和音频质量清晰"
+        ]
+      },
+      "podcasts": {
+        "title": "播客内容",
+        "description": "分享女性主义相关的播客节目和音频内容",
+        "requirements": [
+          "播客内容符合主题",
+          "提供播客平台链接",
+          "注明播客语言和时长"
+        ]
+      },
+      "academic": {
+        "title": "学术论文",
+        "description": "分享经过同行评审的学术研究和论文",
+        "requirements": [
+          "需为经过评审的学术论文",
+          "提供完整的引用信息",
+          "确保论文可以公开获取"
+        ]
+      },
+      "translation": {
+        "title": "翻译工作",
+        "description": "通过翻译优质内容，让更多人获得学习机会",
+        "requirements": [
+          "具备相关语言能力",
+          "保证翻译质量和准确性",
+          "尊重原文版权"
+        ]
+      }
+    },
+    "process": {
+      "title": "投稿流程",
+      "subtitle": "简单几步，即可分享你的内容",
+      "steps": [
+        {
+          "title": "提交内容",
+          "description": "通过表单或 GitHub 提交你的内容建议",
+          "icon": "📧"
+        },
+        {
+          "title": "质量审核",
+          "description": "我们的团队会认真审核内容的质量与相关性",
+          "icon": "🔍"
+        },
+        {
+          "title": "发布分享",
+          "description": "审核通过的内容将正式发布在平台上",
+          "icon": "🚀"
+        }
+      ]
+    },
+    "guidelines": {
+      "title": "投稿指南",
+      "subtitle": "请遵循以下准则，以确保内容的质量",
+      "rules": [
+        {
+          "title": "内容相关性",
+          "description": "所有内容需与女性主义、性别研究或相关议题直接相关"
+        },
+        {
+          "title": "质量标准",
+          "description": "确保内容具有教育价值、准确性和可靠性"
+        },
+        {
+          "title": "尊重版权",
+          "description": "尊重知识产权，确保分享的内容不侵犯他人版权"
+        },
+        {
+          "title": "包容性",
+          "description": "欢迎多元视角，但不接受歧视性或仇恨言论"
+        }
+      ]
+    },
+    "recognition": {
+      "title": "贡献者权益",
+      "subtitle": "感谢每一位为 FemRes 做出贡献的朋友",
+      "benefits": [
+        "在相关内容页面展示贡献者信息",
+        "获得 FemRes 社区认证勋章",
+        "优先参与平台功能内测",
+        "受邀参加线上/线下活动",
+        "接收专属贡献者通讯"
+      ],
+      "honors": {
+        "title": "贡献者认定",
+        "subtitle": "感谢所有贡献者的努力。优秀贡献者将获得以下权益：",
+        "items": [
+          {
+            "title": "贡献者勋章",
+            "description": "在个人主页展示特殊勋章",
+            "icon": "🏆"
+          },
+          {
+            "title": "署名权益",
+            "description": "内容页面展示贡献者信息",
+            "icon": "📜"
+          },
+          {
+            "title": "专属权益",
+            "description": "新功能或活动的优先访问权",
+            "icon": "🎁"
+          }
+        ]
+      }
+    },
+    "submission": {
+      "title": "开始投稿",
+      "subtitle": "请填下下方表单提交你的内容",
+      "form": {
+        "name": "姓名",
+        "namePlaceholder": "请输入你的姓名",
+        "email": "电子邮箱",
+        "emailPlaceholder": "your@email.com",
+        "contentType": "内容类型",
+        "contentTypePlaceholder": "请选择内容类型",
+        "contentTypes": {
+          "book": "书籍推荐",
+          "article": "文章分享",
+          "video": "视频资源",
+          "podcast": "播客节目",
+          "paper": "学术论文",
+          "original": "原创内容"
+        },
+        "title": "内容标题",
+        "titlePlaceholder": "请输入内容标题",
+        "link": "相关链接（如有）",
+        "linkPlaceholder": "https://example.com",
+        "topics": "相关话题（可多选）",
+        "topicCategories": {
+          "theoretical": "理论学派",
+          "movement": "运动议题",
+          "critique": "批判领域",
+          "historical": "历史脉络",
+          "special": "特别概念"
+        },
+        "topicsList": {
+          "intersectional": "交叉性女性主义",
+          "marxist": "马克思主义女性主义",
+          "decolonial": "去殖民女性主义",
+          "radical": "激进女性主义",
+          "liberal": "自由主义女性主义",
+          "black": "黑人女性主义",
+          "trans": "跨性别女性主义",
+          "eco": "生态女性主义",
+          "workplace": "职场平等",
+          "equalPay": "同工同酬",
+          "reproductive": "身体/生育自主",
+          "abortion": "堕胎权",
+          "antiViolence": "反性别暴力",
+          "political": "政治参与",
+          "education": "教育平等",
+          "family": "家族解放",
+          "sports": "体育平等",
+          "economic": "经济赋权",
+          "patriarchy": "家父长制批判",
+          "capitalism": "资本主义批判",
+          "media": "媒体呈现批判",
+          "religious": "宗教家父长制批判",
+          "cultural": "文化批判",
+          "secondWave": "第二波女性主义",
+          "thirdWave": "第三波女性主义",
+          "fourthWave": "第四波女性主义",
+          "metoo": "MeToo 运动",
+          "chinese": "中国女性主义运动",
+          "emotional": "情感劳动",
+          "care": "关怀伦理",
+          "psychology": "女性主义心理学",
+          "art": "女性主义艺术"
+        },
+        "customTopics": "其他话题（可手动输入）",
+        "customTopicsPlaceholder": "如有其他话题，请用逗号分隔",
+        "description": "内容描述",
+        "descriptionPlaceholder": "请详细描述内容，包括核心观点、推荐理由等...",
+        "terms": "我确认所提交的内容真实有效，并同意 FemRes 的",
+        "termsLink": "投稿协议",
+        "submit": "提交投稿"
+      }
+    },
+    "github": {
+      "title": "通过 GitHub 贡献",
+      "subtitle": "FemRes 是一个开源项目，你也可以直接在 GitHub 上提交内容 PR 或协助改进代码",
+      "visitRepo": "访问 GitHub 仓库",
+      "viewGuide": "查看贡献指南"
+    },
+    "support": {
+      "title": "捐助支持",
+      "subtitle": "如果你觉得 FemRes 的内容有价值，请请我们喝杯咖啡。你的支持将帮助我们：",
+      "benefits": [
+        {
+          "title": "发现更多内容",
+          "description": "投入更多时间筛选高质量资源",
+          "icon": "🔍"
+        },
+        {
+          "title": "改进平台功能",
+          "description": "开发新功能，提升用户体验",
+          "icon": "⚡"
+        },
+        {
+          "title": "保持项目免费",
+          "description": "确保所有人都能免费获取这些资源",
+          "icon": "💝"
+        }
+      ],
+      "button": "☕ 请我喝杯咖啡",
+      "thankYou": "每一份支持都让我们感到温暖 💝"
+    }
+  },
+  "film": {
+    "info": "电影信息",
+    "director": "导演",
+    "cast": "主演",
+    "releaseDate": "上映日期",
+    "year": "年份",
+    "duration": "片长",
+    "awards": "获奖与荣誉",
+    "ratingsAndLinks": "评分与链接",
+    "trailer": "预告片",
+    "imdbRating": "IMDB评分",
+    "review": "影评与解读"
+  },
+  "video": {
+    "description": "视频简介",
+    "watchOriginal": "观看原视频",
+    "originalLink": "原视频链接",
+    "videoInfo": "视频信息",
+    "relatedTopics": "相关主题",
+    "relatedVideos": "相关视频",
+    "language": "语言",
+    "addToPlaylist": "添加到播放列表",
+    "unavailable": "视频暂时无法播放",
+    "supportUs": "支持我们",
+    "supportMessage": "如果这些内容对您有帮助"
+  },
+  "articlesPage": {
+    "title": "📰 文章",
+    "subtitle": "通过深入分析和评论探索女性主义观点。",
+    "stats": {
+      "totalArticles": "{count} 篇文章",
+      "topicCategories": "{count} 个主题"
+    },
+    "topicsTitle": "按主题筛选",
+    "allArticles": "全部文章",
+    "allArticlesHeading": "全部文章",
+    "articlesCount": "{count} 项",
+    "noArticles": "未找到符合条件的文章。",
+    "sort": {
+      "latest": "最新发布",
+      "oldest": "最早发布",
+      "titleAZ": "标题 (A-Z)",
+      "titleZA": "标题 (Z-A)"
+    },
+    "guide": {
+      "title": "阅读指南",
+      "deepReading": {
+        "title": "深度阅读",
+        "description": "花时间消化文章中呈现的复杂论点和历史背景。"
+      },
+      "intersectionalPerspective": {
+        "title": "交叉视角",
+        "description": "思考种族、阶级和性别如何在分析中交织。"
+      },
+      "criticalThinking": {
+        "title": "批判性思维",
+        "description": "带着批判性思维阅读，质疑假设并探索新观点。"
+      }
+    }
+  },
+  "topicsPage": {
+    "title": "话题",
+    "subtitle": "探索女性主义的核心议题、流派和思想",
+    "popularTopics": "热门主题",
+    "popularTopicsDesc": "最受关注的女性主义焦点议题",
+    "categories": {
+      "theoreticalschools": "理论流派",
+      "movementissues": "运动议题",
+      "criticaldomains": "批判领域",
+      "historicalcontext": "历史脉络",
+      "literature&creation": "文学与创作",
+      "specialconcepts": "特殊概念"
+    },
+    "categoryDescriptions": {
+      "theoreticalschools": "探索不同的女性主义理论视角与学派",
+      "movementissues": "关注女性权益运动中的核心诉求与实践",
+      "criticaldomains": "批判性分析父权制下的社会文化现象",
+      "historicalcontext": "回顾女性主义运动的历史发展与演变",
+      "literature&creation": "女性视角的文学艺术创作与批评",
+      "specialconcepts": "女性主义研究中的关键概念与特殊议题"
+    },
+    "contributeTitle": "共同建设知识库",
+    "contributeDesc": "发现缺失的主题？或者想为现有主题补充内容？欢迎参与贡献。",
+    "submitContent": "提交内容",
+    "searchContent": "搜索主题",
+    "topicsCount": "{count} 个主题",
+    "totalContent": "总内容数量：{count}",
+    "comingSoon": "即将推出"
+  },
+  "auth": {
+    "login": "登录",
+    "loginPrompt": "请登录以继续",
+    "passwordMismatch": "密码不匹配",
+    "invalidEmail": "无效的邮箱地址",
+    "loginFailed": "登录失败",
+    "registerFailed": "注册失败",
+    "networkError": "网络连接错误",
+    "register": "注册",
+    "username": "用户名",
+    "email": "电子邮箱",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "usernamePlaceholder": "请输入用户名",
+    "emailPlaceholder": "请输入电子邮箱",
+    "passwordPlaceholder": "请输入密码",
+    "confirmPasswordPlaceholder": "请再次输入密码",
+    "registerPrompt": "注册新账号",
+    "haveAccount": "已有账号？立即登录",
+    "noAccount": "还没有账号？立即注册",
+    "loginInProgress": "登录中...",
+    "registerInProgress": "注册中...",
+    "fillAllFields": "请填写所有必填项",
+    "fillEmailPassword": "请输入邮箱和密码"
+  },
+  "topicDetailPage": {
+    "description": "探索关于{topic}的优质女性主义内容",
+    "itemsFound": "个相关内容",
+    "noRelatedContent": "暂无相关内容",
+    "comingSoon": "我们正在努力收集关于\"{topic}\"的优质内容，敬请期待！",
+    "browseOtherTopics": "浏览其他主题",
+    "relatedTopics": "相关主题",
+    "discoverMoreTitle": "发现更多内容",
+    "discoverMoreDesc": "探索更多女性主义相关主题和内容",
+    "contentTypes": {
+      "book": "书籍",
+      "film": "电影",
+      "article": "文章",
+      "video": "视频",
+      "podcast": "播客",
+      "paper": "论文"
+    }
+  },
+  "article": {
+    "relatedArticles": "相关文章"
+  },
+  "promo": {
+    "fatefuldeck": {
+      "supportedBy": "本项目由 FatefulDeck.com 提供支持",
+      "title": "FatefulDeck AI 塔罗",
+      "description": "基于 AI 的全能 10 语种塔罗占卜平台。用你的母语探索命运。",
+      "cta": "开始占卜",
+      "insightTitle": "需要更多启示？",
+      "insightDescription": "抽取一张塔罗牌，获取今日的指引。",
+      "insightCta": "在线抽牌",
+      "thanksSupport": "本项目由 FatefulDeck.com 提供支持",
+      "thanksSupportMessage": "FatefulDeck AI 塔罗 - 高端 10 语种 AI 塔罗占卜平台，探索你的命运。",
+      "checkFortune": "查看今日运势",
+      "showcaseTitle": "探索你的命运",
+      "showcaseDescription": "选择一款塔罗牌，开启你的探索之旅。",
+      "showcaseCTA": "探索所有牌组"
+    }
+  }
+}

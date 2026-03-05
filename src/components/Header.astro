@@ -1,0 +1,415 @@
+---
+// Header component for navigation
+import UserMenu from './UserMenu';
+import LanguageSwitcher from './LanguageSwitcher';
+import '../i18n/translations';
+import { createT, getLocalizedPath, removeLocaleFromPath, type Locale } from '../i18n/index';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = createT(locale);
+
+// 生成本地化链接的辅助函数
+const localizedLink = (path: string) => {
+  // 移除开头的斜杠进行处理
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  return getLocalizedPath(cleanPath, locale);
+};
+
+// 获取当前页面的基础路径（用于语言切换）
+const currentPath = Astro.url.pathname;
+
+// UserMenu translations
+const userMenuTranslations = {
+  login: t('userMenu.login'),
+  profile: t('userMenu.profile'),
+  myLikes: t('userMenu.myLikes'),
+  myBookmarks: t('userMenu.myBookmarks'),
+  logout: t('userMenu.logout')
+};
+
+// Auth translations for LoginModal
+const authTranslations = {
+  login: t('auth.login'),
+  register: t('auth.register'),
+  username: t('auth.username'),
+  email: t('auth.email'),
+  password: t('auth.password'),
+  confirmPassword: t('auth.confirmPassword'),
+  usernamePlaceholder: t('auth.usernamePlaceholder'),
+  emailPlaceholder: t('auth.emailPlaceholder'),
+  passwordPlaceholder: t('auth.passwordPlaceholder'),
+  confirmPasswordPlaceholder: t('auth.confirmPasswordPlaceholder'),
+  loginPrompt: t('auth.loginPrompt'),
+  registerPrompt: t('auth.registerPrompt'),
+  haveAccount: t('auth.haveAccount'),
+  noAccount: t('auth.noAccount'),
+  loginInProgress: t('auth.loginInProgress'),
+  registerInProgress: t('auth.registerInProgress'),
+  fillAllFields: t('auth.fillAllFields'),
+  fillEmailPassword: t('auth.fillEmailPassword'),
+  passwordMismatch: t('auth.passwordMismatch'),
+  invalidEmail: t('auth.invalidEmail'),
+  loginFailed: t('auth.loginFailed'),
+  registerFailed: t('auth.registerFailed'),
+  networkError: t('auth.networkError')
+};
+---
+
+<header class="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
+  <div class="w-full px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a href={localizedLink('/')} class="flex items-center">
+          <span class="text-2xl font-bold text-purple-600 dark:text-purple-400">FemRes</span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation - Centered -->
+      <nav class="hidden md:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">
+        <a href={localizedLink('/')} class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-2 text-sm font-medium transition-colors">
+          {t('nav.home')}
+        </a>
+        
+        <!-- Content Dropdown -->
+        <div class="relative">
+          <button
+            id="content-dropdown-btn"
+            type="button"
+            class="flex items-center text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-2 text-sm font-medium transition-colors"
+            aria-expanded="false"
+            aria-haspopup="true"
+          >
+            {t('nav.content')}
+            <svg id="dropdown-arrow" class="ml-1 w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div id="content-dropdown-menu" class="absolute left-0 mt-2 w-40 hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1">
+              <a href={localizedLink('/books')} class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                <span class="text-base">📚</span>
+                <span>{t('nav.books')}</span>
+              </a>
+              <a href={localizedLink('/films')} class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                <span class="text-base">🎬</span>
+                <span>{t('nav.films')}</span>
+              </a>
+              <a href={localizedLink('/articles')} class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                <span class="text-base">📰</span>
+                <span>{t('nav.articles')}</span>
+              </a>
+              <a href={localizedLink('/videos')} class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                <span class="text-base">🎥</span>
+                <span>{t('nav.videos')}</span>
+              </a>
+              <a href={localizedLink('/podcasts')} class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                <span class="text-base">🎧</span>
+                <span>{t('nav.podcasts')}</span>
+              </a>
+              <a href={localizedLink('/papers')} class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                <span class="text-base">📄</span>
+                <span>{t('nav.papers')}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <a href={localizedLink('/topics')} class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-2 text-sm font-medium transition-colors">
+          {t('nav.topics')}
+        </a>
+        <a href={localizedLink('/contribute')} class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 px-3 py-2 text-sm font-medium transition-colors">
+          {t('nav.contribute')}
+        </a>
+      </nav>
+
+      <!-- Desktop Actions - Right side -->
+      <div class="hidden md:flex items-center space-x-4">
+        <!-- Search Button -->
+        <a
+          href={localizedLink('/search')}
+          class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+          aria-label={t('nav.search')}
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </a>
+        
+        <!-- Theme Toggle -->
+        <button
+          id="theme-toggle"
+          type="button"
+          class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+          aria-label={t('common.toggleTheme')}
+        >
+          <svg id="sun-icon" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+          </svg>
+          <svg id="moon-icon" class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+          </svg>
+        </button>
+
+        <!-- Language Switcher -->
+        <LanguageSwitcher currentLocale={locale} currentPath={currentPath} client:load />
+
+        <!-- User Menu -->
+        <UserMenu locale={locale} translations={userMenuTranslations} authTranslations={authTranslations} client:load />
+      </div>
+
+      <!-- Mobile actions -->
+      <div class="md:hidden flex items-center space-x-2">
+        <!-- Search button (mobile) -->
+        <a
+          href={localizedLink('/search')}
+          class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          aria-label={t('nav.search')}
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </a>
+        
+        <!-- Dark mode toggle (mobile) -->
+        <button
+          id="theme-toggle-mobile"
+          type="button"
+          class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+          aria-label={t('common.toggleTheme')}
+        >
+          <svg class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+          </svg>
+          <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+          </svg>
+        </button>
+
+        <!-- Language Switcher (mobile) -->
+        <LanguageSwitcher currentLocale={locale} currentPath={currentPath} client:load />
+
+        <!-- User Menu (mobile) -->
+        <UserMenu locale={locale} translations={userMenuTranslations} authTranslations={authTranslations} client:load />
+        
+        <!-- Mobile menu button -->
+        <button 
+          type="button" 
+          id="mobile-menu-button"
+          class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500"
+          aria-expanded="false"
+        >
+          <span class="sr-only">{t('common.toggleMenu')}</span>
+          <!-- Menu icon (when closed) -->
+          <svg id="menu-icon" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <!-- Close icon (when open) -->
+          <svg id="close-icon" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile menu panel (hidden by default) - Full screen overlay -->
+  <div id="mobile-menu" class="md:hidden hidden fixed inset-0 z-50">
+    <!-- Semi-transparent backdrop -->
+    <div class="absolute inset-0 bg-black/50"></div>
+    
+    <!-- Menu content with solid background -->
+    <div class="relative flex flex-col items-center justify-center min-h-screen px-6 py-8 bg-white dark:bg-gray-900">
+      <!-- Close button at top right -->
+      <button 
+        id="mobile-menu-close" 
+        class="absolute top-6 right-6 p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        aria-label="关闭菜单"
+      >
+        <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      
+      <nav class="text-center space-y-10">
+        <!-- Home button - standalone (min-height: 56px) -->
+        <div>
+          <a href={localizedLink('/')} class="inline-block px-12 py-5 min-h-[56px] text-2xl font-semibold tracking-wider text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+            {t('nav.home')}
+          </a>
+        </div>
+        
+        <!-- Other navigation items - 4 rows x 2 columns (min-height: 48px each) -->
+        <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
+          <a href={localizedLink('/books')} class="flex items-center justify-center px-6 py-5 min-h-[48px] text-lg font-semibold tracking-wider text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-500 shadow-md hover:shadow-lg transition-all duration-200">
+            {t('nav.books')}
+          </a>
+          <a href={localizedLink('/films')} class="flex items-center justify-center px-6 py-5 min-h-[48px] text-lg font-semibold tracking-wider text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-500 shadow-md hover:shadow-lg transition-all duration-200">
+            {t('nav.films')}
+          </a>
+          <a href={localizedLink('/articles')} class="flex items-center justify-center px-6 py-5 min-h-[48px] text-lg font-semibold tracking-wider text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-500 shadow-md hover:shadow-lg transition-all duration-200">
+            {t('nav.articles')}
+          </a>
+          <a href={localizedLink('/videos')} class="flex items-center justify-center px-6 py-5 min-h-[48px] text-lg font-semibold tracking-wider text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-500 shadow-md hover:shadow-lg transition-all duration-200">
+            {t('nav.videos')}
+          </a>
+          <a href={localizedLink('/podcasts')} class="flex items-center justify-center px-6 py-5 min-h-[48px] text-lg font-semibold tracking-wider text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-500 shadow-md hover:shadow-lg transition-all duration-200">
+            {t('nav.podcasts')}
+          </a>
+          <a href={localizedLink('/papers')} class="flex items-center justify-center px-6 py-5 min-h-[48px] text-lg font-semibold tracking-wider text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-500 shadow-md hover:shadow-lg transition-all duration-200">
+            {t('nav.papers')}
+          </a>
+          <a href={localizedLink('/topics')} class="flex items-center justify-center px-6 py-5 min-h-[48px] text-lg font-semibold tracking-wider text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-500 shadow-md hover:shadow-lg transition-all duration-200">
+            {t('nav.topics')}
+          </a>
+          <a href={localizedLink('/search')} class="flex items-center justify-center px-6 py-5 min-h-[48px] text-lg font-semibold tracking-wider text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-500 shadow-md hover:shadow-lg transition-all duration-200">
+            {t('nav.search')}
+          </a>
+          <a href={localizedLink('/contribute')} class="flex items-center justify-center px-6 py-5 min-h-[48px] text-lg font-semibold tracking-wider text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-500 shadow-md hover:shadow-lg transition-all duration-200">
+            {t('nav.contribute')}
+          </a>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  function initHeader() {
+    // Desktop dropdown menu functionality
+    const dropdownBtn = document.getElementById('content-dropdown-btn');
+    const dropdownMenu = document.getElementById('content-dropdown-menu');
+    const dropdownArrow = document.getElementById('dropdown-arrow');
+    
+    if (dropdownBtn && dropdownMenu && dropdownArrow) {
+      let isOpen = false;
+      
+      // Toggle dropdown on click
+      dropdownBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        isOpen = !isOpen;
+        
+        if (isOpen) {
+          dropdownMenu.classList.remove('hidden');
+          dropdownArrow.classList.add('rotate-180');
+          dropdownBtn.setAttribute('aria-expanded', 'true');
+        } else {
+          dropdownMenu.classList.add('hidden');
+          dropdownArrow.classList.remove('rotate-180');
+          dropdownBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+          isOpen = false;
+          dropdownMenu.classList.add('hidden');
+          dropdownArrow.classList.remove('rotate-180');
+          dropdownBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Close dropdown when clicking a link
+      dropdownMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function() {
+          isOpen = false;
+          dropdownMenu.classList.add('hidden');
+          dropdownArrow.classList.remove('rotate-180');
+          dropdownBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+      
+      // Close dropdown on ESC key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && isOpen) {
+          isOpen = false;
+          dropdownMenu.classList.add('hidden');
+          dropdownArrow.classList.remove('rotate-180');
+          dropdownBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    // Mobile menu toggle functionality
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuClose = document.getElementById('mobile-menu-close');
+    const menuIcon = document.getElementById('menu-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    if (mobileMenuButton && mobileMenu && menuIcon && closeIcon) {
+      let isOpen = false;
+
+      function closeMenu() {
+        isOpen = false;
+        mobileMenu.classList.add('hidden');
+        menuIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+        mobileMenuButton.setAttribute('aria-expanded', 'false');
+        // Re-enable body scroll
+        document.body.style.overflow = '';
+      }
+
+      function openMenu() {
+        isOpen = true;
+        mobileMenu.classList.remove('hidden');
+        menuIcon.classList.add('hidden');
+        closeIcon.classList.remove('hidden');
+        mobileMenuButton.setAttribute('aria-expanded', 'true');
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = 'hidden';
+      }
+
+      mobileMenuButton.addEventListener('click', function() {
+        if (isOpen) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+
+      // Close button functionality
+      if (mobileMenuClose) {
+        mobileMenuClose.addEventListener('click', closeMenu);
+      }
+
+      // Close menu when clicking navigation links
+      const navLinks = mobileMenu.querySelectorAll('a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', closeMenu);
+      });
+
+      // Close menu when clicking the backdrop
+      mobileMenu.addEventListener('click', function(event) {
+        // Only close if clicking the backdrop (the outer container)
+        if (event.target === mobileMenu) {
+          closeMenu();
+        }
+      });
+
+      // Close menu when window is resized to desktop size
+      window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768 && isOpen) {
+          closeMenu();
+        }
+      });
+
+      // Close menu on escape key
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && isOpen) {
+          closeMenu();
+        }
+      });
+    }
+  }
+
+  // Initialize on page load and after view transitions
+  document.addEventListener('astro:page-load', initHeader);
+</script>

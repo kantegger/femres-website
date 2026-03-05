@@ -1,0 +1,281 @@
+---
+import InteractionButtons from "./InteractionButtons";
+import "../i18n/translations";
+import {
+  createT,
+  getLocalizedPath,
+  getLocaleFromUrl,
+  formatDate,
+} from "../i18n/index";
+import { getTopicTranslation } from "../i18n/topicsUtils";
+
+export interface Props {
+  title: string;
+  titleEn?: string;
+  author: string;
+  description: string;
+  descriptionEn?: string;
+  featuredImage?: string;
+  publishDate: Date;
+  readingTime?: number;
+  sourceUrl: string;
+  slug: string;
+  topics: string[];
+  articleType?: "news" | "blog" | "research" | "opinion" | "analysis";
+  locale?: string;
+}
+
+const {
+  title,
+  titleEn,
+  author,
+  description,
+  descriptionEn,
+  featuredImage,
+  publishDate,
+  readingTime,
+  sourceUrl,
+  slug,
+  topics,
+  articleType = "blog",
+  locale,
+} = Astro.props;
+
+// 获取当前语言
+const currentLocale = locale || getLocaleFromUrl(Astro.url);
+const t = createT(currentLocale as any);
+
+// 根据语言选择显示内容
+const displayTitle = currentLocale === "en" && titleEn ? titleEn : title;
+const displayDescription =
+  currentLocale === "en" && descriptionEn ? descriptionEn : description;
+
+// 生成本地化链接
+// 移除语言后缀以生成干净的URL路径
+const cleanSlug =
+  slug.endsWith("-en") || slug.endsWith("-ja") || slug.endsWith("-fr")
+    ? slug.slice(0, -3)
+    : slug;
+const articleLink = getLocalizedPath(
+  `articles/${cleanSlug}`,
+  currentLocale as any,
+);
+
+// 文章类型配置
+const typeConfig = {
+  news: {
+    label: t("common.articleTypes.news"),
+    icon: "📰",
+    color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+  },
+  blog: {
+    label: t("common.articleTypes.blog"),
+    icon: "✍️",
+    color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+  },
+  research: {
+    label: t("common.articleTypes.research"),
+    icon: "🔬",
+    color:
+      "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200",
+  },
+  opinion: {
+    label: t("common.articleTypes.opinion"),
+    icon: "💭",
+    color:
+      "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+  },
+  analysis: {
+    label: t("common.articleTypes.analysis"),
+    icon: "📊",
+    color:
+      "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+  },
+};
+
+const config = typeConfig[articleType];
+
+const formatDateLocal = (date: Date) => {
+  return formatDate(date, currentLocale as any);
+};
+
+// 判断是否为近期文章
+const isRecent = (date: Date) => {
+  const now = new Date();
+  const diff = now.getTime() - date.getTime();
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  return days <= 7;
+};
+
+// 获取作者名字首字母
+const getAuthorInitial = (author: string) => {
+  return author.charAt(0).toUpperCase();
+};
+
+// 为作者头像生成颜色
+const getAuthorColor = (author: string) => {
+  const colors = [
+    "bg-purple-500",
+    "bg-blue-500",
+    "bg-green-500",
+    "bg-yellow-500",
+    "bg-pink-500",
+    "bg-indigo-500",
+    "bg-red-500",
+    "bg-teal-500",
+  ];
+  let hash = 0;
+  for (let i = 0; i < author.length; i++) {
+    hash = author.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
+};
+---
+
+<article
+  class="group relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-purple-200 dark:hover:border-purple-700 hover:shadow-lg transition-all duration-300 rounded-lg overflow-hidden"
+>
+  <a href={articleLink} class="block">
+    <div class="p-5">
+      <div class="flex gap-3">
+        <!-- 缩略图或类型指示器 -->
+        <div class="flex-shrink-0">
+          {
+            featuredImage ? (
+              <div class="w-20 h-20 rounded-lg overflow-hidden">
+                <img
+                  src={featuredImage}
+                  alt={displayTitle}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            ) : (
+              <div class="w-20 h-20 rounded-lg bg-gradient-to-br from-purple-500 via-pink-500 to-indigo-500 flex items-center justify-center">
+                <span class="text-white text-2xl">{config.icon}</span>
+              </div>
+            )
+          }
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="flex-1 min-w-0">
+          <!-- 标题 -->
+          <h3
+            class="text-base font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors leading-snug"
+          >
+            {displayTitle}
+          </h3>
+
+          <!-- 元信息行 -->
+          <div
+            class="flex items-center text-xs text-gray-500 dark:text-gray-400 mb-2"
+          >
+            <div class="flex items-center">
+              <div
+                class={`w-4 h-4 rounded-full ${getAuthorColor(author)} flex items-center justify-center text-white text-xs font-semibold mr-1.5`}
+              >
+                {getAuthorInitial(author)}
+              </div>
+              <span class="font-medium truncate max-w-20">{author}</span>
+            </div>
+            <span class="mx-1.5">·</span>
+            <time datetime={publishDate.toISOString()}>
+              {formatDateLocal(publishDate)}
+            </time>
+            {
+              readingTime && (
+                <>
+                  <span class="mx-1.5">·</span>
+                  <span>
+                    {readingTime} {t("common.minutes")}
+                  </span>
+                </>
+              )
+            }
+            {
+              isRecent(publishDate) && (
+                <>
+                  <span class="mx-1.5">·</span>
+                  <span class="bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300 px-1.5 py-0.5 rounded text-xs font-medium">
+                    🔥 {currentLocale === "zh-CN" ? "最新" : "New"}
+                  </span>
+                </>
+              )
+            }
+          </div>
+
+          <!-- 描述（2行） -->
+          <p
+            class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3 leading-relaxed"
+          >
+            {displayDescription}
+          </p>
+
+          <!-- 紧凑的标签和操作行 -->
+          <div class="flex items-center justify-between">
+            <!-- 标签 -->
+            <div class="flex items-center gap-1.5">
+              {/* Article Type tag removed */}
+              {
+                topics.slice(0, 3).map((topic) => {
+                  const translatedTopic = getTopicTranslation(
+                    topic,
+                    currentLocale as "zh-CN" | "en",
+                  );
+                  return (
+                    <span class="inline-block px-1.5 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                      #{translatedTopic}
+                    </span>
+                  );
+                })
+              }
+              {
+                topics.length > 3 && (
+                  <span class="text-xs text-gray-400">
+                    +{topics.length - 3}
+                  </span>
+                )
+              }
+            </div>
+
+            <!-- 交互按钮 -->
+            <div
+              onclick="event.stopPropagation(); event.preventDefault();"
+              class="flex-shrink-0"
+            >
+              <InteractionButtons
+                contentId={`article-${slug}`}
+                contentType="article"
+                client:visible
+                className="scale-90"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

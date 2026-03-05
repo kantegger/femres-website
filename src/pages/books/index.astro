@@ -1,0 +1,635 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import BookCard from "../../components/BookCard.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import Pagination from "../../components/Pagination.astro";
+import { createT } from "../../i18n/index";
+import { getTopicTranslation, findTopicByName } from "../../i18n/topicsUtils";
+import FatefulDeckMiniPromo from "../../components/promo/FatefulDeckMiniPromo.astro";
+
+const currentLocale = "zh-CN";
+const t = createT(currentLocale);
+
+// Get all books
+const books = await getCollection("books");
+
+// Filter books based on locale suffix
+const publishedBooks = books.filter((book) => {
+  const isPublished = book.data.status === "published";
+  if (!isPublished) return false;
+
+  // Default locale (zh-CN) shows content without specific locale suffix
+  return (
+    !book.slug.endsWith("-en") &&
+    !book.slug.endsWith("-tw") &&
+    !book.slug.endsWith("-ja") &&
+    !book.slug.endsWith("-fr")
+  );
+});
+
+// Sort by publish date
+const sortedBooks = publishedBooks.sort((a, b) => {
+  return (
+    new Date(b.data.publishDate).getTime() -
+    new Date(a.data.publishDate).getTime()
+  );
+});
+
+// Get all topic tags
+const allTopics = [
+  ...new Set(publishedBooks.flatMap((book) => book.data.topics)),
+].sort();
+
+// Pagination settings
+const BOOKS_PER_PAGE = 15;
+const totalBooks = publishedBooks.length;
+const totalPages = Math.ceil(totalBooks / BOOKS_PER_PAGE);
+
+// Get current page number
+const currentPage = Number(Astro.url.searchParams.get("page") || "1");
+const validPage = Math.max(1, Math.min(currentPage, totalPages));
+
+// Calculate current page books
+const startIndex = (validPage - 1) * BOOKS_PER_PAGE;
+const endIndex = startIndex + BOOKS_PER_PAGE;
+const currentPageBooks = sortedBooks.slice(startIndex, endIndex);
+
+// Clean slug by removing locale suffix
+function cleanSlug(slug: string): string {
+  const suffixes = ["-en", "-tw", "-ja", "-fr"];
+  for (const suffix of suffixes) {
+    if (slug.endsWith(suffix)) {
+      return slug.slice(0, -suffix.length);
+    }
+  }
+  return slug;
+}
+
+// Base URL for pagination
+const baseUrl = "/books";
+---
+
+<Layout
+  title={`${t("nav.books")} - FemRes`}
+  description={t("booksPage.subtitle")}
+>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Page Header -->
+    <PageHeader
+      title={t("booksPage.title")}
+      description={t("booksPage.subtitle")}
+      gradient="emerald"
+      stats={[
+        {
+          icon: "📖",
+          text: t("booksPage.stats.totalBooks", { count: totalBooks }),
+        },
+        {
+          icon: "🏷️",
+          text: t("booksPage.stats.topicCategories", {
+            count: allTopics.length,
+          }),
+        },
+      ]}
+    />
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <!-- Topic Filter -->
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          {t("booksPage.topics.title")}
+        </h2>
+        <div class="relative">
+          <!-- Topic tags container -->
+          <div
+            id="topics-container"
+            class="flex flex-wrap gap-3 overflow-hidden transition-all duration-300"
+            style="max-height: 90px;"
+          >
+            <button
+              class="filter-btn inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+              data-filter="all"
+            >
+              {t("booksPage.topics.all")}
+            </button>
+            {
+              allTopics.map((topic) => {
+                const topicInfo = findTopicByName(topic);
+                const translatedTopic = topicInfo
+                  ? getTopicTranslation(topic, currentLocale as any)
+                  : topic;
+                return (
+                  <button
+                    class="filter-btn inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:border-purple-500 dark:hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm"
+                    data-filter={topic}
+                  >
+                    {translatedTopic}
+                  </button>
+                );
+              })
+            }
+          </div>
+
+          <!-- Expand/Collapse button -->
+          {
+            allTopics.length > 20 && (
+              <div class="text-center mt-4">
+                <button
+                  id="toggle-topics"
+                  class="inline-flex items-center px-4 py-2 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-200 transition-colors text-sm font-medium"
+                >
+                  <span id="toggle-text">{t("booksPage.topics.showMore")}</span>
+                  <svg
+                    id="toggle-icon"
+                    class="ml-2 w-4 h-4 transform transition-transform duration-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )
+          }
+        </div>
+      </div>
+
+      <!-- Books List -->
+      <div class="mb-12">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+              <span id="current-filter">{t("booksPage.topics.all")}</span>
+              <span
+                id="book-count"
+                class="text-base font-normal text-gray-600 dark:text-gray-400 ml-2"
+              >
+                ({t("common.itemsCount", { count: totalBooks })})
+              </span>
+            </h2>
+          </div>
+          <div class="flex items-center gap-4">
+            <select
+              id="sort-select"
+              class="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white"
+            >
+              <option value="date-desc">{t("booksPage.list.latest")}</option>
+              <option value="date-asc">{t("booksPage.list.oldest")}</option>
+              <option value="title-asc">{t("booksPage.list.titleAsc")}</option>
+              <option value="title-desc">{t("booksPage.list.titleDesc")}</option
+              >
+            </select>
+          </div>
+        </div>
+
+        <!-- Books Grid -->
+        <div
+          id="books-grid"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          {
+            currentPageBooks.map((book) => (
+              <div class="book-item" data-topics={book.data.topics.join(",")}>
+                <BookCard
+                  title={book.data.title}
+                  originalTitle={book.data.originalTitle?.toString()}
+                  author={book.data.author}
+                  description={book.data.description}
+                  coverImage={book.data.coverImage}
+                  publishDate={book.data.publishDate}
+                  slug={cleanSlug(book.slug)}
+                  topics={book.data.topics}
+                  isbn={book.data.isbn?.toString()}
+                  locale={currentLocale}
+                />
+              </div>
+            ))
+          }
+        </div>
+
+        <!-- Pagination -->
+        {
+          totalPages > 1 && (
+            <div id="original-pagination">
+              <div class="flex justify-center mt-12">
+                <Pagination
+                  currentPage={validPage}
+                  totalPages={totalPages}
+                  baseUrl={baseUrl}
+                  locale={currentLocale}
+                />
+              </div>
+            </div>
+          )
+        }
+      </div>
+
+      <div class="mb-16">
+        <FatefulDeckMiniPromo />
+      </div>
+
+      <!-- Reading Guide -->
+      <div
+        class="mt-16 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-8"
+      >
+        <div class="text-center">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            📖 {t("booksPage.guide.title")}
+          </h2>
+          <div class="grid md:grid-cols-3 gap-6 text-left mt-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">🌟</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("booksPage.guide.beginner.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("booksPage.guide.beginner.description")}
+              </p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">📚</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("booksPage.guide.deepReading.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("booksPage.guide.deepReading.description")}
+              </p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">💡</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("booksPage.guide.discussion.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("booksPage.guide.discussion.description")}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<!-- Pass all books data and topic translations to client -->
+<script
+  is:inline
+  define:vars={{
+    allBooksData: sortedBooks.map((book) => ({
+      slug: cleanSlug(book.slug),
+      title: book.data.title,
+      author: book.data.author,
+      description: book.data.description,
+      coverImage: book.data.coverImage,
+      publishDate: book.data.publishDate.toISOString(),
+      topics: book.data.topics,
+      isbn: book.data.isbn,
+    })),
+    topicTranslations: Object.fromEntries(
+      allTopics.map((topic) => {
+        const topicInfo = findTopicByName(topic);
+        return [
+          topic,
+          topicInfo ? getTopicTranslation(topic, currentLocale) : topic,
+        ];
+      }),
+    ),
+    i18n: {
+      allBooks: t("booksPage.topics.all"),
+      showMore: t("booksPage.topics.showMore"),
+      showLess: t("booksPage.topics.showLess"),
+      emptyTitle: t("booksPage.emptyState.title"),
+      emptyDescription: t("booksPage.emptyState.description"),
+      countFormat: t("booksPage.countFormat"),
+    },
+    currentLocale: currentLocale,
+  }}
+>
+  window.ALL_BOOKS_DATA = allBooksData;
+  window.TOPIC_TRANSLATIONS = topicTranslations;
+  window.I18N = i18n;
+  window.CURRENT_LOCALE = currentLocale;
+</script>
+
+<script>
+  import { type Book } from "../../i18n/types";
+
+  function initPage() {
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const sortSelect = document.getElementById(
+      "sort-select",
+    ) as HTMLSelectElement | null;
+    const booksGrid = document.getElementById("books-grid");
+
+    // Topic expand/collapse functionality
+    const topicsContainer = document.getElementById("topics-container");
+    const toggleBtn = document.getElementById("toggle-topics");
+    const toggleText = document.getElementById("toggle-text");
+    const toggleIcon = document.getElementById("toggle-icon");
+    let isTopicsExpanded = false;
+
+    if (toggleBtn && topicsContainer) {
+      toggleBtn.addEventListener("click", function () {
+        isTopicsExpanded = !isTopicsExpanded;
+
+        if (isTopicsExpanded) {
+          topicsContainer.style.maxHeight = "none";
+          if (toggleText) toggleText.textContent = window.I18N.showLess;
+          if (toggleIcon) toggleIcon.style.transform = "rotate(180deg)";
+        } else {
+          topicsContainer.style.maxHeight = "90px";
+          if (toggleText) toggleText.textContent = window.I18N.showMore;
+          if (toggleIcon) toggleIcon.style.transform = "rotate(0deg)";
+        }
+      });
+    }
+
+    let currentTopic = "all";
+    const BOOKS_PER_PAGE = 15;
+    let currentPage = 1;
+
+    // Use server-passed book data
+    const allBookItems: Book[] = (window as any).ALL_BOOKS_DATA || [];
+
+    // Filter functionality
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        const btn = e.currentTarget as HTMLElement;
+        const filterValue = btn.dataset.filter || "all";
+
+        // If clicking "all", reload the page to restore original layout
+        if (filterValue === "all") {
+          window.location.href = window.location.pathname;
+          return;
+        }
+
+        currentTopic = filterValue;
+        currentPage = 1; // Reset to first page
+
+        // Update button styles
+        filterButtons.forEach((b) => {
+          b.classList.remove("bg-purple-600", "text-white");
+          b.classList.add(
+            "bg-white",
+            "dark:bg-gray-800",
+            "border",
+            "border-gray-300",
+            "dark:border-gray-600",
+            "text-gray-700",
+            "dark:text-gray-300",
+          );
+        });
+
+        btn.classList.remove(
+          "bg-white",
+          "dark:bg-gray-800",
+          "border",
+          "border-gray-300",
+          "dark:border-gray-600",
+          "text-gray-700",
+          "dark:text-gray-300",
+        );
+        btn.classList.add("bg-purple-600", "text-white");
+
+        // Execute filter
+        filterAndSort();
+      });
+    });
+
+    // Sort functionality
+    if (sortSelect) {
+      sortSelect.addEventListener("change", () => {
+        currentPage = 1; // Reset to first page
+        filterAndSort();
+      });
+    }
+
+    function filterAndSort() {
+      const sortValue = (sortSelect as HTMLSelectElement)?.value || "date-desc";
+
+      // Filter
+      let filteredBooks: Book[] = allBookItems.filter((item) => {
+        if (currentTopic === "all") return true;
+        return item.topics.includes(currentTopic);
+      });
+
+      // Sort
+      filteredBooks.sort((a, b) => {
+        switch (sortValue) {
+          case "date-desc":
+            return (
+              new Date(b.publishDate).getTime() -
+              new Date(a.publishDate).getTime()
+            );
+          case "date-asc":
+            return (
+              new Date(a.publishDate).getTime() -
+              new Date(b.publishDate).getTime()
+            );
+          case "title-asc":
+            return a.title.localeCompare(b.title);
+          case "title-desc":
+            return b.title.localeCompare(a.title);
+          default:
+            return 0;
+        }
+      });
+
+      // Clear grid
+      if (booksGrid) booksGrid.innerHTML = "";
+
+      // Calculate pagination
+      const totalFiltered = filteredBooks.length;
+      const totalPages = Math.ceil(totalFiltered / BOOKS_PER_PAGE);
+      const startIndex = (currentPage - 1) * BOOKS_PER_PAGE;
+      const endIndex = startIndex + BOOKS_PER_PAGE;
+      const currentPageBooks = filteredBooks.slice(startIndex, endIndex);
+
+      // Display current page books
+      currentPageBooks.forEach((book) => {
+        const bookCard = createBookCard(book);
+        if (booksGrid) booksGrid.appendChild(bookCard);
+      });
+
+      // Control pagination display
+      const originalPagination = document.getElementById("original-pagination");
+      const filterPagination = document.getElementById("filter-pagination");
+
+      // Remove old filter pagination first
+      if (filterPagination) {
+        filterPagination.remove();
+      }
+
+      if (currentTopic === "all") {
+        // Show original pagination
+        if (originalPagination) originalPagination.style.display = "block";
+      } else {
+        // Hide original pagination
+        if (originalPagination) originalPagination.style.display = "none";
+
+        // Create dynamic pagination if needed
+        if (totalPages > 1) {
+          createFilterPagination(totalPages, currentPage);
+        }
+      }
+
+      // Update title with translation
+      const currentFilter = document.getElementById("current-filter");
+      const bookCount = document.getElementById("book-count");
+
+      const translatedTopic =
+        currentTopic === "all"
+          ? window.I18N.allBooks
+          : window.TOPIC_TRANSLATIONS[currentTopic] || currentTopic;
+      if (currentFilter) {
+        currentFilter.textContent = translatedTopic;
+      }
+      if (bookCount) {
+        bookCount.textContent = `(${window.I18N.countFormat.replace("{count}", totalFiltered)})`;
+      }
+
+      // Show empty state if no results
+      if (filteredBooks.length === 0) {
+        const emptyDiv = document.createElement("div");
+        emptyDiv.id = "empty-state";
+        emptyDiv.className = "col-span-full text-center py-16";
+        emptyDiv.innerHTML = `
+          <div class="text-6xl mb-6">📚</div>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            ${window.I18N.emptyTitle}
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400">
+            ${window.I18N.emptyDescription}
+          </p>
+        `;
+        if (booksGrid) booksGrid.appendChild(emptyDiv);
+      }
+    }
+
+    // Create filter pagination
+    function createFilterPagination(totalPages: number, current: number) {
+      const paginationDiv = document.createElement("div");
+      paginationDiv.id = "filter-pagination";
+      paginationDiv.className = "mt-12 flex justify-center";
+
+      const nav = document.createElement("nav");
+      nav.className = "flex items-center space-x-2";
+      nav.setAttribute("aria-label", "Pagination");
+
+      // Previous button
+      const prevBtn = document.createElement("button");
+      prevBtn.className = `px-3 py-2 rounded-lg transition-colors ${
+        current > 1
+          ? "text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+          : "bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 opacity-50 cursor-not-allowed"
+      }`;
+      prevBtn.innerHTML =
+        '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>';
+      if (current > 1) {
+        prevBtn.onclick = () => {
+          currentPage--;
+          filterAndSort();
+        };
+      }
+      nav.appendChild(prevBtn);
+
+      // Page numbers container
+      const pageNumbersDiv = document.createElement("div");
+      pageNumbersDiv.className = "flex items-center space-x-2";
+
+      // Generate page buttons
+      for (let i = 1; i <= totalPages; i++) {
+        const showPage =
+          i === 1 || i === totalPages || Math.abs(i - current) <= 1;
+
+        if (showPage) {
+          const pageBtn = document.createElement(
+            i === current ? "span" : "button",
+          );
+          pageBtn.className =
+            i === current
+              ? "px-4 py-2 bg-purple-600 text-white rounded-lg font-medium"
+              : "px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors";
+          pageBtn.textContent = i.toString();
+          if (i !== current) {
+            pageBtn.onclick = () => {
+              currentPage = i;
+              filterAndSort();
+            };
+          }
+          pageNumbersDiv.appendChild(pageBtn);
+        } else if (i === 2 && current > 4) {
+          const dots = document.createElement("span");
+          dots.className = "px-2 text-gray-500 dark:text-gray-400";
+          dots.textContent = "...";
+          pageNumbersDiv.appendChild(dots);
+        } else if (i === totalPages - 1 && current < totalPages - 3) {
+          const dots = document.createElement("span");
+          dots.className = "px-2 text-gray-500";
+          dots.textContent = "...";
+          pageNumbersDiv.appendChild(dots);
+        }
+      }
+      nav.appendChild(pageNumbersDiv);
+
+      // Next button
+      const nextBtn = document.createElement("button");
+      nextBtn.className = `px-3 py-2 rounded-lg transition-colors ${
+        current < totalPages
+          ? "text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+          : "bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 opacity-50 cursor-not-allowed"
+      }`;
+      nextBtn.innerHTML =
+        '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>';
+      if (current < totalPages) {
+        nextBtn.onclick = () => {
+          currentPage++;
+          filterAndSort();
+        };
+      }
+      nav.appendChild(nextBtn);
+
+      paginationDiv.appendChild(nav);
+      if (booksGrid?.parentElement) {
+        booksGrid.parentElement.appendChild(paginationDiv);
+      }
+    }
+
+    // Create book card function
+    function createBookCard(book: Book) {
+      const div = document.createElement("div");
+      div.className = "book-item";
+      const locale = window.CURRENT_LOCALE;
+      div.innerHTML = `
+        <a href="/books/${book.slug}" class="group block bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
+          <div class="aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-700">
+            <img 
+              src="${book.coverImage}" 
+              alt="${book.title}" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+              ${book.title}
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">${book.author}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-500 line-clamp-2">${book.description}</p>
+          </div>
+        </a>
+      `;
+      return div;
+    }
+  }
+
+  document.addEventListener("astro:page-load", initPage);
+</script>

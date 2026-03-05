@@ -1,0 +1,266 @@
+---
+import InteractionButtons from "./InteractionButtons";
+import "../i18n/translations";
+import {
+  createT,
+  getLocalizedPath,
+  getLocaleFromUrl,
+  formatRelativeTime,
+  type Locale,
+} from "../i18n/index";
+import { getTopicTranslation } from "../i18n/topicsUtils";
+
+export interface Props {
+  title: string;
+  titleEn?: string;
+  author: string;
+  description: string;
+  descriptionEn?: string;
+  thumbnail?: string;
+  publishDate: Date;
+  duration?: number | string;
+  sourceUrl: string;
+  slug: string;
+  topics: string[];
+  locale?: Locale;
+}
+
+const {
+  title,
+  titleEn,
+  author,
+  description,
+  descriptionEn,
+  thumbnail,
+  publishDate,
+  duration,
+  sourceUrl,
+  slug,
+  topics,
+  locale,
+} = Astro.props;
+
+// 获取当前语言
+const currentLocale = locale || getLocaleFromUrl(Astro.url);
+const t = createT(currentLocale);
+
+// 根据语言选择显示内容
+const displayTitle = currentLocale === "en" && titleEn ? titleEn : title;
+const displayDescription =
+  currentLocale === "en" && descriptionEn ? descriptionEn : description;
+
+// 生成本地化链接
+// 移除语言后缀以生成干净的URL路径（与路由设置保持一致）
+const cleanSlug =
+  slug.endsWith("-en") ||
+  slug.endsWith("-ja") ||
+  slug.endsWith("-fr") ||
+  slug.endsWith("-tw")
+    ? slug.slice(0, -3)
+    : slug;
+const videoLink = getLocalizedPath(`videos/${cleanSlug}`, currentLocale);
+
+// 识别视频平台
+const getPlatform = (url: string) => {
+  if (url.includes("youtube.com") || url.includes("youtu.be")) {
+    return { name: "YouTube", icon: "🎬", color: "bg-red-500" };
+  } else if (url.includes("bilibili.com")) {
+    return { name: "Bilibili", icon: "📺", color: "bg-blue-500" };
+  } else if (url.includes("vimeo.com")) {
+    return { name: "Vimeo", icon: "🎥", color: "bg-sky-500" };
+  } else if (url.includes("ted.com")) {
+    return { name: "TED", icon: "💡", color: "bg-red-600" };
+  } else {
+    return { name: "Video", icon: "🎥", color: "bg-gray-500" };
+  }
+};
+
+const platform = getPlatform(sourceUrl);
+
+const formatDurationLocale = (durationVal?: number | string) => {
+  if (!durationVal) return "";
+  if (typeof durationVal === "string") {
+    if (durationVal.includes(":")) return durationVal;
+    const num = parseInt(durationVal);
+    if (isNaN(num)) return durationVal;
+    durationVal = num;
+  }
+  const seconds = durationVal as number;
+  const hours = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  if (hours > 0) {
+    return `${hours}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  }
+  return `${mins}:${secs.toString().padStart(2, "0")}`;
+};
+
+const formatDateLocal = (date: Date) => {
+  return formatRelativeTime(date, currentLocale);
+};
+---
+
+<article
+  class="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl glass-card glass-hover transition-all duration-300 overflow-hidden"
+>
+  <a href={videoLink} class="block">
+    <!-- Thumbnail with Play Button Overlay -->
+    <div class="relative aspect-video bg-gray-900 overflow-hidden">
+      {
+        thumbnail ? (
+          <img
+            src={thumbnail}
+            alt={displayTitle}
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        ) : (
+          <div class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+            <span class="text-6xl text-white/80">🎬</span>
+          </div>
+        )
+      }
+
+      <!-- Play Button Overlay - 悬停时显示，弱化视觉冲击 -->
+      <div
+        class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 opacity-0 group-hover:opacity-100 flex items-center justify-center"
+      >
+        <div
+          class="w-12 h-12 bg-white/70 backdrop-blur-sm rounded-full flex items-center justify-center scale-90 group-hover:scale-100 transition-all duration-200"
+        >
+          <svg
+            class="w-6 h-6 text-gray-800 ml-0.5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"
+            ></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Duration Badge -->
+      {
+        duration && (
+          <div class="absolute bottom-2 right-2 bg-black/80 text-white text-xs font-medium px-2 py-1 rounded">
+            {formatDurationLocale(duration)}
+          </div>
+        )
+      }
+
+      <!-- Platform Badge -->
+      <div
+        class={`absolute top-2 left-2 ${platform.color} text-white text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1`}
+      >
+        <span>{platform.icon}</span>
+        <span>{platform.name}</span>
+      </div>
+    </div>
+
+    <!-- Video Info -->
+    <div class="p-5">
+      <!-- Title -->
+      <h3
+        class="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors"
+      >
+        {displayTitle}
+      </h3>
+
+      <!-- Author & Meta -->
+      <div
+        class="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-3"
+      >
+        <div class="flex items-center">
+          <div
+            class="w-6 h-6 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white text-xs font-semibold mr-2"
+          >
+            {author.charAt(0).toUpperCase()}
+          </div>
+          <span
+            class="font-medium hover:text-gray-900 dark:hover:text-gray-200"
+          >
+            {author}
+          </span>
+        </div>
+        <span class="mx-2">•</span>
+        <span>{formatDateLocal(publishDate)}</span>
+      </div>
+
+      <!-- Description -->
+      <p class="text-gray-700 dark:text-gray-300 text-sm mb-3 line-clamp-2">
+        {displayDescription}
+      </p>
+
+      <!-- Topics -->
+      <div class="flex flex-wrap gap-1.5">
+        {
+          topics.slice(0, 6).map((topic) => {
+            const translatedTopic = getTopicTranslation(
+              topic,
+              currentLocale as any,
+            );
+            return (
+              <span class="inline-block px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-md">
+                {translatedTopic}
+              </span>
+            );
+          })
+        }
+        {
+          topics.length > 6 && (
+            <span class="inline-block px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-500 rounded-md">
+              +{topics.length - 6}
+            </span>
+          )
+        }
+      </div>
+
+      <!-- Action Bar -->
+      <div
+        class="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-gray-700"
+      >
+        <div onclick="event.stopPropagation(); event.preventDefault();">
+          <InteractionButtons
+            contentId={`video-${slug}`}
+            contentType="video"
+            t={{
+              like: t("interactions.like"),
+              unlike: t("interactions.unlike"),
+              bookmark: t("interactions.bookmark"),
+              unbookmark: t("interactions.unbookmark"),
+              loginToInteract: t("interactions.loginToInteract"),
+            }}
+            client:visible
+          />
+        </div>
+
+        <span
+          class="text-purple-600 dark:text-purple-400 text-sm font-medium group-hover:underline flex items-center"
+        >
+          {t("common.watchVideo")}
+          <svg
+            class="w-4 h-4 ml-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"></path>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

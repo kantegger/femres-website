@@ -1,0 +1,24 @@
+---
+title: "Embrace your inner girl"
+author: "Eve Ensler"
+description: "In this TEDIndia talk, playwright and activist Eve Ensler explores the concept of the 'girl cell'—a universal source of empathy, vulnerability, and strength that society teaches us to suppress. Through global stories of resilience, she argues that embracing this inner girl is key to healing and transformation."
+publishDate: 2009-11-01
+contentLanguage: "en"
+topics: ["Feminism", "Anti-Sexual Violence", "Patriarchy Critique", "Emotional Labor", "Gender Socialization"]
+sourceUrl: "https://www.ted.com/talks/eve_ensler_embrace_your_inner_girl?autoplay=true&referrer=playlist-talks_on_feminism"
+embedUrl: "https://embed.ted.com/talks/eve_ensler_embrace_your_inner_girl"
+duration: 1177
+thumbnail: "https://media.femres.org/images/videos/eve-ensler-inner-girl.jpg"
+status: "published"
+---
+
+Eve Ensler arrives at the TEDIndia stage carrying not just her own story, but the collective narratives of countless girls from around the globe—stories of trauma and triumph, violation and resistance, silence and voice. As the creator of *The Vagina Monologues* and founder of V-Day, Ensler has spent decades listening to the visceral experiences of survival. In this talk, she offers a radical reimagining of what it means to be a "girl" in a world that systematically devalues and destroys girlhood. Her concept of the "girl cell" becomes a powerful metaphor for all that patriarchy teaches us to suppress—our empathy, emotion, vulnerability, and intuition—and all that we must reclaim to save ourselves and our planet. It is an anthem for returning to the most fundamental and revolutionary feelings of the human soul.
+
+Ensler begins with the provocative claim that every human being is born with a "girl cell," regardless of biological sex or gender identity. This cell is not about anatomy, but about an innate capacity to feel deeply, connect authentically, and care passionately. It is the part of us that remains open to wonder and responds to the pain of others as if it were our own. However, from the moment we enter society, we are taught to kill this cell, burying it so deeply that we forget its existence. Boys are told that being "girly" is the ultimate shame, while girls learn that their girlness is a liability to be transcended for the sake of serious recognition. This suppression is a foundational violence that enables all others, for when we teach boys to dissociate from feeling, we create men capable of inflicting pain without remorse.
+
+Her journey to understanding this cell began with her own childhood trauma, where she used intellect and hardness as shields against a world that had violated her girlhood. Yet, through her work with survivors in the Democratic Republic of Congo and Kenya, she discovered a profound truth: those who had faced the most severe violence often maintained the strongest connection to their girl cells. Their survival depended not on adopting the hardness of their oppressors, but on preserving their capacity for connection and hope. These girls transformed from victims into "warriors" of the spirit, using their "untamed" voices to build safety and justice where none existed. Their strength came not from masculine dominance, but from the very vulnerability they were told made them weak.
+
+The economic and psychological implications of suppressing the girl cell are immense. In a world that prizes extraction over regeneration and competition over cooperation, the "emotional labor" associated with the girl cell—caring for children, the sick, and the environment—is systematically devalued. Ensler suggests that the global climate crisis is essentially a crisis of dissociation from this inner girl; we cannot destroy the earth if we allow ourselves to feel its pain. Reclaiming the girl cell is thus an act of "pleasure activism" (as Brown might call it), turning movement-building into a source of healing rather than a grim duty. It is a vision of a world where boys can cry without shame and girls can rage without apology, restoring a balance that patriarchy has violently tipped.
+
+Ultimately, Ensler’s message is a call for a revolution of feeling. She envisions a form of leadership based on nurturing and connection rather than control, using tools—whether artistic or digital—to amplify the "words of fire" that have been silenced for too long. By embracing the inner girl, we don't just recover our capacity for pain; we recover our capacity for life itself—for joy, creativity, and the sacred in the ordinary. Her final invitation is for each of us to find our girl cell, no matter how deeply it has been buried. When girls and those who embrace their inner girlhood are free to shout, dance, and love without fear, the wars of the world finally lose their power to continue.
+

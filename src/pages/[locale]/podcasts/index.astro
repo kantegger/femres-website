@@ -1,0 +1,783 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../../layouts/Layout.astro";
+import PodcastCard from "../../../components/PodcastCard.astro";
+import PageHeader from "../../../components/PageHeader.astro";
+import Pagination from "../../../components/Pagination.astro";
+import { createT, formatRelativeTime } from "../../../i18n/index";
+import {
+  getTopicTranslation,
+  findTopicByName,
+} from "../../../i18n/topicsUtils";
+import FatefulDeckMiniPromo from "../../../components/promo/FatefulDeckMiniPromo.astro";
+import { type Locale } from "../../../i18n/types";
+
+export async function getStaticPaths() {
+  const paths = [
+    { params: { locale: "en" } },
+    { params: { locale: "zh-TW" } },
+    { params: { locale: "ja" } },
+    { params: { locale: "fr" } },
+  ];
+  return paths;
+}
+
+const { locale } = Astro.params;
+const currentLocale = locale as Locale;
+const t = createT(currentLocale);
+
+// Filter podcasts based on locale
+const podcasts = await getCollection("podcasts");
+
+const getCleanSlug = (slug: string) => {
+  if (slug.endsWith("-en")) return slug.slice(0, -3);
+  if (slug.endsWith("-ja")) return slug.slice(0, -3);
+  if (slug.endsWith("-fr")) return slug.slice(0, -3);
+  if (slug.endsWith("-tw")) return slug.slice(0, -3);
+  if (slug.endsWith("-cht")) return slug.slice(0, -4); // In case some use cht
+  return slug;
+};
+
+const publishedPodcasts = podcasts.filter((podcast) => {
+  const isPublished = podcast.data.status === "published";
+  if (!isPublished) return false;
+
+  const slug = podcast.slug;
+
+  if (currentLocale === "zh-CN") {
+    // Exclude all other verified suffixes
+    return (
+      !slug.endsWith("-en") &&
+      !slug.endsWith("-ja") &&
+      !slug.endsWith("-fr") &&
+      !slug.endsWith("-tw") &&
+      !slug.endsWith("-cht")
+    );
+  } else if (currentLocale === "en") {
+    return slug.endsWith("-en");
+  } else if (currentLocale === "ja") {
+    return slug.endsWith("-ja");
+  } else if (currentLocale === "fr") {
+    return slug.endsWith("-fr");
+  } else if (currentLocale === "zh-TW") {
+    return slug.endsWith("-tw") || slug.endsWith("-cht");
+  }
+  return false;
+});
+
+// Sort
+const sortedPodcasts = publishedPodcasts.sort((a, b) => {
+  return (
+    new Date(b.data.publishDate).getTime() -
+    new Date(a.data.publishDate).getTime()
+  );
+});
+
+// Topics
+const allTopics = [
+  ...new Set(publishedPodcasts.flatMap((podcast) => podcast.data.topics)),
+].sort();
+
+// Pagination
+const PODCASTS_PER_PAGE = 12;
+const totalPodcasts = publishedPodcasts.length;
+const totalPages = Math.ceil(totalPodcasts / PODCASTS_PER_PAGE);
+
+// Initial Load
+const currentPage = Number(Astro.url.searchParams.get("page") || "1");
+const validPage = Math.max(1, Math.min(currentPage, totalPages));
+
+const startIndex = (validPage - 1) * PODCASTS_PER_PAGE;
+const endIndex = startIndex + PODCASTS_PER_PAGE;
+const currentPodcasts = sortedPodcasts.slice(startIndex, endIndex);
+
+const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+// Helpers for formatted data
+const formatDurationLocale = (durationVal?: number | string) => {
+  if (!durationVal) return "";
+  if (typeof durationVal === "string") {
+    if (durationVal.includes(":")) return durationVal;
+    const num = parseInt(durationVal);
+    if (isNaN(num)) return durationVal;
+    durationVal = num;
+  }
+  const minutes = durationVal as number;
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  if (hours > 0) {
+    return t("common.durationFormat.hoursMins", { hours, mins });
+  }
+  return t("common.durationFormat.mins", { mins });
+};
+
+const formatDateLocal = (date: Date) => {
+  return formatRelativeTime(date, currentLocale as any);
+};
+
+const formatEpisode = (num?: number) => {
+  if (!num) return "";
+  return t("common.episode", { number: num });
+};
+
+// Map localized topic names
+const localizedTopicTranslations = Object.fromEntries(
+  allTopics.map((topic) => {
+    const topicInfo = findTopicByName(topic);
+    // Use generic type access to avoid strict literal issues if needed, or just cast
+    return [
+      topic,
+      topicInfo ? getTopicTranslation(topic, currentLocale as any) : topic,
+    ];
+  }),
+);
+---
+
+<Layout
+  title={`${t("nav.podcasts")} - FemRes`}
+  description={t("podcastsPage.subtitle") ||
+    "汇聚优质女性主义播客节目，深度探讨性别、文化与社会议题"}
+>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Page Header -->
+    <PageHeader
+      title={t("nav.podcasts")}
+      description={t("podcastsPage.subtitle")}
+      icon="🎙️"
+      gradient="indigo"
+      stats={[
+        {
+          icon: "🎧",
+          text: t("podcastsPage.stats.totalPodcasts", { count: totalPodcasts }),
+        },
+        {
+          icon: "🏷️",
+          text: t("podcastsPage.stats.topicCategories", {
+            count: allTopics.length,
+          }),
+        },
+      ]}
+    />
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <!-- Filter -->
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          {t("podcastsPage.topicsTitle")}
+        </h2>
+        <div class="relative">
+          <div
+            id="topics-container"
+            class="flex flex-wrap gap-3 overflow-hidden transition-all duration-300"
+            style="max-height: 90px;"
+          >
+            <button
+              class="filter-btn inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+              data-filter="all"
+            >
+              {t("podcastsPage.allPodcasts")}
+            </button>
+            {
+              allTopics.map((topic) => {
+                const translatedTopic =
+                  localizedTopicTranslations[topic] || topic;
+                return (
+                  <button
+                    class="filter-btn inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:border-purple-500 dark:hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm"
+                    data-filter={topic}
+                  >
+                    {translatedTopic}
+                  </button>
+                );
+              })
+            }
+          </div>
+
+          {
+            allTopics.length > 20 && (
+              <div class="text-center mt-4">
+                <button
+                  id="toggle-topics-btn"
+                  class="inline-flex items-center px-4 py-2 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-200 transition-colors text-sm font-medium"
+                >
+                  <span id="toggle-topics-text">
+                    {
+                      t(
+                        "podcastsPage.emptyState.viewAll",
+                      ) /* Using viewAll as placeholder for Show More if missing, or use inline i18n var */
+                    }
+                  </span>
+                  <svg
+                    id="toggle-topics-icon"
+                    class="ml-2 w-4 h-4 transform transition-transform duration-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )
+          }
+        </div>
+      </div>
+
+      <!-- Grid -->
+      <div class="mb-12">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+              <span id="current-filter">{t("podcastsPage.allPodcasts")}</span>
+              <span
+                id="podcasts-count"
+                class="text-base font-normal text-gray-600 dark:text-gray-400 ml-2"
+              >
+                ({
+                  t("podcastsPage.stats.totalPodcasts", {
+                    count: totalPodcasts,
+                  })
+                })
+              </span>
+            </h2>
+          </div>
+          <div class="flex items-center gap-4">
+            <select
+              id="sort-select"
+              class="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white"
+            >
+              <option value="date-desc">{t("podcastsPage.sort.latest")}</option>
+              <option value="date-asc">{t("podcastsPage.sort.oldest")}</option>
+              <option value="title-asc">{t("podcastsPage.sort.titleAZ")}</option
+              >
+              <option value="title-desc"
+                >{t("podcastsPage.sort.titleZA")}</option
+              >
+            </select>
+          </div>
+        </div>
+
+        <div
+          id="podcasts-grid"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          {
+            currentPodcasts.map((podcast) => (
+              <div class="podcast-item">
+                <PodcastCard
+                  title={podcast.data.title}
+                  author={podcast.data.author}
+                  description={podcast.data.description}
+                  thumbnail={podcast.data.thumbnail}
+                  publishDate={podcast.data.publishDate}
+                  duration={podcast.data.duration}
+                  sourceUrl={podcast.data.sourceUrl}
+                  slug={getCleanSlug(podcast.slug)}
+                  topics={podcast.data.topics}
+                  episodeNumber={podcast.data.episodeNumber}
+                  locale={currentLocale as Locale}
+                />
+              </div>
+            ))
+          }
+        </div>
+
+        {
+          totalPages > 1 && (
+            <div id="original-pagination">
+              <div class="flex justify-center mt-12">
+                <Pagination
+                  currentPage={validPage}
+                  totalPages={totalPages}
+                  baseUrl={`/${currentLocale}/podcasts`}
+                  locale={currentLocale}
+                />
+              </div>
+            </div>
+          )
+        }
+
+        {
+          currentPodcasts.length === 0 && (
+            <div class="text-center py-16">
+              <div class="text-6xl mb-4">🎙️</div>
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                {t("podcastsPage.emptyState.noContent")}
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400">
+                {t("podcastsPage.emptyState.workingOnIt")}
+              </p>
+            </div>
+          )
+        }
+      </div>
+
+      <div class="mb-16">
+        <FatefulDeckMiniPromo />
+      </div>
+
+      <!-- Guide -->
+      <div
+        class="mt-16 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-2xl p-8"
+      >
+        <div class="text-center">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            🎓 {t("podcastsPage.guide.title")}
+          </h2>
+          <div class="grid md:grid-cols-3 gap-6 text-left mt-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">💬</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("podcastsPage.guide.diverseVoices.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("podcastsPage.guide.diverseVoices.description")}
+              </p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">📖</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("podcastsPage.guide.deepConversations.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("podcastsPage.guide.deepConversations.description")}
+              </p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <div class="text-2xl mb-3">🎧</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {t("podcastsPage.guide.anytimeAnywhere.title")}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t("podcastsPage.guide.anytimeAnywhere.description")}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script
+  is:inline
+  define:vars={{
+    allPodcastsData: sortedPodcasts.map((p) => ({
+      slug: p.slug,
+      cleanSlug: getCleanSlug(p.slug),
+      linkUrl: `/${currentLocale}/podcasts/${getCleanSlug(p.slug)}`,
+      title: p.data.title,
+      author: p.data.author,
+      description: p.data.description,
+      thumbnail: p.data.thumbnail,
+      publishDate: p.data.publishDate.toISOString(),
+      formattedDate: formatDateLocal(p.data.publishDate),
+      topics: p.data.topics,
+      sourceUrl: p.data.sourceUrl,
+      duration: p.data.duration,
+      formattedDuration: formatDurationLocale(p.data.duration),
+      episodeNumber: p.data.episodeNumber,
+      formattedEpisode: formatEpisode(p.data.episodeNumber),
+    })),
+    topicTranslations: localizedTopicTranslations,
+    currentLocale: currentLocale,
+    i18n: {
+      allPodcasts: t("podcastsPage.allPodcasts"),
+      showMore: t("booksPage.topics.showMore") || "Show more", // Fallback key if not in podcastsPage
+      showLess: t("booksPage.topics.showLess") || "Show less",
+      emptyTitle: t("podcastsPage.emptyState.noContent"),
+      emptyDescription: t("podcastsPage.emptyState.workingOnIt"),
+      countFormat: t("podcastsPage.countFormat"),
+      listenPodcast: t("common.listenPodcast"),
+    },
+  }}
+>
+  window.ALL_PODCASTS_DATA = allPodcastsData;
+  window.TOPIC_TRANSLATIONS = topicTranslations;
+  window.I18N = i18n;
+  window.CURRENT_LOCALE = currentLocale;
+</script>
+
+<script>
+  import type { Podcast } from "../../../i18n/types";
+
+  function initPage() {
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const sortSelect = document.getElementById("sort-select");
+    const podcastsGrid = document.getElementById("podcasts-grid");
+    const currentFilter = document.getElementById("current-filter");
+    const podcastsCount = document.getElementById("podcasts-count");
+
+    const topicsContainer = document.getElementById("topics-container");
+    const toggleBtn = document.getElementById("toggle-topics-btn");
+    const toggleText = document.getElementById("toggle-topics-text");
+    const toggleIcon = document.getElementById("toggle-topics-icon");
+    let isTopicsExpanded = false;
+
+    if (toggleBtn) {
+      if (toggleText) toggleText.textContent = window.I18N.showMore;
+      toggleBtn.addEventListener("click", () => {
+        if (isTopicsExpanded && topicsContainer) {
+          topicsContainer.style.maxHeight = "90px";
+          if (toggleText) toggleText.textContent = window.I18N.showMore;
+          if (toggleIcon) toggleIcon.style.transform = "rotate(0deg)";
+          isTopicsExpanded = false;
+        } else if (topicsContainer) {
+          topicsContainer.style.maxHeight = "none";
+          if (toggleText) toggleText.textContent = window.I18N.showLess;
+          if (toggleIcon) toggleIcon.style.transform = "rotate(180deg)";
+          isTopicsExpanded = true;
+        }
+      });
+    }
+
+    let currentTopic = "all";
+    const PODCASTS_PER_PAGE = 12;
+    let currentPage = 1;
+
+    const allPodcastItems: Podcast[] = (window.ALL_PODCASTS_DATA ||
+      []) as Podcast[];
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const filterValue = target.dataset.filter || "all";
+        currentTopic = filterValue;
+        currentPage = 1;
+
+        filterButtons.forEach((btn) => {
+          btn.classList.remove("bg-purple-600", "text-white");
+          btn.classList.add(
+            "bg-white",
+            "dark:bg-gray-800",
+            "border",
+            "border-gray-300",
+            "dark:border-gray-600",
+            "text-gray-700",
+            "dark:text-gray-300",
+          );
+        });
+
+        target.classList.remove(
+          "bg-white",
+          "dark:bg-gray-800",
+          "border",
+          "border-gray-300",
+          "dark:border-gray-600",
+          "text-gray-700",
+          "dark:text-gray-300",
+        );
+        target.classList.add("bg-purple-600", "text-white");
+
+        const translatedTopic =
+          filterValue === "all"
+            ? window.I18N.allPodcasts
+            : window.TOPIC_TRANSLATIONS[filterValue] || filterValue;
+        if (currentFilter) currentFilter.textContent = translatedTopic;
+
+        filterAndSort();
+      });
+    });
+
+    if (sortSelect) {
+      sortSelect.addEventListener("change", () => {
+        currentPage = 1;
+        filterAndSort();
+      });
+    }
+
+    function getPlatform(url: string) {
+      if (!url) return { name: "Podcast", icon: "🎧", color: "bg-gray-500" };
+      if (url.includes("spotify.com")) {
+        return { name: "Spotify", icon: "🎵", color: "bg-green-500" };
+      } else if (
+        url.includes("apple.com/podcasts") ||
+        url.includes("podcasts.apple.com")
+      ) {
+        return { name: "Apple Podcasts", icon: "🎧", color: "bg-purple-600" };
+      } else if (url.includes("soundcloud.com")) {
+        return { name: "SoundCloud", icon: "☁️", color: "bg-orange-500" };
+      } else if (url.includes("google.com/podcasts")) {
+        return { name: "Google Podcasts", icon: "🎙️", color: "bg-blue-500" };
+      } else {
+        return { name: "Podcast", icon: "🎧", color: "bg-gray-500" };
+      }
+    }
+
+    function filterAndSort() {
+      const sortValue = (sortSelect as HTMLSelectElement).value;
+      const filtered = allPodcastItems.filter((item) => {
+        if (currentTopic === "all") return true;
+        return item.topics.includes(currentTopic);
+      });
+
+      filtered.sort((a, b) => {
+        switch (sortValue) {
+          case "date-desc":
+            return (
+              new Date(b.publishDate).getTime() -
+              new Date(a.publishDate).getTime()
+            );
+          case "date-asc":
+            return (
+              new Date(a.publishDate).getTime() -
+              new Date(b.publishDate).getTime()
+            );
+          case "title-asc":
+            return a.title.localeCompare(b.title);
+          case "title-desc":
+            return b.title.localeCompare(a.title);
+          default:
+            return 0;
+        }
+      });
+
+      if (podcastsGrid) podcastsGrid.innerHTML = "";
+
+      const totalFiltered = filtered.length;
+      const totalPages = Math.ceil(totalFiltered / PODCASTS_PER_PAGE);
+      const startIndex = (currentPage - 1) * PODCASTS_PER_PAGE;
+      const endIndex = startIndex + PODCASTS_PER_PAGE;
+      const currentPagePodcasts = filtered.slice(startIndex, endIndex);
+
+      currentPagePodcasts.forEach((p) => {
+        const card = createPodcastCard(p);
+        if (podcastsGrid) podcastsGrid.appendChild(card);
+      });
+
+      const originalPagination = document.getElementById("original-pagination");
+      const filterPagination = document.getElementById("filter-pagination");
+
+      if (filterPagination) filterPagination.remove();
+
+      if (currentTopic === "all") {
+        if (originalPagination) originalPagination.style.display = "block";
+      } else {
+        if (originalPagination) originalPagination.style.display = "none";
+        if (totalPages > 1) {
+          createFilterPagination(totalPages, currentPage);
+        }
+      }
+
+      if (podcastsCount)
+        podcastsCount.textContent = `(${window.I18N.countFormat.replace("{count}", totalFiltered)})`;
+
+      if (totalFiltered === 0) {
+        const emptyDiv = document.createElement("div");
+        emptyDiv.className = "col-span-full text-center py-16";
+        emptyDiv.innerHTML = `
+           <div class="text-6xl mb-4">🎙️</div>
+           <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+             ${window.I18N.emptyTitle}
+           </h3>
+           <p class="text-gray-600 dark:text-gray-400">
+             ${window.I18N.emptyDescription}
+           </p>
+         `;
+        if (podcastsGrid) podcastsGrid.appendChild(emptyDiv);
+      }
+    }
+
+    function createFilterPagination(totalPages: number, current: number) {
+      const paginationDiv = document.createElement("div");
+      paginationDiv.id = "filter-pagination";
+      paginationDiv.className = "mt-12 flex justify-center";
+      const nav = document.createElement("nav");
+      nav.className = "flex items-center space-x-2";
+
+      const createBtn = (
+        text: string,
+        onClick: () => void,
+        disabled: boolean,
+      ) => {
+        const btn = document.createElement("button");
+        if (disabled) {
+          btn.className =
+            "px-3 py-2 bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 opacity-50 cursor-not-allowed rounded-lg";
+        } else {
+          btn.className =
+            "px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors";
+          btn.onclick = onClick;
+        }
+        btn.innerHTML = text;
+        return btn;
+      };
+
+      const prevBtn = createBtn(
+        '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>',
+        () => {
+          currentPage--;
+          filterAndSort();
+        },
+        current <= 1,
+      );
+      nav.appendChild(prevBtn);
+
+      const pageNumbersDiv = document.createElement("div");
+      pageNumbersDiv.className = "flex items-center space-x-2";
+
+      for (let i = 1; i <= totalPages; i++) {
+        const showPage =
+          i === 1 || i === totalPages || Math.abs(i - current) <= 1;
+
+        if (showPage) {
+          const pageBtn = document.createElement(
+            i === current ? "span" : "button",
+          );
+          pageBtn.className =
+            i === current
+              ? "px-4 py-2 bg-purple-600 text-white rounded-lg font-medium"
+              : "px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors";
+          pageBtn.textContent = i.toString();
+          if (i !== current) {
+            pageBtn.onclick = () => {
+              currentPage = i;
+              filterAndSort();
+            };
+          }
+          pageNumbersDiv.appendChild(pageBtn);
+        } else if (i === 2 && current > 4) {
+          const dots = document.createElement("span");
+          dots.className = "px-2 text-gray-500";
+          dots.textContent = "...";
+          pageNumbersDiv.appendChild(dots);
+        } else if (i === totalPages - 1 && current < totalPages - 3) {
+          const dots = document.createElement("span");
+          dots.className = "px-2 text-gray-500";
+          dots.textContent = "...";
+          pageNumbersDiv.appendChild(dots);
+        }
+      }
+      nav.appendChild(pageNumbersDiv);
+
+      const nextBtn = createBtn(
+        '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>',
+        () => {
+          currentPage++;
+          filterAndSort();
+        },
+        current >= totalPages,
+      );
+      nav.appendChild(nextBtn);
+
+      paginationDiv.appendChild(nav);
+      if (podcastsGrid && podcastsGrid.parentElement) {
+        podcastsGrid.parentElement.appendChild(paginationDiv);
+      }
+    }
+
+    function createPodcastCard(podcast: any) {
+      const platform = getPlatform(podcast.sourceUrl);
+      const topicsHtml = podcast.topics
+        .slice(0, 4)
+        .map((t: string) => {
+          const trans = window.TOPIC_TRANSLATIONS[t] || t;
+          return `<span class="inline-block px-2 py-1 text-xs bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-md">#${trans}</span>`;
+        })
+        .join("");
+
+      let extraTopicsHtml = "";
+      if (podcast.topics.length > 4) {
+        extraTopicsHtml = `<span class="inline-block px-2 py-1 text-xs text-gray-500 dark:text-gray-500">
+             +${podcast.topics.length - 4}
+           </span>`;
+      }
+
+      // Link generation using the server-side prepared URL
+      const div = document.createElement("div");
+      div.className = "podcast-item";
+      div.innerHTML = `
+        <article class="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl glass-card glass-hover transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700">
+          <a href="${podcast.linkUrl}" class="block">
+            <div class="p-6">
+              ${
+                podcast.formattedEpisode
+                  ? `<div class="mb-4">
+                  <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-1 rounded-md">
+                    ${podcast.formattedEpisode}
+                  </span>
+                </div>`
+                  : ""
+              }
+        
+              <div class="flex gap-4">
+                <div class="flex-shrink-0">
+                  ${
+                    podcast.thumbnail
+                      ? `<div class="w-20 h-20 rounded-xl overflow-hidden relative">
+                      <img src="${podcast.thumbnail}" alt="${podcast.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    </div>`
+                      : `<div class="w-20 h-20 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center relative overflow-hidden">
+                      <span class="text-2xl text-white relative z-10">🎧</span>
+                    </div>`
+                  }
+                </div>
+        
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-start justify-between mb-2">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors flex-1 mr-3">
+                      ${podcast.title}
+                    </h3>
+                    <div class="${platform.color} text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 flex-shrink-0">
+                      <span>${platform.icon}</span>
+                      <span>${platform.name}</span>
+                    </div>
+                  </div>
+        
+                  <div class="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-3">
+                    <div class="flex items-center">
+                      <svg class="w-4 h-4 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a2 2 0 012-2h2a2 2 0 012 2v3a3 3 0 01-3 3z"></path>
+                      </svg>
+                      <span class="font-medium">${podcast.author}</span>
+                    </div>
+                    <span class="mx-2">•</span>
+                    <span>${podcast.formattedDate}</span>
+                    ${
+                      podcast.formattedDuration
+                        ? `<span class="mx-2">•</span>
+                      <span class="flex items-center">
+                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                         </svg>
+                        ${podcast.formattedDuration}
+                      </span>`
+                        : ""
+                    }
+                  </div>
+        
+                  <p class="text-gray-700 dark:text-gray-300 text-sm mb-3 line-clamp-2">
+                    ${podcast.description}
+                  </p>
+        
+                  <div class="flex flex-wrap gap-1.5">
+                    ${topicsHtml}
+                    ${extraTopicsHtml}
+                  </div>
+                </div>
+              </div>
+        
+              <div class="flex items-center justify-between mt-5 pt-4 border-t border-gray-100 dark:border-gray-700">
+                <div></div>
+                <div class="flex items-center text-purple-600 dark:text-purple-400 text-sm font-medium group-hover:underline">
+                  <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                  </svg>
+                  ${window.I18N.listenPodcast}
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
+        `;
+      return div;
+    }
+  }
+
+  document.addEventListener("astro:page-load", initPage);
+</script>

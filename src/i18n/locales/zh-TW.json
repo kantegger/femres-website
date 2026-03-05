@@ -1,0 +1,1211 @@
+{
+  "nav": {
+    "home": "首頁",
+    "content": "內容",
+    "books": "書籍",
+    "articles": "文章",
+    "films": "電影",
+    "videos": "視頻",
+    "podcasts": "播客",
+    "papers": "論文",
+    "topics": "話題",
+    "search": "搜尋",
+    "contribute": "投稿"
+  },
+  "homepage": {
+    "metaTitle": "FemRes - 女性主義內容聚合平台",
+    "hero": {
+      "badge": "匯聚全球優質女性主義內容",
+      "title": "發現",
+      "titleHighlight": "女性主義",
+      "titleEnd": "的力量",
+      "subtitle": "探索書籍、電影、文章、視頻、播客和論文<br/>深入理解性別平等的理論與實踐，推動社會進步",
+      "startExploring": "開始探索",
+      "learnMore": "關於項目"
+    },
+    "features": {
+      "richContent": {
+        "title": "豐富內容",
+        "description": "涵蓋書籍、文章、視頻等多種形式的優質女性主義資源"
+      },
+      "smartCategories": {
+        "title": "智能分類",
+        "description": "按話題和類型精確分類，助你快速找到所需內容"
+      },
+      "globalPerspective": {
+        "title": "全球視野",
+        "description": "匯集全球女性主義學者和活動家的多元觀點"
+      }
+    },
+    "sections": {
+      "featured": "精選內容",
+      "featuredDescription": "探索最新的女性主義思想、研究與實踐，匯聚全球優質內容",
+      "latestBooks": "嚴選書籍",
+      "latestFilms": "嚴選電影",
+      "latestArticles": "嚴選文章",
+      "latestVideos": "嚴選視頻",
+      "latestPodcasts": "嚴選播客",
+      "latestPapers": "嚴選論文",
+      "popularTopics": "熱門話題",
+      "popularTopicsDescription": "探索最受關注的女性主義話題，深入了解各個領域的發展現狀",
+      "featuredContent": "{count} 個精選內容"
+    },
+    "cta": {
+      "title": "共同推動性別平等",
+      "description": "加入我們的社區，分享你的洞見，發現更多優質內容",
+      "contribute": "提交內容",
+      "aboutUs": "了解更多"
+    }
+  },
+  "userMenu": {
+    "login": "登錄",
+    "profile": "個人中心",
+    "myLikes": "我的點贊",
+    "myBookmarks": "我的收藏",
+    "logout": "退出登錄"
+  },
+  "common": {
+    "watchVideo": "觀看視頻",
+    "readMore": "閱讀更多",
+    "viewAll": "查看全部",
+    "loading": "加載中...",
+    "language": "語言",
+    "publishDate": "發布日期",
+    "description": "描述",
+    "author": "作者",
+    "director": "導演",
+    "duration": "時長",
+    "pages": "頁數",
+    "toggleTheme": "切換主題",
+    "toggleMenu": "切換選單",
+    "itemsCount": "{count} 個內容",
+    "favorite": "收藏",
+    "share": "分享",
+    "contentTypes": {
+      "book": "書籍",
+      "film": "電影",
+      "article": "文章",
+      "video": "影音",
+      "podcast": "播客",
+      "paper": "論文"
+    },
+    "minutes": "分鐘",
+    "readTimeFormat": "{time} 分鐘閱讀",
+    "readTimeFormatShort": "{time} 分鐘",
+    "readFull": "閱讀全文",
+    "articleTypes": {
+      "opinion": "觀點",
+      "analysis": "分析",
+      "news": "新聞",
+      "blog": "部落格",
+      "research": "研究"
+    },
+    "viewAllTopics": "查看所有話題",
+    "siteDescription": "FemRes - 女性主義內容聚合平台，匯聚全球優質女性主義資源",
+    "copyright": "© 2025 FemRes. All rights reserved.",
+    "pagination": {
+      "navigation": "分頁導航",
+      "previous": "上一頁",
+      "next": "下一頁"
+    },
+    "noCover": "暫無封面",
+    "topics": "相關話題",
+    "support": "支持我們",
+    "supportMessage": "如果這些內容對你有幫助",
+    "subscribe": "訂閱",
+    "countries": "國家/地區",
+    "genres": "類型",
+    "noPoster": "暫無海報",
+    "noLinks": "暫無相關鏈接",
+    "genre": "類型",
+    "listenNow": "立即收聽",
+    "listenPodcast": "在線收聽",
+    "episode": "第{number}集",
+    "journalsCount": "{count} 本期刊",
+    "readPaper": "閱讀論文",
+    "showMore": "顯示更多",
+    "showLess": "顯示更少",
+    "paperTypes": {
+      "research": "研究",
+      "review": "綜述",
+      "case-study": "案例研究",
+      "theoretical": "理論研究"
+    },
+    "durationFormat": {
+      "hoursMins": "{hours}小時{mins}分",
+      "mins": "{mins}分"
+    }
+  },
+  "footer": {
+    "description": "一個開源的女性主義內容聚合平台。致力於推動性別平等事業，匯聚全球優質女性主義資源。",
+    "resourceTypes": "資源類型",
+    "community": "社區參與",
+    "links": {
+      "books": "📚 書籍推薦",
+      "films": "🎬 電影解析",
+      "articles": "📰 精選文章",
+      "videos": "🎬 視頻資源",
+      "podcasts": "🎧 播客頻道",
+      "papers": "📄 學術論文",
+      "about": "📋 關於我們",
+      "contact": "📧 聯絡我們",
+      "contribute": "💡 提交內容",
+      "feedback": "🐛 反饋建議",
+      "source": "⭐ 開源代碼",
+      "privacy": "隱私政策",
+      "terms": "服務條款"
+    },
+    "copyright": "© 2025 FemRes. MIT 許可證開源。"
+  },
+  "errorPage": {
+    "title": "頁面未找到",
+    "message": "抱歉，您訪問的頁面不存在或已被移動。",
+    "backHome": "返回首頁",
+    "goBack": "返回上一頁",
+    "tagline": "— FemRes 女性主義資源平台 —"
+  },
+  "languages": {
+    "en": "英語",
+    "zh-CN": "簡體中文",
+    "zh-TW": "繁體中文",
+    "ja": "日語",
+    "fr": "法語",
+    "es": "西班牙語",
+    "bem": "本巴語",
+    "tr": "土耳其語",
+    "cs": "捷克語",
+    "fa": "波斯語",
+    "hi": "印地語",
+    "ko": "韓語",
+    "it": "義大利語",
+    "ro": "羅馬尼亞語",
+    "pl": "波蘭語",
+    "de": "德語",
+    "pt": "葡萄牙語",
+    "ar": "阿拉伯語"
+  },
+  "booksPage": {
+    "title": "📚 書籍",
+    "subtitle": "從理論到實踐，嚴選女性主義經典與當代名著。為思考增添深度與廣度。",
+    "stats": {
+      "totalBooks": "共 {count} 本書籍",
+      "topicCategories": "{count} 個話題分類"
+    },
+    "topics": {
+      "title": "話題分類",
+      "all": "全部書籍",
+      "showMore": "展開更多",
+      "showLess": "收起"
+    },
+    "list": {
+      "latest": "最新發布",
+      "oldest": "最早發布",
+      "titleAsc": "標題 (A-Z)",
+      "titleDesc": "標題 (Z-A)"
+    },
+    "emptyState": {
+      "title": "暫無相關書籍",
+      "description": "該主題下暫無書籍，試試其他主題或查看全部書籍"
+    },
+    "countFormat": "{count} 本",
+    "guide": {
+      "title": "閱讀指南",
+      "beginner": {
+        "title": "入門推薦",
+        "description": "從《第二性》或《我們都應該是女性主義者》等經典著作開始。"
+      },
+      "deepReading": {
+        "title": "深度閱讀",
+        "description": "按主題系統閱讀，從理論基礎到實踐應用。"
+      },
+      "discussion": {
+        "title": "討論與思考",
+        "description": "閱讀後查看詳細頁面，理解核心論點並反思現實。"
+      }
+    }
+  },
+  "filmsPage": {
+    "title": "🎬 推薦電影",
+    "subtitle": "通過鏡頭探索性別議題，感受影像敘事推動社會變革的力量。",
+    "stats": {
+      "totalFilms": "全 {count} 部作品",
+      "topicCategories": "{count} 個話題分類",
+      "countries": "{count} 個國家/地區",
+      "genres": "{count} 種流派"
+    },
+    "topics": {
+      "title": "話題分類",
+      "all": "全部主題",
+      "showMore": "展開更多主題",
+      "showLess": "收起主題"
+    },
+    "country": {
+      "title": "國家/地區",
+      "all": "全部地區"
+    },
+    "allFilmsHeading": "全部電影作品",
+    "allFilms": "全部電影",
+    "countFormat": "{count} 部",
+    "sort": {
+      "latest": "最新上映",
+      "oldest": "最早上映",
+      "titleAZ": "片名 A-Z",
+      "titleZA": "片名 Z-A",
+      "yearNewest": "年份倒序",
+      "yearOldest": "年份順序"
+    },
+    "emptyState": {
+      "title": "暫無相關電影",
+      "description": "該篩選條件下暫無電影，試試其他條件或查看全部電影"
+    },
+    "guide": {
+      "title": "觀影指南",
+      "criticalViewing": {
+        "title": "批判性觀看",
+        "description": "從性別視角出發，觀察角色發展、敘事方式以及價值觀的傳遞。"
+      },
+      "deepReflection": {
+        "title": "深度思考",
+        "description": "觀影后思考影片反映的社會問題，並嘗試將其與現實生活聯繫起來。"
+      },
+      "discussion": {
+        "title": "交流與對話",
+        "description": "在社區或與朋友分享觀影感受，通過對話深化理解。"
+      }
+    }
+  },
+  "videosPage": {
+    "title": "🎥 視頻",
+    "subtitle": "通過講座、紀錄片和訪談，直觀地學習女性主義理論與實踐。",
+    "stats": {
+      "totalVideos": "全 {count} 個視頻",
+      "topicCategories": "{count} 個話題分類"
+    },
+    "topicsTitle": "話題分類",
+    "allVideos": "全部視頻",
+    "videosCount": "（{count} 個）",
+    "sort": {
+      "latest": "最新發布",
+      "oldest": "最早發布",
+      "titleAZ": "標題 A-Z",
+      "titleZA": "標題 Z-A",
+      "durationShort": "時長從短到長",
+      "durationLong": "時長從長到短"
+    },
+    "emptyState": {
+      "title": "暫無相關視頻",
+      "description": "該主題下暫無視頻，試試其他主題或查看全部視頻"
+    },
+    "guide": {
+      "title": "觀看指南",
+      "documentaries": {
+        "title": "從紀錄片開始",
+        "description": "觀看紀錄片可以直觀地了解重要的歷史人物和關鍵的社會運動。"
+      },
+      "talks": {
+        "title": "演講與訪談",
+        "description": "聆聽學者和活動家的分享，接觸多元的女性主義觀點。"
+      },
+      "reflection": {
+        "title": "批判性思考",
+        "description": "觀看後結合自身經驗進行反思，培養獨立的判斷力。"
+      }
+    }
+  },
+  "podcastsPage": {
+    "title": "🎙️ 播客",
+    "subtitle": "聆聽多元聲音，通過音頻開啟女性主義的深度對話。",
+    "stats": {
+      "totalPodcasts": "全 {count} 期節目",
+      "topicCategories": "{count} 個話題分類"
+    },
+    "topicsTitle": "話題分類",
+    "allPodcasts": "全部播客",
+    "sort": {
+      "latest": "最新發布",
+      "oldest": "最早發布",
+      "titleAZ": "標題 A-Z",
+      "titleZA": "標題 Z-A"
+    },
+    "emptyState": {
+      "noContent": "未找到播客節目",
+      "workingOnIt": "我們正在整理更多優質的女性主義播客推薦列表。",
+      "viewAll": "查看全部"
+    },
+    "countFormat": "{count} 期節目",
+    "guide": {
+      "title": "聆聽指南",
+      "diverseVoices": {
+        "title": "多元聲音",
+        "description": "聆聽來自不同文化背景的女性主義聲音，拓寬個人視野。"
+      },
+      "deepConversations": {
+        "title": "深度對話",
+        "description": "通過長篇對話與訪談，深入理解複雜的性別問題與社會現象。"
+      },
+      "anytimeAnywhere": {
+        "title": "隨時隨地",
+        "description": "利用碎片時間學習，將女性主義思考融入日常生活。"
+      }
+    }
+  },
+  "papersPage": {
+    "title": "📄 學術論文",
+    "subtitle": "通過最新的學術研究與理論框架，提供關於性別議題的學理性洞察。",
+    "stats": {
+      "totalPapers": "全 {count} 篇論文",
+      "topicCategories": "{count} 個話題分類"
+    },
+    "topicsTitle": "話題分類",
+    "allPapers": "全部論文",
+    "sort": {
+      "latest": "最新發布",
+      "oldest": "最早發布",
+      "titleAZ": "標題 (A-Z)",
+      "titleZA": "標題 (Z-A)",
+      "citationsDesc": "引用次數 (高-低)",
+      "citationsAsc": "引用次數 (低-高)"
+    },
+    "emptyState": {
+      "noContent": "未找到論文",
+      "workingOnIt": "該主題下暫無論文。",
+      "viewAll": "查看全部"
+    },
+    "guide": {
+      "title": "論文閱讀指南",
+      "empirical": {
+        "title": "實證研究",
+        "description": "專注於基於數據和田野調查的研究，了解女性主義理論的實際應用。"
+      },
+      "critical": {
+        "title": "批判性分析",
+        "description": "深入批判現有的性別結構和社會制度。"
+      },
+      "interdisciplinary": {
+        "title": "跨學科視角",
+        "description": "探索社會學、心理學、經濟學等不同領域的交叉研究。"
+      }
+    }
+  },
+  "paper": {
+    "info": "論文資訊",
+    "abstract": "摘要",
+    "keywords": "關鍵詞",
+    "relatedPapers": "相關推薦",
+    "citationCount": "引用次數",
+    "doi": "DOI",
+    "journal": "期刊",
+    "language": "語言",
+    "readPaper": "閱讀論文",
+    "viewPdf": "閱讀 PDF",
+    "types": {
+      "research": "研究論文",
+      "review": "綜述文章",
+      "caseStudy": "案例研究",
+      "theoretical": "理論研究"
+    }
+  },
+  "interactions": {
+    "like": "點贊",
+    "unlike": "取消點贊",
+    "bookmark": "收藏",
+    "unbookmark": "取消收藏",
+    "loginToInteract": "請登錄後進行操作"
+  },
+  "book": {
+    "review": "書評與導讀",
+    "info": "書籍信息",
+    "originalTitle": "原名",
+    "author": "作者",
+    "published": "出版",
+    "purchase": "購買此書",
+    "buyOnAmazon": "在亞馬遜購買",
+    "affiliateNotice": "通過此鏈接購買，我們可能會獲得少量佣金，這不會增加你的購買成本。感謝你的支持！",
+    "relatedBooks": "相關推薦"
+  },
+  "podcast": {
+    "info": "播客資訊",
+    "host": "主播",
+    "originalName": "原名",
+    "added": "收錄",
+    "episodes": "集數",
+    "listenOnline": "線上收聽",
+    "visitSource": "點擊下方按鈕前往原始平台收聽",
+    "related": "相關播客",
+    "websiteNote": "完整文字稿與資源請訪問播客官網"
+  },
+  "newsletter": {
+    "title": "訂閱更新",
+    "description": "獲取最新的女性主義內容和深度分析，不錯過任何重要觀點",
+    "success": "訂閱成功！",
+    "error": "訂閱失敗，請重試。",
+    "genericError": "發生錯誤。"
+  },
+  "about": {
+    "title": "關於 FemRes",
+    "subtitle": "匯聚全球女性主義聲音，推動性別平等事業發展",
+    "mission": {
+      "title": "我們的使命",
+      "description1": "FemRes 致力於成為全球最高質量的女性主義內容聚合平台。我們相信知識和信息的力量可以推動社會變革，通過匯集全球女性主義思想、研究和實踐，為所有關注性別平等的人提供豐富的學習資源。",
+      "description2": "在這個信息碎片化的時代，我們通過智能的內容篩选和分類，確保推薦的每一份內容都經過嚴格的質量把關，幫助用戶高效地獲取有價值的信息，深入理解女性主義的多元視角。",
+      "globalPerspective": "全球視野",
+      "globalDescription": "跨越多元文化背景",
+      "curatedContent": "嚴選內容",
+      "curatedDescription": "嚴格的質量控制",
+      "values": "平等·多元·包容",
+      "buildBetter": "構建更公正的世界"
+    },
+    "coreValues": {
+      "title": "核心價值觀",
+      "subtitle": "引導我們的基本原則",
+      "genderEquality": {
+        "title": "性別平等",
+        "description": "倡導在政治、經濟、社會、文化等所有領域，所有性別都享有平等的權利、機會和尊嚴"
+      },
+      "intersectionality": {
+        "title": "交叉性視角",
+        "description": "認識到性別與種族、階級、性取向、殘障等其他身份標籤的交叉影響，追求更全面的社會公正"
+      },
+      "knowledgeEmpowerment": {
+        "title": "知識賦權",
+        "description": "相信教育和知識普及是實現性別平等的關鍵途徑，致力於讓更多人接觸並理解女性主義"
+      },
+      "openInclusion": {
+        "title": "開放與包容",
+        "description": "歡迎來自不同背景、觀點和經驗的人參與對話，在多樣性中尋求共識，在差異中促進理解"
+      }
+    },
+    "features": {
+      "title": "平台特點",
+      "subtitle": "為你提供最優質的內容體驗",
+      "smartAggregation": {
+        "title": "智能內容聚合",
+        "description": "結合先進的 AI 技術與人工審核，從海量信息中篩選出高質量的女性主義內容",
+        "features": [
+          "多渠道內容抓取",
+          "質量評分算法",
+          "實時更新機制"
+        ]
+      },
+      "preciseClassification": {
+        "title": "精確分類系統",
+        "description": "建立了完整的話題分類體系，幫助用戶快速鎖定感興趣的內容領域",
+        "features": [
+          "8 大核心話題",
+          "多維度標籤",
+          "交叉搜索功能"
+        ]
+      },
+      "diverseContent": {
+        "title": "多樣化內容形式",
+        "description": "涵蓋書籍、文章、視頻、播客、學術論文等多種形式，滿足不同的學習習慣",
+        "features": [
+          "5 種內容類型",
+          "全球資源整合",
+          "多媒體展示"
+        ]
+      }
+    },
+    "contentTypes": {
+      "title": "內容類型",
+      "subtitle": "多元內容形式，滿足不同學習需求",
+      "books": {
+        "title": "書籍",
+        "description": "經典與新著"
+      },
+      "articles": {
+        "title": "文章",
+        "description": "深度解析"
+      },
+      "videos": {
+        "title": "視頻",
+        "description": "視覺呈現"
+      },
+      "podcasts": {
+        "title": "播客",
+        "description": "聲音傳遞"
+      },
+      "papers": {
+        "title": "論文",
+        "description": "學術研究"
+      },
+      "films": {
+        "title": "電影",
+        "description": "影像敘事"
+      }
+    },
+    "coreTopics": {
+      "title": "核心話題",
+      "subtitle": "涵蓋女性主義關注的重要領域",
+      "workplaceEquality": {
+        "title": "職場平等",
+        "description": "消除職場性別歧視，推動同工同酬，打破玻璃天花板"
+      },
+      "bodilyAutonomy": {
+        "title": "身體自主權",
+        "description": "關注女性對自己身體的決定權，包括生育權和健康權"
+      },
+      "educationRights": {
+        "title": "受教育權",
+        "description": "確保所有性別平等的受教育機會，消除教育領域的偏見"
+      },
+      "politicalParticipation": {
+        "title": "政治參與",
+        "description": "提升女性在政治決策中的代表性和參與度"
+      },
+      "familyRoles": {
+        "title": "家庭角色",
+        "description": "重新定義家庭責任分配，打破傳統性別角色的束縛"
+      },
+      "genderViolence": {
+        "title": "性別暴力",
+        "description": "關注並制止任何形式的性別暴力，保護受害者權利"
+      },
+      "mediaRepresentation": {
+        "title": "媒體呈現",
+        "description": "批判媒體中的性別刻板印象，推動多元化的表達"
+      },
+      "historicalFigures": {
+        "title": "歷史人物",
+        "description": "重新發現和認識歷史上的傑出女性及其貢獻"
+      }
+    },
+    "team": {
+      "title": "團隊理念",
+      "subtitle": "由熱愛女性主義事業的志願者共同維護",
+      "description": "FemRes 是一個由志願者驅動的開源項目。我們的團隊成員來自不同背景，包括技術開發者、內容編輯、女性主義研究者和社會活動家。我們因共同的信念走到一起：相信知識的力量，相信性別平等的未來。",
+      "openSource": {
+        "title": "開源透明",
+        "description": "代碼與內容策略完全公開"
+      },
+      "communityDriven": {
+        "title": "社區驅動",
+        "description": "歡迎每一個人的貢獻"
+      },
+      "nonProfit": {
+        "title": "非盈利",
+        "description": "純粹為推動平等而努力"
+      }
+    },
+    "joinUs": {
+      "title": "與我們一同成長",
+      "description": "無論你是內容創作者、技術開發者、研究學者還是熱心讀者，我們都歡迎你加入 FemRes 社區，共同為性別平等事業貢獻力量",
+      "contributeContent": "提交內容",
+      "githubProject": "GitHub 項目"
+    },
+    "contact": {
+      "title": "聯絡我們",
+      "description": "如果你有任何問題、建議或合作意向，請隨時通過以下方式與我們聯繫"
+    }
+  },
+  "contactPage": {
+    "metaTitle": "聯絡我們",
+    "metaDescription": "我們重視每一個反饋，期待與您的連結",
+    "hero": {
+      "title": "聯絡",
+      "titleHighlight": "FemRes",
+      "subtitle": "我們重視每一個反饋，期待與您的連結"
+    },
+    "options": {
+      "general": {
+        "title": "一般諮詢",
+        "description": "對 FemRes 有疑問？我們樂意為您解答。"
+      },
+      "submission": {
+        "title": "內容投稿",
+        "description": "有優質內容想要分享？我們期待您的投稿。"
+      },
+      "partnership": {
+        "title": "合作洽談",
+        "description": "尋求合作機會？讓我們共同推動性別平等。"
+      },
+      "volunteer": {
+        "title": "加入志工",
+        "description": "想加入我們的團隊？現在就行動。"
+      }
+    },
+    "form": {
+      "title": "發送訊息",
+      "subtitle": "填寫下方表格，我們會盡快回覆您。",
+      "name": "姓名",
+      "placeholderName": "輸入您的姓名",
+      "email": "電子郵件",
+      "placeholderEmail": "your@email.com",
+      "subject": "主旨",
+      "placeholderSubject": "選擇主旨",
+      "message": "訊息內容",
+      "placeholderMessage": "請描述您的請求或問題...",
+      "agreement": "我已閱讀並同意",
+      "privacy": "隱私政策",
+      "terms": "服務條款",
+      "submit": "發送訊息",
+      "required": "*",
+      "subjects": {
+        "general": "一般諮詢",
+        "content": "內容投稿",
+        "partnership": "合作洽談",
+        "volunteer": "加入志工",
+        "feedback": "反饋建議",
+        "other": "其他"
+      }
+    },
+    "faq": {
+      "title": "常見問題",
+      "subtitle": "常見問題解答",
+      "items": [
+        {
+          "question": "如何向 FemRes 投稿？",
+          "answer": "您可以將標題、作者、摘要和連結發送至 submissions@femres.org。我們的編輯團隊將在 7 個工作日內審核並回覆。"
+        },
+        {
+          "question": "FemRes 如何篩選內容？",
+          "answer": "我們結合 AI 技術與人工審核。算法進行初步篩選，隨後由專家審核以確保準確性、相關性和價值，並注重多樣性。"
+        },
+        {
+          "question": "如何成為志工？",
+          "answer": "我們歡迎各領域的志工！請將您的背景和感興趣的領域發送至 volunteer@femres.org。我們需要編輯、開發者、設計師和翻譯人員。"
+        },
+        {
+          "question": "FemRes 接受捐款嗎？",
+          "answer": "作為非營利項目，我們依賴社區支持。如果您願意提供幫助，請聯繫 partnership@femres.org。所有資金將用於平台維護和內容開發。"
+        },
+        {
+          "question": "如何報告內容問題或錯誤？",
+          "answer": "發現錯誤或失效連結？請將頁面連結和描述發送至 info@femres.org。我們將盡快處理。"
+        }
+      ]
+    },
+    "info": {
+      "title": "聯絡資訊",
+      "email": "主要郵箱：",
+      "response": "回覆時間：週一至週五 9:00 - 18:00 (UTC+8)",
+      "scope": "服務範圍：全球",
+      "note": "FemRes 是一個由志工運營的開源項目；我們致力於在 48 小時內回覆。"
+    }
+  },
+  "searchPage": {
+    "title": "搜尋",
+    "metaDescription": "在 FemRes 上搜尋女性主義內容，包括書籍、文章、視頻、播客和論文",
+    "heroTitle": "內容搜尋",
+    "subtitle": "從 {count} 個精選資源中探索女性主義",
+    "placeholder": "搜尋標題、作者、描述或話題...",
+    "filters": {
+      "clear": "清除篩選",
+      "allTopics": "所有話題"
+    },
+    "sort": {
+      "relevance": "相關度",
+      "newest": "最新發布",
+      "oldest": "最早發布",
+      "az": "標題 (A-Z)",
+      "za": "標題 (Z-A)"
+    },
+    "results": {
+      "count": "顯示 {count} 個結果",
+      "emptyTitle": "未找到結果",
+      "emptyMessage": "嘗試調整關鍵詞或篩選條件"
+    }
+  },
+  "profilePage": {
+    "title": "個人資料",
+    "description": "管理您的FemRes個人資料、收藏和按讚內容",
+    "ui": {
+      "usernameEmpty": "用戶名不能為空",
+      "updateFailed": "更新失敗",
+      "loginRequired": "請先登錄",
+      "loginDesc": "登錄後即可查看您的個人資料和內容",
+      "home": "返回首頁",
+      "editUsername": "編輯用戶名",
+      "likes": "按讚",
+      "bookmarks": "收藏",
+      "joinDate": "加入日期",
+      "logout": "退出登錄",
+      "myLikes": "我的按讚",
+      "myBookmarks": "我的收藏",
+      "contentCount": "個內容",
+      "quickActions": "快速操作",
+      "browseBooks": "瀏覽書籍",
+      "readArticles": "閱讀文章",
+      "exploreTopics": "探索主題"
+    },
+    "bookmarks": {
+      "title": "我的收藏",
+      "description": "查看您收藏的所有內容",
+      "emptyMessage": "這裡是您的私人收藏夾"
+    },
+    "likes": {
+      "title": "我的按讚",
+      "description": "查看您按讚過的所有內容",
+      "emptyMessage": "這裡記錄了您喜歡的每一刻"
+    },
+    "breadcrumb": {
+      "home": "首頁",
+      "profile": "個人資料"
+    },
+    "contentList": {
+      "loginRequired": "請先登錄",
+      "loginDesc": "登錄後即可查看您的{type}內容",
+      "loading": "加載中...",
+      "noContent": "暫無{type}內容",
+      "browseDesc": "瀏覽內容並{action}您喜歡的作品",
+      "author": "作者：",
+      "viewDetails": "查看詳情 →",
+      "types": {
+        "book": "書籍",
+        "book_plural": "書籍",
+        "article": "文章",
+        "article_plural": "文章",
+        "video": "視頻",
+        "video_plural": "視頻",
+        "podcast": "播客",
+        "podcast_plural": "播客",
+        "paper": "論文",
+        "paper_plural": "論文",
+        "film": "電影",
+        "film_plural": "電影",
+        "default": "內容"
+      },
+      "actions": {
+        "like": "按讚",
+        "bookmark": "收藏"
+      },
+      "items": {
+        "likes": "按讚",
+        "bookmarks": "收藏"
+      }
+    }
+  },
+  "discussion": {
+    "title": "討論區",
+    "description": "分享您的想法和觀點",
+    "contentType": {
+      "default": {
+        "title": "💬 討論區",
+        "description": "分享您對這個內容的看法和見解"
+      },
+      "book": {
+        "title": "📚 讀書討論",
+        "description": "分享您的閱讀感想和思考"
+      },
+      "article": {
+        "title": "📰 文章討論",
+        "description": "分享您對這篇文章的看法"
+      },
+      "video": {
+        "title": "🎥 視頻討論",
+        "description": "分享您觀看後的想法"
+      },
+      "podcast": {
+        "title": "🎧 播客討論",
+        "description": "分享您收聽後的感想"
+      },
+      "paper": {
+        "title": "📄 論文討論",
+        "description": "分享您對這篇研究的見解"
+      }
+    },
+    "noCommentsYet": "暫無評論，成為第一個發言的人吧！",
+    "shareYourThoughts": "分享您的想法...",
+    "postComment": "發表評論",
+    "reply": "回覆",
+    "posting": "發送中...",
+    "joinDiscussion": "加入討論",
+    "loginToDiscuss": "登入參與討論",
+    "loadingComments": "載入評論中...",
+    "totalComments": "共 {count} 則評論",
+    "loginRequired": "請先登入",
+    "replyTo": "回覆 {name}"
+  },
+  "contribute": {
+    "title": "提交",
+    "content": "內容",
+    "subtitle": "你的貢獻將幫助更多人了解女性主義，共同推動性別平等",
+    "types": {
+      "title": "你可以提交什麼？",
+      "subtitle": "FemRes 歡迎任何形式的高質量女性主義內容投稿",
+      "books": {
+        "title": "書籍推薦",
+        "description": "向我們推薦優秀的女性主義相關書籍，包括理論著作、文學作品、傳記等",
+        "requirements": [
+          "書籍需與女性主義或性別研究相關",
+          "提供詳細的書籍信息及推薦理由",
+          "確保書籍信息的準確性"
+        ]
+      },
+      "articles": {
+        "title": "文章分享",
+        "description": "分享高質量的文章，如學術論文、評論性文章、新聞報導等",
+        "requirements": [
+          "文章內容具有權威性或啟發性",
+          "提供文章來源和鏈接",
+          "內容與女性主義議題相關"
+        ]
+      },
+      "videos": {
+        "title": "視頻資源",
+        "description": "推薦或創作具有教育意義的視頻，包括講座、紀錄片、訪談等",
+        "requirements": [
+          "視頻內容具有較高的教育價值",
+          "提供完整的視頻信息",
+          "確保視頻和音頻質量清晰"
+        ]
+      },
+      "podcasts": {
+        "title": "播客內容",
+        "description": "分享女性主義相關的播客節目和音頻內容",
+        "requirements": [
+          "播客內容符合主題",
+          "提供播客平台鏈接",
+          "注明播客語言和時長"
+        ]
+      },
+      "academic": {
+        "title": "學術論文",
+        "description": "分享經過同行評審的學術研究和論文",
+        "requirements": [
+          "需為經過評審的學術論文",
+          "提供完整的引用信息",
+          "確保論文可以公開獲取"
+        ]
+      },
+      "translation": {
+        "title": "翻譯工作",
+        "description": "通過翻譯優質內容，讓更多人獲得學習機會",
+        "requirements": [
+          "具備相關語言能力",
+          "保證翻譯質量和準確性",
+          "尊重原文版權"
+        ]
+      }
+    },
+    "process": {
+      "title": "投稿流程",
+      "subtitle": "簡單幾步，即可分享你的內容",
+      "steps": [
+        {
+          "title": "提交內容",
+          "description": "通過表單或 GitHub 提交你的內容建議",
+          "icon": "📧"
+        },
+        {
+          "title": "質量審核",
+          "description": "我們的團隊會認真審核內容的質量與相關性",
+          "icon": "🔍"
+        },
+        {
+          "title": "發布分享",
+          "description": "審核通過的內容將正式發布在平台上",
+          "icon": "🚀"
+        }
+      ]
+    },
+    "guidelines": {
+      "title": "投稿指南",
+      "subtitle": "請遵循以下準則，以確保內容的質量",
+      "rules": [
+        {
+          "title": "內容相關性",
+          "description": "所有內容需與女性主義、性別研究或相關議題直接相關"
+        },
+        {
+          "title": "質量標準",
+          "description": "確保內容具有教育價值、準確性和可靠性"
+        },
+        {
+          "title": "尊重版權",
+          "description": "尊重知識產權，確保分享的內容不侵犯他人版權"
+        },
+        {
+          "title": "包容性",
+          "description": "歡迎多元視角，但不接受歧視性或仇恨言論"
+        }
+      ]
+    },
+    "recognition": {
+      "title": "貢獻者權益",
+      "subtitle": "感謝每一位為 FemRes 做出貢獻的朋友",
+      "benefits": [
+        "在相關內容頁面展示貢獻者信息",
+        "獲得 FemRes 社區認證勳章",
+        "優先參與平台功能內測",
+        "受邀參加線上/線下活動",
+        "接收專屬貢獻者通訊"
+      ],
+      "honors": {
+        "title": "貢獻者認定",
+        "subtitle": "感謝所有貢獻者的努力。優秀貢獻者將獲得以下權益：",
+        "items": [
+          {
+            "title": "貢獻者勳章",
+            "description": "在個人主頁展示特殊勳章",
+            "icon": "🏆"
+          },
+          {
+            "title": "署名權益",
+            "description": "內容頁面展示貢獻者信息",
+            "icon": "📜"
+          },
+          {
+            "title": "專屬權益",
+            "description": "新功能或活動的優先訪問權",
+            "icon": "🎁"
+          }
+        ]
+      }
+    },
+    "submission": {
+      "title": "開始投稿",
+      "subtitle": "請填寫下方表單提交你的內容",
+      "form": {
+        "name": "姓名",
+        "namePlaceholder": "請輸入你的姓名",
+        "email": "電子郵箱",
+        "emailPlaceholder": "your@email.com",
+        "contentType": "內容類型",
+        "contentTypePlaceholder": "請選擇內容類型",
+        "contentTypes": {
+          "book": "書籍推薦",
+          "article": "文章分享",
+          "video": "視頻資源",
+          "podcast": "播客節目",
+          "paper": "學術論文",
+          "original": "原創內容"
+        },
+        "title": "內容標題",
+        "titlePlaceholder": "請輸入內容標題",
+        "link": "相關鏈接（如有）",
+        "linkPlaceholder": "https://example.com",
+        "topics": "相關話題（可多選）",
+        "topicCategories": {
+          "theoretical": "理論學派",
+          "movement": "運動議題",
+          "critique": "批判領域",
+          "historical": "歷史脈絡",
+          "special": "特別概念"
+        },
+        "topicsList": {
+          "intersectional": "交叉性女性主義",
+          "marxist": "馬克思主義女性主義",
+          "decolonial": "去殖民女性主義",
+          "radical": "激進女性主義",
+          "liberal": "自由主義女性主義",
+          "black": "黑人女性主義",
+          "trans": "跨性別女性主義",
+          "eco": "生態女性主義",
+          "workplace": "職場平等",
+          "equalPay": "同工同酬",
+          "reproductive": "身體/生育自主",
+          "abortion": "墮胎權",
+          "antiViolence": "反性別暴力",
+          "political": "政治參與",
+          "education": "教育平等",
+          "family": "家族解放",
+          "sports": "體育平等",
+          "economic": "經濟賦權",
+          "patriarchy": "家父長制批判",
+          "capitalism": "資本主義批判",
+          "media": "媒體呈現批判",
+          "religious": "宗教家父長制批判",
+          "cultural": "文化批判",
+          "secondWave": "第二波女性主義",
+          "thirdWave": "第三波女性主義",
+          "fourthWave": "第四波女性主義",
+          "metoo": "MeToo 運動",
+          "chinese": "中國女性主義運動",
+          "emotional": "情感勞動",
+          "care": "關懷倫理",
+          "psychology": "女性主義心理學",
+          "art": "女性主義藝術"
+        },
+        "customTopics": "其他話題（可手動輸入）",
+        "customTopicsPlaceholder": "如有其他話題，請用逗號分隔",
+        "description": "內容描述",
+        "descriptionPlaceholder": "請詳細描述內容，包括核心觀點、推薦理由等...",
+        "terms": "我確認所提交的內容真實有效，並同意 FemRes 的",
+        "termsLink": "投稿協議",
+        "submit": "提交投稿"
+      }
+    },
+    "github": {
+      "title": "通過 GitHub 貢獻",
+      "subtitle": "FemRes 是一個開源項目，你也可以直接在 GitHub 上提交內容 PR 或協助改進代碼",
+      "visitRepo": "訪問 GitHub 倉庫",
+      "viewGuide": "查看貢獻指南"
+    },
+    "support": {
+      "title": "捐助支持",
+      "subtitle": "如果你覺得 FemRes 的內容有價值，請請我們喝杯咖啡。你的支持將幫助我們：",
+      "benefits": [
+        {
+          "title": "發現更多內容",
+          "description": "投入更多時間篩選高質量資源",
+          "icon": "🔍"
+        },
+        {
+          "title": "改進平台功能",
+          "description": "開發新功能，提升用戶體驗",
+          "icon": "⚡"
+        },
+        {
+          "title": "保持項目免費",
+          "description": "確保所有人都能免費獲取這些資源",
+          "icon": "💝"
+        }
+      ],
+      "button": "☕ 請我喝杯咖啡",
+      "thankYou": "每一份支持都讓我們感到溫暖 💝"
+    }
+  },
+  "film": {
+    "info": "影片資訊",
+    "director": "導演",
+    "cast": "主演",
+    "releaseDate": "上映日期",
+    "year": "年份",
+    "duration": "片長",
+    "awards": "獲獎與提名",
+    "ratingsAndLinks": "評分與連結",
+    "trailer": "預告片",
+    "imdbRating": "IMDb 評分",
+    "review": "影評與分析"
+  },
+  "video": {
+    "description": "描述",
+    "watchOriginal": "觀看原片",
+    "originalLink": "原始連結",
+    "videoInfo": "影片資訊",
+    "relatedTopics": "相關主題",
+    "relatedVideos": "相關推薦",
+    "language": "語言",
+    "addToPlaylist": "加入播放清單",
+    "unavailable": "影片無法播放",
+    "supportUs": "支持我們",
+    "supportMessage": "如果您覺得這個內容對您有幫助"
+  },
+  "articlesPage": {
+    "title": "文章",
+    "subtitle": "匯集從學術分析到時事評論的多角度深度文章，提供重要的理論視角。",
+    "stats": {
+      "totalArticles": "全 {count} 篇文章",
+      "topicCategories": "{count} 個話題分類"
+    },
+    "topicsTitle": "話題分類",
+    "allArticles": "全部文章",
+    "allArticlesHeading": "全部文章",
+    "articlesCount": "（{count} 篇）",
+    "noArticles": "找不到符合條件的文章。",
+    "sort": {
+      "latest": "最新發布",
+      "oldest": "最早發布",
+      "titleAZ": "標題 A-Z",
+      "titleZA": "標題 Z-A"
+    },
+    "guide": {
+      "title": "閱讀指南",
+      "deepReading": {
+        "title": "精讀",
+        "description": "仔細閱讀作者的核心論點與邏輯結構，理解其理論背景。"
+      },
+      "intersectionalPerspective": {
+        "title": "交叉性視角",
+        "description": "分析性別如何與種族、階級、性取向等其他身份標籤發生交叉。"
+      },
+      "criticalThinking": {
+        "title": "批判性思維",
+        "description": "質疑文章中的假設，檢視證據的可靠性，尋找被忽略的視角。"
+      }
+    }
+  },
+  "topicsPage": {
+    "title": "女性主義話題分類",
+    "subtitle": "從理論到實踐，發現女性主義內容的豐富多樣性",
+    "popularTopics": "熱門話題",
+    "popularTopicsDesc": "當前討論最廣泛的女性主義議題",
+    "categories": {
+      "theoreticalschools": "理論流派",
+      "movementissues": "運動議題",
+      "criticaldomains": "批判領域",
+      "historicalcontext": "歷史脈絡",
+      "literature&creation": "文學與創作",
+      "specialconcepts": "特殊概念"
+    },
+    "categoryDescriptions": {
+      "theoreticalschools": "理論流派",
+      "movementissues": "運動議題",
+      "criticaldomains": "批判領域",
+      "historicalcontext": "歷史脈絡",
+      "literature&creation": "文學與創作",
+      "specialconcepts": "特殊概念"
+    },
+    "contributeTitle": "提交新內容",
+    "contributeDesc": "如果你有優秀的女性主義相關內容，歡迎分享給我們",
+    "submitContent": "提交內容",
+    "searchContent": "搜索內容",
+    "topicsCount": "{count} 個主題",
+    "totalContent": "總內容數量：{count}",
+    "comingSoon": "即將推出"
+  },
+  "auth": {
+    "login": "登入",
+    "loginPrompt": "請登入以繼續",
+    "passwordMismatch": "密碼不符",
+    "invalidEmail": "無效的電子郵件地址",
+    "loginFailed": "登入失敗",
+    "registerFailed": "註冊失敗",
+    "networkError": "網路錯誤",
+    "register": "註冊",
+    "username": "使用者名稱",
+    "email": "電子郵件",
+    "password": "密碼",
+    "confirmPassword": "確認密碼",
+    "usernamePlaceholder": "請輸入使用者名稱",
+    "emailPlaceholder": "請輸入電子郵件",
+    "passwordPlaceholder": "請輸入密碼",
+    "confirmPasswordPlaceholder": "請再次輸入密碼",
+    "registerPrompt": "註冊新帳號",
+    "haveAccount": "已有帳號？立即登入",
+    "noAccount": "還沒有帳號？立即註冊",
+    "loginInProgress": "登入中...",
+    "registerInProgress": "註冊中...",
+    "fillAllFields": "請填寫所有必填欄位",
+    "fillEmailPassword": "請輸入電子郵件和密碼"
+  },
+  "topicDetailPage": {
+    "description": "探索關於{topic}的優質女性主義內容",
+    "itemsFound": "個相關內容",
+    "noRelatedContent": "暫無相關內容",
+    "comingSoon": "我們正在努力收集關於「{topic}」的優質內容，敬請期待！",
+    "browseOtherTopics": "瀏覽其他主題",
+    "relatedTopics": "相關主題",
+    "discoverMoreTitle": "發現更多內容",
+    "discoverMoreDesc": "探索更多女性主義相關主題和內容",
+    "contentTypes": {
+      "book": "書籍",
+      "film": "電影",
+      "article": "文章",
+      "video": "影音",
+      "podcast": "播客",
+      "paper": "論文"
+    }
+  },
+  "article": {
+    "relatedArticles": "相關文章"
+  },
+  "promo": {
+    "fatefuldeck": {
+      "supportedBy": "本項目由 FatefulDeck.com 提供支持",
+      "title": "FatefulDeck AI 塔羅",
+      "description": "基於 AI 的全能 10 語種塔羅占卜平台。用你的母語探索命運。",
+      "cta": "開始占卜",
+      "insightTitle": "需要更多啟示？",
+      "insightDescription": "抽取一張塔羅牌，獲取今日的指引。",
+      "insightCta": "線上抽牌",
+      "thanksSupport": "本項目由 FatefulDeck.com 提供支持",
+      "thanksSupportMessage": "FatefulDeck AI 塔羅 - 高端 10 語種 AI 塔羅佔卜平台，探索你的命運。",
+      "checkFortune": "查看今日運勢",
+      "showcaseTitle": "探索你的命運",
+      "showcaseDescription": "選擇一款塔羅牌，開啟你的探索之旅。",
+      "showcaseCTA": "探索所有牌組"
+    }
+  }
+}

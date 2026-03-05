@@ -1,0 +1,164 @@
+---
+import { createT } from "../../i18n/index";
+import { getLocaleFromUrl } from "../../i18n/index";
+
+const locale = getLocaleFromUrl(Astro.url);
+const t = createT(locale);
+
+interface Props {
+    className?: string;
+}
+
+const { className = "" } = Astro.props;
+---
+
+<div
+    class={`fateful-deck-banner relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-950 p-8 text-white shadow-2xl border border-white/10 ${className}`}
+>
+    <!-- Decorative Background -->
+    <div
+        class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_50%,rgba(120,50,255,0.2),transparent_50%),radial-gradient(circle_at_70%_50%,rgba(255,50,150,0.1),transparent_50%)]"
+    >
+    </div>
+    <div
+        class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"
+    >
+    </div>
+
+    <div class="relative flex flex-col md:flex-row items-center gap-8">
+        <!-- Icon/Graphic -->
+        <div class="relative flex-shrink-0 group">
+            <div
+                class="absolute -inset-4 bg-purple-500/20 blur-2xl rounded-full group-hover:bg-purple-500/30 transition-colors"
+            >
+            </div>
+            <!-- Decorative Card Back -->
+            <div
+                class="absolute -left-4 top-4 w-24 h-36 md:w-32 md:h-48 bg-gray-800 rounded-lg shadow-xl -rotate-12 group-hover:-rotate-15 transition-transform duration-700 opacity-40 overflow-hidden border border-white/10"
+            >
+                <img
+                    src="https://media.femres.org/images/fatefuldeck/Deck_2/back_deck_2.jpg"
+                    alt="Tarot Card Back"
+                    class="w-full h-full object-cover"
+                />
+            </div>
+            <!-- Main Card -->
+            <div
+                class="relative w-24 h-36 md:w-32 md:h-48 flex items-center justify-center bg-gray-900 border border-white/20 rounded-lg rotate-3 group-hover:rotate-0 transition-all duration-500 shadow-2xl overflow-hidden"
+            >
+                <img
+                    src="https://media.femres.org/images/fatefuldeck/Deck_1/justice_1.jpg"
+                    alt="Justice Tarot Card"
+                    class="w-full h-full object-cover"
+                />
+                <div
+                    class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="flex-grow text-center md:text-left">
+            <div
+                class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-xs font-medium text-purple-200 mb-4 tracking-wider uppercase"
+            >
+                <span class="relative flex h-2 w-2">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"
+                    ></span>
+                    <span
+                        class="relative inline-flex rounded-full h-2 w-2 bg-purple-500"
+                    ></span>
+                </span>
+                <span
+                    >{
+                        t("promo.fatefuldeck.supportedBy") ||
+                            "Supported by FatefulDeck.com"
+                    }</span
+                >
+            </div>
+
+            <h3
+                class="text-2xl md:text-3xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-100 to-white"
+            >
+                {t("promo.fatefuldeck.title") || "FatefulDeck AI Tarot"}
+            </h3>
+
+            <p class="text-indigo-100/80 text-lg mb-6 max-w-xl leading-relaxed">
+                {
+                    t("promo.fatefuldeck.description") ||
+                        "Premium 10-language Tarot reading platform powered by AI. Explore your destiny in your own language."
+                }
+            </p>
+
+            <div
+                class="flex flex-wrap items-center justify-center md:justify-start gap-4"
+            >
+                <a
+                    href="https://fatefuldeck.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center px-6 py-3 rounded-xl bg-white text-indigo-950 font-bold hover:bg-purple-50 transition-all transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg"
+                >
+                    {t("promo.fatefuldeck.cta") || "Start Reading"}
+                    <svg
+                        class="ml-2 w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </a>
+
+                <div class="flex -space-x-2">
+                    {
+                        [
+                            "🇺🇸",
+                            "🇨🇳",
+                            "🇯🇵",
+                            "🇫🇷",
+                            "🇩🇪",
+                            "🇪🇸",
+                            "🇰🇷",
+                            "🇮🇹",
+                            "🇵🇹",
+                            "🇷🇺",
+                        ].map((flag) => (
+                            <span
+                                class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-sm"
+                                title="Supported Language"
+                            >
+                                {flag}
+                            </span>
+                        ))
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fateful-deck-banner {
+        background-size: 200% 200%;
+        animation: gradient-shift 15s ease infinite;
+    }
+
+    @keyframes gradient-shift {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+</style>

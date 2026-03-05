@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import UserProfile from '../../components/UserProfile';
+import { createT } from '../../i18n/index';
+
+const t = createT('zh-CN');
+const uiStrings = t('profilePage.ui') as unknown as Record<string, string>;
+---
+
+<Layout 
+  title={`${t('profilePage.title')} - FemRes`}
+  description={t('profilePage.description')}
+>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <UserProfile client:load locale="zh-CN" uiStrings={uiStrings} />
+  </div>
+</Layout>

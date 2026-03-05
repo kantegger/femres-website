@@ -1,0 +1,27 @@
+---
+export const prerender = true;
+
+import Layout from "../../../layouts/Layout.astro";
+import UserProfile from "../../../components/UserProfile";
+import { createT } from "../../../i18n/index";
+import { type Locale } from "../../../i18n/types";
+
+export function getStaticPaths() {
+  const locales = ["en", "zh-CN", "zh-TW", "ja", "fr"];
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const { locale } = Astro.params;
+const currentLocale = locale as Locale;
+const t = createT(currentLocale);
+const uiStrings = t("profilePage.ui") as any;
+---
+
+<Layout
+  title={`${t("profilePage.title")} - FemRes`}
+  description={t("profilePage.description")}
+>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <UserProfile client:load locale={currentLocale} uiStrings={uiStrings} />
+  </div>
+</Layout>

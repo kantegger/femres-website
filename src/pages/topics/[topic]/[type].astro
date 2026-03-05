@@ -1,0 +1,183 @@
+---
+export const prerender = true;
+
+import Layout from '../../../layouts/Layout.astro';
+import ContentCard from '../../../components/ContentCard.astro';
+import BookCard from '../../../components/BookCard.astro';
+import PodcastCard from '../../../components/PodcastCard.astro';
+import VideoCard from '../../../components/VideoCard.astro';
+import { getCollection } from 'astro:content';
+import { createT, getLocalizedPath, getLocaleFromUrl } from '../../../i18n/index';
+import { getTopicIcon, getTopicTranslation } from '../../../i18n/topicsUtils';
+
+const currentLocale = getLocaleFromUrl(Astro.url) || 'zh-CN';
+const t = createT(currentLocale);
+
+export async function getStaticPaths() {
+  const books = await getCollection('books');
+  const films = await getCollection('films');
+  const articles = await getCollection('articles');
+  const videos = await getCollection('videos');
+  const podcasts = await getCollection('podcasts');
+  const papers = await getCollection('papers');
+  
+  const allContent = [
+    ...books.map(item => ({ ...item, contentType: 'book' as const })),
+    ...films.map(item => ({ ...item, contentType: 'film' as const })),
+    ...articles.map(item => ({ ...item, contentType: 'article' as const })),
+    ...videos.map(item => ({ ...item, contentType: 'video' as const })),
+    ...podcasts.map(item => ({ ...item, contentType: 'podcast' as const })),
+    ...papers.map(item => ({ ...item, contentType: 'paper' as const }))
+  ];
+
+  // Get all unique topics
+  const allTopics = [...new Set(allContent.flatMap(item => item.data.topics))];
+  
+  // Define supported types
+  const types = [
+    { param: 'books', contentType: 'book' },
+    { param: 'films', contentType: 'film' },
+    { param: 'articles', contentType: 'article' },
+    { param: 'videos', contentType: 'video' },
+    { param: 'podcasts', contentType: 'podcast' },
+    { param: 'papers', contentType: 'paper' }
+  ];
+
+  // Generate paths for every topic + type combination
+  return allTopics.flatMap(topic => 
+    types.map(typeObj => ({
+      params: { topic: topic, type: typeObj.param },
+      props: { topic, typeObj, allContent }
+    }))
+  );
+}
+
+const { topic, typeObj, allContent } = Astro.props;
+const decodedTopic = decodeURIComponent(topic);
+const translatedTopic = getTopicTranslation(decodedTopic, currentLocale as 'zh-CN' | 'en');
+
+// Filter content
+const typeContent = allContent.filter(item => {
+  if (!item.data.topics.includes(decodedTopic)) return false;
+  if (item.contentType !== typeObj.contentType) return false;
+
+  // Root page is always Simplified Chinese, so we exclude all content with language suffixes
+  return !item.slug.endsWith('-en') && !item.slug.endsWith('-tw') && !item.slug.endsWith('-ja') && !item.slug.endsWith('-fr');
+}).sort((a, b) => new Date(b.data.publishDate || b.data.releaseDate).getTime() - new Date(a.data.publishDate || a.data.releaseDate).getTime());
+
+const typeLabels: Record<string, string> = {
+  book: t('nav.books'),
+  film: t('nav.films'),
+  article: t('nav.articles'),
+  video: t('nav.videos'),
+  podcast: t('nav.podcasts'),
+  paper: t('nav.papers')
+};
+---
+
+<Layout 
+  title={`${translatedTopic} - ${typeLabels[typeObj.contentType]} - FemRes`} 
+  description={t('topicDetailPage.description').replace('{topic}', translatedTopic)}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-purple-100 dark:bg-purple-900 rounded-full mb-6">
+        <span class="text-3xl">
+          {getTopicIcon(decodedTopic)}
+        </span>
+      </div>
+      
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        {translatedTopic} - {typeLabels[typeObj.contentType]}
+      </h1>
+      
+      <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+        {t('common.itemsCount', { count: typeContent.length })}
+      </p>
+
+      <!-- Breadcrumb -->
+      <nav class="flex justify-center mb-8">
+        <ol class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+          <li><a href={getLocalizedPath('/', currentLocale)} class="hover:text-purple-600 dark:hover:text-purple-400">{t('nav.home')}</a></li>
+          <li><span class="mx-2">/</span></li>
+          <li><a href={getLocalizedPath('topics', currentLocale)} class="hover:text-purple-600 dark:hover:text-purple-400">{t('nav.topics')}</a></li>
+          <li><span class="mx-2">/</span></li>
+          <li><a href={getLocalizedPath(`topics/${topic}`, currentLocale)} class="hover:text-purple-600 dark:hover:text-purple-400">{translatedTopic}</a></li>
+           <li><span class="mx-2">/</span></li>
+          <li class="text-gray-900 dark:text-white font-medium">{typeLabels[typeObj.contentType]}</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Content Grid -->
+    {typeContent.length > 0 ? (
+       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {typeContent.map(item => {
+           if (item.contentType === 'book') {
+             return <BookCard 
+                title={item.data.title}
+                author={item.data.author}
+                description={item.data.description}
+                coverImage={item.data.coverImage}
+                publishDate={item.data.publishDate}
+                slug={item.slug}
+                locale={currentLocale}
+                topics={item.data.topics}
+                isbn={item.data.isbn}
+             />
+           } else if (item.contentType === 'podcast') {
+              return <PodcastCard 
+                  title={item.data.title}
+                  author={item.data.author}
+                  description={item.data.description}
+                  slug={item.slug}
+                  locale={currentLocale}
+                  thumbnail={item.data.thumbnail}
+                  publishDate={item.data.publishDate}
+                  duration={item.data.duration}
+                  sourceUrl={item.data.sourceUrl}
+                  topics={item.data.topics}
+                  episodeNumber={item.data.episodeNumber}
+              />
+           } else if (item.contentType === 'video') {
+              return <VideoCard 
+                  title={item.data.title}
+                  author={item.data.author}
+                  description={item.data.description}
+                  slug={item.slug}
+                  locale={currentLocale}
+                  thumbnail={item.data.thumbnail}
+                  publishDate={item.data.publishDate}
+                  duration={item.data.duration}
+                  sourceUrl={item.data.sourceUrl}
+                  topics={item.data.topics}
+              />
+           } else {
+             // Article, Paper, etc. use ContentCard
+             return <ContentCard 
+                title={item.data.title}
+                author={item.data.author}
+                description={item.data.description}
+                contentType={item.contentType}
+                topics={item.data.topics}
+                publishDate={item.data.publishDate || (item.data as any).releaseDate}
+                sourceUrl={item.data.sourceUrl}
+                slug={item.slug}
+                locale={currentLocale}
+                readingTime={item.data.readingTime}
+                duration={item.data.duration}
+             />
+           }
+        })}
+       </div>
+    ) : (
+      <div class="text-center py-12">
+        <p class="text-gray-600 dark:text-gray-400">{t('topicDetailPage.noRelatedContent')}</p>
+        <a href={getLocalizedPath(`topics/${topic}`, currentLocale)} class="text-purple-600 hover:text-purple-700 mt-4 inline-block">{t('topicDetailPage.browseOtherTopics')}</a>
+      </div>
+    )}
+
+  </div>
+</Layout>

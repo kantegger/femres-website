@@ -1,0 +1,249 @@
+---
+import { ViewTransitions } from "astro:transitions";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import MusicPlayer from "../components/MusicPlayer";
+import "../styles/global.css";
+import "../i18n/translations";
+import {
+  getLocaleFromUrl,
+  createT,
+  getLocalizedPath,
+  type Locale,
+} from "../i18n/index";
+
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string; // 支持自定义封面图
+}
+
+// 获取当前语言和翻译函数
+const locale = getLocaleFromUrl(Astro.url);
+const t = createT(locale);
+
+const { title, description = t("common.siteDescription"), image } = Astro.props;
+
+// 构建绝对路径辅助函数
+const siteBase = "https://www.femres.org";
+const currentPath = Astro.url.pathname;
+const canonicalUrl = new URL(currentPath, siteBase).href;
+
+// 构建绝对路径的 hreflang 链接
+const getAbsoluteLocalizedPath = (path: string, targetLocale: Locale) => {
+  const relativePath = getLocalizedPath(path, targetLocale);
+  return new URL(relativePath, siteBase).href;
+};
+
+// Open Graph Locale 映射
+const ogLocaleMap: Record<string, string> = {
+  "zh-CN": "zh_CN",
+  en: "en_US",
+  ja: "ja_JP",
+  fr: "fr_FR",
+  "zh-TW": "zh_TW",
+};
+const ogLocale = ogLocaleMap[locale] || "en_US";
+
+// 处理 OG 图片
+const ogImage = image
+  ? new URL(image, siteBase).href
+  : new URL("/og-default.jpg", siteBase).href; // 默认或者传入的图片
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    {/* Google Fonts */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    {/* Robots Control */}
+    <meta name="robots" content="index, follow" />
+
+    {/* Canonical Tag */}
+    <link rel="canonical" href={canonicalUrl} />
+
+    {/* Alternate language links (Absolute URLs) */}
+    <link
+      rel="alternate"
+      hreflang="zh-CN"
+      href={getAbsoluteLocalizedPath(currentPath, "zh-CN" as Locale)}
+    />
+    <link
+      rel="alternate"
+      hreflang="en"
+      href={getAbsoluteLocalizedPath(currentPath, "en" as Locale)}
+    />
+    <link
+      rel="alternate"
+      hreflang="ja"
+      href={getAbsoluteLocalizedPath(currentPath, "ja" as Locale)}
+    />
+    <link
+      rel="alternate"
+      hreflang="fr"
+      href={getAbsoluteLocalizedPath(currentPath, "fr" as Locale)}
+    />
+    <link
+      rel="alternate"
+      hreflang="zh-TW"
+      href={getAbsoluteLocalizedPath(currentPath, "zh-TW" as Locale)}
+    />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={getAbsoluteLocalizedPath(currentPath, "en" as Locale)}
+    />
+
+    {/* Open Graph / Facebook */}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+
+    {/* Twitter */}
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImage} />
+
+    <ViewTransitions />
+    <slot name="head" />
+  </head>
+  <body
+    class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors flex flex-col"
+  >
+    <Header locale={locale} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+    <div transition:persist="music-player">
+      <MusicPlayer client:load />
+    </div>
+  </body>
+</html>
+
+<style>
+  html {
+    /* 默认基础字体 (英文/混合) */
+    font-family:
+      "Inter", "Noto Sans SC", "Noto Sans TC", "Noto Sans JP", system-ui,
+      sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  /* 简体中文专用 */
+  html[lang^="zh-CN"],
+  html[lang^="zh-Hans"] {
+    font-family:
+      "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+
+  /* 繁体中文专用 - 解决细瘦问题 */
+  html[lang^="zh-TW"],
+  html[lang^="zh-Hant"] {
+    font-family:
+      "Inter", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  }
+
+  /* 日文专用 - 解决歪斜/衬线回退问题 */
+  html[lang^="ja"] {
+    font-family:
+      "Inter", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  }
+
+  /* 法文 (复用基础设置，确保西文用 Inter) */
+  html[lang^="fr"] {
+    font-family: "Inter", system-ui, sans-serif;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+</style>
+
+<script is:inline>
+  function initTheme() {
+    // 获取存储的主题或系统偏好
+    const storedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+
+    // 确定初始主题
+    const isDark = storedTheme === "dark" || (!storedTheme && prefersDark);
+
+    // 应用主题
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+
+    return isDark;
+  }
+
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.contains("dark");
+
+    if (isDark) {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    }
+  }
+
+  // 立即初始化主题（防止闪烁）
+  initTheme();
+
+  // 处理视图转换后的主题状态保持
+  document.addEventListener("astro:after-swap", initTheme);
+
+  // 页面加载完成（包括初始加载和视图转换后）绑定事件
+  document.addEventListener("astro:page-load", function () {
+    // 确保主题状态正确
+    initTheme();
+
+    const themeToggle = document.getElementById("theme-toggle");
+    const themeToggleMobile = document.getElementById("theme-toggle-mobile");
+
+    if (themeToggle) {
+      // 移除旧的事件监听器（如果是重新绑定）
+      themeToggle.removeEventListener("click", toggleTheme);
+      themeToggle.addEventListener("click", toggleTheme);
+    }
+
+    if (themeToggleMobile) {
+      themeToggleMobile.removeEventListener("click", toggleTheme);
+      themeToggleMobile.addEventListener("click", toggleTheme);
+    }
+  });
+</script>

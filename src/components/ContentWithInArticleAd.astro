@@ -1,0 +1,62 @@
+---
+import TarotInsightCard from './promo/TarotInsightCard.astro';
+
+export interface Props {
+  content: any;
+}
+
+const { content } = Astro.props;
+const { Content } = await content.render();
+
+// Estimate if we should show an ad based on word count/body length
+// to avoid rendering the template and script for very short articles.
+const body = content.body || '';
+const estimatedParagraphs = body.split(/\n\s*\n/).length;
+const shouldInsertAd = estimatedParagraphs > 4;
+---
+
+<div class="content-with-ad">
+  <div id="article-body-content" class="article-body-content">
+    <Content />
+  </div>
+
+  {shouldInsertAd && (
+    <template id="in-article-ad-template">
+      <div class="my-12 not-prose">
+        <TarotInsightCard />
+      </div>
+    </template>
+
+    <script is:inline>
+      (function() {
+        const contentArea = document.getElementById('article-body-content');
+        const template = document.getElementById('in-article-ad-template');
+        
+        if (contentArea && template) {
+          const paragraphs = contentArea.querySelectorAll('p');
+          
+          // Only insert if we have enough content
+          if (paragraphs.length >= 4) {
+            // Target approximately 40% into the article, but at least after paragraph 2
+            const targetIndex = Math.max(1, Math.floor(paragraphs.length * 0.4));
+            const targetP = paragraphs[targetIndex];
+            
+            if (targetP) {
+              const adContent = template.content.cloneNode(true);
+              targetP.after(adContent);
+            }
+          }
+        }
+      })();
+    </script>
+  )}
+</div>
+
+<style>
+  .article-body-content {
+    display: contents;
+  }
+  .hidden {
+    display: none;
+  }
+</style>

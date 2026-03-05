@@ -1,0 +1,227 @@
+---
+import {
+  createT,
+  getLocalizedPath,
+  getLocaleFromUrl,
+  formatDate,
+  type Locale,
+} from "../i18n/index";
+import { getTopicTranslation, findTopicByName } from "../i18n/topicsUtils";
+
+export interface Props {
+  title: string;
+  author: string;
+  description: string;
+  contentType: "book" | "article" | "video" | "podcast" | "paper";
+  topics: string[];
+  publishDate: Date;
+  sourceUrl: string;
+  slug: string;
+  readingTime?: number;
+  duration?: number | string;
+  locale?: Locale;
+}
+
+const {
+  title,
+  author,
+  description,
+  contentType,
+  topics,
+  publishDate,
+  sourceUrl,
+  slug,
+  readingTime,
+  duration,
+  locale,
+} = Astro.props;
+
+const currentLocale = locale || getLocaleFromUrl(Astro.url);
+const t = createT(currentLocale);
+
+const contentTypeIcons = {
+  book: "📚",
+  article: "📰",
+  video: "🎥",
+  podcast: "🎧",
+  paper: "📄",
+};
+
+const contentTypeLabels = {
+  book: t("common.contentTypes.book"),
+  article: t("common.contentTypes.article"),
+  video: t("common.contentTypes.video"),
+  podcast: t("common.contentTypes.podcast"),
+  paper: t("common.contentTypes.paper"),
+};
+
+const formatDateLocal = (date: Date) => {
+  return formatDate(date, currentLocale);
+};
+
+// 统一移除语言后缀以生成干净的URL路径
+let cleanSlug = slug;
+if (slug.endsWith("-en")) {
+  cleanSlug = slug.slice(0, -3);
+} else if (slug.endsWith("-ja")) {
+  cleanSlug = slug.slice(0, -3);
+} else if (slug.endsWith("-fr")) {
+  cleanSlug = slug.slice(0, -3);
+}
+const contentLink = getLocalizedPath(
+  `${contentType}s/${cleanSlug}`,
+  currentLocale,
+);
+---
+
+<article
+  class="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200 dark:border-gray-700 overflow-hidden group"
+>
+  <div class="p-6">
+    <!-- Content Type Badge -->
+    <div class="flex items-center justify-between mb-3">
+      <span
+        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
+      >
+        <span class="mr-1">{contentTypeIcons[contentType]}</span>
+        {contentTypeLabels[contentType]}
+      </span>
+    </div>
+
+    <!-- Title -->
+    <h3
+      class="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors"
+    >
+      <a href={contentLink} class="hover:underline">
+        {title}
+      </a>
+    </h3>
+
+    <!-- Author and Date -->
+    <div
+      class="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-3"
+    >
+      <span>{author}</span>
+      <span class="mx-2">•</span>
+      <time datetime={publishDate.toISOString()}>
+        {formatDateLocal(publishDate)}
+      </time>
+      {
+        (readingTime || duration) && (
+          <>
+            <span class="mx-2">•</span>
+            <span>
+              {readingTime
+                ? t("common.durationFormat.mins", { mins: readingTime })
+                : t("common.durationFormat.mins", { mins: duration })}
+            </span>
+          </>
+        )
+      }
+    </div>
+
+    <!-- Description -->
+    <p class="text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">
+      {description}
+    </p>
+
+    <!-- Topics -->
+    <div class="flex flex-wrap gap-2 mb-4">
+      {
+        topics.slice(0, 3).map((topic) => {
+          const translatedTopic = getTopicTranslation(
+            topic,
+            currentLocale as any,
+          );
+          return (
+            <span class="inline-block px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md">
+              {translatedTopic}
+            </span>
+          );
+        })
+      }
+      {
+        topics.length > 3 && (
+          <span class="inline-block px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-md">
+            +{topics.length - 3}
+          </span>
+        )
+      }
+    </div>
+
+    <!-- Actions -->
+    <div
+      class="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700"
+    >
+      <div class="flex items-center space-x-3">
+        <button
+          type="button"
+          class="text-gray-400 hover:text-red-500 transition-colors"
+          title={t("common.favorite", { defaultValue: "Favorite" })}
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            ></path>
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          class="text-gray-400 hover:text-blue-500 transition-colors"
+          title={t("common.share", { defaultValue: "Share" })}
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <a
+        href={contentLink}
+        class="inline-flex items-center text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-200 font-medium text-sm transition-colors"
+      >
+        {t("common.readMore")}
+        <svg
+          class="w-4 h-4 ml-1"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

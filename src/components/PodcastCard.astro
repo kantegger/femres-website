@@ -1,0 +1,234 @@
+---
+import InteractionButtons from './InteractionButtons';
+import '../i18n/translations';
+import { createT, getLocalizedPath, getLocaleFromUrl, formatRelativeTime, type Locale } from '../i18n/index';
+import { getTopicTranslation } from '../i18n/topicsUtils';
+
+export interface Props {
+  title: string;
+  titleEn?: string;
+  author: string;
+  description: string;
+  descriptionEn?: string;
+  thumbnail?: string;
+  publishDate: Date;
+  duration?: number | string;
+  sourceUrl: string;
+  slug: string;
+  topics: string[];
+  locale?: Locale;
+  episodeNumber?: number;
+  transcript?: string;
+  transcriptEn?: string;
+}
+
+const { title, titleEn, author, description, descriptionEn, thumbnail, publishDate, duration, sourceUrl, slug, topics, episodeNumber, transcript, transcriptEn, locale } = Astro.props;
+
+const currentLocale = locale || getLocaleFromUrl(Astro.url);
+const t = createT(currentLocale);
+
+// 根据语言选择显示内容
+const displayTitle = (currentLocale === 'en' && titleEn) ? titleEn : title;
+const displayDescription = (currentLocale === 'en' && descriptionEn) ? descriptionEn : description;
+
+// 生成本地化链接
+// 移除语言后缀以生成干净的URL路径
+let cleanSlug = slug;
+if (slug.endsWith('-en')) {
+  cleanSlug = slug.slice(0, -3);
+} else if (slug.endsWith('-ja')) {
+  cleanSlug = slug.slice(0, -3);
+} else if (slug.endsWith('-fr')) {
+  cleanSlug = slug.slice(0, -3);
+} else if (slug.endsWith('-tw')) {
+  cleanSlug = slug.slice(0, -3);
+}
+const podcastLink = getLocalizedPath(`podcasts/${cleanSlug}`, currentLocale);
+
+// 识别播客平台
+const getPlatform = (url: string) => {
+  if (url.includes('spotify.com')) {
+    return { name: 'Spotify', icon: '🎵', color: 'bg-green-500' };
+  } else if (url.includes('apple.com/podcasts') || url.includes('podcasts.apple.com')) {
+    return { name: 'Apple Podcasts', icon: '🎧', color: 'bg-purple-600' };
+  } else if (url.includes('soundcloud.com')) {
+    return { name: 'SoundCloud', icon: '☁️', color: 'bg-orange-500' };
+  } else if (url.includes('google.com/podcasts')) {
+    return { name: 'Google Podcasts', icon: '🎙️', color: 'bg-blue-500' };
+  } else {
+    return { name: 'Podcast', icon: '🎧', color: 'bg-gray-500' };
+  }
+};
+
+const platform = getPlatform(sourceUrl);
+
+const formatDurationLocale = (durationVal?: number | string) => {
+  if (!durationVal) return '';
+  if (typeof durationVal === 'string') {
+    if (durationVal.includes(':')) return durationVal;
+    const num = parseInt(durationVal);
+    if (isNaN(num)) return durationVal;
+    durationVal = num;
+  }
+  const minutes = durationVal as number;
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  if (hours > 0) {
+    return t('common.durationFormat.hoursMins', { hours, mins });
+  }
+  return t('common.durationFormat.mins', { mins });
+};
+
+const formatDateLocal = (date: Date) => {
+  return formatRelativeTime(date, currentLocale);
+};
+---
+
+<article class="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl glass-card glass-hover transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700">
+  <a href={podcastLink} class="block">
+    <div class="p-6">
+      <!-- Episode Info -->
+      {episodeNumber && (
+        <div class="mb-4">
+          <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-1 rounded-md">
+            {t('common.episode', { number: episodeNumber })}
+          </span>
+        </div>
+      )}
+
+      <!-- Podcast Content -->
+      <div class="flex gap-4">
+        <!-- Audio Visual Element -->
+        <div class="flex-shrink-0">
+          {thumbnail ? (
+            <div class="w-20 h-20 rounded-xl overflow-hidden relative">
+              <img
+                src={thumbnail}
+                alt={displayTitle}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <!-- Audio Wave Overlay -->
+              <div class="absolute inset-0 flex items-end justify-center pb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="flex items-center gap-1">
+                  <div class="w-1 bg-white/90 rounded-full group-hover:animate-pulse shadow-sm" style="height: 8px; animation-delay: 0ms;"></div>
+                  <div class="w-1 bg-white/80 rounded-full group-hover:animate-pulse shadow-sm" style="height: 12px; animation-delay: 150ms;"></div>
+                  <div class="w-1 bg-white/90 rounded-full group-hover:animate-pulse shadow-sm" style="height: 6px; animation-delay: 300ms;"></div>
+                  <div class="w-1 bg-white rounded-full group-hover:animate-pulse shadow-sm" style="height: 14px; animation-delay: 450ms;"></div>
+                  <div class="w-1 bg-white/80 rounded-full group-hover:animate-pulse shadow-sm" style="height: 10px; animation-delay: 600ms;"></div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center relative overflow-hidden">
+              <!-- Background Audio Waves -->
+              <div class="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300">
+                <div class="flex items-center justify-center h-full gap-1">
+                  <div class="w-1 bg-white rounded-full group-hover:animate-pulse" style="height: 12px; animation-delay: 0ms;"></div>
+                  <div class="w-1 bg-white rounded-full group-hover:animate-pulse" style="height: 18px; animation-delay: 150ms;"></div>
+                  <div class="w-1 bg-white rounded-full group-hover:animate-pulse" style="height: 8px; animation-delay: 300ms;"></div>
+                  <div class="w-1 bg-white rounded-full group-hover:animate-pulse" style="height: 22px; animation-delay: 450ms;"></div>
+                  <div class="w-1 bg-white rounded-full group-hover:animate-pulse" style="height: 14px; animation-delay: 600ms;"></div>
+                </div>
+              </div>
+              <!-- Play Icon -->
+              <span class="text-2xl text-white relative z-10">🎧</span>
+            </div>
+          )}
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1 min-w-0">
+          <!-- Title with Platform Badge -->
+          <div class="flex items-start justify-between mb-2">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors flex-1 mr-3">
+              {displayTitle}
+            </h3>
+            <div class={`${platform.color} text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 flex-shrink-0`}>
+              <span>{platform.icon}</span>
+              <span>{platform.name}</span>
+            </div>
+          </div>
+
+          <!-- Host & Meta -->
+          <div class="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-3">
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a2 2 0 012-2h2a2 2 0 012 2v3a3 3 0 01-3 3z"></path>
+              </svg>
+              <span class="font-medium">{author}</span>
+            </div>
+            <span class="mx-2">•</span>
+            <span>{formatDateLocal(publishDate)}</span>
+            {duration && (
+              <>
+                <span class="mx-2">•</span>
+                <span class="flex items-center">
+                  <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  {formatDurationLocale(duration)}
+                </span>
+              </>
+            )}
+          </div>
+
+          <!-- Description -->
+          <p class="text-gray-700 dark:text-gray-300 text-sm mb-3 line-clamp-2">
+            {displayDescription}
+          </p>
+
+          <!-- Topics -->
+          <div class="flex flex-wrap gap-1.5">
+            {topics.slice(0, 4).map(topic => {
+              const translatedTopic = getTopicTranslation(topic, currentLocale as any);
+              return (
+                <span class="inline-block px-2 py-1 text-xs bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-md">
+                  #{translatedTopic}
+                </span>
+              );
+            })}
+            {topics.length > 4 && (
+              <span class="inline-block px-2 py-1 text-xs text-gray-500 dark:text-gray-500">
+                +{topics.length - 4}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Bar -->
+      <div class="flex items-center justify-between mt-5 pt-4 border-t border-gray-100 dark:border-gray-700">
+        <div onclick="event.stopPropagation(); event.preventDefault();">
+          <InteractionButtons
+            contentId={`podcast-${slug}`}
+            contentType="podcast"
+            t={{
+              like: t('interactions.like'),
+              unlike: t('interactions.unlike'),
+              bookmark: t('interactions.bookmark'),
+              unbookmark: t('interactions.unbookmark'),
+              loginToInteract: t('interactions.loginToInteract')
+            }}
+            client:visible
+          />
+        </div>
+
+        <div class="flex items-center text-purple-600 dark:text-purple-400 text-sm font-medium group-hover:underline">
+          <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+          </svg>
+          {t('common.listenPodcast')}
+        </div>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

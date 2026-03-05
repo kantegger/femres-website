@@ -1,0 +1,116 @@
+---
+export interface Props {
+  type:
+    | "Book"
+    | "Movie"
+    | "Article"
+    | "ScholarlyArticle"
+    | "VideoObject"
+    | "PodcastEpisode"
+    | "WebSite";
+  data: Record<string, any>;
+  url?: string;
+}
+
+const { type, data, url } = Astro.props;
+const currentUrl = url || Astro.url.href;
+
+let schema: Record<string, any> = {
+  "@context": "https://schema.org",
+  "@type": type,
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": currentUrl,
+  },
+  url: currentUrl,
+};
+
+// Data normalization
+if (type === "Book") {
+  schema = {
+    ...schema,
+    name: data.title,
+    author: [
+      {
+        "@type": "Person",
+        name: data.author,
+      },
+    ],
+    datePublished: data.publicationYear?.toString(),
+    description: data.description,
+    image: data.coverImage,
+    isbn: data.isbn || undefined,
+    inLanguage: data.language || undefined,
+  };
+} else if (type === "Movie") {
+  schema = {
+    ...schema,
+    name: data.title,
+    director: [
+      {
+        "@type": "Person",
+        name: data.director,
+      },
+    ],
+    datePublished: data.releaseYear?.toString(),
+    description: data.description,
+    image: data.coverImage,
+    inLanguage: data.language || undefined,
+  };
+} else if (type === "ScholarlyArticle" || type === "Article") {
+  schema = {
+    ...schema,
+    headline: data.title,
+    author: [
+      {
+        "@type": "Person",
+        name: data.author,
+      },
+    ],
+    datePublished: data.publishDate,
+    description: data.description || data.abstract,
+    image: data.coverImage,
+  };
+} else if (type === "VideoObject") {
+  schema = {
+    ...schema,
+    name: data.title,
+    description: data.description,
+    thumbnailUrl: data.coverImage ? [data.coverImage] : undefined,
+    uploadDate: data.publishDate,
+    author: {
+      "@type": "Person",
+      name: data.author,
+    },
+  };
+} else if (type === "PodcastEpisode") {
+  schema = {
+    ...schema,
+    name: data.title,
+    description: data.description,
+    datePublished: data.publishDate,
+    associatedMedia: {
+      "@type": "MediaObject",
+      contentUrl: data.sourceUrl,
+    },
+  };
+} else if (type === "WebSite") {
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: data.name || "FemRes",
+    url: currentUrl,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${new URL(currentUrl).origin}/search?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+---
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(schema)}
+  is:inline
+/>

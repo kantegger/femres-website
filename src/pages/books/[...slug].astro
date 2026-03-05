@@ -1,0 +1,502 @@
+---
+export const prerender = true;
+
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import SchemaMarkup from "../../components/seo/SchemaMarkup.astro";
+import InteractionButtons from "../../components/InteractionButtons";
+import Discussion from "../../components/Discussion";
+import BookCard from "../../components/BookCard.astro";
+import { createT, getLocalizedPath } from "../../i18n/index";
+import FatefulDeckMiniPromo from "../../components/promo/FatefulDeckMiniPromo.astro";
+import { getTopicTranslation } from "../../i18n/topicsUtils";
+
+export async function getStaticPaths() {
+  const books = await getCollection("books");
+
+  // Filter for zh-CN books (no suffix)
+  const zhBooks = books.filter(
+    (book) =>
+      !book.slug.endsWith("-en") &&
+      !book.slug.endsWith("-tw") &&
+      !book.slug.endsWith("-ja") &&
+      !book.slug.endsWith("-fr"),
+  );
+
+  return zhBooks.map((book) => ({
+    params: { slug: book.slug },
+    props: { book },
+  }));
+}
+
+const { book } = Astro.props;
+const currentLocale = "zh-CN";
+const t = createT(currentLocale);
+
+const { Content } = await book.render();
+
+// Get related books
+const allBooks = await getCollection("books");
+const relatedBooks = allBooks
+  .filter((b) => {
+    const isDifferent = b.slug !== book.slug;
+    const isZh =
+      !b.slug.endsWith("-en") &&
+      !b.slug.endsWith("-tw") &&
+      !b.slug.endsWith("-ja") &&
+      !b.slug.endsWith("-fr");
+    if (!isDifferent || !isZh) return false;
+    const hasCommonTopic = b.data.topics.some((topic) =>
+      book.data.topics.includes(topic),
+    );
+    return hasCommonTopic;
+  })
+  .slice(0, 3);
+
+// Format date
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString("zh-CN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+// Get language name translation
+const getLanguageName = (code: string | undefined) => {
+  if (!code) return t("languages.en");
+  const translated = t(`languages.${code}`);
+  return translated.startsWith("languages.") ? code : translated;
+};
+
+// Breadcrumb links
+const homeLink = "/";
+const booksLink = "/books";
+---
+
+<Layout
+  title={`${book.data.title} - ${book.data.author} - FemRes`}
+  description={book.data.description}
+>
+  <SchemaMarkup slot="head" type="Book" data={book.data} />
+  <article class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-8">
+      <div
+        class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400"
+      >
+        <a
+          href={homeLink}
+          class="hover:text-purple-600 dark:hover:text-purple-400"
+          >{t("nav.home")}</a
+        >
+        <span>/</span>
+        <a
+          href={booksLink}
+          class="hover:text-purple-600 dark:hover:text-purple-400"
+          >{t("nav.books")}</a
+        >
+        <span>/</span>
+        <span class="text-gray-900 dark:text-white line-clamp-1"
+          >{book.data.title}</span
+        >
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-12">
+      <h1
+        class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6 leading-tight"
+      >
+        {book.data.title}
+      </h1>
+
+      <!-- Description -->
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 mb-8">
+        <p
+          class="text-gray-700 dark:text-gray-300 leading-relaxed text-base mb-4"
+        >
+          {book.data.description}
+        </p>
+        <!-- Topics -->
+        <div class="mb-4">
+          <div class="flex flex-wrap gap-2">
+            {
+              book.data.topics.map((topic) => (
+                <a
+                  href={`/topics/${encodeURIComponent(topic)}`}
+                  class="inline-block px-3 py-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-full text-sm hover:border-purple-500 dark:hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                >
+                  {getTopicTranslation(topic, "zh-CN")}
+                </a>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- Interaction Buttons -->
+        <div
+          class="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700"
+        >
+          <InteractionButtons
+            contentId={`book-${book.slug}`}
+            contentType="book"
+            client:load
+            t={{
+              like: t("interactions.like"),
+              unlike: t("interactions.unlike"),
+              bookmark: t("interactions.bookmark"),
+              unbookmark: t("interactions.unbookmark"),
+              loginToInteract: t("interactions.loginToInteract"),
+            }}
+          />
+        </div>
+      </div>
+    </header>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Main Content -->
+      <div class="flex-1">
+        <!-- Content -->
+        <div class="mb-16">
+          <div
+            class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700"
+          >
+            <!-- Book Cover -->
+            <div class="flex justify-center mb-8">
+              <div
+                class="w-64 aspect-[2/3] bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 relative overflow-hidden rounded-lg"
+              >
+                {
+                  book.data.coverImage ? (
+                    <img
+                      src={book.data.coverImage}
+                      alt={book.data.title}
+                      class="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center">
+                      <div class="text-center p-8">
+                        <span class="text-6xl mb-3 block">📚</span>
+                        <p class="text-gray-600 dark:text-gray-400 mt-4">
+                          {t("common.noCover")}
+                        </p>
+                      </div>
+                    </div>
+                  )
+                }
+              </div>
+            </div>
+
+            <h2
+              class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
+            >
+              <span class="text-purple-600 dark:text-purple-400 mr-3">📝</span>
+              {t("book.review")}
+            </h2>
+            <div
+              class="prose prose-lg dark:prose-invert max-w-none mb-12 hyphens-auto text-justify"
+              style="hyphens: auto; -webkit-hyphens: auto; -ms-hyphens: auto;"
+              lang={currentLocale}
+            >
+              <Content />
+            </div>
+
+            <!-- Action Buttons -->
+            <div
+              class="flex items-center justify-between py-6 border-y border-gray-200 dark:border-gray-700 mb-8"
+            >
+              <div class="flex items-center">
+                <InteractionButtons
+                  contentId={`book-${book.slug}`}
+                  contentType="book"
+                  client:visible
+                  t={{
+                    like: t("interactions.like"),
+                    unlike: t("interactions.unlike"),
+                    bookmark: t("interactions.bookmark"),
+                    unbookmark: t("interactions.unbookmark"),
+                    loginToInteract: t("interactions.loginToInteract"),
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-80 flex-shrink-0">
+        <div class="sticky top-20 space-y-6">
+          <!-- Book Stats -->
+          <div
+            class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700"
+          >
+            <h3 class="font-semibold text-gray-900 dark:text-white mb-4">
+              {t("book.info")}
+            </h3>
+            <div class="space-y-3 text-sm">
+              {
+                book.data.originalTitle && (
+                  <div class="flex">
+                    <span class="text-gray-500 dark:text-gray-400 w-16 flex-shrink-0">
+                      {t("book.originalTitle")}:
+                    </span>
+                    <span class="font-medium flex-1 text-right text-gray-900 dark:text-white">
+                      {book.data.originalTitle}
+                    </span>
+                  </div>
+                )
+              }
+              <div class="flex">
+                <span
+                  class="text-gray-500 dark:text-gray-400 w-16 flex-shrink-0"
+                  >{t("book.author")}:</span
+                >
+                <span
+                  class="font-medium flex-1 text-right text-gray-900 dark:text-white"
+                  >{book.data.author}</span
+                >
+              </div>
+              <div class="flex">
+                <span
+                  class="text-gray-500 dark:text-gray-400 w-16 flex-shrink-0"
+                  >{t("book.published")}:</span
+                >
+                <span class="flex-1 text-right text-gray-900 dark:text-white"
+                  >{formatDate(book.data.publishDate)}</span
+                >
+              </div>
+              {
+                book.data.isbn && (
+                  <div class="flex">
+                    <span class="text-gray-500 dark:text-gray-400 w-16 flex-shrink-0">
+                      ISBN:
+                    </span>
+                    <span class="font-mono flex-1 text-right text-gray-900 dark:text-white">
+                      {book.data.isbn}
+                    </span>
+                  </div>
+                )
+              }
+              {
+                book.data.contentLanguage && (
+                  <div class="flex">
+                    <span class="text-gray-500 dark:text-gray-400 w-16 flex-shrink-0">
+                      {t("common.language")}:
+                    </span>
+                    <span class="flex-1 text-right text-gray-900 dark:text-white">
+                      {getLanguageName(book.data.contentLanguage)}
+                    </span>
+                  </div>
+                )
+              }
+            </div>
+          </div>
+
+          <!-- Purchase Section -->
+          <div
+            class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 shadow-sm border border-blue-200 dark:border-blue-800/30"
+          >
+            <h3
+              class="font-semibold text-gray-900 dark:text-white mb-4 flex items-center"
+            >
+              <span class="text-blue-600 dark:text-blue-400 mr-2">🛒</span>
+              {t("book.purchase")}
+            </h3>
+            <a
+              href={book.data.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg transition-all duration-200 text-center group"
+            >
+              <span class="flex items-center justify-center">
+                <img
+                  src="/amazon-logo.svg"
+                  alt="Amazon"
+                  class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform filter brightness-0 invert"
+                />
+                {t("book.buyOnAmazon")}
+              </span>
+            </a>
+            <div class="mt-4">
+              <div
+                class="text-xs text-gray-500 dark:text-gray-400 text-center px-2 leading-relaxed"
+              >
+                {t("book.affiliateNotice")}
+              </div>
+            </div>
+          </div>
+
+          <!-- Support -->
+          <div
+            class="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-xl p-6 shadow-sm border border-yellow-200 dark:border-yellow-800/30"
+          >
+            <h3
+              class="font-semibold text-gray-900 dark:text-white mb-3 text-center"
+            >
+              {t("common.support")}
+            </h3>
+            <p
+              class="text-sm text-gray-600 dark:text-gray-400 mb-4 text-center"
+            >
+              {t("common.supportMessage")}
+            </p>
+            <a
+              href="https://buymeacoffee.com/femres"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block w-full px-4 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-semibold rounded-lg transition-all duration-200 text-center"
+            >
+              {t("contribute.support.button")}
+            </a>
+          </div>
+
+          <FatefulDeckMiniPromo className="mt-8" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Books -->
+    {
+      relatedBooks.length > 0 && (
+        <section class="border-t border-gray-200 dark:border-gray-700 pt-12 mt-16">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">
+            {t("book.relatedBooks")}
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {relatedBooks.map((relatedBook) => (
+              <BookCard
+                title={relatedBook.data.title}
+                author={relatedBook.data.author}
+                description={relatedBook.data.description}
+                coverImage={relatedBook.data.coverImage}
+                publishDate={relatedBook.data.publishDate}
+                slug={relatedBook.slug}
+                topics={relatedBook.data.topics}
+                isbn={relatedBook.data.isbn}
+                locale={currentLocale}
+              />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Newsletter/Share Section -->
+    <section class="border-t border-gray-200 dark:border-gray-700 pt-12 mt-16">
+      <div class="bg-gray-100 dark:bg-gray-800/50 rounded-2xl p-8 text-center">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          {t("newsletter.title")}
+        </h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-6">
+          {t("newsletter.description")}
+        </p>
+        <form
+          id="newsletter-form"
+          class="flex flex-col sm:flex-row gap-4 justify-center"
+          data-message-success={t("newsletter.success")}
+          data-message-error={t("newsletter.error")}
+          data-message-generic-error={t("newsletter.genericError")}
+        >
+          <input
+            type="email"
+            name="email"
+            placeholder={t("auth.emailPlaceholder")}
+            required
+            class="px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none min-w-[300px]"
+          />
+          <button
+            type="submit"
+            class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {t("common.subscribe")}
+          </button>
+        </form>
+        <p id="newsletter-message" class="mt-4 text-sm hidden"></p>
+      </div>
+    </section>
+
+    <!-- Discussion Section -->
+    <Discussion
+      contentId={`book-${book.slug}`}
+      contentType="book"
+      locale={currentLocale}
+      client:load
+    />
+
+    <script>
+      const form = document.getElementById(
+        "newsletter-form",
+      ) as HTMLFormElement | null;
+      const messageEl = document.getElementById("newsletter-message");
+
+      if (form) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const emailInput = form.querySelector(
+            'input[name="email"]',
+          ) as HTMLInputElement;
+          const button = form.querySelector("button");
+          if (!emailInput || !button) return;
+
+          const email = emailInput.value;
+          const successMsg = form.dataset.messageSuccess || null;
+          const errorMsg = form.dataset.messageError || null;
+          const genericMsg = form.dataset.messageGenericError || null;
+
+          // Disable button
+          button.disabled = true;
+          const originalText = button.textContent;
+          button.textContent = "...";
+
+          try {
+            const response = await fetch("/api/subscribe", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, source: "book_detail" }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              if (messageEl) {
+                messageEl.textContent = successMsg;
+                messageEl.className =
+                  "mt-4 text-sm text-green-600 dark:text-green-400 font-medium";
+                messageEl.classList.remove("hidden");
+              }
+              form.reset();
+            } else {
+              if (messageEl) {
+                messageEl.textContent = errorMsg;
+                messageEl.className =
+                  "mt-4 text-sm text-red-600 dark:text-red-400 font-medium";
+                messageEl.classList.remove("hidden");
+              }
+            }
+          } catch (error) {
+            if (messageEl) {
+              messageEl.textContent = genericMsg;
+              messageEl.className =
+                "mt-4 text-sm text-red-600 dark:text-red-400 font-medium";
+              messageEl.classList.remove("hidden");
+            }
+          } finally {
+            button.disabled = false;
+            button.textContent = originalText;
+          }
+        });
+      }
+    </script>
+  </article>
+</Layout>
+
+<style>
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

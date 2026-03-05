@@ -1,0 +1,1032 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import BookCard from "../../components/BookCard.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+import VideoCard from "../../components/VideoCard.astro";
+import PodcastCard from "../../components/PodcastCard.astro";
+import PaperCard from "../../components/PaperCard.astro";
+import FilmCard from "../../components/FilmCard.astro";
+import { getCollection } from "astro:content";
+import { createT, type Locale } from "../../i18n/index";
+import "../../i18n/translations";
+
+export function getStaticPaths() {
+  const locales = ["en", "zh-CN", "zh-TW", "ja", "fr"];
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const { locale } = Astro.params;
+const currentLocale = locale as Locale;
+const t = createT(currentLocale);
+
+const filterByLocale = (item: any) => {
+  if (currentLocale === "zh-CN") {
+    return (
+      !item.slug.endsWith("-en") &&
+      !item.slug.endsWith("-tw") &&
+      !item.slug.endsWith("-ja") &&
+      !item.slug.endsWith("-fr")
+    );
+  }
+  const suffix = currentLocale === "zh-TW" ? "-tw" : `-${currentLocale}`;
+  return item.slug.endsWith(suffix);
+};
+
+const books = (
+  await getCollection("books", ({ data }) => data.status === "published")
+).filter(filterByLocale);
+const articles = (
+  await getCollection("articles", ({ data }) => data.status === "published")
+).filter(filterByLocale);
+const videos = (
+  await getCollection("videos", ({ data }) => data.status === "published")
+).filter(filterByLocale);
+const podcasts = (
+  await getCollection("podcasts", ({ data }) => data.status === "published")
+).filter(filterByLocale);
+const papers = (
+  await getCollection("papers", ({ data }) => data.status === "published")
+).filter(filterByLocale);
+const films = (
+  await getCollection("films", ({ data }) => data.status === "published")
+).filter(filterByLocale);
+
+function cleanSlug(slug: string): string {
+  if (currentLocale === "zh-CN") return slug;
+  const suffix = currentLocale === "zh-TW" ? "-tw" : `-${currentLocale}`;
+  if (suffix && slug.endsWith(suffix)) return slug.slice(0, -suffix.length);
+  return slug;
+}
+
+const allContent = [
+  ...books.map((item) => ({
+    ...item,
+    contentType: "book" as const,
+    slug: cleanSlug(item.slug),
+  })),
+  ...articles.map((item) => ({
+    ...item,
+    contentType: "article" as const,
+    slug: cleanSlug(item.slug),
+  })),
+  ...films.map((item) => ({
+    ...item,
+    contentType: "film" as const,
+    slug: cleanSlug(item.slug),
+  })),
+  ...videos.map((item) => ({
+    ...item,
+    contentType: "video" as const,
+    slug: cleanSlug(item.slug),
+  })),
+  ...podcasts.map((item) => ({
+    ...item,
+    contentType: "podcast" as const,
+    slug: cleanSlug(item.slug),
+  })),
+  ...papers.map((item) => ({
+    ...item,
+    contentType: "paper" as const,
+    slug: cleanSlug(item.slug),
+  })),
+];
+
+const allTopics = [
+  ...new Set(allContent.flatMap((item) => item.data.topics)),
+].sort();
+
+const contentTypes = [
+  { value: "book", label: t("nav.books"), icon: "📚", count: books.length },
+  {
+    value: "article",
+    label: t("nav.articles"),
+    icon: "📰",
+    count: articles.length,
+  },
+  { value: "film", label: t("nav.films"), icon: "🎬", count: films.length },
+  { value: "video", label: t("nav.videos"), icon: "🎥", count: videos.length },
+  {
+    value: "podcast",
+    label: t("nav.podcasts"),
+    icon: "🎧",
+    count: podcasts.length,
+  },
+  { value: "paper", label: t("nav.papers"), icon: "📄", count: papers.length },
+];
+
+const enrichedArticles = articles.map((article) => {
+  let articleType: "news" | "blog" | "research" | "opinion" | "analysis" =
+    "blog";
+  const titleLower = article.data.title.toLowerCase();
+  if (
+    titleLower.includes("report") ||
+    titleLower.includes("data") ||
+    titleLower.includes("报告") ||
+    titleLower.includes("数据")
+  ) {
+    articleType = "analysis";
+  } else if (
+    titleLower.includes("status") ||
+    titleLower.includes("metoo") ||
+    titleLower.includes("现状")
+  ) {
+    articleType = "news";
+  }
+  return { ...article, articleType };
+});
+---
+
+<Layout
+  title={`${t("searchPage.title")} - FemRes`}
+  description={t("searchPage.metaDescription")}
+>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Search Header -->
+    <div
+      class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center mb-6 sm:mb-8">
+          <h1
+            class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4"
+          >
+            {t("searchPage.heroTitle")}
+          </h1>
+          <p
+            class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-4"
+          >
+            {
+              t("searchPage.subtitle").replace(
+                "{count}",
+                allContent.length.toString(),
+              )
+            }
+          </p>
+        </div>
+
+        <!-- Search Input -->
+        <div class="max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
+          <div class="relative">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder={t("searchPage.placeholder")}
+              class="w-full px-4 sm:px-6 py-3 sm:py-4 pr-12 text-base sm:text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 shadow-sm"
+              autocomplete="off"
+            />
+            <div
+              class="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2"
+            >
+              <svg
+                class="w-5 h-5 sm:w-6 sm:h-6 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Filters -->
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6">
+          {
+            contentTypes.map((type) => (
+              <button
+                class="content-type-filter px-3 sm:px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-purple-50 dark:hover:bg-gray-600 hover:border-purple-300 dark:hover:border-purple-400 transition-colors text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap"
+                data-type={type.value}
+              >
+                <span class="mr-1 sm:mr-2">{type.icon}</span>
+                <span class="hidden sm:inline">
+                  {type.label} ({type.count})
+                </span>
+                <span class="sm:hidden">{type.icon}</span>
+              </button>
+            ))
+          }
+          <button
+            id="clearFilters"
+            class="px-3 sm:px-4 py-2 bg-gray-100 dark:bg-gray-600 border border-gray-300 dark:border-gray-500 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400"
+          >
+            <span class="sm:hidden">X</span>
+            <span class="hidden sm:inline">{t("searchPage.filters.clear")}</span
+            >
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter & Sort Bar -->
+    <div
+      class="bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex flex-col gap-4">
+          <!-- Mobile Filters -->
+          <div class="md:hidden">
+            <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+              <!-- Topic Filter -->
+              <div class="relative flex-shrink-0">
+                <select
+                  id="topicFilter"
+                  class="appearance-none w-40 px-3 py-2 pr-8 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm hover:border-purple-300 dark:hover:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm text-gray-900 dark:text-white transition-all duration-200 cursor-pointer"
+                >
+                  <option value="">{t("searchPage.filters.allTopics")}</option>
+                  {
+                    allTopics.map((topic) => (
+                      <option value={topic}>{topic}</option>
+                    ))
+                  }
+                </select>
+                <div
+                  class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+                >
+                  <svg
+                    class="w-4 h-4 text-gray-400 dark:text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Sort -->
+              <div class="relative flex-shrink-0">
+                <select
+                  id="sortBy"
+                  class="appearance-none w-28 px-3 py-2 pr-8 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm hover:border-purple-300 dark:hover:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm text-gray-900 dark:text-white transition-all duration-200 cursor-pointer"
+                >
+                  <option value="relevance"
+                    >{t("searchPage.sort.relevance")}</option
+                  >
+                  <option value="date-desc"
+                    >{t("searchPage.sort.newest")}</option
+                  >
+                  <option value="date-asc">{t("searchPage.sort.oldest")}</option
+                  >
+                  <option value="title-asc">{t("searchPage.sort.az")}</option>
+                  <option value="title-desc">{t("searchPage.sort.za")}</option>
+                </select>
+                <div
+                  class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+                >
+                  <svg
+                    class="w-4 h-4 text-gray-400 dark:text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mobile Count -->
+            <div class="text-center mt-2">
+              <span
+                id="resultsCountMobile"
+                class="text-sm text-gray-600 dark:text-gray-400"
+                data-template={t("searchPage.results.count")}
+              >
+                {
+                  t("searchPage.results.count").replace(
+                    "{count}",
+                    allContent.length.toString(),
+                  )
+                }
+              </span>
+            </div>
+          </div>
+
+          <!-- Desktop Filters (Grid Layout) -->
+          <div
+            class="hidden md:grid md:grid-cols-3 md:items-center md:gap-4 w-full"
+          >
+            <!-- Topic Filter (Left) -->
+            <div class="justify-self-start">
+              <div class="relative">
+                <select
+                  id="topicFilterDesktop"
+                  class="appearance-none w-48 px-4 py-3 pr-10 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-sm hover:border-purple-300 dark:hover:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm text-gray-900 dark:text-white transition-all duration-200 cursor-pointer"
+                >
+                  <option value="">{t("searchPage.filters.allTopics")}</option>
+                  {
+                    allTopics.map((topic) => (
+                      <option value={topic}>{topic}</option>
+                    ))
+                  }
+                </select>
+                <div
+                  class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
+                >
+                  <svg
+                    class="w-4 h-4 text-gray-400 dark:text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Desktop Count (Center) -->
+            <div class="justify-self-center text-center">
+              <span
+                id="resultsCountDesktop"
+                class="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap"
+                data-template={t("searchPage.results.count")}
+              >
+                {
+                  t("searchPage.results.count").replace(
+                    "{count}",
+                    allContent.length.toString(),
+                  )
+                }
+              </span>
+            </div>
+
+            <!-- Sort (Right) -->
+            <div class="justify-self-end">
+              <div class="relative">
+                <select
+                  id="sortByDesktop"
+                  class="appearance-none w-36 px-4 py-3 pr-10 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-sm hover:border-purple-300 dark:hover:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm text-gray-900 dark:text-white transition-all duration-200 cursor-pointer"
+                >
+                  <option value="relevance"
+                    >{t("searchPage.sort.relevance")}</option
+                  >
+                  <option value="date-desc"
+                    >{t("searchPage.sort.newest")}</option
+                  >
+                  <option value="date-asc">{t("searchPage.sort.oldest")}</option
+                  >
+                  <option value="title-asc">{t("searchPage.sort.az")}</option>
+                  <option value="title-desc">{t("searchPage.sort.za")}</option>
+                </select>
+                <div
+                  class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
+                >
+                  <svg
+                    class="w-4 h-4 text-gray-400 dark:text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- No Results -->
+      <div id="noResults" class="text-center py-12 hidden">
+        <div class="text-gray-400 dark:text-gray-500 text-6xl mb-4">🔍</div>
+        <h3 class="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
+          {t("searchPage.results.emptyTitle")}
+        </h3>
+        <p class="text-gray-500 dark:text-gray-400">
+          {t("searchPage.results.emptyMessage")}
+        </p>
+      </div>
+
+      <!-- Results By Category -->
+      <div id="searchResults">
+        {/* Books Section */}
+        {
+          books.length > 0 && (
+            <section id="section-book" class="mb-12">
+              <h2 class="text-2xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
+                <span class="mr-3">📚</span> {t("nav.books")}
+                <span class="category-count ml-3 text-sm font-normal text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
+                  {books.length}
+                </span>
+              </h2>
+              <div class="search-results-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {books.map((book) => (
+                  <div
+                    class="search-item"
+                    data-type="book"
+                    data-title={(book.data.title || "").toLowerCase()}
+                    data-author={(book.data.author || "").toLowerCase()}
+                    data-description={(
+                      book.data.description || ""
+                    ).toLowerCase()}
+                    data-topics={(book.data.topics || [])
+                      .join(" ")
+                      .toLowerCase()}
+                    data-language={currentLocale}
+                    data-date={book.data.publishDate.getTime()}
+                  >
+                    <BookCard
+                      title={book.data.title}
+                      author={book.data.author}
+                      description={book.data.description}
+                      coverImage={book.data.coverImage}
+                      publishDate={book.data.publishDate}
+                      slug={cleanSlug(book.slug)}
+                      topics={book.data.topics}
+                      originalTitle={book.data.originalTitle?.toString()}
+                      isbn={book.data.isbn?.toString()}
+                      locale={currentLocale}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        {/* Films Section */}
+        {
+          films.length > 0 && (
+            <section id="section-film" class="mb-12">
+              <h2 class="text-2xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
+                <span class="mr-3">🎬</span> {t("nav.films")}
+                <span class="category-count ml-3 text-sm font-normal text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
+                  {films.length}
+                </span>
+              </h2>
+              <div class="search-results-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {films.map((film) => (
+                  <div
+                    class="search-item"
+                    data-type="film"
+                    data-title={(film.data.title || "").toLowerCase()}
+                    data-author={(film.data.director || "").toLowerCase()}
+                    data-description={(
+                      film.data.description || ""
+                    ).toLowerCase()}
+                    data-topics={(film.data.topics || [])
+                      .join(" ")
+                      .toLowerCase()}
+                    data-language={currentLocale}
+                    data-date={new Date(film.data.releaseDate).getTime()}
+                  >
+                    <FilmCard
+                      title={film.data.title}
+                      director={film.data.director}
+                      description={film.data.description}
+                      posterImage={film.data.posterImage}
+                      releaseDate={film.data.releaseDate}
+                      duration={film.data.duration}
+                      year={film.data.year}
+                      country={film.data.country}
+                      genre={film.data.genre}
+                      slug={cleanSlug(film.slug)}
+                      topics={film.data.topics}
+                      locale={currentLocale}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        {/* Articles Section */}
+        {
+          enrichedArticles.length > 0 && (
+            <section id="section-article" class="mb-12">
+              <h2 class="text-2xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
+                <span class="mr-3">📰</span> {t("nav.articles")}
+                <span class="category-count ml-3 text-sm font-normal text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
+                  {articles.length}
+                </span>
+              </h2>
+              <div class="search-results-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {enrichedArticles.map((article) => (
+                  <div
+                    class="search-item"
+                    data-type="article"
+                    data-title={(article.data.title || "").toLowerCase()}
+                    data-author={(article.data.author || "").toLowerCase()}
+                    data-description={(
+                      article.data.description || ""
+                    ).toLowerCase()}
+                    data-topics={(article.data.topics || [])
+                      .join(" ")
+                      .toLowerCase()}
+                    data-language={currentLocale}
+                    data-date={article.data.publishDate.getTime()}
+                  >
+                    <ArticleCard
+                      title={article.data.title}
+                      author={article.data.author}
+                      description={article.data.description}
+                      featuredImage={article.data.featuredImage}
+                      publishDate={article.data.publishDate}
+                      readingTime={article.data.readingTime}
+                      sourceUrl={article.data.sourceUrl}
+                      slug={article.slug}
+                      topics={article.data.topics}
+                      articleType={article.articleType}
+                      locale={currentLocale}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        {/* Videos Section */}
+        {
+          videos.length > 0 && (
+            <section id="section-video" class="mb-12">
+              <h2 class="text-2xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
+                <span class="mr-3">🎥</span> {t("nav.videos")}
+                <span class="category-count ml-3 text-sm font-normal text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
+                  {videos.length}
+                </span>
+              </h2>
+              <div class="search-results-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {videos.map((video) => (
+                  <div
+                    class="search-item"
+                    data-type="video"
+                    data-title={(video.data.title || "").toLowerCase()}
+                    data-author={(video.data.author || "").toLowerCase()}
+                    data-description={(
+                      video.data.description || ""
+                    ).toLowerCase()}
+                    data-topics={(video.data.topics || [])
+                      .join(" ")
+                      .toLowerCase()}
+                    data-language={currentLocale}
+                    data-date={video.data.publishDate.getTime()}
+                  >
+                    <VideoCard
+                      title={video.data.title}
+                      author={video.data.author}
+                      description={video.data.description}
+                      thumbnail={video.data.thumbnail}
+                      publishDate={video.data.publishDate}
+                      duration={video.data.duration}
+                      sourceUrl={video.data.sourceUrl}
+                      slug={cleanSlug(video.slug)}
+                      topics={video.data.topics}
+                      locale={currentLocale}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        {/* Podcasts Section */}
+        {
+          podcasts.length > 0 && (
+            <section id="section-podcast" class="mb-12">
+              <h2 class="text-2xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
+                <span class="mr-3">🎧</span> {t("nav.podcasts")}
+                <span class="category-count ml-3 text-sm font-normal text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
+                  {podcasts.length}
+                </span>
+              </h2>
+              <div class="search-results-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {podcasts.map((podcast) => (
+                  <div
+                    class="search-item"
+                    data-type="podcast"
+                    data-title={(podcast.data.title || "").toLowerCase()}
+                    data-author={(podcast.data.author || "").toLowerCase()}
+                    data-description={(
+                      podcast.data.description || ""
+                    ).toLowerCase()}
+                    data-topics={(podcast.data.topics || [])
+                      .join(" ")
+                      .toLowerCase()}
+                    data-language={currentLocale}
+                    data-date={podcast.data.publishDate.getTime()}
+                  >
+                    <PodcastCard
+                      title={podcast.data.title}
+                      author={podcast.data.author}
+                      description={podcast.data.description}
+                      thumbnail={podcast.data.thumbnail}
+                      publishDate={podcast.data.publishDate}
+                      duration={podcast.data.duration}
+                      sourceUrl={podcast.data.sourceUrl}
+                      slug={cleanSlug(podcast.slug)}
+                      topics={podcast.data.topics}
+                      episodeNumber={podcast.data.episodeNumber}
+                      locale={currentLocale}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        {/* Papers Section */}
+        {
+          papers.length > 0 && (
+            <section id="section-paper" class="mb-12">
+              <h2 class="text-2xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
+                <span class="mr-3">📄</span> {t("nav.papers")}
+                <span class="category-count ml-3 text-sm font-normal text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
+                  {papers.length}
+                </span>
+              </h2>
+              <div class="search-results-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {papers.map((paper) => (
+                  <div
+                    class="search-item"
+                    data-type="paper"
+                    data-title={(paper.data.title || "").toLowerCase()}
+                    data-author={(paper.data.author || "").toLowerCase()}
+                    data-description={(
+                      paper.data.description || ""
+                    ).toLowerCase()}
+                    data-topics={(paper.data.topics || [])
+                      .join(" ")
+                      .toLowerCase()}
+                    data-language={currentLocale}
+                    data-date={paper.data.publishDate.getTime()}
+                  >
+                    <PaperCard
+                      title={paper.data.title}
+                      author={paper.data.author}
+                      description={paper.data.description}
+                      publishDate={paper.data.publishDate}
+                      slug={cleanSlug(paper.slug)}
+                      topics={paper.data.topics}
+                      journal={paper.data.journal}
+                      doi={paper.data.doi}
+                      citationCount={paper.data.citationCount}
+                      paperType={paper.data.paperType}
+                      locale={currentLocale}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        }
+      </div>
+    </div>
+  </div>
+
+  <script>
+    class ContentSearch {
+      searchInput: HTMLInputElement | null = null;
+      topicFilter: HTMLSelectElement | null = null;
+      sortBy: HTMLSelectElement | null = null;
+      resultsCountMobile: HTMLElement | null = null;
+      topicFilterDesktop: HTMLSelectElement | null = null;
+      sortByDesktop: HTMLSelectElement | null = null;
+      resultsCountDesktop: HTMLElement | null = null;
+      noResults: HTMLElement | null = null;
+      searchResults: HTMLElement | null = null;
+      clearFiltersBtn: HTMLElement | null = null;
+      contentTypeFilters: HTMLElement[] = [];
+      allItems: HTMLElement[] = [];
+      activeContentTypes: Set<string> = new Set();
+
+      constructor() {
+        this.searchInput = document.getElementById(
+          "searchInput",
+        ) as HTMLInputElement | null;
+        // Mobile Filters
+        this.topicFilter = document.getElementById(
+          "topicFilter",
+        ) as HTMLSelectElement | null;
+        this.sortBy = document.getElementById(
+          "sortBy",
+        ) as HTMLSelectElement | null;
+        this.resultsCountMobile = document.getElementById("resultsCountMobile");
+        // Desktop Filters
+        this.topicFilterDesktop = document.getElementById(
+          "topicFilterDesktop",
+        ) as HTMLSelectElement | null;
+        this.sortByDesktop = document.getElementById(
+          "sortByDesktop",
+        ) as HTMLSelectElement | null;
+        this.resultsCountDesktop = document.getElementById(
+          "resultsCountDesktop",
+        );
+        // Common Elements
+        this.noResults = document.getElementById("noResults");
+        this.searchResults = document.getElementById("searchResults");
+        this.clearFiltersBtn = document.getElementById("clearFilters");
+        this.contentTypeFilters = Array.from(
+          document.querySelectorAll(".content-type-filter"),
+        ) as HTMLElement[];
+
+        this.allItems = Array.from(
+          document.querySelectorAll(".search-item"),
+        ) as HTMLElement[];
+        this.activeContentTypes = new Set();
+
+        this.bindEvents();
+        this.updateResults();
+      }
+
+      bindEvents() {
+        this.searchInput?.addEventListener("input", () => this.updateResults());
+
+        this.topicFilter?.addEventListener("change", () => {
+          if (this.topicFilterDesktop && this.topicFilter)
+            this.topicFilterDesktop.value = this.topicFilter.value;
+          this.updateResults();
+        });
+        this.sortBy?.addEventListener("change", () => {
+          if (this.sortByDesktop && this.sortBy)
+            this.sortByDesktop.value = this.sortBy.value;
+          this.updateResults();
+        });
+
+        this.topicFilterDesktop?.addEventListener("change", () => {
+          if (this.topicFilter && this.topicFilterDesktop)
+            this.topicFilter.value = this.topicFilterDesktop.value;
+          this.updateResults();
+        });
+        this.sortByDesktop?.addEventListener("change", () => {
+          if (this.sortBy && this.sortByDesktop)
+            this.sortBy.value = this.sortByDesktop.value;
+          this.updateResults();
+        });
+
+        this.contentTypeFilters?.forEach((btn) => {
+          btn.addEventListener("click", () => this.toggleContentType(btn));
+        });
+
+        this.clearFiltersBtn?.addEventListener("click", () =>
+          this.clearFilters(),
+        );
+
+        this.handleURLParams();
+      }
+
+      toggleContentType(button: HTMLElement) {
+        const type = button.dataset.type;
+        if (!type) return;
+
+        if (this.activeContentTypes.has(type)) {
+          this.activeContentTypes.delete(type);
+          button.classList.remove(
+            "bg-purple-100",
+            "dark:bg-purple-900",
+            "border-purple-300",
+            "dark:border-purple-600",
+            "text-purple-700",
+            "dark:text-purple-300",
+          );
+          button.classList.add(
+            "bg-white",
+            "dark:bg-gray-700",
+            "border-gray-300",
+            "dark:border-gray-600",
+            "text-gray-700",
+            "dark:text-gray-300",
+          );
+        } else {
+          this.activeContentTypes.add(type);
+          button.classList.add(
+            "bg-purple-100",
+            "dark:bg-purple-900",
+            "border-purple-300",
+            "dark:border-purple-600",
+            "text-purple-700",
+            "dark:text-purple-300",
+          );
+          button.classList.remove(
+            "bg-white",
+            "dark:bg-gray-700",
+            "border-gray-300",
+            "dark:border-gray-600",
+            "text-gray-700",
+            "dark:text-gray-300",
+          );
+        }
+
+        this.updateResults();
+      }
+
+      clearFilters() {
+        if (this.searchInput) this.searchInput.value = "";
+        if (this.topicFilter) this.topicFilter.value = "";
+        if (this.sortBy) this.sortBy.value = "relevance";
+        if (this.topicFilterDesktop) this.topicFilterDesktop.value = "";
+        if (this.sortByDesktop) this.sortByDesktop.value = "relevance";
+
+        this.activeContentTypes.clear();
+
+        this.contentTypeFilters.forEach((btn) => {
+          btn.classList.remove(
+            "bg-purple-100",
+            "dark:bg-purple-900",
+            "border-purple-300",
+            "dark:border-purple-600",
+            "text-purple-700",
+            "dark:text-purple-300",
+          );
+          btn.classList.add(
+            "bg-white",
+            "dark:bg-gray-700",
+            "border-gray-300",
+            "dark:border-gray-600",
+            "text-gray-700",
+            "dark:text-gray-300",
+          );
+        });
+
+        this.updateResults();
+      }
+
+      handleURLParams() {
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get("q");
+        const type = params.get("type");
+        const topic = params.get("topic");
+
+        if (query && this.searchInput) this.searchInput.value = query;
+        if (type) {
+          this.activeContentTypes.add(type);
+          const button = document.querySelector(`[data-type="${type}"]`);
+          if (button) this.toggleContentType(button as HTMLElement);
+        }
+        if (topic) {
+          if (this.topicFilter) this.topicFilter.value = topic;
+          if (this.topicFilterDesktop) this.topicFilterDesktop.value = topic;
+        }
+
+        this.updateResults();
+      }
+
+      updateResults() {
+        const query = this.searchInput?.value.toLowerCase().trim() || "";
+        const selectedTopic =
+          this.topicFilter?.value || this.topicFilterDesktop?.value || "";
+        const sortBy =
+          (this.sortBy as HTMLSelectElement)?.value ||
+          (this.sortByDesktop as HTMLSelectElement)?.value ||
+          "relevance";
+
+        let visibleCount = 0;
+
+        this.allItems.forEach((item) => {
+          let match = true;
+
+          if (query) {
+            const title = item.dataset.title || "";
+            const author = item.dataset.author || "";
+            const description = item.dataset.description || "";
+            const topics = item.dataset.topics || "";
+
+            if (
+              !title.includes(query) &&
+              !author.includes(query) &&
+              !description.includes(query) &&
+              !topics.includes(query)
+            ) {
+              match = false;
+            }
+          }
+
+          if (match && this.activeContentTypes.size > 0) {
+            const itemType = item.dataset.type;
+            if (!itemType || !this.activeContentTypes.has(itemType)) {
+              match = false;
+            }
+          }
+
+          if (match && selectedTopic) {
+            const topics = item.dataset.topics || "";
+            if (!topics.includes(selectedTopic.toLowerCase())) {
+              match = false;
+            }
+          }
+
+          item.style.display = match ? "block" : "none";
+          if (match) visibleCount++;
+        });
+
+        const types = ["book", "article", "film", "video", "podcast", "paper"];
+        types.forEach((type) => {
+          const section = document.getElementById(`section-${type}`);
+          if (!section) return;
+
+          const grid = section.querySelector(".search-results-grid");
+          if (!grid) return;
+
+          const visibleItems = Array.from(grid.children).filter(
+            (child) => (child as HTMLElement).style.display !== "none",
+          );
+          const visibleInSectionCount = visibleItems.length;
+
+          section.style.display = visibleInSectionCount > 0 ? "block" : "none";
+
+          // Update counts for each category
+          const countSpan = section.querySelector(".category-count");
+          if (countSpan) {
+            countSpan.textContent = visibleInSectionCount.toString();
+          }
+
+          if (visibleInSectionCount > 0) {
+            this.sortGrid(grid, sortBy);
+          }
+        });
+
+        if (this.resultsCountMobile) {
+          const template =
+            this.resultsCountMobile.dataset.template ||
+            "Showing {count} results";
+          this.resultsCountMobile.textContent = template.replace(
+            "{count}",
+            visibleCount.toString(),
+          );
+        }
+        if (this.resultsCountDesktop) {
+          const template =
+            this.resultsCountDesktop.dataset.template ||
+            "Showing {count} results";
+          this.resultsCountDesktop.textContent = template.replace(
+            "{count}",
+            visibleCount.toString(),
+          );
+        }
+
+        if (visibleCount === 0) {
+          this.noResults?.classList.remove("hidden");
+          this.searchResults?.classList.add("hidden");
+        } else {
+          this.noResults?.classList.add("hidden");
+          this.searchResults?.classList.remove("hidden");
+        }
+      }
+
+      sortGrid(grid: Element, sortBy: string) {
+        // Only sort and rearrange visible items
+        const items = Array.from(grid.children) as HTMLElement[];
+        const visibleItems = items.filter((item) => item.style.display !== "none");
+        const hiddenItems = items.filter((item) => item.style.display === "none");
+
+        visibleItems.sort((a, b) => {
+          switch (sortBy) {
+            case "date-desc":
+              return Number(b.dataset.date) - Number(a.dataset.date);
+            case "date-asc":
+              return Number(a.dataset.date) - Number(b.dataset.date);
+            case "title-asc":
+              return (a.dataset.title || "").localeCompare(
+                b.dataset.title || "",
+              );
+            case "title-desc":
+              return (b.dataset.title || "").localeCompare(
+                a.dataset.title || "",
+              );
+            default:
+              return 0;
+          }
+        });
+
+        // Re-append visible items first (maintains grid layout), then hidden items
+        if (grid) {
+          visibleItems.forEach((item) => grid.appendChild(item));
+          hiddenItems.forEach((item) => grid.appendChild(item));
+        }
+      }
+    }
+
+    document.addEventListener("astro:page-load", () => {
+      new ContentSearch();
+    });
+  </script>
+</Layout>

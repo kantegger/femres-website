@@ -1,0 +1,61 @@
+# build output
+dist/
+.vercel/
+# generated types
+.astro/
+
+# Media files (hosted on R2 CDN at media.femres.org)
+/public/images/
+/public/music/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.production
+.env.local
+.dev.vars
+
+# Wrangler/Cloudflare local files
+.wrangler/
+wrangler.toml.local
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+
+../webpages/
+
+# Temporary scripts and output files
+*.py
+*.ps1
+check*.txt
+*result*.txt
+matches.txt
+final_check.txt
+books_index_check.txt
+build-output.txt
+generate_summary.ps1
+update-*.py
+update-*.ps1
+resize_*.py
+
+# Content processing scripts (internal use)
+add-bilingual-fields.py
+analyze_content.py
+apply_topic_fixes.py
+fix-*.py
+process-*.py
+topic_*.py
+update-*.py
+generate_*.py

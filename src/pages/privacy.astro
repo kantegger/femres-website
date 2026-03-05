@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { createT } from '../i18n/index';
+import { getEntry } from 'astro:content';
+
+const currentLocale = 'zh-CN';
+const t = createT(currentLocale);
+
+// For default locale (zh-CN), use file without suffix: privacy.md
+const entry = await getEntry('pages', 'privacy');
+if (!entry) {
+  return Astro.redirect('/404');
+}
+const { Content } = await entry.render();
+---
+
+<Layout 
+  title={`${entry.data.title} - FemRes`}
+  description={entry.data.intro}
+>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <article class="prose prose-lg max-w-none dark:prose-invert">
+        <h1>{entry.data.title}</h1>
+        {entry.data.lastUpdated && (
+            <p class="text-gray-600 dark:text-gray-400">
+                {t('common.publishDate')}: {entry.data.lastUpdated.toISOString().split('T')[0]}
+            </p>
+        )}
+
+        <Content />
+      </article>
+    </div>
+  </div>
+</Layout>

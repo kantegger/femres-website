@@ -1,0 +1,230 @@
+---
+import InteractionButtons from "./InteractionButtons";
+import "../i18n/translations";
+import {
+  createT,
+  getLocalizedPath,
+  getLocaleFromUrl,
+  type Locale,
+} from "../i18n/index";
+import { getTopicTranslation } from "../i18n/topicsUtils";
+
+export interface Props {
+  title: string;
+  director: string;
+  description: string;
+  posterImage?: string;
+  releaseDate: Date;
+  slug: string;
+  topics: string[];
+  year: number;
+  country: string;
+  duration?: string;
+  genre?: string[];
+  locale?: Locale;
+}
+
+const {
+  title,
+  director,
+  description,
+  posterImage,
+  releaseDate,
+  slug,
+  topics,
+  year,
+  country,
+  duration,
+  genre,
+  locale,
+} = Astro.props;
+
+const currentLocale = locale || getLocaleFromUrl(Astro.url);
+const t = createT(currentLocale);
+// 移除语言后缀以生成干净的URL路径（与路由设置保持一致）
+let cleanSlug = slug;
+if (slug.endsWith("-en")) {
+  cleanSlug = slug.slice(0, -3);
+} else if (slug.endsWith("-ja")) {
+  cleanSlug = slug.slice(0, -3);
+} else if (slug.endsWith("-fr")) {
+  cleanSlug = slug.slice(0, -3);
+} else if (slug.endsWith("-tw")) {
+  cleanSlug = slug.slice(0, -3);
+}
+const filmLink = getLocalizedPath(`films/${cleanSlug}`, currentLocale);
+
+const formatYear = (date: Date) => {
+  return date.getFullYear();
+};
+---
+
+<article
+  class="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-2xl glass-card glass-hover transition-all duration-300 overflow-hidden"
+>
+  <!-- Film Poster with Overlay -->
+  <div
+    class="relative aspect-[2/3] overflow-hidden bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900"
+  >
+    <a href={filmLink} class="block w-full h-full">
+      {
+        posterImage ? (
+          <img
+            src={posterImage}
+            alt={title}
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+          />
+        ) : (
+          <div class="w-full h-full flex items-center justify-center">
+            <div class="text-center p-6">
+              <span class="text-6xl mb-3 block">🎬</span>
+              <p class="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                {t("common.loading")}
+              </p>
+            </div>
+          </div>
+        )
+      }
+
+      <!-- Gradient Overlay -->
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+      >
+      </div>
+
+      <!-- Film Info Overlay -->
+      <div
+        class="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"
+      >
+        <div class="text-white">
+          <h3 class="text-xl font-bold mb-2 drop-shadow-lg">{title}</h3>
+          <p class="text-sm opacity-90 mb-3 line-clamp-3">{description}</p>
+          <div class="flex items-center justify-between text-xs">
+            <span class="flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                <path
+                  fill-rule="evenodd"
+                  d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              查看详情
+            </span>
+            {duration && <span>{duration}</span>}
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Year Badge -->
+    <div
+      class="absolute top-3 left-3 px-2 py-1 bg-black/60 backdrop-blur-sm text-white rounded-md text-sm font-semibold"
+    >
+      {year}
+    </div>
+
+    <!-- Country Badge -->
+    <div
+      class="absolute top-3 right-3 px-2 py-1 bg-purple-600/80 backdrop-blur-sm text-white rounded-md text-sm font-medium"
+    >
+      {country}
+    </div>
+  </div>
+
+  <!-- Film Details -->
+  <div class="p-4">
+    <a href={filmLink} class="block">
+      <h3
+        class="text-lg font-bold text-gray-900 dark:text-white mb-1 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-1"
+      >
+        {title}
+      </h3>
+    </a>
+
+    <!-- Director -->
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3 flex items-center">
+      <svg
+        class="w-4 h-4 mr-2 flex-shrink-0"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+        ></path>
+      </svg>
+      <span class="truncate">{director}</span>
+    </p>
+
+    <!-- Genre Tags -->
+    {
+      genre && genre.length > 0 && (
+        <div class="flex flex-wrap gap-1 mb-3">
+          {genre.slice(0, 3).map((g) => (
+            <span class="inline-block px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded">
+              {g}
+            </span>
+          ))}
+        </div>
+      )
+    }
+
+    <!-- Topics -->
+    <div class="flex flex-wrap gap-1 mb-3">
+      {
+        topics.slice(0, 2).map((topic) => {
+          const translatedTopic = getTopicTranslation(
+            topic,
+            currentLocale as any,
+          );
+          return (
+            <span class="inline-block px-2 py-1 text-xs bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded">
+              {translatedTopic}
+            </span>
+          );
+        })
+      }
+      {
+        topics.length > 2 && (
+          <span class="inline-block px-2 py-1 text-xs text-gray-500 dark:text-gray-500">
+            +{topics.length - 2}
+          </span>
+        )
+      }
+    </div>
+
+    <div class="pt-3 border-t border-gray-100 dark:border-gray-700">
+      <InteractionButtons
+        contentId={`film-${slug}`}
+        contentType="film"
+        t={{
+          like: t("interactions.like"),
+          unlike: t("interactions.unlike"),
+          bookmark: t("interactions.bookmark"),
+          unbookmark: t("interactions.unbookmark"),
+          loginToInteract: t("interactions.loginToInteract"),
+        }}
+        client:visible
+      />
+    </div>
+  </div>
+</article>
+
+<style>
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
