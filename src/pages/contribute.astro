@@ -1,0 +1,12 @@
+---
+import EditorialContribute from "../components/EditorialContribute.astro";
+import Layout from "../layouts/Layout.astro";
+import { createT } from "../i18n";
+
+const locale = "zh-CN";
+const t = createT(locale);
+---
+
+<Layout title={`${t("contribute.title")} - FemRes`} description={t("contribute.subtitle")} headerVariant="editorial" showMusicPlayer={false}>
+  <EditorialContribute locale={locale} />
+</Layout>

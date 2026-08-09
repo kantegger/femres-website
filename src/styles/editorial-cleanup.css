@@ -1,0 +1,660 @@
+/*
+ * Editorial restraint pass
+ *
+ * Detail end matter and institutional pages share a quieter hierarchy here.
+ * Content components keep their own layouts; this layer removes the repeated
+ * issue-number, oversized-heading and ruled-grid treatment.
+ */
+
+/* Detail pages: the body ends once, then offers a short continuation. */
+:is(
+  .book-reading,
+  .film-reading,
+  .article-reading,
+  .video-reading,
+  .podcast-reading,
+  .paper-reading
+) :is(
+  .book-section-heading,
+  .film-section-heading,
+  .article-section-heading,
+  .video-section-heading,
+  .podcast-section-heading,
+  .paper-section-heading
+) {
+  gap: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+:is(
+  .book-section-heading,
+  .article-section-heading,
+  .video-section-heading,
+  .podcast-section-heading,
+  .paper-section-heading,
+  .paper-abstract__index
+) > span {
+  display: none;
+}
+
+:is(
+  .book-reading,
+  .film-reading,
+  .article-reading,
+  .video-reading,
+  .podcast-reading,
+  .paper-reading
+) :is(
+  .book-section-heading,
+  .film-section-heading,
+  .article-section-heading,
+  .video-section-heading,
+  .podcast-section-heading,
+  .paper-section-heading
+) h2 {
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+
+:is(
+  .book-related,
+  .film-related,
+  .article-related,
+  .video-related,
+  .podcast-related,
+  .paper-related
+) {
+  width: min(100% - var(--editorial-canvas-gutter), var(--editorial-canvas-width));
+  margin-inline: auto;
+  padding: clamp(3rem, 6vw, 5.5rem) 0 !important;
+  color: var(--ink) !important;
+  background: var(--paper) !important;
+}
+
+:is(
+  .book-related__heading,
+  .film-related__heading,
+  .article-related__heading,
+  .video-related__heading,
+  .podcast-related__heading,
+  .paper-related__heading
+) {
+  display: block !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+:is(
+  .book-related__heading,
+  .article-related__heading,
+  .video-related__heading,
+  .podcast-related__heading,
+  .paper-related__heading
+) > span,
+:is(
+  .book-related__number,
+  .film-related__number,
+  .article-related__number,
+  .video-related__number,
+  .podcast-related__number,
+  .paper-related__number
+) {
+  display: none;
+}
+
+:is(
+  .book-related__heading,
+  .film-related__heading,
+  .article-related__heading,
+  .video-related__heading,
+  .podcast-related__heading,
+  .paper-related__heading
+) h2 {
+  max-width: 22ch;
+  font-size: clamp(1.9rem, 2.8vw, 2.5rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+
+:is(
+  .book-related__grid,
+  .film-related__grid,
+  .article-related__grid,
+  .video-related__grid,
+  .podcast-related__grid,
+  .paper-related__grid
+) {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 2rem clamp(2rem, 5vw, 5rem) !important;
+  margin-top: 2rem !important;
+  border: 0 !important;
+}
+
+:is(
+  .book-related__item,
+  .film-related__item,
+  .article-related__item,
+  .video-related__item,
+  .podcast-related__item,
+  .paper-related__item
+) {
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+:is(
+  .book-related__item,
+  .film-related__item,
+  .article-related__item,
+  .video-related__item,
+  .podcast-related__item,
+  .paper-related__item
+) + :is(
+  .book-related__item,
+  .film-related__item,
+  .article-related__item,
+  .video-related__item,
+  .podcast-related__item,
+  .paper-related__item
+) {
+  padding-left: 0 !important;
+  border-left: 0 !important;
+}
+
+:is(.book-related__item, .film-related__item, .podcast-related__item) {
+  grid-template-columns: 76px minmax(0, 1fr) !important;
+  gap: 1rem !important;
+  align-items: start;
+}
+
+:is(.book-related__item, .film-related__item, .podcast-related__item) > :is(img, .book-related__missing, .podcast-related__missing) {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  width: 76px !important;
+  height: auto !important;
+  max-height: 112px !important;
+  object-fit: cover !important;
+  filter: none !important;
+}
+
+:is(.book-related__item, .film-related__item, .podcast-related__item) > div {
+  grid-column: 2 !important;
+}
+
+:is(.article-related__item, .video-related__item) {
+  grid-template-columns: 132px minmax(0, 1fr) !important;
+  gap: 1.25rem !important;
+  align-items: start;
+}
+
+:is(.article-related__item, .video-related__item) > :is(img, .video-related__missing) {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  width: 132px !important;
+  aspect-ratio: 16 / 10 !important;
+  margin: 0 !important;
+  object-fit: cover !important;
+  filter: none !important;
+}
+
+:is(.article-related__item, .video-related__item) > div {
+  grid-column: 2 !important;
+}
+
+.paper-related__item {
+  display: block !important;
+}
+
+.paper-related__item > div {
+  grid-column: auto !important;
+}
+
+:is(
+  .book-related__item,
+  .film-related__item,
+  .article-related__item,
+  .video-related__item,
+  .podcast-related__item,
+  .paper-related__item
+) > div > span {
+  color: var(--muted) !important;
+}
+
+:is(
+  .book-related__item,
+  .film-related__item,
+  .article-related__item,
+  .video-related__item,
+  .podcast-related__item,
+  .paper-related__item
+) h3 {
+  margin: 0.35rem 0;
+  color: var(--ink);
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+}
+
+:is(
+  .book-related__item,
+  .film-related__item,
+  .article-related__item,
+  .video-related__item,
+  .podcast-related__item,
+  .paper-related__item
+) :is(p, em) {
+  color: var(--muted) !important;
+}
+
+:is(
+  .book-reading__community,
+  .film-reading__community,
+  .article-reading__community,
+  .video-reading__community,
+  .podcast-reading__community,
+  .paper-reading__community
+) {
+  max-width: 58rem;
+  padding: 0 0 5rem;
+}
+
+:is(
+  .book-reading__community,
+  .film-reading__community,
+  .article-reading__community,
+  .video-reading__community,
+  .podcast-reading__community,
+  .paper-reading__community
+) .editorial-thread__header h2 {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+}
+
+/* Institutional pages: one clear title, ordinary sections, sparse rules. */
+:is(.institution, .contact-page, .contribute-page) {
+  padding-bottom: 4rem;
+}
+
+:is(.institution-hero__index, .contact-hero > p, .contribute-hero > p),
+.institution :is(.section-number, .section-heading > span, .team__intro > span, .open-source > div > span),
+.contact-page :is(.contact-routes header > span, .contact-form-intro > span, .faq header > span, .contact-info > div > span),
+.contribute-page :is(.formats header > span, .process header > span, .standards__intro > span, .recognition header > span, .submission__intro > span, .open-contribution > div > span, .support header > span),
+.institution :is(.principle-list article > span, .method-grid article > span, .medium-index a > span, .topic-index article > span, .team dt > span),
+.contact-page .contact-routes article > span,
+.contribute-page :is(.formats article > span, .process article > span, .standards article > span, .recognition li > span, .support article > span) {
+  display: none;
+}
+
+:is(.institution-hero, .contact-hero, .contribute-hero) {
+  grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.65fr) !important;
+  gap: clamp(2rem, 7vw, 7rem);
+  padding: clamp(3.5rem, 7vw, 6.5rem) 0 clamp(3rem, 6vw, 5rem);
+  border-bottom: 0 !important;
+}
+
+:is(.institution-hero, .contact-hero, .contribute-hero) h1 {
+  font-size: clamp(3.7rem, 7vw, 6.75rem) !important;
+  line-height: 0.95 !important;
+  letter-spacing: -0.06em;
+}
+
+:is(.institution-hero__deck, .contact-hero > div, .contribute-hero > div) {
+  padding-left: 0 !important;
+  border-left: 0 !important;
+}
+
+.institution :is(.section-heading, .team__intro, .open-source > div),
+.contact-page :is(.contact-routes > header, .contact-form-intro, .faq > header, .contact-info > div),
+.contribute-page :is(.formats > header, .process > header, .standards__intro, .recognition > header, .submission__intro, .open-contribution > div, .support > header) {
+  display: block !important;
+}
+
+.institution .section-heading,
+.contact-page :is(.contact-routes > header, .faq > header),
+.contribute-page :is(.formats > header, .process > header, .recognition > header, .support > header) {
+  padding: clamp(3.5rem, 7vw, 6rem) 0 1.75rem;
+}
+
+.institution :is(.section-heading, .mission, .team, .open-source, .institution-cta) h2,
+.contact-page :is(.contact-routes, .contact-form-intro, .faq, .contact-info) h2,
+.contribute-page :is(.formats, .process, .standards, .recognition, .submission, .open-contribution, .support) h2 {
+  font-size: clamp(2.1rem, 3vw, 3rem) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.045em;
+}
+
+.institution .section-heading p,
+.contact-page :is(.contact-routes > header, .faq > header) p,
+.contribute-page :is(.formats > header, .process > header, .recognition > header, .support > header) p {
+  max-width: 42rem;
+  margin-top: 0.8rem;
+}
+
+.institution :is(.principle-list, .method-grid, .medium-index, .team, .mission, .open-source, .institution-cta),
+.contact-page :is(.contact-routes > div, .contact-form-section, .faq > div, .contact-info),
+.contribute-page :is(.formats > div, .process > div, .standards, .recognition ol, .submission, .open-contribution, .support__reasons, .honors) {
+  border: 0 !important;
+}
+
+.institution :is(.principle-list article, .method-grid article, .medium-index a, .topic-index article, .team dl div),
+.contact-page :is(.contact-routes article, .faq details, .contact-info dl div),
+.contribute-page :is(.formats article, .process article, .standards article, .recognition li, .support article) {
+  border: 0 !important;
+}
+
+/* Numbers were acting as decoration rather than navigation. */
+.institution .team dt span,
+.institution .principle-list article > span,
+.institution .method-grid article > span,
+.institution .medium-index a > span,
+.institution .topic-index article > span,
+.contact-page .contact-routes article > span,
+.contact-page .faq summary > span:first-child,
+.contribute-page :is(.formats, .process, .standards, .recognition, .support) article > span,
+.contribute-page .recognition li > span {
+  display: none !important;
+}
+
+/* About: content groups, not ruled data tables. */
+.institution .mission {
+  grid-template-columns: minmax(14rem, 0.7fr) minmax(0, 1.25fr) !important;
+  gap: clamp(2.5rem, 7vw, 7rem) !important;
+  padding: clamp(3.5rem, 7vw, 6rem) 0 !important;
+}
+
+.institution .mission__title,
+.institution .mission__copy {
+  grid-column: auto !important;
+}
+
+.institution .mission__copy dl,
+.institution .open-source dl {
+  gap: 1.5rem;
+  border: 0 !important;
+}
+
+.institution .mission__copy dl div,
+.institution .open-source dl div {
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.institution .principle-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+.institution .principle-list article {
+  display: block !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.institution .principle-list p {
+  margin-top: 0.75rem !important;
+}
+
+.institution .method-grid {
+  gap: clamp(2rem, 5vw, 4.5rem);
+}
+
+.institution .method-grid article,
+.institution .method-grid article + article {
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.institution .method-grid h3 {
+  margin-top: 0 !important;
+}
+
+.institution .method-grid p {
+  min-height: 0 !important;
+}
+
+.institution .method-grid ul,
+.institution .method-grid li {
+  border: 0 !important;
+}
+
+.institution .method-grid ul {
+  padding-left: 1rem !important;
+  list-style: disc !important;
+}
+
+.institution .medium-index {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 1.25rem 2.5rem;
+}
+
+.institution .medium-index a {
+  min-height: 0 !important;
+  padding: 0.6rem 0 !important;
+  border: 0 !important;
+}
+
+.institution .medium-index strong {
+  align-self: auto !important;
+}
+
+.institution .topic-index {
+  gap: 1.75rem 3rem;
+  border: 0 !important;
+}
+
+.institution .topic-index article {
+  display: block !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.institution .topic-index p {
+  margin-top: 0.55rem !important;
+}
+
+.institution .team {
+  margin-top: clamp(4rem, 8vw, 7rem) !important;
+  padding: 0 !important;
+}
+
+.institution .team__intro,
+.institution .open-source > div {
+  display: block !important;
+}
+
+.institution .team__intro p,
+.institution .open-source p {
+  grid-column: auto !important;
+  margin-top: 1rem !important;
+}
+
+.institution .team dl {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.institution .team dl div {
+  display: block !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.institution .team dd {
+  margin-top: 0.45rem !important;
+}
+
+.institution .open-source {
+  padding: clamp(4rem, 7vw, 6rem) 0 !important;
+}
+
+.institution .institution-cta {
+  padding: clamp(3rem, 6vw, 5rem) 0 0 !important;
+  border-top: 1px solid var(--line) !important;
+}
+
+/* Contact: quiet routes and an ordinary form, not a numbered directory. */
+.contact-page .contact-routes > div {
+  gap: clamp(2rem, 5vw, 4.5rem);
+}
+
+.contact-page .contact-routes article {
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.contact-page .contact-routes h3 {
+  margin-top: 0 !important;
+}
+
+.contact-page .contact-form-section {
+  margin-top: clamp(4rem, 8vw, 7rem) !important;
+  padding: clamp(3rem, 6vw, 5rem) 0 !important;
+  border-top: 1px solid var(--line) !important;
+}
+
+.contact-page .contact-info {
+  padding-top: clamp(3rem, 6vw, 5rem) !important;
+}
+
+.contact-page .contact-info dl div {
+  border: 0 !important;
+}
+
+/* Contribute: retain the form hierarchy; remove the catalogue scaffolding. */
+.contribute-page :is(.formats > div, .process > div, .support__reasons, .honors) {
+  gap: clamp(2rem, 5vw, 4.5rem);
+}
+
+.contribute-page :is(.formats, .process, .standards, .support) article,
+.contribute-page :is(.formats, .process, .support) article + article {
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.contribute-page :is(.formats, .process, .support) h3 {
+  margin-top: 0 !important;
+}
+
+.contribute-page .formats ul,
+.contribute-page .formats li {
+  border: 0 !important;
+}
+
+.contribute-page .formats ul {
+  padding-left: 1rem !important;
+  list-style: disc !important;
+}
+
+.contribute-page .standards {
+  padding: clamp(4rem, 8vw, 7rem) 0 !important;
+}
+
+.contribute-page .standards__intro,
+.contribute-page .submission__intro,
+.contribute-page .open-contribution > div {
+  display: block !important;
+}
+
+.contribute-page :is(.standards__intro, .submission__intro, .open-contribution > div) > p {
+  grid-column: auto !important;
+  margin-top: 1rem !important;
+}
+
+.contribute-page .standards > div:last-child {
+  display: grid;
+  gap: 1.5rem;
+  border: 0 !important;
+}
+
+.contribute-page .standards article {
+  display: block !important;
+  padding: 0 !important;
+}
+
+.contribute-page .standards article > p {
+  margin-top: 0.45rem !important;
+}
+
+.contribute-page .recognition ol {
+  gap: 1rem 3rem;
+}
+
+.contribute-page .recognition li {
+  display: block !important;
+  min-height: 0 !important;
+  padding: 0.35rem 0 !important;
+  border: 0 !important;
+}
+
+.contribute-page .submission {
+  padding: clamp(4rem, 8vw, 7rem) 0 !important;
+  border-top: 1px solid var(--line) !important;
+}
+
+.contribute-page .open-contribution {
+  padding: clamp(3.5rem, 7vw, 6rem) 0 !important;
+}
+
+.contact-page .contact-routes article,
+.contribute-page .process article {
+  min-height: 0 !important;
+}
+
+.contact-page .contact-routes h3,
+.contribute-page .process h3 {
+  margin-top: 1.5rem;
+}
+
+.contact-page .faq summary {
+  grid-template-columns: 1fr;
+}
+
+.contact-page .faq details p {
+  margin-left: 0;
+}
+
+@media (max-width: 700px) {
+  :is(
+    .book-related,
+    .film-related,
+    .article-related,
+    .video-related,
+    .podcast-related,
+    .paper-related
+  ) {
+    width: calc(100% - var(--editorial-mobile-gutter));
+    padding-inline: 0;
+  }
+
+  :is(
+    .book-related__grid,
+    .film-related__grid,
+    .article-related__grid,
+    .video-related__grid,
+    .podcast-related__grid,
+    .paper-related__grid
+  ) {
+    grid-template-columns: 1fr !important;
+    gap: 1.75rem;
+  }
+
+  :is(.institution-hero, .contact-hero, .contribute-hero) {
+    grid-template-columns: 1fr !important;
+    padding: 3.25rem 0 2.5rem;
+  }
+
+  :is(.institution-hero, .contact-hero, .contribute-hero) h1 {
+    font-size: clamp(3.25rem, 15vw, 5rem);
+  }
+
+  .institution .mission,
+  .institution .principle-list,
+  .institution .method-grid,
+  .institution .medium-index {
+    grid-template-columns: 1fr !important;
+  }
+}

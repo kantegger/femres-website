@@ -1,0 +1,17 @@
+---
+export const prerender = false;
+
+import { isSupportedDetailLocale } from "../../../../lib/localeDetails";
+
+const { locale } = Astro.params;
+if (!isSupportedDetailLocale(locale)) return Astro.redirect("/404");
+
+return Astro.redirect(
+  `/${locale}/podcasts?page=` + (
+    /^\d+$/.test(Astro.params.page || "")
+      ? Math.max(1, Number.parseInt(Astro.params.page || "1", 10))
+      : 1
+  ),
+  301,
+);
+---

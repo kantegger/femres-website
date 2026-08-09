@@ -1,0 +1,27 @@
+---
+export const prerender = true;
+import Layout from "../../../layouts/Layout.astro";
+import EditorialIssueDetail from "../../../components/EditorialIssueDetail.astro";
+import { type Locale } from "../../../i18n";
+import { nonDefaultDetailLocales } from "../../../lib/localeDetails";
+import { buildIssueView, getLocalizedIssueStaticPaths } from "../../../lib/issues";
+export function getStaticPaths() {
+  return getLocalizedIssueStaticPaths(nonDefaultDetailLocales);
+}
+const currentLocale = Astro.params.locale as Locale;
+const { slug } = Astro.props as { slug: string };
+const issue = await buildIssueView(slug, currentLocale);
+if (!issue) {
+  throw new Error(`Unknown issue slug: ${slug}`);
+}
+const titles: Record<Locale, string> = {
+  "zh-CN": "往期 - FemRes",
+  "zh-TW": "往期 - FemRes",
+  en: "Issues - FemRes",
+  ja: "バックナンバー - FemRes",
+  fr: "Numéros - FemRes",
+};
+---
+<Layout title={`${issue.copy.theme} · ${issue.copy.title} - ${titles[currentLocale]}`} description={issue.copy.deck} headerVariant="editorial" showMusicPlayer={false}>
+  <EditorialIssueDetail locale={currentLocale} issue={issue} />
+</Layout>

@@ -1,0 +1,34 @@
+---
+export const prerender = true;
+
+import Layout from "../../layouts/Layout.astro";
+import EditorialFilmDetail from "../../components/EditorialFilmDetail.astro";
+import SchemaMarkup from "../../components/seo/SchemaMarkup.astro";
+import { getCollectionDetailPathsForLocale } from "../../lib/content";
+
+export async function getStaticPaths() {
+  return getCollectionDetailPathsForLocale(
+    "films",
+    "zh-CN",
+    "film",
+    "allFilms",
+  );
+}
+
+const { film, allFilms } = Astro.props;
+---
+
+<Layout
+  title={`${film.data.title} - ${film.data.director} - FemRes`}
+  description={film.data.description}
+  image={film.data.posterImage}
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <SchemaMarkup
+    slot="head"
+    type="Movie"
+    data={{ ...film.data, coverImage: film.data.posterImage }}
+  />
+  <EditorialFilmDetail film={film} allFilms={allFilms} locale="zh-CN" />
+</Layout>

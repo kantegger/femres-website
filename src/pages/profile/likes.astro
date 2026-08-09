@@ -1,0 +1,24 @@
+---
+import ProfileContentListPage from "../../components/ProfileContentListPage.astro";
+import { createT, getLocalizedPath, type Locale } from "../../i18n";
+import { getUserContentListStrings } from "../../lib/profileTranslations";
+
+const currentLocale: Locale = "zh-CN";
+const t = createT(currentLocale);
+const contentListStrings = getUserContentListStrings(currentLocale);
+---
+
+<ProfileContentListPage
+  type="likes"
+  locale={currentLocale}
+  title={t("profilePage.likes.title")}
+  description={t("profilePage.likes.description")}
+  emptyMessage={t("profilePage.likes.emptyMessage")}
+  homeLabel={t("profilePage.breadcrumb.home")}
+  profileLabel={t("profilePage.breadcrumb.profile")}
+  homeLink={getLocalizedPath("/", currentLocale)}
+  profileLink={getLocalizedPath("profile", currentLocale)}
+  icon="❤️"
+  iconClassName="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-red-100 to-pink-100 dark:from-red-900 dark:to-pink-900 rounded-full mb-4"
+  uiStrings={contentListStrings}
+/>

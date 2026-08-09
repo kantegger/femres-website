@@ -1,0 +1,19 @@
+---
+import Layout from "../layouts/Layout.astro";
+import EditorialSearch from "../components/EditorialSearch.astro";
+import { createT, type Locale } from "../i18n";
+
+export const prerender = false;
+
+const currentLocale: Locale = "zh-CN";
+const t = createT(currentLocale);
+---
+
+<Layout
+  title={`${t("searchPage.title")} - FemRes`}
+  description={t("searchPage.metaDescription")}
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <EditorialSearch locale={currentLocale} pathMode="root" />
+</Layout>

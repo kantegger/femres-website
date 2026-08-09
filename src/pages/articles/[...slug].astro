@@ -1,0 +1,27 @@
+---
+export const prerender = true;
+
+import Layout from "../../layouts/Layout.astro";
+import EditorialArticleDetail from "../../components/EditorialArticleDetail.astro";
+import SchemaMarkup from "../../components/seo/SchemaMarkup.astro";
+import { getCollectionDetailPathsForLocale } from "../../lib/content";
+import { getEditorialShareImage } from "../../lib/editorialShareImage";
+
+export async function getStaticPaths() {
+  return getCollectionDetailPathsForLocale("articles", "zh-CN", "article", "allArticles");
+}
+
+const { article, allArticles } = Astro.props;
+const shareImage = getEditorialShareImage("article");
+---
+
+<Layout
+  title={`${article.data.title} - FemRes`}
+  description={article.data.description}
+  image={shareImage}
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <SchemaMarkup slot="head" type="Article" data={{ ...article.data, coverImage: shareImage }} />
+  <EditorialArticleDetail article={article} allArticles={allArticles} locale="zh-CN" />
+</Layout>

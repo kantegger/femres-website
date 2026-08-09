@@ -1,0 +1,20 @@
+---
+title: "How Feminism Ends?"
+author: "Ginevra Davis"
+publishDate: 2024-02-01
+description: "This article starts from bodily experience to critique contemporary feminism's over-abstraction of 'gender,' exploring the inescapability of the female body, the predicament of gender theory, and the tension between women's freedom and self-exhaustion."
+featuredImage: "https://media.femres.org/images/articles/how-feminism-ends.jpg"
+topics: ["Patriarchy Critique", "Trans Feminism", "Feminist Psychology", "Bodily Autonomy", "Anti-Feminism Studies", "Fourth Wave Feminism"]
+status: "published"
+sourceUrl: "https://americanaffairsjournal.org/2024/02/how-feminism-ends/?ref=refind"
+readingTime: 20
+contentLanguage: "en"
+---
+
+Ginevra Davis poses a provocative question in her detailed exploration of the current state of feminist thought: has contemporary feminism reached its logical endpoint? Starting from her own deeply personal bodily experiences, Davis questions the increasing abstraction of "gender" within modern theory. She argues that the concept of "woman" has been sanitized and intellectualized to the point where the visceral reality of the female body—its pain, its rhythms, and its physical limitations—has been almost entirely erased from the discourse. Her critique focuses on how influential figures like Judith Butler, through theories of gender performativity, have fundamentally altered feminist language, shifting the focus from the lived material reality of women to a series of linguistic and social performances.
+
+The core of Davis’s argument lies in what she describes as the inescapability of the female body. Through detailed accounts of her own long-term physical pain and medical encounters, she observes that for many women, "the female body is a part-time job." This "job" comes with extremely high maintenance costs in terms of time, energy, and mental focus, which she believes severely affects women's capacity for creativity and sustained professional concentration. By contrast, much of contemporary gender theory tends to disembody the concept of "woman." While the idea of gender as a social role initially offered a liberating potential, Davis contends that it has now become a predicament that obscures the very real physical burdens that women continue to carry regardless of their social identification.
+
+This theoretical shift has led to what Davis identifies as a linguistic crisis within feminism. Defining the word "woman" has become a fraught and difficult task, and the radical de-essentialization of the term has resulted in profound confusion in public discourse. When the category of "woman" is dismantled or made entirely fluid, it becomes increasingly difficult for women to speak clearly and authoritatively about their specific situations and needs. The result is a state of "self-exhaustion" among contemporary feminists who, while fighting for an abstract ideal of freedom, are also constantly suppressing or ignoring their own body's basic needs and limitations. This creates what Davis calls a state of "exhausted freedom"—a condition where women are legally free but physically and mentally depleted by the effort of transcending their own biology.
+
+Looking back at the history of feminist thought, Davis situates this crisis within a broader progression from fighting for legal equality to the total deconstruction of gender categories. She draws on the work of Emmanuel Todd and Simone de Beauvoir to point out that in this transition, the focus on women's bodily experience has been lost. While Beauvoir may have been unable to solve the question of whether women can achieve the same "greatness" as men, she at least acknowledged the struggle of the spirit against the limitations of the body. Davis suggests that if the ultimate goal of feminism is complete gender neutrality, then in a world where biological differences still exist, that goal might ironically mean the disappearance of "woman" as a meaningful category. Her article serves as a reminder that any feminism that seeks to end women's oppression must first reckon with the reality of the women it claims to represent.

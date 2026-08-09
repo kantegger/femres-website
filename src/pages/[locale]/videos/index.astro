@@ -1,0 +1,35 @@
+---
+export const prerender = false;
+
+import EditorialVideoIndex from "../../../components/EditorialVideoIndex.astro";
+import { createT } from "../../../i18n";
+import Layout from "../../../layouts/Layout.astro";
+import {
+  isSupportedDetailLocale,
+  type SupportedDetailLocale,
+} from "../../../lib/localeDetails";
+
+const { locale } = Astro.params;
+if (!isSupportedDetailLocale(locale)) return Astro.redirect("/404");
+const currentLocale = locale;
+const t = createT(currentLocale);
+const pageTitles: Record<SupportedDetailLocale, string> = {
+  "zh-CN": "影像",
+  en: "Videos",
+  "zh-TW": "影像",
+  ja: "映像",
+  fr: "Vidéos",
+};
+---
+
+<Layout
+  title={`${pageTitles[currentLocale]} - FemRes`}
+  description={t("videosPage.subtitle")}
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <EditorialVideoIndex
+    locale={currentLocale}
+    basePath={`/${currentLocale}/videos`}
+  />
+</Layout>

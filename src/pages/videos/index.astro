@@ -1,0 +1,15 @@
+---
+import EditorialVideoIndex from "../../components/EditorialVideoIndex.astro";
+import Layout from "../../layouts/Layout.astro";
+
+const currentLocale = "zh-CN";
+---
+
+<Layout
+  title="影像 - FemRes"
+  description="汇聚全球女性主义讲座、纪录片、访谈与思想影像。"
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <EditorialVideoIndex locale={currentLocale} basePath="/videos" />
+</Layout>

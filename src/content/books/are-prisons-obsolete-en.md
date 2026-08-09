@@ -1,0 +1,28 @@
+---
+title: "Are Prisons Obsolete?"
+author: "Angela Y. Davis"
+description: "Angela Y. Davis’s classic short book denaturalizes prisons as historical institutions and asks readers to imagine justice and safety beyond incarceration."
+publishDate: 2003-08-05
+isbn: "9781583225813"
+contentLanguage: "en"
+topics: ["Prison Abolition","Carceral Feminism","Black Feminism","Race and Gender","Political Participation"]
+sourceUrl: "https://sevenstories.com/books/2907-are-prisons-obsolete"
+coverImage: "https://media.femres.org/images/books/are-prisons-obsolete.jpg"
+status: "published"
+---
+
+*Are Prisons Obsolete?* uses a seemingly unthinkable question to expose the prison’s unusual place in modern political imagination. People may concede that prisons are brutal, racially unequal, and ineffective at rehabilitation—even that many incarcerated people should not be there—while still treating a world without prisons as impossible to think. Angela Y. Davis does not begin by naming one ideal replacement institution. She explains how imagination became closed: prisons remove unemployment, poverty, mental-health crises, drug dependence, and social violence from public sight, permitting a free society to avoid addressing them while mistaking disappearance for resolution.
+
+Davis denaturalizes prison through institutional history. Imprisonment is a relatively modern punishment and was once promoted as a humane reform of corporal and capital punishment. In the United States it later connected with Black Codes, convict leasing, and forced labor after the formal abolition of slavery, extending racialized exploitation and control. Simply equating prison with slavery would erase historical differences, but tracing institutional succession reveals why abolition cannot stop at changing a legal name. If labor, land, and political power remain intact, an old relation of domination can return in a new form.
+
+The “prison-industrial complex” likewise means more than private prison corporations profiting from inmates. Davis describes an expansionary arrangement of public budgets, construction firms, technology suppliers, rural employment politics, media fear, police, and courts. Prisons are sold as economic development for regions that have lost work, drawing resources that might have supported schools, health, and housing; increased incarceration then supplies the political rationale for more facilities. Even if every prison were publicly operated and corporate profit limited, the conversion of social investment into punitive capacity would remain.
+
+Women’s imprisonment clarifies the system’s gendered structure. Davis recounts how women prisoners are punished both for breaking the law and for departing from normative femininity, while prisons govern their bodies through sexual abuse, strip searches, medical neglect, forced medication, and separation from children. Rising numbers of incarcerated women have often been answered with “gender-responsive” facilities. Davis warns that equal access to confinement is not liberation. A feminism that demands prison capacity and specialized management for women may open a new market for institutional expansion.
+
+This explains her caution about reform. Better healthcare, an end to sexual violence, and the abolition of solitary confinement are urgent; people inside cannot be asked to endure present harm for a future ideal. Yet some reforms add beds, budgets, and surveillance technology under the banner of humanity, making prison easier for the public to accept. The abolitionist test is not whether a reform is ideologically pure, but whether it reduces the number of people confined, shortens sentences, expands freedom and resources, and weakens the institution’s future capacity to imprison. It connects immediate harm reduction to a direction of decarceration.
+
+When readers ask what will replace prison, Davis refuses to exchange one total institution for another. The problems swallowed by prisons are not all the same, so alternatives must form a constellation: robust education and healthcare, affordable housing, decriminalized drug policy, mental-health support, restorative and transformative justice, material security for survivors of gender violence, and conflict processes that do not default to exclusion. The claim is not that all harm will disappear. It is that confinement should cease to be society’s automatic answer to every failure.
+
+This 128-page book is intentionally an entry point, and it opens more difficulties than it resolves. Its focus is the United States at the start of the twenty-first century; trans and nonbinary prisoners, immigration detention, algorithmic surveillance, electronic monitoring, and contemporary family policing receive limited attention. Nor does it fully develop immediate safety in cases of continuing severe violence, the conditions for survivor participation in accountability, or transition across different welfare states. Its mobilizing history should be read with prisoner writing, Indigenous and disability abolitionism, survivor advocacy, and current empirical work.
+
+For FemRes readers, the most durable contribution of *Are Prisons Obsolete?* is a reversal of the ordinary question. Instead of beginning with whether a particular person “deserves” confinement, ask why housing, care, and education are treated as expensive ideals while prison counts as realism; why an institutional harm receives resources only after it has been individualized as crime; how many people a reform will free, and which new populations it may place under supervision. Davis does not ask us to believe in a society without conflict. She asks us to stop granting prison an exemption from having to prove that it works.

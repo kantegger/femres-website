@@ -1,0 +1,141 @@
+.editorial-language {
+  position: relative;
+}
+
+.editorial-language__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  width: fit-content;
+  min-height: 38px;
+  padding: 0.45rem 0.15rem;
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+  font: 600 0.72rem/1 Inter, "Noto Sans SC", sans-serif;
+  letter-spacing: 0.08em;
+  transition: border-color 150ms ease, color 150ms ease;
+}
+
+.editorial-language__trigger::-webkit-details-marker {
+  display: none;
+}
+
+.editorial-language__trigger::marker {
+  content: "";
+}
+
+.editorial-language__trigger:hover,
+.editorial-language[open] > .editorial-language__trigger {
+  border-bottom-color: #df2d27;
+  color: #df2d27;
+}
+
+.editorial-language__globe {
+  width: 1.1rem;
+  height: 1.1rem;
+  display: block;
+  flex: 0 0 auto;
+}
+
+.editorial-language__code {
+  line-height: 1;
+  display: none;
+}
+
+.editorial-language__chevron {
+  width: 0.9rem;
+  height: 0.9rem;
+  display: block;
+  transition: transform 150ms ease;
+}
+
+.editorial-language[open] .editorial-language__chevron {
+  transform: rotate(180deg);
+}
+
+.editorial-language__menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.55rem);
+  z-index: 80;
+  width: 10.5rem;
+  border: 1px solid #171614;
+  border-radius: 0;
+  background: #f8f5ef;
+  color: #171614;
+}
+
+.editorial-language__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.65rem;
+  border-bottom: 1px solid #c9c3b9;
+  padding: 0.55rem 0.75rem;
+  color: inherit;
+  font: 600 0.76rem/1.2 Inter, "Noto Sans SC", sans-serif;
+  letter-spacing: 0.035em;
+  text-decoration: none;
+}
+
+.editorial-language__option:last-child {
+  border-bottom: 0;
+}
+
+.editorial-language__option:hover {
+  background: #eee9e0;
+}
+
+.editorial-language__option.is-current {
+  background: #171614;
+  color: #fff;
+}
+
+.editorial-language__check {
+  width: 0.9rem;
+  height: 0.9rem;
+  color: #df2d27;
+}
+
+.editorial-language--desktop .editorial-language__trigger {
+  margin-top: 1px;
+}
+
+.editorial-language--mobile .editorial-language__trigger {
+  justify-content: flex-start;
+  gap: 0.6rem;
+  width: 100%;
+  min-height: unset;
+  padding: 0.9rem 0.25rem;
+  font: 600 1.32rem/1.1 "Noto Serif TC", "Noto Serif", Georgia, serif;
+}
+
+.editorial-language--mobile .editorial-language__code {
+  display: inline;
+  line-height: 1;
+}
+
+.editorial-language--mobile .editorial-language__menu {
+  right: auto;
+  left: 0;
+  width: 14rem;
+  top: calc(100% + 0.5rem);
+}
+
+@media (min-width: 640px) {
+  .editorial-language__code { display: inline; }
+}
+
+html.dark .editorial-language__menu {
+  border-color: #e5e0d7;
+  background: #171614;
+  color: #f8f5ef;
+}
+
+html.dark .editorial-language__option { border-bottom-color: #4f4a43; }
+html.dark .editorial-language__option:hover { background: #292622; }
+html.dark .editorial-language__option.is-current { background: #f8f5ef; color: #171614; }

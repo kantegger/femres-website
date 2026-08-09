@@ -1,0 +1,28 @@
+---
+title: "Becoming Ms. Burton: From Prison to Recovery to Leading the Fight for Incarcerated Women"
+author: "Susan Burton, Cari Lynn"
+description: "Susan Burton’s lived account connects trauma, the drug war, repeated incarceration, and reentry, then turns recovery into care and political work led by formerly incarcerated women."
+publishDate: 2017-05-09
+isbn: "9781620972120"
+contentLanguage: "en"
+topics: ["Prison Abolition","Women's Rights","Trauma and Healing","Economic Empowerment","Social Movements"]
+sourceUrl: "https://thenewpress.org/books/becoming-ms-burton/"
+coverImage: "https://media.femres.org/images/books/becoming-ms-burton.jpg"
+status: "published"
+---
+
+*Becoming Ms. Burton* can be marketed as a story of hitting bottom and recovering through willpower, but Susan Burton and Cari Lynn have written testimony about how institutions manufacture the fall. Burton’s life included poverty, childhood sexual abuse, rape and exploitation as a teenager, and then the death of her five-year-old son Marque beneath a police car. She received neither meaningful accountability nor care capable of holding her grief. Drugs became a way to numb trauma, while the state’s most available response to her was not treatment but arrest.
+
+During the height of the US war on drugs, Burton was incarcerated six times and cycled through prison over fifteen years for drug-related offenses. The memoir makes the production of “recidivism” visible: untreated trauma feeds dependency; dependency is criminalized; incarceration disrupts family and work; a record then blocks housing, benefits, and employment; the next crisis becomes more likely. For Black women, racialized policing operates with gendered judgments about the bad mother, the disorderly woman, and the supposedly incorrigible addict, turning a person in need of care into a subject presumed to require punishment.
+
+The book’s sharpest contrast concerns the geography and class distribution of care. Years in prison did not bring Burton effective trauma treatment or sustained addiction support. Only by chance did she reach a private recovery facility in Santa Monica, where she experienced stability, safety, and recognition as a whole person. Her breakthrough exposed a public choice: treatment existed in a wealthy, largely white area, while poor Black residents of South Los Angeles were more readily supplied with police, courts, and cells. Recovery did not disprove structural critique; it gave her a material comparison on which to build it.
+
+After becoming sober, Burton did not conclude that she possessed more discipline than women still caught in the cycle. In 1998 she purchased a house in South Los Angeles and began welcoming women released from prison with nowhere to go, developing what became A New Way of Life Reentry Project. The organization provides sober housing, case support, legal services, family reunification, and leadership development without armed guards or a culture of humiliation and instant expulsion. Reentry becomes a test not of individual adjustment but of whether society will return resources, relationships, and civic standing after confinement.
+
+Burton’s “wall of no” is especially important to a feminist reading. A criminal record reappears in renting, employment, public assistance, education, voting, and custody proceedings; women must often rebuild relationships with children while resuming care work society assumes they will perform. Punishment continues long after a sentence ends. Housing and accompaniment at A New Way of Life are therefore not charitable extras but safety infrastructure. Stable shelter, income, and non-shaming relationships create the conditions in which a person can address trauma and choose a future.
+
+The memoir also shows lived-experience leadership growing into institutional contest. Burton moves from offering individual women a bed to challenging lifetime collateral punishment, advocating fair employment, and organizing formerly incarcerated people to speak in their own names. Suffering alone does not automatically confer political wisdom; her authority comes from turning experience into service design and analysis that others can test and reshape. Care is not feminized, unpaid virtue here. It is public work that requires money, organizational capacity, and decision-making power for the people most affected.
+
+Readers should still resist the pull of a singular hero. Cari Lynn coauthors a memoir centered on an exceptional organizer, so it cannot stand for every incarcerated woman, and the published arc necessarily compresses colleagues’ labor and the slow construction of institutions. Burton’s work spans immediate recovery services, criminal-justice reform, and an abolitionist horizon, positions that contain productive tension. Humane reentry can save lives without by itself ending the system that produces confinement. Celebrating resilience without asking why such resilience was required would return responsibility to the individual.
+
+In the first half, write beside each apparent “choice” the resources available or withheld at that moment; in the second, note how A New Way of Life responds to those missing conditions one by one. Pair the memoir with *The New Jim Crow* for the drug war’s racial architecture, and with *All Our Trials* or *Beyond Survival* to compare movement history, reentry practice, and transformative justice. Its most credible hope is not that one woman miraculously escaped a system. It is that she returned to dismantle its wall and enabled more people once confined by it to decide together where doors should be built.

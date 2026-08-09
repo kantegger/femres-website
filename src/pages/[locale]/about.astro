@@ -1,0 +1,14 @@
+---
+export const prerender = true;
+import EditorialAbout from "../../components/EditorialAbout.astro";
+import Layout from "../../layouts/Layout.astro";
+import { createT, type Locale } from "../../i18n";
+
+export function getStaticPaths() { return ["en", "zh-TW", "ja", "fr"].map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = createT(locale);
+---
+
+<Layout title={`${t("about.title")} - FemRes`} description={t("about.subtitle")} headerVariant="editorial" showMusicPlayer={false}>
+  <EditorialAbout locale={locale} />
+</Layout>

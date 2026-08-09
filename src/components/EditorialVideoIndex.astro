@@ -1,0 +1,312 @@
+---
+import InteractionButtons from "./InteractionButtons";
+import { formatDate, getLocalizedPath, type Locale } from "../i18n";
+import { cleanLocalizedSlug } from "../lib/content";
+import { buildDateTitleListingPageData } from "../lib/listingPage";
+import { getTranslatedTopicLabel } from "../lib/listingTopics";
+import CoverImage from "./editorial/CoverImage.astro";
+import FilterRow from "./editorial/FilterRow.astro";
+import IndexShell from "./editorial/IndexShell.astro";
+import Pagination from "./editorial/Pagination.astro";
+import SortSelect from "./editorial/SortSelect.astro";
+
+interface Props {
+  locale: Locale;
+  basePath: string;
+}
+
+const { locale, basePath } = Astro.props;
+const perPage = 12;
+const data = await buildDateTitleListingPageData({
+  collectionName: "videos",
+  locale,
+  url: Astro.url,
+  pathMode: basePath.startsWith(`/${locale}/`) ? "locale" : "root",
+  perPage,
+  featuredCount: 3,
+  allTopicLabelKey: "videosPage.allVideos",
+});
+const {
+  t,
+  allTopics,
+  currentTopic,
+  currentSort,
+  currentItems,
+  featuredItems,
+  totalItems,
+  visibleTotal,
+  totalPages,
+  validPage,
+  currentTopicLabel,
+  getListingUrl: getVideosUrl,
+} = data;
+
+const videoLink = (slug: string) =>
+  getLocalizedPath(`videos/${cleanLocalizedSlug(slug)}`, locale);
+const cleanVisible = (value: string) => value.replace(/[—–]/g, " - ");
+
+const labels: Record<Locale, {
+  title: string;
+  index: string;
+  filters: string;
+  programme: string;
+  sort: string;
+  show: string;
+  hide: string;
+  results: string;
+  previous: string;
+  next: string;
+  noImage: string;
+  watch: string;
+  guide: string;
+}> = {
+  "zh-CN": { title: "影像", index: "女性主义讲座、纪录片与思想影像", filters: "按话题观看", programme: "放映目录", sort: "排序", show: "展开全部话题", hide: "收起话题", results: "部影像", previous: "上一页", next: "下一页", noImage: "暂无画面", watch: "观看与阅读", guide: "观看路径" },
+  "zh-TW": { title: "影像", index: "女性主義講座、紀錄片與思想影像", filters: "按話題觀看", programme: "放映目錄", sort: "排序", show: "展開全部話題", hide: "收起話題", results: "部影像", previous: "上一頁", next: "下一頁", noImage: "暫無畫面", watch: "觀看與閱讀", guide: "觀看路徑" },
+  en: { title: "Videos", index: "Feminist talks, documentaries, and moving-image essays", filters: "Watch by topic", programme: "Screening programme", sort: "Sort", show: "Show all topics", hide: "Show fewer topics", results: "videos", previous: "Previous", next: "Next", noImage: "No image", watch: "Watch and read", guide: "Viewing paths" },
+  ja: { title: "映像", index: "フェミニズムの講演・ドキュメンタリー・映像エッセイ", filters: "トピックから観る", programme: "上映目録", sort: "並び順", show: "すべてのトピック", hide: "トピックを閉じる", results: "本", previous: "前へ", next: "次へ", noImage: "画像なし", watch: "観る・読む", guide: "鑑賞の手引き" },
+  fr: { title: "Vidéos", index: "Conférences, documentaires et essais vidéo féministes", filters: "Voir par sujet", programme: "Programme de projection", sort: "Trier", show: "Tous les sujets", hide: "Réduire les sujets", results: "vidéos", previous: "Précédent", next: "Suivant", noImage: "Sans image", watch: "Voir et lire", guide: "Parcours de visionnage" },
+};
+const copy = labels[locale];
+
+const formatDuration = (duration?: number) => {
+  if (!duration) return "";
+  const hours = Math.floor(duration / 3600);
+  const minutes = Math.floor((duration % 3600) / 60);
+  const seconds = duration % 60;
+  return hours > 0
+    ? `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
+    : `${minutes}:${String(seconds).padStart(2, "0")}`;
+};
+
+const getPlatform = (url: string) => {
+  if (url.includes("youtube.com") || url.includes("youtu.be")) return "YouTube";
+  if (url.includes("bilibili.com")) return "Bilibili";
+  if (url.includes("vimeo.com")) return "Vimeo";
+  if (url.includes("ted.com")) return "TED";
+  return "Video";
+};
+
+const topicValues = [
+  { value: "all", label: t("videosPage.allVideos"), href: getVideosUrl({ topic: "all", page: 1 }) },
+  ...allTopics.map((topic) => ({
+    value: topic,
+    label: getTranslatedTopicLabel(topic, locale),
+    href: getVideosUrl({ topic, page: 1 }),
+  })),
+];
+
+const sortOptions = [
+  { value: "date-desc", label: t("videosPage.sort.latest") },
+  { value: "date-asc", label: t("videosPage.sort.oldest") },
+  { value: "title-asc", label: t("videosPage.sort.titleAZ") },
+  { value: "title-desc", label: t("videosPage.sort.titleZA") },
+];
+
+const interactionCopy = {
+  like: t("interactions.like"),
+  unlike: t("interactions.unlike"),
+  bookmark: t("interactions.bookmark"),
+  unbookmark: t("interactions.unbookmark"),
+  loginToInteract: t("interactions.loginToInteract"),
+};
+
+const lead = featuredItems[0];
+const briefs = featuredItems.slice(1, 3);
+---
+
+<IndexShell
+  title={copy.title}
+  tagline={copy.index}
+  intro={cleanVisible(t("videosPage.subtitle"))}
+  stats={[
+    { value: String(totalItems).padStart(3, "0"), label: t("videosPage.stats.totalVideos", { count: totalItems }) },
+    { value: String(allTopics.length).padStart(2, "0"), label: t("videosPage.stats.topicCategories", { count: allTopics.length }) },
+  ]}
+>
+  <FilterRow
+    slot="filters"
+    heading={copy.filters}
+    values={topicValues}
+    currentValue={currentTopic}
+    showLabel={copy.show}
+    hideLabel={copy.hide}
+  />
+
+  <div slot="featured" class="video-heading">
+    <div>
+      <h2>{currentTopic === "all" ? copy.programme : currentTopicLabel}</h2>
+      <p>{visibleTotal} {copy.results}</p>
+    </div>
+    <SortSelect
+      id="video-sort-select"
+      label={copy.sort}
+      options={sortOptions}
+      currentValue={currentSort}
+      defaultValue="date-desc"
+    />
+  </div>
+
+  {lead && (
+    <div slot="featured" class="video-screenings">
+      <article class="video-screening video-screening--lead">
+        <a href={videoLink(lead.id)}>
+          <div class="video-screening__image">
+            <CoverImage src={lead.data.thumbnail} kind="video" loading="eager">
+              <span slot="placeholder">{copy.noImage}</span>
+            </CoverImage>
+            <i aria-hidden="true">▶</i>
+          </div>
+          <div class="video-screening__copy">
+            <span>{getPlatform(lead.data.sourceUrl)} / {formatDate(lead.data.publishDate, locale)}{lead.data.duration ? ` / ${formatDuration(lead.data.duration)}` : ""}</span>
+            <h3>{cleanVisible(lead.data.title)}</h3>
+            <p>{cleanVisible(lead.data.description)}</p>
+            <small>{cleanVisible(lead.data.author)} / {copy.watch}</small>
+          </div>
+        </a>
+        <div class="video-actions">
+          <InteractionButtons contentId={`video-${cleanLocalizedSlug(lead.id)}`} contentType="video" t={interactionCopy} client:visible />
+        </div>
+      </article>
+
+      <div class="video-screenings__briefs">
+        {briefs.map((video) => (
+          <article class="video-screening video-screening--brief">
+            <a href={videoLink(video.id)}>
+              <div class="video-screening__image">
+                <CoverImage src={video.data.thumbnail} kind="video">
+                  <span slot="placeholder">{copy.noImage}</span>
+                </CoverImage>
+                <i aria-hidden="true">▶</i>
+              </div>
+              <div class="video-screening__copy">
+                <span>{getPlatform(video.data.sourceUrl)}{video.data.duration ? ` / ${formatDuration(video.data.duration)}` : ""}</span>
+                <h3>{cleanVisible(video.data.title)}</h3>
+                <p>{cleanVisible(video.data.author)}</p>
+              </div>
+            </a>
+            <div class="video-actions">
+              <InteractionButtons contentId={`video-${cleanLocalizedSlug(video.id)}`} contentType="video" t={interactionCopy} client:visible />
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {currentItems.length > 0 && (
+    <div class="video-programme__grid">
+      {currentItems.map((video, index) => (
+        <article class="video-entry">
+          <a href={videoLink(video.id)}>
+            <div class="video-entry__image">
+              <CoverImage src={video.data.thumbnail} kind="video">
+                <span slot="placeholder">{copy.noImage}</span>
+              </CoverImage>
+              <b>{String((validPage - 1) * perPage + index + 4).padStart(2, "0")}</b>
+            </div>
+            <span>{getPlatform(video.data.sourceUrl)} / {formatDate(video.data.publishDate, locale)}{video.data.duration ? ` / ${formatDuration(video.data.duration)}` : ""}</span>
+            <h3>{cleanVisible(video.data.title)}</h3>
+            <p>{cleanVisible(video.data.author)}</p>
+          </a>
+          <div class="video-actions">
+            <InteractionButtons contentId={`video-${cleanLocalizedSlug(video.id)}`} contentType="video" t={interactionCopy} client:visible />
+          </div>
+        </article>
+      ))}
+    </div>
+  )}
+
+  {currentItems.length === 0 && featuredItems.length === 0 && (
+    <div class="video-empty">
+      <h3>{t("videosPage.emptyState.title")}</h3>
+      <p>{t("videosPage.emptyState.description")}</p>
+    </div>
+  )}
+
+  <Pagination
+    slot="pagination"
+    totalPages={totalPages}
+    validPage={validPage}
+    getUrl={(page) => getVideosUrl({ page })}
+    previousLabel={copy.previous}
+    nextLabel={copy.next}
+    navLabel={t("common.pagination.navigation")}
+  />
+
+  <Fragment slot="aside">
+    <h2 class="video-guide__heading">{copy.guide}</h2>
+    <div class="video-guide__grid">
+      <section><h3>{t("videosPage.guide.documentaries.title")}</h3><p>{cleanVisible(t("videosPage.guide.documentaries.description"))}</p></section>
+      <section><h3>{t("videosPage.guide.talks.title")}</h3><p>{cleanVisible(t("videosPage.guide.talks.description"))}</p></section>
+      <section><h3>{t("videosPage.guide.reflection.title")}</h3><p>{cleanVisible(t("videosPage.guide.reflection.description"))}</p></section>
+    </div>
+  </Fragment>
+</IndexShell>
+
+<style>
+  .video-heading { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 32px; }
+  .video-heading h2 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(2.2rem, 4vw, 4rem); font-weight: 500; line-height: 1.1; }
+  .video-heading p { margin: 10px 0 0; color: var(--muted); font-family: var(--editorial-sans); font-size: .72rem; }
+
+  .video-screenings { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(280px, .8fr); gap: 26px; padding: 26px 0 58px; border-top: 1px solid var(--ink); }
+  .video-screenings__briefs { display: grid; grid-template-rows: 1fr 1fr; gap: 28px; }
+  .video-screening { position: relative; min-width: 0; }
+  .video-screening > a, .video-entry > a { display: block; color: inherit; text-decoration: none; }
+  .video-screening__image, .video-entry__image { position: relative; }
+  .video-screening__image :global(.ed-cover), .video-entry__image :global(.ed-cover) { background: var(--paper-deep); }
+  .video-screening__image :global(.ed-cover img), .video-entry__image :global(.ed-cover img) { filter: saturate(.82) contrast(1.02); transition: transform .4s cubic-bezier(.16, 1, .3, 1), filter .25s ease; }
+  .video-screening a:hover :global(.ed-cover img), .video-entry a:hover :global(.ed-cover img) { transform: scale(1.025); filter: saturate(1) contrast(1); }
+  .video-screening__image i { position: absolute; right: 18px; bottom: 16px; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid rgb(255 255 255 / .8); border-radius: 50%; color: white; background: rgb(23 22 20 / .72); font-style: normal; font-size: .78rem; transition: transform .2s ease, background .2s ease; }
+  .video-screening a:hover .video-screening__image i { transform: scale(1.06); background: var(--accent); }
+  .video-screening__copy { padding-top: 18px; }
+  .video-screening__copy > span, .video-entry > a > span { display: block; color: var(--accent); font-family: var(--editorial-sans); font-size: .64rem; line-height: 1.5; }
+  .video-screening__copy h3 { margin: 10px 0 0; font-family: var(--editorial-serif); font-size: clamp(1.8rem, 3.2vw, 3.5rem); font-weight: 500; line-height: 1.12; letter-spacing: -.025em; }
+  .video-screening__copy > p { margin: 16px 0 0; color: var(--muted); font-family: var(--editorial-serif); font-size: .96rem; line-height: 1.7; }
+  .video-screening__copy small { display: block; margin-top: 20px; color: var(--muted); font-size: .68rem; }
+  .video-screening--brief { padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .video-screening--brief .video-screening__image i { width: 34px; height: 34px; right: 12px; bottom: 10px; font-size: .62rem; }
+  .video-screening--brief .video-screening__copy { padding-top: 11px; }
+  .video-screening--brief .video-screening__copy h3 { margin-top: 6px; font-size: clamp(1.05rem, 1.7vw, 1.45rem); line-height: 1.22; }
+  .video-screening--brief .video-screening__copy > p { margin-top: 8px; font-family: inherit; font-size: .7rem; line-height: 1.4; }
+
+  .video-actions { position: relative; margin-top: 12px; min-height: 28px; }
+  .video-actions :global(button) { color: var(--muted); }
+
+  .video-programme__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 24px; row-gap: 54px; padding-top: 48px; border-top: 1px solid var(--ink); }
+  .video-entry { min-width: 0; }
+  .video-entry__image { margin-bottom: 15px; }
+  .video-entry__image b { position: absolute; left: 0; bottom: 0; z-index: 1; padding: 5px 8px; color: var(--paper); background: var(--ink); font-family: var(--editorial-sans); font-size: .63rem; font-weight: 500; }
+  .video-entry h3 { margin: 8px 0 0; font-family: var(--editorial-serif); font-size: clamp(1.2rem, 1.9vw, 1.65rem); font-weight: 500; line-height: 1.25; }
+  .video-entry p { margin: 9px 0 0; color: var(--muted); font-size: .72rem; }
+
+  .video-empty { padding: 90px 0; border-top: 1px solid var(--ink); text-align: center; }
+  .video-empty h3 { margin: 0; font-family: var(--editorial-serif); font-size: 2rem; font-weight: 500; }
+  .video-empty p { color: var(--muted); }
+
+  .video-guide__heading { margin: 0 0 36px; font-family: var(--editorial-serif); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 500; }
+  .video-guide__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 42px; }
+  .video-guide__grid section + section { border-left: 1px solid var(--line); padding-left: 42px; }
+  .video-guide__grid h3 { margin: 0 0 10px; font-family: var(--editorial-serif); font-size: 1.08rem; font-weight: 500; }
+  .video-guide__grid p { margin: 0; color: var(--muted); font-size: .76rem; line-height: 1.7; }
+
+  @media (max-width: 900px) {
+    .video-screenings { grid-template-columns: 1fr; }
+    .video-screenings__briefs { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .video-programme__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 700px) {
+    .video-heading { display: block; }
+    .video-screenings__briefs, .video-programme__grid { grid-template-columns: 1fr; }
+    .video-screening__copy h3 { font-size: 2rem; }
+    .video-screening--brief .video-screening__copy h3 { font-size: 1.35rem; }
+    .video-programme__grid { row-gap: 42px; }
+    .video-guide__grid { grid-template-columns: 1fr; gap: 28px; }
+    .video-guide__grid section + section { border-left: 0; border-top: 1px solid var(--line); padding: 28px 0 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .video-screenings *, .video-screenings *::before, .video-screenings *::after,
+    .video-programme__grid *, .video-programme__grid *::before, .video-programme__grid *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+  }
+</style>

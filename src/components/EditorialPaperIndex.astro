@@ -1,0 +1,284 @@
+---
+import InteractionButtons from "./InteractionButtons";
+import { createT, getLocalizedPath, type Locale } from "../i18n";
+import { cleanLocalizedSlug } from "../lib/content";
+import { buildCollectionListingView } from "../lib/listing";
+import { comparePapers, getCanonicalTopicKey, paperSortOptions } from "../lib/listingSort";
+import { getCurrentTopicLabel, getTranslatedTopicLabel } from "../lib/listingTopics";
+import FilterRow from "./editorial/FilterRow.astro";
+import IndexShell from "./editorial/IndexShell.astro";
+import Pagination from "./editorial/Pagination.astro";
+import SortSelect from "./editorial/SortSelect.astro";
+
+interface Props {
+  locale: Locale;
+  pathMode: "root" | "locale";
+}
+
+const { locale, pathMode } = Astro.props;
+const t = createT(locale);
+const basePath = pathMode === "locale" ? `/${locale}/papers` : "/papers";
+const {
+  allTopics,
+  currentTopic,
+  currentSort,
+  totalItems,
+  visibleTotal,
+  totalPages,
+  validPage,
+  currentItems,
+  featuredItems,
+  sourceItems,
+  getListingUrl: getPapersUrl,
+} = await buildCollectionListingView({
+  collectionName: "papers",
+  locale,
+  url: Astro.url,
+  basePath,
+  perPage: 12,
+  featuredCount: 3,
+  sortOptions: paperSortOptions,
+  defaultSort: "date-desc",
+  getTopics: (paper) => paper.data.topics.map(getCanonicalTopicKey),
+  compareItems: comparePapers,
+});
+
+const labels: Record<Locale, {
+  title: string;
+  index: string;
+  filters: string;
+  catalogue: string;
+  sort: string;
+  show: string;
+  hide: string;
+  results: string;
+  journals: string;
+  fields: string;
+  previous: string;
+  next: string;
+  abstract: string;
+  read: string;
+  guide: string;
+  citations: string;
+}> = {
+  "zh-CN": { title: "论文", index: "女性主义研究、理论与方法的学术索引", filters: "按研究领域阅读", catalogue: "论文目录", sort: "排序", show: "展开全部领域", hide: "收起研究领域", results: "篇论文", journals: "种期刊来源", fields: "个研究领域", previous: "上一页", next: "下一页", abstract: "摘要", read: "阅读全文", guide: "研究路径", citations: "次引用" },
+  "zh-TW": { title: "論文", index: "女性主義研究、理論與方法的學術索引", filters: "按研究領域閱讀", catalogue: "論文目錄", sort: "排序", show: "展開全部領域", hide: "收起研究領域", results: "篇論文", journals: "種期刊來源", fields: "個研究領域", previous: "上一頁", next: "下一頁", abstract: "摘要", read: "閱讀全文", guide: "研究路徑", citations: "次引用" },
+  en: { title: "Papers", index: "An academic index of feminist research, theory, and method", filters: "Read by field", catalogue: "Paper catalogue", sort: "Sort", show: "Show all fields", hide: "Show fewer fields", results: "papers", journals: "journal sources", fields: "research fields", previous: "Previous", next: "Next", abstract: "Abstract", read: "Read paper", guide: "Research paths", citations: "citations" },
+  ja: { title: "論文", index: "フェミニズム研究・理論・方法の学術索引", filters: "研究分野から読む", catalogue: "論文目録", sort: "並び順", show: "すべての分野", hide: "分野を閉じる", results: "本", journals: "誌の掲載元", fields: "研究分野", previous: "前へ", next: "次へ", abstract: "要旨", read: "論文を読む", guide: "研究の道筋", citations: "引用" },
+  fr: { title: "Études", index: "Un index académique de la recherche, de la théorie et des méthodes féministes", filters: "Lire par domaine", catalogue: "Catalogue des études", sort: "Trier", show: "Tous les domaines", hide: "Réduire les domaines", results: "études", journals: "revues sources", fields: "domaines de recherche", previous: "Précédent", next: "Suivant", abstract: "Résumé", read: "Lire l’étude", guide: "Parcours de recherche", citations: "citations" },
+};
+const copy = labels[locale];
+const journalCount = new Set(sourceItems.map((paper) => paper.data.journal).filter(Boolean)).size;
+const currentTopicLabel = getCurrentTopicLabel(currentTopic, locale, t("papersPage.allPapers"));
+const paperLink = (slug: string) => getLocalizedPath(`papers/${cleanLocalizedSlug(slug)}`, locale);
+const cleanVisible = (value: string) => value.replace(/[—–]/g, " - ");
+const year = (date: Date) => date.getFullYear();
+const paperType = (type?: "research" | "review" | "case-study" | "theoretical") => t(`common.paperTypes.${type ?? "research"}`);
+
+const topicValues = [
+  { value: "all", label: t("papersPage.allPapers"), href: getPapersUrl({ topic: "all", page: 1 }) },
+  ...allTopics.map((topic) => ({
+    value: topic,
+    label: getTranslatedTopicLabel(topic, locale),
+    href: getPapersUrl({ topic, page: 1 }),
+  })),
+];
+
+const sortOptions = [
+  { value: "date-desc", label: t("papersPage.sort.latest") },
+  { value: "date-asc", label: t("papersPage.sort.oldest") },
+  { value: "title-asc", label: t("papersPage.sort.titleAZ") },
+  { value: "title-desc", label: t("papersPage.sort.titleZA") },
+  { value: "citations-desc", label: t("papersPage.sort.citationsDesc") },
+  { value: "citations-asc", label: t("papersPage.sort.citationsAsc") },
+];
+
+const interactionCopy = {
+  like: t("interactions.like"),
+  unlike: t("interactions.unlike"),
+  bookmark: t("interactions.bookmark"),
+  unbookmark: t("interactions.unbookmark"),
+  loginToInteract: t("interactions.loginToInteract"),
+};
+
+const lead = featuredItems[0];
+const briefs = featuredItems.slice(1);
+---
+
+<IndexShell
+  title={copy.title}
+  tagline={copy.index}
+  intro={cleanVisible(t("papersPage.subtitle"))}
+  stats={[
+    { value: String(totalItems).padStart(3, "0"), label: `${totalItems} ${copy.results}` },
+    { value: String(journalCount).padStart(2, "0"), label: `${journalCount} ${copy.journals}` },
+    { value: String(allTopics.length).padStart(2, "0"), label: `${allTopics.length} ${copy.fields}` },
+  ]}
+>
+  <FilterRow
+    slot="filters"
+    heading={copy.filters}
+    values={topicValues}
+    currentValue={currentTopic}
+    showLabel={copy.show}
+    hideLabel={copy.hide}
+  />
+
+  <div slot="featured" class="paper-heading">
+    <div>
+      <h2>{currentTopic === "all" ? copy.catalogue : currentTopicLabel}</h2>
+      <p>{visibleTotal} {copy.results}</p>
+    </div>
+    <SortSelect
+      id="paper-sort-select"
+      label={copy.sort}
+      options={sortOptions}
+      currentValue={currentSort}
+      defaultValue="date-desc"
+    />
+  </div>
+
+  {lead && (
+    <div slot="featured" class="paper-featured">
+      <article class="paper-lead">
+        <a href={paperLink(lead.id)}>
+          <div class="paper-lead__folio" aria-hidden="true">
+            <span>{lead.data.journal || copy.catalogue}</span>
+            <strong>{year(lead.data.publishDate)}</strong>
+            <small>{lead.data.doi ? `DOI ${cleanVisible(lead.data.doi)}` : paperType(lead.data.paperType)}</small>
+          </div>
+          <div class="paper-lead__copy">
+            <span>{paperType(lead.data.paperType)} / {lead.data.journal || copy.catalogue}</span>
+            <h3>{cleanVisible(lead.data.title)}</h3>
+            {lead.data.originalTitle && lead.data.originalTitle !== lead.data.title && <em>{cleanVisible(lead.data.originalTitle)}</em>}
+            <p><b>{copy.abstract}</b> {cleanVisible(lead.data.abstract || lead.data.description)}</p>
+            <small>{cleanVisible(lead.data.author)} / {copy.read}</small>
+          </div>
+        </a>
+        <InteractionButtons contentId={`paper-${cleanLocalizedSlug(lead.id)}`} contentType="paper" t={interactionCopy} client:visible />
+      </article>
+      {briefs.length > 0 && (
+        <div class="paper-featured__briefs">
+          {briefs.map((paper) => <article class="paper-brief">
+            <a href={paperLink(paper.id)}>
+              <span>{year(paper.data.publishDate)} / {paperType(paper.data.paperType)}</span>
+              <h3>{cleanVisible(paper.data.title)}</h3>
+              {paper.data.originalTitle && paper.data.originalTitle !== paper.data.title && <em>{cleanVisible(paper.data.originalTitle)}</em>}
+              <p>{cleanVisible(paper.data.author)}</p>
+              <small>{paper.data.journal || paper.data.doi || copy.catalogue}</small>
+            </a>
+            <InteractionButtons contentId={`paper-${cleanLocalizedSlug(paper.id)}`} contentType="paper" t={interactionCopy} client:visible />
+          </article>)}
+        </div>
+      )}
+    </div>
+  )}
+
+  {currentItems.length > 0 && (
+    <div class="paper-list">
+      {currentItems.map((paper, index) => <article class="paper-entry">
+        <a href={paperLink(paper.id)}>
+          <b>{String((validPage - 1) * 12 + index + 4).padStart(2, "0")}</b>
+          <div>
+            <span>{year(paper.data.publishDate)} / {paperType(paper.data.paperType)} / {paper.data.journal || copy.catalogue}</span>
+            <h3>{cleanVisible(paper.data.title)}</h3>
+            {paper.data.originalTitle && paper.data.originalTitle !== paper.data.title && <em>{cleanVisible(paper.data.originalTitle)}</em>}
+            <p>{cleanVisible(paper.data.author)}{paper.data.citationCount ? ` / ${paper.data.citationCount} ${copy.citations}` : ""}</p>
+          </div>
+        </a>
+        <InteractionButtons contentId={`paper-${cleanLocalizedSlug(paper.id)}`} contentType="paper" t={interactionCopy} client:visible />
+      </article>)}
+    </div>
+  )}
+
+  {visibleTotal === 0 && (
+    <div class="paper-empty">
+      <h3>{t("papersPage.emptyState.noContent")}</h3>
+      <p>{t("papersPage.emptyState.workingOnIt")}</p>
+    </div>
+  )}
+
+  <Pagination
+    slot="pagination"
+    totalPages={totalPages}
+    validPage={validPage}
+    getUrl={(page) => getPapersUrl({ page })}
+    previousLabel={copy.previous}
+    nextLabel={copy.next}
+    navLabel={t("common.pagination.navigation")}
+  />
+
+  <Fragment slot="aside">
+    <h2 class="paper-guide__heading">{copy.guide}</h2>
+    <div class="paper-guide__grid">
+      <section><h3>{t("papersPage.guide.empirical.title")}</h3><p>{cleanVisible(t("papersPage.guide.empirical.description"))}</p></section>
+      <section><h3>{t("papersPage.guide.critical.title")}</h3><p>{cleanVisible(t("papersPage.guide.critical.description"))}</p></section>
+      <section><h3>{t("papersPage.guide.interdisciplinary.title")}</h3><p>{cleanVisible(t("papersPage.guide.interdisciplinary.description"))}</p></section>
+    </div>
+  </Fragment>
+</IndexShell>
+
+<style>
+  .paper-heading { display: flex; align-items: end; justify-content: space-between; gap: 32px; padding-bottom: 28px; border-bottom: 1px solid var(--ink); }
+  .paper-heading h2 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(2.5rem, 5vw, 4.6rem); font-weight: 500; line-height: 1; }
+  .paper-heading p { margin: 12px 0 0; color: var(--muted); font-size: .7rem; }
+
+  .paper-featured { display: grid; grid-template-columns: 2fr 1fr; gap: 56px; padding: 36px 0 48px; border-bottom: 1px solid var(--ink); }
+  .paper-lead > a { display: grid; grid-template-columns: minmax(190px, .72fr) 1.35fr; gap: 34px; color: inherit; text-decoration: none; }
+  .paper-lead__folio { display: flex; min-height: 335px; padding: 24px; flex-direction: column; justify-content: space-between; color: var(--paper); background: var(--ink); }
+  .paper-lead__folio span { font-family: var(--editorial-serif); font-size: 1.05rem; line-height: 1.3; }
+  .paper-lead__folio strong { font-family: var(--editorial-serif); font-size: clamp(3.5rem, 6vw, 5.8rem); font-weight: 400; letter-spacing: -.08em; }
+  .paper-lead__folio small { color: var(--line); font-family: var(--editorial-sans); font-size: .55rem; overflow-wrap: anywhere; }
+  .paper-lead__copy > span, .paper-brief > a > span, .paper-entry a span { color: var(--accent); font-family: var(--editorial-sans); font-size: .62rem; }
+  .paper-lead__copy h3 { margin: 16px 0 0; font-family: var(--editorial-serif); font-size: clamp(2.1rem, 3.5vw, 3.45rem); font-weight: 500; line-height: 1.08; }
+  .paper-lead__copy em, .paper-brief em, .paper-entry em { display: block; margin-top: 10px; color: var(--muted); font-family: Georgia, serif; font-size: .82rem; line-height: 1.4; }
+  .paper-lead__copy p { margin: 26px 0 0; color: var(--muted); font-size: .77rem; line-height: 1.8; }
+  .paper-lead__copy p b { color: var(--ink); font-weight: 600; }
+  .paper-lead__copy small { display: block; margin-top: 26px; font-size: .65rem; }
+  .paper-lead > astro-island, .paper-brief > astro-island, .paper-entry > astro-island { display: block; margin-top: 16px; }
+  .paper-entry > astro-island { margin-left: 60px; } /* align with title column (42px number + 18px gap) */
+  .paper-featured__briefs { display: grid; grid-template-rows: 1fr 1fr; gap: 0; }
+  .paper-brief { padding: 0 0 24px; }
+  .paper-brief + .paper-brief { padding-top: 24px; border-top: 1px solid var(--line); }
+  .paper-brief a { color: inherit; text-decoration: none; }
+  .paper-brief h3 { margin: 12px 0 0; font-family: var(--editorial-serif); font-size: 1.38rem; font-weight: 500; line-height: 1.25; }
+  .paper-brief p { margin: 14px 0 0; font-size: .72rem; }
+  .paper-brief small { display: block; margin-top: 8px; color: var(--muted); font-size: .63rem; }
+
+  .paper-list { display: grid; grid-template-columns: 1fr 1fr; column-gap: 58px; }
+  .paper-entry { min-width: 0; padding: 30px 0; border-bottom: 1px solid var(--line); }
+  .paper-entry > a { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 18px; color: inherit; text-decoration: none; }
+  .paper-entry > a > b { color: var(--muted); font-family: var(--editorial-sans); font-size: .72rem; font-weight: 400; }
+  .paper-entry h3 { margin: 10px 0 0; font-family: var(--editorial-serif); font-size: clamp(1.16rem, 1.65vw, 1.48rem); font-weight: 500; line-height: 1.3; }
+  .paper-entry p { margin: 12px 0 0; color: var(--muted); font-size: .7rem; }
+  .paper-lead a:hover h3, .paper-brief a:hover h3, .paper-entry a:hover h3 { color: var(--accent); }
+
+  .paper-empty { padding: 90px 0; text-align: center; }
+
+  .paper-guide__heading { margin: 0 0 34px; font-family: var(--editorial-serif); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 500; }
+  .paper-guide__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 42px; }
+  .paper-guide__grid section + section { padding-left: 42px; border-left: 1px solid var(--line); }
+  .paper-guide__grid h3 { margin: 0 0 10px; font-family: var(--editorial-serif); font-size: 1.08rem; font-weight: 500; }
+  .paper-guide__grid p { margin: 0; color: var(--muted); font-size: .75rem; line-height: 1.7; }
+
+  @media (max-width: 980px) {
+    .paper-featured { grid-template-columns: 1fr; }
+    .paper-featured__briefs { grid-template-columns: 1fr 1fr; grid-template-rows: auto; gap: 34px; }
+    .paper-brief + .paper-brief { padding: 0 0 24px 34px; border-top: 0; border-left: 1px solid var(--line); }
+  }
+
+  @media (max-width: 700px) {
+    .paper-heading { display: block; }
+    .paper-lead > a { grid-template-columns: 1fr; }
+    .paper-lead__folio { min-height: 250px; }
+    .paper-lead__copy h3 { font-size: 2.25rem; }
+    .paper-featured__briefs, .paper-list { grid-template-columns: 1fr; }
+    .paper-brief + .paper-brief { padding: 24px 0; border-left: 0; border-top: 1px solid var(--line); }
+    .paper-guide__grid { grid-template-columns: 1fr; gap: 26px; }
+    .paper-guide__grid section + section { padding: 26px 0 0; border-left: 0; border-top: 1px solid var(--line); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .paper-featured *, .paper-list *, .paper-featured *::before, .paper-list *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+  }
+</style>

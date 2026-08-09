@@ -1,0 +1,22 @@
+---
+import Layout from "../layouts/Layout.astro";
+import UserProfile from "./UserProfile";
+import type { Locale } from "../i18n";
+import type { ProfileUiStrings } from "../types/profile";
+import "../styles/editorial-account.css";
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  uiStrings: ProfileUiStrings;
+}
+
+const { locale, title, description, uiStrings } = Astro.props;
+---
+
+<Layout title={`${title} - FemRes`} description={description} headerVariant="editorial" showMusicPlayer={false}>
+  <div class="reader-surface">
+    <UserProfile client:idle locale={locale} uiStrings={uiStrings} />
+  </div>
+</Layout>

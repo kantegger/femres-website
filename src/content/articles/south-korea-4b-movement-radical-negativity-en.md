@@ -1,0 +1,20 @@
+---
+title: "The 4B Movement: Political Practice as Radical Negativity"
+author: "The Cut"
+description: "The 4B movement (no marriage, no childbirth, no dating, no sex with men) is not merely a defensive retreat from extreme patriarchy, but a courageous 'political strike' aimed at paralyzing the mechanisms of patriarchal reproduction."
+publishDate: 2024-01-24
+contentLanguage: "en"
+topics: ["Patriarchy Critique", "Social Movements", "Sexual Liberation", "Digital Feminism", "Radical Feminism", "Capitalism Critique"]
+sourceUrl: "https://www.thecut.com/article/4b-movement-feminism-south-korea.html"
+featuredImage: "https://media.femres.org/images/articles/4b-movement.jpg"
+status: "published"
+readingTime: 12
+---
+
+South Korea’s 4B movement—comprised of *bihon* (no marriage), *bichulsan* (no childbirth), *biyeonae* (no dating), and *bisekseu* (no sex with men)—marks a paradigm shift in radical feminism: a transition from seeking rights within the system to a strategic and comprehensive withdrawal from it. This is more than a mere lifestyle choice; it is an organized resistance against the biopolitics of the state. The essence of 4B lies in its categorical negation, a "no" that is far from nihilistic, but rather functions as a weapon to paralyze the patriarchal apparatus. By refusing to occupy the roles traditionally assigned to their bodies, these women are reclaiming their physical and emotional existence from a structure that views them only as reproductive containers and sources of unpaid labor.
+
+This logic of refusal is a direct response to the state’s attempt to manipulate female reproductive labor in the face of a mounting demographic crisis. As the defiant slogan states, "We refuse to be fertile, we refuse to be livestock." This cry reveals a grim diagnostic: within the logic of nationalist patriarchy, female citizenship is inextricably tied to the womb. When the government blames women for declining birth rates while ignoring systemic misogyny and intimate partner violence, the refusal of reproduction becomes a political act of de-shackling. While liberal feminism historically struggled for "a seat at the table," the 4B movement recognizes that if the table is built upon the very foundations of your exclusion, the most radical move is to leave the room entirely.
+
+This withdrawal manifests as a total political strike—a strike that deposes the traditional roles of wife and mother, and further, the role of women as emotional caregivers for men. It is intrinsically linked to the "Escape the Corset" movement, which rejects the bullying of male-centered beauty standards, facilitating an aesthetic and affective decoupling from patriarchal expectations. By ceasing the attempt to persuade men who benefit from the status quo, 4B redirects intellectual and emotional energy back into female solidarity. In a society where digital sex crimes and pervasive surveillance render intimacy inherently hazardous, this "politics of negativity" is framed by participants as a necessity for survival. "Boycotting men is therefore an act of defiance, a way of seeing through this structure and breaking free from it," stripping away the sentimental veneer of the family to expose the underlying hierarchy of power.
+
+The backlash against 4B, characterized by accusations of "selfishness" or "anti-social" behavior, precisely indicates that the movement has struck a patriarchal nerve. It proves that the existing social structure cannot sustain its basic functions if women collectively decide to stop their self-sacrifice. This is a "revolution of stagnation"—by refusing to move forward along the path prescribed for them, these women force the world to turn around and face the deep, long-hidden gender chasm. It does not offer a blueprint for a better future; instead, it uses the weight of its current absence to protest a past that refuses to change. Here, revolution is not an advance, but a steadfast refusal to participate until the oppressive machinery of the state grinds to a halt.

@@ -1,0 +1,28 @@
+---
+title: "Algorithms of Oppression: How Search Engines Reinforce Racism"
+author: "Safiya Umoja Noble"
+description: "Safiya Umoja Noble begins with the stigmatization of Black girls in commercial search to expose how advertising markets, platform monopoly, and knowledge classification produce algorithmic oppression."
+publishDate: 2018-02-20
+isbn: "9781479837243"
+contentLanguage: "en"
+topics: ["Algorithmic Bias","Black Feminism","Data Justice","Technology Critique","Race and Gender"]
+sourceUrl: "https://nyupress.org/9781479837243/algorithms-of-oppression/"
+coverImage: "https://media.femres.org/images/books/algorithms-of-oppression.jpg"
+status: "published"
+---
+
+*Algorithms of Oppression* begins with an ordinary action: searching Google for “Black girls.” From 2009 onward, Safiya Umoja Noble documented results dominated for years by pornography, sexualized advertising, and degrading associations, although the query contained no sexual term; “white girls” produced a markedly different information landscape. She does not treat this as one piece of bad code that engineers later fixed. She asks who defines relevance when a commercial search engine becomes a principal route through which students, journalists, and the public learn what Black womanhood is.
+
+Noble’s answer returns algorithms to political economy. Search ranking is not an objective distillation of the whole web but an outcome shaped by advertising auctions, optimization, user behavior, company rules, and monopoly power. Pornography businesses and large advertisers can spend far more than communities of Black girls to occupy visibility around identity terms. Google can then invoke trade secrecy and automated neutrality, describing rankings as a process without responsible actors. The formula that results merely reflect what users want conceals who has the resources to manufacture, purchase, and amplify that desire.
+
+Search results are therefore more than offensive representations; they are knowledge infrastructure. High-ranked pages acquire the appearance of credibility, prevalence, and legitimacy, while search increasingly structures preliminary research in schools and public life. A platform acts at once as catalogue, editor, and advertising market without accepting the accountability associated with public knowledge institutions. “Algorithmic oppression” names the way inherited racial and gender hierarchies gain speed, scale, and technical authority through a new classification system—not a machine spontaneously inventing prejudice absent from society.
+
+Black feminist analysis makes the hypersexualization of “Black girls” impossible to divide into one racial error plus one gender error. Historical figures such as the Jezebel and the angry Black woman are reassembled in snippets, autocomplete, images, and advertisements. Black women become hypervisible as sexual objects while remaining invisible as students, experts, and whole persons. Audits that test only aggregate “women” or “minority” categories can average this intersectional injury out of view, even while a system appears to improve on each axis separately.
+
+The method is not a source-code inspection. Noble reads search outputs as cultural texts, following keywords, advertisements, and media ranking over time and connecting them to Black studies, feminist media history, information science, and library classification. Libraries have also organized knowledge through racist, colonial, and sexist subject headings, so the politics of classification did not begin with Google. What changes is the unprecedented control private search companies hold over discovery, the opacity and volatility of their rules, and the public’s lack of durable mechanisms for audit or appeal.
+
+Her remedy therefore exceeds hiring a more diverse group of engineers or cleaning a dataset. Representation matters, but a few employees cannot readily reverse incentives created by profit, monopoly, and weak liability. Noble calls for search and artificial intelligence to become matters of public policy, antidiscrimination responsibility, independent research, transparency, and public-interest information systems. Black studies, ethnic studies, women’s and gender studies, the humanities, and library science belong in technology governance. Designing systems for society without studying histories of domination is itself a design hazard.
+
+The book also has identifiable limits. Its central cases come from particular years, the English-language web, and US racial history; Google results have since changed, so a reader cannot reproduce the original pages with a single present-day query. That change neither invalidates the evidence nor proves current systems safe. Noble studies visible outputs and commercial structure rather than conducting a replicable code audit, and gives less space to non-English search, Global South platforms, or users’ counter-practices. Calling every undesirable result “algorithmic bias” would also dilute her precise account of institutional power.
+
+Track three levels while reading: what representation appears on the page, which business system rewards it, and how its ranking changes education, public knowledge, or opportunity. The framework can then be brought to recommenders, generative AI, and large language models, but those technologies should be investigated rather than presumed to be larger versions of 2018 Google. The book’s lasting contribution is not a catalogue of old failures. It teaches a discipline of questioning every “intelligent answer”: who defined relevance, who absorbs the error, and who possesses enough power to require a change?

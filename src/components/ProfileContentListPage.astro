@@ -1,0 +1,74 @@
+---
+import Layout from "../layouts/Layout.astro";
+import UserContentList from "./UserContentList";
+import type { Locale } from "../i18n";
+import type { UserContentListStrings } from "../types/profile";
+import "../styles/editorial-account.css";
+
+interface Props {
+  type: "likes" | "bookmarks";
+  locale: Locale;
+  title: string;
+  description: string;
+  emptyMessage: string;
+  homeLabel: string;
+  profileLabel: string;
+  homeLink: string;
+  profileLink: string;
+  icon: string;
+  iconClassName: string;
+  uiStrings: UserContentListStrings;
+}
+
+const {
+  type,
+  locale,
+  title,
+  description,
+  emptyMessage,
+  homeLabel,
+  profileLabel,
+  homeLink,
+  profileLink,
+  uiStrings,
+} = Astro.props;
+const breadcrumbLabel = ({
+  "zh-CN": "面包屑导航",
+  "zh-TW": "麵包屑導覽",
+  en: "Breadcrumb",
+  ja: "パンくずリスト",
+  fr: "Fil d’Ariane",
+} as Record<Locale, string>)[locale];
+const archiveLabel = ({
+  "zh-CN": "档案",
+  "zh-TW": "檔案",
+  en: "Archive",
+  ja: "アーカイブ",
+  fr: "Archives",
+} as Record<Locale, string>)[locale];
+---
+
+<Layout title={`${title} - FemRes`} description={description} headerVariant="editorial" showMusicPlayer={false}>
+  <div class="reader-surface">
+    <main class="reader-list-page">
+      <nav class="reader-list-page__crumbs" aria-label={breadcrumbLabel}>
+        <a href={homeLink}>{homeLabel}</a><span>/</span>
+        <a href={profileLink}>{profileLabel}</a><span>/</span>
+        <span>{title}</span>
+      </nav>
+      <header class="reader-list-page__hero">
+        <div>
+          <span class="reader-list-page__index">{archiveLabel} / {type === "likes" ? "01" : "02"}</span>
+          <h1>{title}</h1>
+        </div>
+        <p>{emptyMessage}</p>
+      </header>
+      <UserContentList
+        type={type}
+        locale={locale}
+        uiStrings={uiStrings}
+        client:idle
+      />
+    </main>
+  </div>
+</Layout>

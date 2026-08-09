@@ -1,0 +1,29 @@
+---
+export const prerender = false;
+
+import EditorialPaperIndex from "../../../components/EditorialPaperIndex.astro";
+import { createT } from "../../../i18n";
+import Layout from "../../../layouts/Layout.astro";
+import { isSupportedDetailLocale, type SupportedDetailLocale } from "../../../lib/localeDetails";
+
+const { locale } = Astro.params;
+if (!isSupportedDetailLocale(locale)) return Astro.redirect("/404");
+const currentLocale = locale;
+const t = createT(currentLocale);
+const pageTitles: Record<SupportedDetailLocale, string> = {
+  "zh-CN": "论文",
+  "zh-TW": "論文",
+  en: "Papers",
+  ja: "論文",
+  fr: "Études",
+};
+---
+
+<Layout
+  title={`${pageTitles[currentLocale]} - FemRes`}
+  description={t("papersPage.subtitle")}
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <EditorialPaperIndex locale={currentLocale} pathMode="locale" />
+</Layout>

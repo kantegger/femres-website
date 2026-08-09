@@ -1,0 +1,239 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  emailPlaceholder: string;
+  buttonLabel: string;
+  source: string;
+  successMessage?: string;
+  errorMessage?: string;
+  genericErrorMessage?: string;
+}
+
+const {
+  title,
+  description,
+  emailPlaceholder,
+  buttonLabel,
+  source,
+  successMessage = "Subscribed successfully! / 订阅成功！",
+  errorMessage = "Subscription failed. Please try again. / 订阅失败，请重试。",
+  genericErrorMessage = "An error occurred. / 发生错误。",
+} = Astro.props;
+
+const pathLocale = Astro.url.pathname.match(/^\/(en|zh-CN|zh-TW|ja|fr)(?:\/|$)/)?.[1];
+const unsubscribeHref = pathLocale ? `/${pathLocale}/unsubscribe` : "/unsubscribe";
+const manageLabel = pathLocale === "en"
+  ? "Manage or unsubscribe"
+  : pathLocale === "ja"
+    ? "配信設定・登録解除"
+    : pathLocale === "fr"
+      ? "Gérer ou se désabonner"
+      : pathLocale === "zh-TW"
+        ? "管理或取消訂閱"
+        : "管理或取消订阅";
+---
+
+<section class="newsletter-editorial">
+  <div class="newsletter-editorial__panel">
+    <h2 class="newsletter-editorial__title">
+      {title}
+    </h2>
+    <p class="newsletter-editorial__description">
+      {description}
+    </p>
+    <form
+      class="newsletter-editorial__form"
+      data-newsletter-signup
+      data-source={source}
+      data-success-message={successMessage}
+      data-error-message={errorMessage}
+      data-generic-error-message={genericErrorMessage}
+    >
+      <input
+        type="email"
+        name="email"
+        placeholder={emailPlaceholder}
+        aria-label={emailPlaceholder}
+        autocomplete="email"
+        inputmode="email"
+        required
+        class="newsletter-editorial__input"
+      />
+      <button
+        type="submit"
+        class="newsletter-editorial__button"
+      >
+        {buttonLabel}
+      </button>
+    </form>
+    <p class="newsletter-editorial__message" role="status" aria-live="polite" data-newsletter-message></p>
+    <a class="newsletter-editorial__manage" href={unsubscribeHref}>{manageLabel}</a>
+  </div>
+</section>
+
+<script>
+  const forms = document.querySelectorAll("[data-newsletter-signup]");
+
+  forms.forEach((form) => {
+    if (!(form instanceof HTMLFormElement) || form.dataset.bound === "true") {
+      return;
+    }
+
+    form.dataset.bound = "true";
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const emailInput = form.querySelector('input[name="email"]');
+      const button = form.querySelector("button");
+      const messageEl = form.parentElement?.querySelector("[data-newsletter-message]");
+
+      if (!(emailInput instanceof HTMLInputElement) || !(button instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      const source = form.dataset.source ?? "website";
+      const successMessage =
+        form.dataset.successMessage ?? "Subscribed successfully! / 订阅成功！";
+      const errorMessage =
+        form.dataset.errorMessage ?? "Subscription failed. Please try again. / 订阅失败，请重试。";
+      const genericErrorMessage =
+        form.dataset.genericErrorMessage ?? "An error occurred. / 发生错误。";
+      const originalText = button.textContent;
+      button.disabled = true;
+      button.textContent = "...";
+
+      try {
+        const response = await fetch("/api/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: emailInput.value, source }),
+        });
+
+        const data = await response.json();
+
+        if (messageEl) {
+          messageEl.textContent = data.success ? successMessage : errorMessage;
+          messageEl.className = data.success
+            ? "newsletter-editorial__message newsletter-editorial__message--success"
+            : "newsletter-editorial__message newsletter-editorial__message--error";
+        }
+
+        if (data.success) {
+          form.reset();
+        }
+      } catch {
+        if (messageEl) {
+          messageEl.textContent = genericErrorMessage;
+          messageEl.className =
+            "newsletter-editorial__message newsletter-editorial__message--error";
+        }
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
+    });
+  });
+</script>
+
+<style>
+  .newsletter-editorial {
+    --newsletter-paper: #f8f5ef;
+    --newsletter-ink: #171614;
+    --newsletter-muted: #6f6a62;
+    --newsletter-line: #c9c3b9;
+    --newsletter-accent: #df2d27;
+    margin-top: 56px;
+    padding: 28px 0;
+    color: var(--newsletter-ink);
+  }
+
+  :global(.dark) .newsletter-editorial {
+    --newsletter-paper: #181715;
+    --newsletter-ink: #f3efe7;
+    --newsletter-muted: #aaa39a;
+    --newsletter-line: #403d38;
+    --newsletter-accent: #ff514b;
+  }
+
+  .newsletter-editorial__panel {
+    display: grid;
+    grid-template-columns: minmax(180px, .8fr) minmax(240px, 1.2fr);
+    gap: 12px 48px;
+    align-items: center;
+  }
+
+  .newsletter-editorial__title {
+    margin: 0;
+    font-family: var(--editorial-serif);
+    font-size: clamp(24px, 3vw, 34px);
+    font-weight: 500;
+    line-height: 1.15;
+  }
+
+  .newsletter-editorial__description {
+    grid-column: 1;
+    margin: 0;
+    color: var(--newsletter-muted);
+    font-family: var(--editorial-serif);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .newsletter-editorial__form {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-self: center;
+    border-bottom: 1px solid var(--newsletter-ink);
+  }
+
+  .newsletter-editorial__input {
+    min-width: 0;
+    padding: 14px 0;
+    border: 0;
+    outline: 0;
+    color: var(--newsletter-ink);
+    background: transparent;
+    font: 500 14px/1.4 Inter, sans-serif;
+  }
+
+  .newsletter-editorial__input::placeholder { color: var(--newsletter-muted); }
+  .newsletter-editorial__input:focus { box-shadow: inset 0 -2px var(--newsletter-accent); }
+
+  .newsletter-editorial__button {
+    padding: 12px 18px;
+    border: 0;
+    color: #fff;
+    background: var(--newsletter-accent);
+    font: 700 12px/1 Inter, sans-serif;
+    letter-spacing: .08em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+
+  .newsletter-editorial__button:hover { opacity: .86; }
+  .newsletter-editorial__button:active { transform: translateY(1px); }
+  .newsletter-editorial__button:disabled { cursor: not-allowed; opacity: .5; }
+
+  .newsletter-editorial__message {
+    grid-column: 2;
+    min-height: 1.4em;
+    margin: 8px 0 0;
+    font: 600 12px/1.4 Inter, sans-serif;
+  }
+
+  .newsletter-editorial__message:empty { display: none; }
+  .newsletter-editorial__message--success { color: #247044; }
+  .newsletter-editorial__message--error { color: var(--newsletter-accent); }
+  .newsletter-editorial__manage { grid-column: 2; width: fit-content; color: var(--newsletter-muted); font: 600 11px/1.4 Inter, sans-serif; text-decoration: underline; text-underline-offset: .3em; }
+
+  @media (max-width: 700px) {
+    .newsletter-editorial__panel { grid-template-columns: 1fr; gap: 16px; }
+    .newsletter-editorial__description, .newsletter-editorial__form, .newsletter-editorial__message, .newsletter-editorial__manage { grid-column: 1; grid-row: auto; }
+    .newsletter-editorial__form { margin-top: 16px; }
+  }
+</style>

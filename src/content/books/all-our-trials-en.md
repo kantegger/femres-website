@@ -1,0 +1,28 @@
+---
+title: "All Our Trials: Prisons, Policing, and the Feminist Fight to End Violence"
+author: "Emily L. Thuma"
+description: "Emily L. Thuma reconstructs the anticarceral politics developed from the 1970s into the early 1980s by criminalized women and Black, queer, prisoner, and psychiatric-survivor organizers."
+publishDate: 2019-03-02
+isbn: "9780252084126"
+contentLanguage: "en"
+topics: ["Carceral Feminism","Prison Abolition","Anti-Sexual Violence","Social Movements","Black Feminism"]
+sourceUrl: "https://www.press.uillinois.edu/books/?id=p084126"
+coverImage: "https://media.femres.org/images/books/all-our-trials.jpg"
+status: "published"
+---
+
+*All Our Trials* revises a familiar history of the US antiviolence movement. The dominant account moves from domestic and sexual violence finally gaining legal recognition to tougher arrest, prosecution, and sentencing, as though criminal-justice expansion were feminism’s inevitable institutional success. Emily L. Thuma returns to the 1970s and early 1980s to recover another current: Black, queer, incarcerated, and psychiatrically confined women treated interpersonal and state violence as connected problems and built what can now be recognized as anticarceral feminism.
+
+One route into that politics came through mass defense campaigns for Joan Little, Inez García, Yvonne Wanrow, Dessie Woods, and other women criminalized after resisting sexual assault. Their cases forced organizers to confront a basic contradiction: how could a state that policed selectively by race, class, gender, and sexuality act as every woman’s neutral protector? The movement from “Free Joan Little” toward “free them all” did not erase differences between cases. It connected courtroom defense to the shared structures of imprisonment, poverty, racial rule, and sexual vulnerability.
+
+Thuma then follows activism against what organizers called the “prison/psychiatric state.” Women in prison faced guard abuse, isolation, medical neglect, and coercive treatment; women in psychiatric institutions could be diagnosed, drugged, or confined for refusing gender and sexual norms. Activists read those systems together by asking who had authority to define danger, madness, and corrigibility. Paternal treatment “for her own good” and punishment “for public safety” could both translate women’s resistance into a symptom that institutions were authorized to manage.
+
+The chapter on prison newsletters and radical print culture shows movement infrastructure crossing walls. Incarcerated women used letters, poetry, testimony, and investigative reports to document sexual assault, medical abandonment, collective action, and ordinary survival. Organizers outside typed, edited, duplicated, mailed, raised money, and maintained legal contact. Print did more than publicize suffering: it created relationships and shared analysis. Whether a letter could leave a prison, and who performed the labor of circulating it, determined whether an experience remained an individual grievance or became a political claim.
+
+These campaigns also redrew the constituency of antiviolence politics. Black women, antiracist white women, lesbians, prisoner-rights advocates, and psychiatric-survivor organizers built coalitions around housing, policing, urban space, and safety without becoming a seamless bloc. Some prioritized an immediate legal victory; others feared that exceptional innocence would preserve a system that abandoned everyone deemed guilty. Groups had to respond to urgent danger in homes and streets while refusing to deliver more poor and Black people to police. Thuma preserves such disagreement, presenting coalition as work rather than the automatic product of shared identity.
+
+The study draws on organizational archives, posters, newsletters, legal records, oral histories, and first-person narratives to reconstruct networks rarely centered in major institutions. Its feminist contribution is not simply to add forgotten women to an existing chronology, but to change the measure of political success. Groups that did not secure national legislation still generated concepts, relationships, and practices that later abolitionist and transformative-justice movements could inherit. Thuma resists making the past a straight line toward today: history offers contested tools, not proof that current movements have solved the problem.
+
+The archive and scope impose real limits. The book concentrates on particular US networks and years, not every strand of prisoner or antiviolence organizing. Surviving records favor groups with the capacity to document themselves, and some voices remain inaccessible. It is a genealogy, not a manual for responding to present emergencies. Nor does a critique of policing automatically create safety where community resources are thin and danger is immediate. Romanticizing these organizers as if they possessed a complete alternative would miss the book’s most honest lesson: noncarceral capacity must be built, financed, practiced, and revised.
+
+Track four threads while reading: how self-defense cases changed the category of victim, how prison and psychiatry shared techniques of control, how print sustained solidarity across walls, and how local coalitions connected women’s safety to a right to the city. Then read contemporary work on mandatory arrest, carceral feminism, and transformative justice to test what remains unresolved. Thuma’s history makes one point impossible to evade: ending interpersonal violence and ending state violence are not rival feminist commitments. The difficult politics is to hold both without sacrificing the people most exposed to either.

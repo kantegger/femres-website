@@ -1,0 +1,17 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import EditorialFilmIndex from "../../components/EditorialFilmIndex.astro";
+import { createT } from "../../i18n";
+
+const locale = "zh-CN";
+const t = createT(locale);
+---
+
+<Layout
+  title={`电影 - FemRes`}
+  description={t("filmsPage.subtitle")}
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <EditorialFilmIndex locale={locale} basePath="/films" />
+</Layout>

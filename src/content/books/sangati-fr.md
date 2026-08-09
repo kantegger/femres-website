@@ -1,0 +1,29 @@
+---
+title: "Sangati : événements"
+originalTitle: "Sangati: Events"
+author: "Bama"
+description: "Bama remplace l’héroïne solitaire par la vie collective de femmes dalits et fait du travail, de la violence, du rire, de la langue et de la transmission la matière d’un féminisme populaire."
+publishDate: 2008-09-01
+isbn: "9780195698435"
+contentLanguage: "en"
+topics: ["Dalit Feminism","Caste and Gender","Women's Literature","Family Liberation","Social Movements"]
+sourceUrl: "https://india.oup.com/product/sangati-9780195698435/"
+coverImage: "https://media.femres.org/images/books/sangati.jpg"
+status: "published"
+---
+
+En tamoul, *sangati* peut désigner un événement, une nouvelle ou toutes ces choses que l’on se raconte. Lorsque Bama publie le livre en 1994, elle refuse de réduire l’expérience des femmes dalits à l’ascension d’un seul sujet autobiographique. La traduction anglaise de Lakshmi Holmström, parue en 2005 et présentée ici dans l’édition Oxford University Press de 2008, porte cette polyphonie vers un public plus large. Il n’y a pas d’intrigue conventionnelle : conversations, souvenirs, disputes, chansons, plaisanteries et incidents s’accumulent pour former l’histoire collective des femmes d’une communauté chrétienne dalit du Tamil Nadu.
+
+Le récit s’élargit depuis l’observation d’une jeune fille vers les voix des grand-mères, mères, voisines et ouvrières. Les enfants n’apprennent pas d’abord la caste comme doctrine, mais comme distribution du mouvement et des obligations : qui doit courber le dos dans les champs, qui marche sans crainte, pourquoi les garçons reçoivent davantage de nourriture et de liberté, pourquoi les filles prennent si tôt en charge le soin. Les échanges entre générations montrent à la fois la continuité et le changement. Les aînées transmettent un savoir vital, mais parfois aussi des règles patriarcales intériorisées ; les questions de la narratrice refusent que « les choses ont toujours été ainsi » tienne lieu de réponse.
+
+Le travail constitue l’axe politique le plus solide du livre. Les femmes dalits accomplissent des tâches pénibles et mal payées dans les champs, sur les chantiers ou chez les castes dominantes, puis rentrent cuisiner, nettoyer et s’occuper des enfants. Elles peuvent être moins payées que les hommes pour un travail comparable, tout en subissant harcèlement patronal et violence domestique. Bama renverse ainsi le mythe d’une dépendance due à l’absence de travail féminin. Leur travail est exploité, dévalué et invisibilisé à la fois. La caste affecte certains corps aux tâches stigmatisées ; le genre exige ensuite de ces mêmes corps qu’ils réparent gratuitement le monde social.
+
+L’épisode où Mariamma échappe à l’agression d’un propriétaire de caste dominante avant d’être calomniée et jugée par les hommes du village condense cette structure. Sa parole ne peut rivaliser avec la crédibilité présumée d’un homme de haute caste, et le conseil masculin place la « réputation » au-dessus de sa sécurité. La violence n’est donc pas un acte isolé : le pouvoir de caste produit d’abord une disponibilité à l’agression, puis l’institution patriarcale transforme la survivante en accusée. Bama ne cache pas la domination masculine interne derrière l’oppression extérieure, pas plus qu’elle ne minimise la violence des castes dominantes pour critiquer ce patriarcat.
+
+Pour autant, *Sangati* n’est pas un inventaire de souffrances. Les femmes retrouvent une capacité d’agir par l’humour cru, les insultes, l’imitation, le chant, l’entraide et la riposte publique. Leurs corps s’épuisent au travail, mais occupent aussi l’espace des jeux, des fêtes et du rire partagé. La résistance prend rarement la forme d’une victoire héroïque. Elle réside dans le refus de la honte, la révélation d’un secret, la confirmation du récit d’une autre femme, l’éducation des filles ou l’entrée dans la littérature d’une parole jugée vulgaire. La joie refuse que la communauté ne soit connue qu’à travers la victimisation.
+
+La langue est elle-même un terrain politique. Bama emploie le tamoul oral, les rythmes communautaires, l’argot et les injures exclus de la littérature dite raffinée, contestant l’alliance entre correction linguistique et respectabilité des castes dominantes. Holmström tente de conserver cette pression orale en anglais sans la nettoyer, mais traduire redistribue nécessairement la voix : le lectorat anglophone entend le tamoul dalit à travers un autre système linguistique et éditorial. Reconnaître le travail de la traductrice tout en demandant qui acquiert autorité et valeur marchande grâce aux littératures marginalisées fait partie d’une lecture responsable.
+
+Le texte ne doit pas devenir un rapport représentatif sur toutes les femmes dalits. Il se situe dans une communauté chrétienne dalit du Tamil Nadu et construit une voix collective littéraire, non un échantillon sociologique. Les différences de région, religion, caste, classe et période dépassent un seul village. Les personnages conservent aussi des positions contradictoires sur le mariage, la sexualité et le corps. Ces tensions ne constituent pas une insuffisance de pureté féministe : elles montrent des sujets politiques qui discutent, composent et inventent sous contrainte plutôt qu’un groupe déjà unifié par la théorie.
+
+On peut lire la première partie comme une carte de la manière dont l’enfance est genrée et castée, puis suivre la façon dont le travail, la parole et les alliances féminines commencent à la redessiner. À côté des scènes de violence, il importe de noter qui transmet chaque histoire, qui la corrige et quand le rire modifie un rapport de pouvoir. *Genre et caste* montre comment le point de vue féministe dalit prend corps dans un salaire, une cuisine ou un conseil villageois ; *The Prisons We Broke* permet de comparer récit collectif et mémoire personnelle comme méthodes de conservation d’un savoir que l’histoire dominante n’a pas entendu.

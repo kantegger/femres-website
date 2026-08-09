@@ -1,0 +1,381 @@
+---
+import LanguageSwitcher from "./LanguageSwitcher";
+import UserMenu from "./UserMenu";
+import { createT, getLocalizedPath, type Locale } from "../i18n/index";
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = createT(locale);
+const homePath = getLocalizedPath("", locale);
+const topicsPath = getLocalizedPath("topics", locale);
+const issuesPath = getLocalizedPath("issues", locale);
+const libraryPath = getLocalizedPath("library", locale);
+const bookmarksPath = getLocalizedPath("profile/bookmarks", locale);
+const searchPath = getLocalizedPath("search", locale);
+const normalizePath = (path: string) => path === "/" ? path : path.replace(/\/$/, "");
+const isHome = normalizePath(Astro.url.pathname) === normalizePath(homePath);
+
+const labels: Record<Locale, {
+  current: string;
+  archive: string;
+  atlas: string;
+  library: string;
+  bookshelf: string;
+  menu: string;
+  brand: string;
+  home: string;
+  primaryNav: string;
+  mobileNav: string;
+}> = {
+  "zh-CN": { current: "本期", archive: "往期", atlas: "思想星图", library: "资源库", bookshelf: "我的书架", menu: "打开菜单", brand: "持续生长的评论", home: "FemRes 首页", primaryNav: "主导航", mobileNav: "移动端导航" },
+  "zh-TW": { current: "本期", archive: "往期", atlas: "思想星圖", library: "資源庫", bookshelf: "我的書架", menu: "開啟選單", brand: "持續生長的評論", home: "FemRes 首頁", primaryNav: "主要導覽", mobileNav: "行動版導覽" },
+  en: { current: "Current", archive: "Issues", atlas: "Idea atlas", library: "Library", bookshelf: "Bookshelf", menu: "Open menu", brand: "The Living Review", home: "FemRes home", primaryNav: "Primary navigation", mobileNav: "Mobile navigation" },
+  ja: { current: "最新号", archive: "バックナンバー", atlas: "思想星図", library: "資料庫", bookshelf: "本棚", menu: "メニューを開く", brand: "成長し続けるレビュー", home: "FemRes ホーム", primaryNav: "メインナビゲーション", mobileNav: "モバイルナビゲーション" },
+  fr: { current: "À la une", archive: "Numéros", atlas: "Atlas d'idées", library: "Ressources", bookshelf: "Bibliothèque", menu: "Ouvrir le menu", brand: "La revue vivante", home: "Accueil FemRes", primaryNav: "Navigation principale", mobileNav: "Navigation mobile" },
+};
+const copy = labels[locale];
+
+const userMenuTranslations = {
+  login: t("userMenu.login"),
+  profile: t("userMenu.profile"),
+  myLikes: t("userMenu.myLikes"),
+  myBookmarks: t("userMenu.myBookmarks"),
+  logout: t("userMenu.logout"),
+};
+
+const authTranslations = {
+  login: t("auth.login"),
+  register: t("auth.register"),
+  username: t("auth.username"),
+  email: t("auth.email"),
+  password: t("auth.password"),
+  confirmPassword: t("auth.confirmPassword"),
+  usernamePlaceholder: t("auth.usernamePlaceholder"),
+  emailPlaceholder: t("auth.emailPlaceholder"),
+  passwordPlaceholder: t("auth.passwordPlaceholder"),
+  confirmPasswordPlaceholder: t("auth.confirmPasswordPlaceholder"),
+  loginPrompt: t("auth.loginPrompt"),
+  registerPrompt: t("auth.registerPrompt"),
+  haveAccount: t("auth.haveAccount"),
+  noAccount: t("auth.noAccount"),
+  loginInProgress: t("auth.loginInProgress"),
+  registerInProgress: t("auth.registerInProgress"),
+  fillAllFields: t("auth.fillAllFields"),
+  fillEmailPassword: t("auth.fillEmailPassword"),
+  passwordMismatch: t("auth.passwordMismatch"),
+  invalidEmail: t("auth.invalidEmail"),
+  loginFailed: t("auth.loginFailed"),
+  registerFailed: t("auth.registerFailed"),
+  networkError: t("auth.networkError"),
+};
+---
+
+<header class="editorial-header">
+  <div class="editorial-header__inner">
+    <a href={homePath} class="editorial-wordmark" aria-label={copy.home}>
+      <span>FemRes</span>
+      <small>{copy.brand}</small>
+    </a>
+
+    <nav class="editorial-nav" aria-label={copy.primaryNav}>
+      <a href={homePath} data-current-issue-link aria-current={isHome ? "page" : undefined}>{copy.current}</a>
+      <a href={issuesPath}>{copy.archive}</a>
+      <a href={topicsPath}>{copy.atlas}</a>
+      <a href={libraryPath}>{copy.library}</a>
+      <a href={bookmarksPath}>{copy.bookshelf}</a>
+    </nav>
+
+    <div class="editorial-actions">
+      <a href={searchPath} class="editorial-icon-button editorial-search-control" aria-label={t("nav.search")}>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5"></circle>
+          <path d="m16 16 4 4"></path>
+        </svg>
+      </a>
+      <div class="editorial-desktop-language">
+        <LanguageSwitcher
+          currentLocale={locale}
+          currentPath={Astro.url.pathname}
+          className="editorial-language--desktop"
+        />
+      </div>
+      <button type="button" data-theme-toggle class="editorial-icon-button" aria-label={t("common.toggleTheme")}>
+        <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+        </svg>
+        <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 15.2A8 8 0 0 1 8.8 4 8.2 8.2 0 1 0 20 15.2Z"></path>
+        </svg>
+      </button>
+      <div class="editorial-user-control">
+        <UserMenu locale={locale} translations={userMenuTranslations} authTranslations={authTranslations} client:idle />
+      </div>
+      <button class="editorial-menu-button" type="button" aria-expanded="false" aria-controls="editorial-mobile-nav">
+        <span class="sr-only">{copy.menu}</span>
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <nav id="editorial-mobile-nav" class="editorial-mobile-nav" aria-label={copy.mobileNav} hidden>
+    <a href={homePath} data-current-issue-link>{copy.current}</a>
+    <a href={issuesPath}>{copy.archive}</a>
+    <a href={topicsPath}>{copy.atlas}</a>
+    <a href={libraryPath}>{copy.library}</a>
+    <a href={bookmarksPath}>{copy.bookshelf}</a>
+    <a href={searchPath}>{t("nav.search")}</a>
+    <div class="editorial-mobile-nav__language">
+      <LanguageSwitcher currentLocale={locale} currentPath={Astro.url.pathname} className="editorial-language--mobile" />
+    </div>
+  </nav>
+</header>
+
+<script is:inline>
+  function initEditorialHeader() {
+    const button = document.querySelector(".editorial-menu-button");
+    const nav = document.getElementById("editorial-mobile-nav");
+    if (!(button instanceof HTMLButtonElement) || !(nav instanceof HTMLElement)) return;
+
+    document.querySelectorAll("[data-current-issue-link]").forEach((link) => {
+      if (!(link instanceof HTMLAnchorElement) || link.dataset.scrollReady === "true") return;
+      link.dataset.scrollReady = "true";
+      link.addEventListener("click", (event) => {
+        const target = new URL(link.href);
+        if (target.pathname !== window.location.pathname || target.search !== window.location.search) return;
+        event.preventDefault();
+        window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      });
+    });
+
+    if (button.dataset.ready === "true") return;
+    button.dataset.ready = "true";
+
+    const close = () => {
+      button.setAttribute("aria-expanded", "false");
+      nav.hidden = true;
+    };
+
+    button.addEventListener("click", () => {
+      const open = button.getAttribute("aria-expanded") === "true";
+      button.setAttribute("aria-expanded", String(!open));
+      nav.hidden = open;
+    });
+    nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", close));
+  }
+
+  document.addEventListener("astro:page-load", initEditorialHeader);
+</script>
+
+<style>
+  .editorial-header {
+    --header-bg: color-mix(in srgb, #f8f5ef 92%, transparent);
+    --header-ink: #171614;
+    --header-line: #c9c3b9;
+    --header-accent: #df2d27;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    color: var(--header-ink);
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--header-line);
+    backdrop-filter: blur(16px);
+  }
+
+  :global(.dark) .editorial-header {
+    --header-bg: color-mix(in srgb, #181715 92%, transparent);
+    --header-ink: #f3efe7;
+    --header-line: #403d38;
+  }
+
+  .editorial-header__inner {
+    width: min(calc(100% - var(--editorial-canvas-gutter)), var(--editorial-canvas-width));
+    height: 72px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(160px, 1fr) auto minmax(220px, 1fr);
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .editorial-wordmark {
+    width: fit-content;
+    color: inherit;
+    line-height: 1;
+  }
+
+  .editorial-wordmark span {
+    display: block;
+    font-size: 1.55rem;
+    font-weight: 750;
+    letter-spacing: -0.055em;
+  }
+
+  .editorial-wordmark small {
+    display: block;
+    margin-top: 0.32rem;
+    font-size: 0.58rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .editorial-nav {
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+    gap: clamp(1.25rem, 2.5vw, 2.75rem);
+  }
+
+  .editorial-nav a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+    font-size: 0.86rem;
+    font-weight: 560;
+    white-space: nowrap;
+  }
+
+  .editorial-nav a::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--header-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 180ms ease;
+  }
+
+  .editorial-nav a:hover::after,
+  .editorial-nav a[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
+
+  .editorial-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .editorial-desktop-language,
+  .editorial-user-control {
+    display: flex;
+    align-items: center;
+  }
+
+  .editorial-actions :global(button[title]) {
+    color: white;
+    background: var(--header-accent);
+    background-image: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .editorial-icon-button {
+    width: 38px;
+    height: 38px;
+    display: inline-grid;
+    place-items: center;
+    color: inherit;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .editorial-icon-button:hover {
+    color: var(--header-accent);
+  }
+
+  .editorial-icon-button svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .theme-moon,
+  :global(.dark) .theme-sun {
+    display: none;
+  }
+
+  :global(.dark) .theme-moon {
+    display: block;
+  }
+
+  .editorial-menu-button {
+    display: none;
+    width: 42px;
+    height: 42px;
+    border: 0;
+    background: transparent;
+  }
+
+  .editorial-menu-button span:not(.sr-only) {
+    display: block;
+    width: 22px;
+    height: 1px;
+    margin: 6px auto;
+    background: currentColor;
+  }
+
+  .editorial-mobile-nav {
+    padding: 1rem;
+    border-top: 1px solid var(--header-line);
+  }
+
+  .editorial-mobile-nav a {
+    display: block;
+    padding: 0.9rem 0.25rem;
+    color: inherit;
+    font-family: var(--editorial-serif);
+    font-size: 1.3rem;
+    border-bottom: 1px solid var(--header-line);
+  }
+
+  .editorial-mobile-nav__language {
+    border-bottom: 1px solid var(--header-line);
+  }
+
+  @media (max-width: 1023px) {
+    .editorial-header__inner {
+      grid-template-columns: 1fr auto;
+    }
+    .editorial-nav {
+      display: none;
+    }
+    .editorial-search-control,
+    .editorial-desktop-language {
+      display: none;
+    }
+    .editorial-menu-button {
+      display: block;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .editorial-header__inner {
+      width: calc(100% - 1.25rem);
+      height: 64px;
+    }
+    .editorial-wordmark small {
+      display: none;
+    }
+    .editorial-wordmark span {
+      font-size: 1.35rem;
+    }
+    .editorial-actions {
+      gap: 0.1rem;
+    }
+  }
+</style>

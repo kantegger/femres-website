@@ -1,0 +1,95 @@
+---
+import { type Locale } from "../i18n";
+import { buildTopicIndexPageData } from "../lib/topicIndex";
+
+interface Props { locale: Locale; pathMode: "root" | "locale"; }
+const { locale, pathMode } = Astro.props;
+const {
+  t, enrichedCategories, popularTopics, getTopicPath, contributePath, searchPath,
+  formatItemsCount, formatTopicsCount, formatTotalContent, comingSoonLabel,
+} = await buildTopicIndexPageData({ locale, pathMode });
+
+const copy: Record<Locale, { title:string; deck:string; map:string; mapNote:string; catalogue:string; open:string; connections:string; contribute:string; search:string; }> = {
+  "zh-CN": { title:"思想星图", deck:"女性主义不是一条单线历史，而是一组彼此回应、冲突与生长的思想坐标。", map:"关系星图", mapNote:"从最常出现的议题进入，沿着作品之间的共同主题继续探索。", catalogue:"主题图谱", open:"进入议题", connections:"关联内容", contribute:"补充这张星图", search:"搜索全部内容" },
+  "zh-TW": { title:"思想星圖", deck:"女性主義不是一條單線歷史，而是一組彼此回應、衝突與生長的思想座標。", map:"關係星圖", mapNote:"從最常出現的議題進入，沿著作品之間的共同主題繼續探索。", catalogue:"主題圖譜", open:"進入議題", connections:"關聯內容", contribute:"補充這張星圖", search:"搜尋全部內容" },
+  en: { title:"Idea atlas", deck:"Feminism is not a single history, but a constellation of ideas that answer, challenge, and reshape one another.", map:"Constellation", mapNote:"Enter through the most recurring issues, then follow the themes shared across works.", catalogue:"Topic atlas", open:"Open topic", connections:"linked works", contribute:"Add to the atlas", search:"Search the collection" },
+  ja: { title:"思想星図", deck:"フェミニズムは一本の歴史ではなく、応答し、対立し、育ち続ける思想の座標です。", map:"関係星図", mapNote:"多く現れる論点から入り、作品に共有されるテーマをたどります。", catalogue:"トピック図譜", open:"トピックを見る", connections:"関連資料", contribute:"星図に加える", search:"全資料を検索" },
+  fr: { title:"Atlas d’idées", deck:"Le féminisme n’est pas une histoire unique, mais une constellation d’idées qui se répondent, se contestent et se transforment.", map:"Constellation", mapNote:"Entrez par les enjeux les plus présents, puis suivez les thèmes partagés entre les œuvres.", catalogue:"Atlas des sujets", open:"Ouvrir le sujet", connections:"ressources liées", contribute:"Enrichir l’atlas", search:"Rechercher" },
+};
+const labels = copy[locale];
+const positions = [
+  [50,50],[19,21],[48,15],[79,23],[88,53],[77,82],[49,87],[19,79],[8,50],[31,35],[68,38],[34,69],
+] as const;
+const nodes = popularTopics.map((topic,index)=>({ ...topic, x:positions[index]?.[0] ?? 50, y:positions[index]?.[1] ?? 50 }));
+const edges = [[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9],[0,10],[0,11],[1,9],[2,9],[3,10],[4,10],[5,6],[6,11],[7,11],[8,9]] as const;
+const availableTopics = enrichedCategories.reduce((sum,category)=>sum+category.topics.filter(topic=>topic.count>0).length,0);
+const totalLinks = enrichedCategories.reduce((sum,category)=>sum+category.totalContent,0);
+---
+
+<main class="topic-atlas">
+  <header class="topic-atlas__hero">
+    <div>
+      <h1>{labels.title}</h1>
+      <p>{labels.deck}</p>
+    </div>
+    <dl>
+      <div><dt>{String(availableTopics).padStart(3,"0")}</dt><dd>{formatTopicsCount(availableTopics)}</dd></div>
+      <div><dt>{String(totalLinks).padStart(4,"0")}</dt><dd>{labels.connections}</dd></div>
+    </dl>
+  </header>
+
+  <section class="topic-map" aria-labelledby="topic-map-title">
+    <div class="topic-map__heading">
+      <h2 id="topic-map-title">{labels.map}</h2>
+      <p>{labels.mapNote}</p>
+    </div>
+    <div class="topic-map__canvas">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        {edges.map(([from,to]) => <line x1={nodes[from]?.x} y1={nodes[from]?.y} x2={nodes[to]?.x} y2={nodes[to]?.y}></line>)}
+      </svg>
+      {nodes.map((node,index)=>(
+        <a class:list={["topic-node",{"topic-node--primary":index===0}]} href={getTopicPath(node.englishName)} style={`--x:${node.x}%;--y:${node.y}%`}>
+          <span></span><strong>{node.displayName}</strong><small>{node.count}</small>
+        </a>
+      ))}
+    </div>
+    <div class="topic-map__mobile">
+      {nodes.map((node,index)=><a href={getTopicPath(node.englishName)}><span>{String(index+1).padStart(2,"0")}</span><strong>{node.displayName}</strong><small>{formatItemsCount(node.count)}</small></a>)}
+    </div>
+  </section>
+
+  <section class="topic-catalogue" aria-labelledby="topic-catalogue-title">
+    <header><h2 id="topic-catalogue-title">{labels.catalogue}</h2><p>{t("topicsPage.subtitle")}</p></header>
+    {enrichedCategories.map((category,index)=>(
+      <section class="topic-family">
+        <div class="topic-family__heading">
+          <span>{String(index+1).padStart(2,"0")}</span>
+          <div><h3>{category.name}</h3><p>{category.description}</p></div>
+          <dl><dt>{formatTopicsCount(category.topics.filter(topic=>topic.count>0).length)}</dt><dd>{formatTotalContent(category.totalContent)}</dd></dl>
+        </div>
+        <div class="topic-family__list">
+          {category.topics.map((topic,topicIndex)=>topic.count>0 ? (
+            <a href={getTopicPath(topic.englishName)}><span>{String(topicIndex+1).padStart(2,"0")}</span><strong>{topic.displayName}</strong><small>{topic.count}</small><em>{labels.open}</em></a>
+          ) : (
+            <div><span>{String(topicIndex+1).padStart(2,"0")}</span><strong>{topic.displayName}</strong><small>—</small><em>{comingSoonLabel}</em></div>
+          ))}
+        </div>
+      </section>
+    ))}
+  </section>
+
+  <aside class="topic-atlas__cta">
+    <h2>{t("topicsPage.contributeTitle")}</h2><p>{t("topicsPage.contributeDesc")}</p>
+    <div><a href={contributePath}>{labels.contribute}</a><a href={searchPath}>{labels.search}</a></div>
+  </aside>
+</main>
+
+<style>
+  .topic-atlas{min-height:100dvh;padding-bottom:80px;color:var(--ink);background:var(--paper);font-family:var(--editorial-sans)}.topic-atlas :is(.topic-atlas__hero,.topic-map,.topic-catalogue,.topic-atlas__cta){width:min(100% - var(--editorial-canvas-gutter),var(--editorial-canvas-width));margin-inline:auto}
+  .topic-atlas__hero{display:grid;grid-template-columns:1.35fr .65fr;gap:70px;padding:50px 0 40px}.topic-atlas__hero h1{margin:0;font-family:var(--editorial-serif);font-size:clamp(78px,9.5vw,136px);font-weight:600;letter-spacing:-.075em;line-height:.82}.topic-atlas__hero p{max-width:770px;margin:28px 0 0;font-family:var(--editorial-serif);font-size:clamp(18px,1.8vw,25px);line-height:1.55}.topic-atlas__hero dl{align-self:end;display:grid;grid-template-columns:repeat(2,1fr);margin:0;border-top:1px solid var(--line)}.topic-atlas__hero dl div{padding:16px 12px 0 0;border-right:1px solid var(--line)}.topic-atlas__hero dt{color:var(--accent);font-family:Georgia,serif;font-size:32px}.topic-atlas__hero dd{margin:6px 0 0;color:var(--muted);font-size:9px}
+  .topic-map{padding:32px 0 48px;border-block:2px solid var(--ink)}.topic-map__heading{display:flex;align-items:end;justify-content:space-between;gap:40px}.topic-map__heading h2{margin:0;font-family:var(--editorial-serif);font-size:clamp(44px,5.4vw,70px);font-weight:600;letter-spacing:-.05em}.topic-map__heading p{max-width:450px;margin:0 0 8px;color:var(--muted);font-family:var(--editorial-serif);font-size:15px;line-height:1.6}.topic-map__canvas{position:relative;height:520px;margin-top:18px;overflow:hidden;background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--accent) 5%,transparent),transparent 34%)}.topic-map__canvas svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.topic-map__canvas line{stroke:var(--line);stroke-width:.16;vector-effect:non-scaling-stroke}.topic-node{position:absolute;left:var(--x);top:var(--y);display:grid;grid-template-columns:auto auto;gap:3px 8px;transform:translate(-50%,-50%);white-space:nowrap}.topic-node>span{grid-row:1 / 3;align-self:start;width:8px;height:8px;margin-top:5px;background:var(--accent);border-radius:50%}.topic-node strong{font-family:var(--editorial-serif);font-size:17px;font-weight:600}.topic-node small{color:var(--muted);font-size:9px}.topic-node:hover strong{color:var(--accent)}.topic-node--primary strong{color:var(--accent);font-size:clamp(30px,4vw,54px)}.topic-node--primary>span{width:12px;height:12px;margin-top:13px}.topic-map__mobile{display:none}
+  .topic-catalogue{padding:76px 0 20px}.topic-catalogue>header{display:grid;grid-template-columns:1fr .6fr;gap:60px;align-items:end;margin-bottom:54px}.topic-catalogue>header h2{margin:0;font-family:var(--editorial-serif);font-size:clamp(58px,8vw,110px);font-weight:600;letter-spacing:-.06em;line-height:.9}.topic-catalogue>header p{margin:0 0 8px;color:var(--muted);font-family:var(--editorial-serif);font-size:17px;line-height:1.6}.topic-family{display:grid;grid-template-columns:310px 1fr;border-top:2px solid var(--ink)}.topic-family__heading{display:grid;grid-template-columns:28px 1fr;gap:14px;padding:28px 34px 42px 0;border-right:1px solid var(--line)}.topic-family__heading>span{color:var(--accent);font:12px/1.4 Georgia,serif}.topic-family__heading h3{margin:0;font-family:var(--editorial-serif);font-size:33px;font-weight:600;line-height:1.05}.topic-family__heading p{margin:14px 0 0;color:var(--muted);font-family:var(--editorial-serif);font-size:13px;line-height:1.65}.topic-family__heading dl{grid-column:2;margin:24px 0 0;color:var(--muted);font-size:9px}.topic-family__heading dd{margin:5px 0 0}.topic-family__list{display:grid;grid-template-columns:repeat(2,1fr)}.topic-family__list :is(a,div){display:grid;grid-template-columns:24px 1fr auto;gap:12px;align-items:baseline;min-height:72px;padding:15px 18px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.topic-family__list span,.topic-family__list small{color:var(--muted);font-size:8px}.topic-family__list strong{font-family:var(--editorial-serif);font-size:16px;font-weight:600}.topic-family__list em{grid-column:2;color:var(--muted);font-size:8px;font-style:normal}.topic-family__list a:hover{color:var(--paper);background:var(--ink)}.topic-family__list a:hover :is(span,small,em){color:color-mix(in srgb,var(--paper) 65%,transparent)}.topic-family__list div{opacity:.45}
+  .topic-atlas__cta{display:grid;grid-template-columns:1fr .8fr;gap:70px;align-items:end;margin-top:68px;padding:55px 0;border-block:2px solid var(--ink)}.topic-atlas__cta h2{margin:0;font-family:var(--editorial-serif);font-size:clamp(48px,6vw,82px);font-weight:600;letter-spacing:-.05em;line-height:1}.topic-atlas__cta p{margin:18px 0 0;color:var(--muted);font-family:var(--editorial-serif);font-size:16px;line-height:1.7}.topic-atlas__cta>div{display:flex;justify-content:flex-end;gap:28px}.topic-atlas__cta a{padding:10px 0;border-bottom:1px solid var(--accent);font-size:11px;font-weight:700}.topic-atlas__cta a:first-child{color:var(--accent)}
+  @media(max-width:850px){.topic-atlas__hero{grid-template-columns:1fr}.topic-atlas__hero dl{max-width:520px}.topic-map__canvas{height:560px}.topic-family{grid-template-columns:250px 1fr}.topic-family__list{grid-template-columns:1fr}.topic-catalogue>header,.topic-atlas__cta{grid-template-columns:1fr}}
+  @media(max-width:650px){.topic-atlas :is(.topic-atlas__hero,.topic-map,.topic-catalogue,.topic-atlas__cta){width:calc(100% - 24px)}.topic-atlas__hero{gap:30px;padding:50px 0 40px}.topic-atlas__hero h1{font-size:72px}.topic-atlas__hero p{margin-top:26px;font-size:18px}.topic-map{padding:32px 0}.topic-map__heading{display:block}.topic-map__heading h2{font-size:48px}.topic-map__heading p{margin-top:15px}.topic-map__canvas{display:none}.topic-map__mobile{display:grid;grid-template-columns:repeat(2,1fr);margin-top:28px;border-top:1px solid var(--line);border-left:1px solid var(--line)}.topic-map__mobile a{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;min-height:72px;padding:13px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.topic-map__mobile span,.topic-map__mobile small{color:var(--muted);font-size:8px}.topic-map__mobile strong{font-family:var(--editorial-serif);font-size:15px}.topic-map__mobile small{grid-column:2}.topic-catalogue{padding-top:52px}.topic-catalogue>header{display:block;margin-bottom:38px}.topic-catalogue>header h2{font-size:58px}.topic-catalogue>header p{margin-top:20px}.topic-family{grid-template-columns:1fr}.topic-family__heading{border-right:0}.topic-family__list{grid-template-columns:1fr}.topic-family__list :is(a,div){min-height:64px;padding-inline:10px}.topic-atlas__cta{gap:28px;margin-top:48px;padding:42px 0}.topic-atlas__cta h2{font-size:50px}.topic-atlas__cta>div{justify-content:flex-start;flex-wrap:wrap}}
+</style>

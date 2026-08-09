@@ -1,0 +1,25 @@
+---
+export const prerender = true;
+
+import Layout from "../../layouts/Layout.astro";
+import EditorialVideoDetail from "../../components/EditorialVideoDetail.astro";
+import SchemaMarkup from "../../components/seo/SchemaMarkup.astro";
+import { getCollectionDetailPathsForLocale } from "../../lib/content";
+
+export async function getStaticPaths() {
+  return getCollectionDetailPathsForLocale("videos", "zh-CN", "video", "allVideos");
+}
+
+const { video, allVideos } = Astro.props;
+---
+
+<Layout
+  title={`${video.data.title} - FemRes`}
+  description={video.data.description}
+  image={video.data.thumbnail}
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <SchemaMarkup slot="head" type="VideoObject" data={video.data} />
+  <EditorialVideoDetail video={video} allVideos={allVideos} locale="zh-CN" />
+</Layout>

@@ -1,0 +1,13 @@
+---
+export const prerender=true;
+import Layout from "../../../layouts/Layout.astro";
+import EditorialTopicIndex from "../../../components/EditorialTopicIndex.astro";
+import { createT, type Locale } from "../../../i18n";
+import { getTopicIndexStaticPaths } from "../../../lib/topicIndex";
+export function getStaticPaths(){return getTopicIndexStaticPaths();}
+const currentLocale=Astro.params.locale as Locale;
+const t=createT(currentLocale);
+---
+<Layout title={`${t("topicsPage.title")} - FemRes`} description={t("topicsPage.subtitle")} headerVariant="editorial" showMusicPlayer={false}>
+  <EditorialTopicIndex locale={currentLocale} pathMode="locale" />
+</Layout>

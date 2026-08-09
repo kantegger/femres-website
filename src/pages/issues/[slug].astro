@@ -1,0 +1,19 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import EditorialIssueDetail from "../../components/EditorialIssueDetail.astro";
+import type { Locale } from "../../i18n";
+import { buildIssueView, getIssueStaticPaths } from "../../lib/issues";
+export function getStaticPaths() {
+  return getIssueStaticPaths();
+}
+const currentLocale: Locale = "zh-CN";
+const { slug } = Astro.props as { slug: string };
+const issue = await buildIssueView(slug, currentLocale);
+if (!issue) {
+  throw new Error(`Unknown issue slug: ${slug}`);
+}
+---
+<Layout title={`${issue.copy.theme} · ${issue.copy.title} - 往期 - FemRes`} description={issue.copy.deck} headerVariant="editorial" showMusicPlayer={false}>
+  <EditorialIssueDetail locale={currentLocale} issue={issue} />
+</Layout>

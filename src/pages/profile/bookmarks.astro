@@ -1,0 +1,24 @@
+---
+import ProfileContentListPage from "../../components/ProfileContentListPage.astro";
+import { createT, getLocalizedPath, type Locale } from "../../i18n";
+import { getUserContentListStrings } from "../../lib/profileTranslations";
+
+const currentLocale: Locale = "zh-CN";
+const t = createT(currentLocale);
+const contentListStrings = getUserContentListStrings(currentLocale);
+---
+
+<ProfileContentListPage
+  type="bookmarks"
+  locale={currentLocale}
+  title={t("profilePage.bookmarks.title")}
+  description={t("profilePage.bookmarks.description")}
+  emptyMessage={t("profilePage.bookmarks.emptyMessage")}
+  homeLabel={t("profilePage.breadcrumb.home")}
+  profileLabel={t("profilePage.breadcrumb.profile")}
+  homeLink={getLocalizedPath("/", currentLocale)}
+  profileLink={getLocalizedPath("profile", currentLocale)}
+  icon="⭐"
+  iconClassName="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900 dark:to-orange-900 rounded-full mb-4"
+  uiStrings={contentListStrings}
+/>

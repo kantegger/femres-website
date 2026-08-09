@@ -1,0 +1,394 @@
+---
+import type { CollectionEntry } from "astro:content";
+import InteractionButtons from "./InteractionButtons";
+import Discussion from "./Discussion";
+import NewsletterSignup from "./NewsletterSignup.astro";
+import SupportPromo from "./SupportPromo.astro";
+import { createT, getLocalizedPath, type Locale } from "../i18n/index";
+import { encodeTopicForUrl, getTopicTranslation } from "../i18n/topicsUtils";
+import { getGenreTranslation, translateAward } from "../i18n/genreUtils";
+import { getLanguageName } from "../i18n/languageUtils";
+import { getRegionTranslation } from "../i18n/regionUtils";
+import {
+  buildCollectionDetailView,
+  cleanLocalizedSlug,
+} from "../lib/content";
+import { getLocaleDateLocale } from "../lib/localeDetails";
+import { getDiscussionCopy } from "../lib/discussionCopy";
+
+interface Props {
+  film: CollectionEntry<"films">;
+  allFilms: CollectionEntry<"films">[];
+  locale: Locale;
+}
+
+const { film, allFilms, locale } = Astro.props;
+const t = createT(locale);
+const { Content, relatedEntries } = await buildCollectionDetailView(
+  film,
+  allFilms,
+  4,
+);
+
+const homeLink = getLocalizedPath("", locale);
+const filmsLink = getLocalizedPath("films", locale);
+const filmLink = (slug: string) =>
+  getLocalizedPath(`films/${cleanLocalizedSlug(slug)}`, locale);
+const topicLink = (topic: string) =>
+  getLocalizedPath(`topics/${encodeTopicForUrl(topic)}`, locale);
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString(getLocaleDateLocale(locale), {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+
+const sourceLinks = film.data.sourceUrl ?? [];
+const normalizedPlatform = (platform: string) => platform.trim().toLowerCase();
+const isImdb = (platform: string) => normalizedPlatform(platform) === "imdb";
+const isDouban = (platform: string) =>
+  normalizedPlatform(platform) === "douban" || platform.trim() === "豆瓣";
+const imdb = sourceLinks.find((link) => isImdb(link.platform));
+const douban = sourceLinks.find((link) => isDouban(link.platform));
+const otherSources = sourceLinks.filter(
+  (link) => !isImdb(link.platform) && !isDouban(link.platform),
+);
+
+const labels: Record<Locale, {
+  section: string;
+  overview: string;
+  facts: string;
+  sources: string;
+  related: string;
+  next: string;
+  original: string;
+  discussion: string;
+  discussionDescription: string;
+  support: string;
+}> = {
+  "zh-CN": { section: "银幕", overview: "作品导读", facts: "影片档案", sources: "评分与出处", related: "沿着这条线继续", next: "下一部", original: "原片名", discussion: "讨论", discussionDescription: "分享你的观看感受与延伸思考。", support: "支持 FemRes" },
+  "zh-TW": { section: "銀幕", overview: "作品導讀", facts: "影片檔案", sources: "評分與出處", related: "沿著這條線繼續", next: "下一部", original: "原片名", discussion: "討論", discussionDescription: "分享你的觀看感受與延伸思考。", support: "支持 FemRes" },
+  en: { section: "Screen", overview: "Reading the film", facts: "Film file", sources: "Ratings and sources", related: "Continue along this thread", next: "Next", original: "Original title", discussion: "Discussion", discussionDescription: "Share your response and continue the reading together.", support: "Support FemRes" },
+  ja: { section: "映画", overview: "作品を読む", facts: "作品資料", sources: "評価と出典", related: "この線をたどる", next: "次へ", original: "原題", discussion: "対話", discussionDescription: "鑑賞後の感想や、そこから広がる考えを共有してください。", support: "FemResを支援" },
+  fr: { section: "Écran", overview: "Lire le film", facts: "Fiche du film", sources: "Notes et sources", related: "Poursuivre ce fil", next: "Suivant", original: "Titre original", discussion: "Discussion", discussionDescription: "Partagez votre lecture du film et prolongez la réflexion.", support: "Soutenir FemRes" },
+};
+const copy = labels[locale];
+const primaryTopic = film.data.topics?.[0]
+  ? getTopicTranslation(film.data.topics[0], locale)
+  : null;
+const copyWithPrimaryTopic = primaryTopic
+  ? `${primaryTopic} · ${copy.section}`
+  : copy.section;
+---
+
+<article class="film-reading">
+  <div class="film-reading__rail">
+    <nav class="film-breadcrumb" aria-label={t("common.breadcrumb")}>
+      <a href={homeLink}>{t("nav.home")}</a>
+      <span aria-hidden="true">/</span>
+      <a href={filmsLink}>{t("nav.films")}</a>
+      <span aria-hidden="true">/</span>
+      <span>{film.data.title}</span>
+    </nav>
+
+    <header class="film-hero">
+      <div class="film-poster">
+        {film.data.posterImage ? (
+          <img
+            src={film.data.posterImage}
+            alt={film.data.title}
+            width="800"
+            height="1200"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+        ) : (
+          <div class="film-poster__missing">{t("common.noPoster")}</div>
+        )}
+      </div>
+
+      <div class="film-intro">
+        <p class="film-kicker">{copyWithPrimaryTopic}</p>
+        <h1>{film.data.title}</h1>
+        {film.data.originalTitle && film.data.originalTitle !== film.data.title && (
+          <p class="film-original"><span>{copy.original}</span>{film.data.originalTitle}</p>
+        )}
+        <p class="film-deck">{film.data.description}</p>
+
+        <dl class="film-facts film-facts--hero">
+          <div><dt>{t("film.director")}</dt><dd>{film.data.director}</dd></div>
+          <div><dt>{t("film.year")}</dt><dd>{film.data.year}</dd></div>
+          <div><dt>{t("filmsPage.country.title")}</dt><dd>{getRegionTranslation(film.data.country, locale)}</dd></div>
+          {film.data.duration && <div><dt>{t("film.duration")}</dt><dd>{film.data.duration}</dd></div>}
+        </dl>
+
+        <div class="film-actions">
+          <InteractionButtons
+            contentId={`film-${film.id}`}
+            contentType="film"
+            className="editorial-interactions"
+            client:visible
+            t={{
+              like: t("interactions.like"),
+              unlike: t("interactions.unlike"),
+              bookmark: t("interactions.bookmark"),
+              unbookmark: t("interactions.unbookmark"),
+              loginToInteract: t("interactions.loginToInteract"),
+            }}
+          />
+        </div>
+      </div>
+    </header>
+
+    <div class="film-reading__body">
+      <main class="film-essay">
+        <div class="film-section-heading">
+          <h2>{copy.overview}</h2>
+        </div>
+        <div class="film-prose" lang={locale}>
+          <Content />
+        </div>
+
+        <div class="film-topics" aria-label={t("common.topics")}>
+          <span>{t("common.topics")}</span>
+          {film.data.topics.map((topic) => (
+            <a href={topicLink(topic)}>{getTopicTranslation(topic, locale)}</a>
+          ))}
+        </div>
+      </main>
+
+      <aside class="film-marginalia">
+        <section>
+          <h2>{copy.facts}</h2>
+          <dl class="film-facts">
+            <div><dt>{t("film.releaseDate")}</dt><dd>{formatDate(film.data.releaseDate)}</dd></div>
+            {film.data.contentLanguage && <div><dt>{t("common.language")}</dt><dd>{getLanguageName(film.data.contentLanguage, locale)}</dd></div>}
+            {film.data.genre && film.data.genre.length > 0 && (
+              <div><dt>{t("common.genre")}</dt><dd>{film.data.genre.map((genre) => getGenreTranslation(genre, locale)).join(" · ")}</dd></div>
+            )}
+          </dl>
+        </section>
+
+        {film.data.cast && film.data.cast.length > 0 && (
+          <section>
+            <h2>{t("film.cast")}</h2>
+            <p class="film-name-list">{film.data.cast.join(" · ")}</p>
+          </section>
+        )}
+
+        {film.data.awards && film.data.awards.length > 0 && (
+          <section>
+            <h2>{t("film.awards")}</h2>
+            <ul>
+              {film.data.awards.map((award) => <li>{translateAward(award, locale)}</li>)}
+            </ul>
+          </section>
+        )}
+
+        <section>
+          <h2>{copy.sources}</h2>
+          <div class="film-source-list">
+            {imdb && <a href={imdb.url} target="_blank" rel="noopener noreferrer"><span>IMDb</span><strong>{film.data.imdbRating ? `${film.data.imdbRating}/10` : "↗"}</strong></a>}
+            {douban && <a href={douban.url} target="_blank" rel="noopener noreferrer"><span>Douban</span><strong>{film.data.doubanRating && film.data.doubanRating !== "N/A" ? `${film.data.doubanRating}/10` : "↗"}</strong></a>}
+            {otherSources.map((link) => <a href={link.url} target="_blank" rel="noopener noreferrer"><span>{link.platform}</span><strong>↗</strong></a>)}
+            {sourceLinks.length === 0 && <p>{t("common.noLinks")}</p>}
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  {relatedEntries.length > 0 && (
+    <section class="film-related" aria-labelledby="film-related-title">
+      <div class="film-related__heading">
+        <h2 id="film-related-title">{copy.related}</h2>
+      </div>
+      <div class="film-related__grid">
+        {relatedEntries.map((related, index) => (
+          <a href={filmLink(related.id)} class="film-related__item">
+            <span class="film-related__number">0{index + 1}</span>
+            {related.data.posterImage && (
+              <img src={related.data.posterImage} alt="" loading="lazy" decoding="async" />
+            )}
+            <div>
+              <span>{copy.next} · {related.data.year}</span>
+              <h3>{related.data.title}</h3>
+              <p>{related.data.director}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <div class="film-reading__community">
+    <NewsletterSignup
+      title={t("newsletter.title")}
+      description={t("newsletter.description")}
+      emailPlaceholder={t("auth.emailPlaceholder")}
+      buttonLabel={t("common.subscribe")}
+      source="film_detail"
+      successMessage={t("newsletter.success")}
+      errorMessage={t("newsletter.error")}
+      genericErrorMessage={t("newsletter.genericError")}
+    />
+
+    <Discussion
+      contentId={`film-${film.id}`}
+      contentType="film"
+      locale={locale}
+      copy={getDiscussionCopy(locale, "film", copy.discussion, copy.discussionDescription)}
+      className="editorial-discussion"
+      variant="editorial"
+      client:visible
+    />
+
+    <SupportPromo
+      title={t("common.support")}
+      message={t("common.supportMessage")}
+      buttonLabel={copy.support}
+    />
+  </div>
+</article>
+
+<style>
+  .film-reading {
+    color: var(--ink);
+    background: var(--paper);
+    font-family: var(--editorial-sans);
+  }
+
+  .film-reading__rail,
+  .film-reading__community {
+    width: min(100% - var(--editorial-canvas-gutter), var(--editorial-canvas-width));
+    margin-inline: auto;
+  }
+
+  .film-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 22px 0 18px;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  .film-breadcrumb a:hover { color: var(--accent); }
+  .film-breadcrumb span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .film-hero {
+    display: grid;
+    grid-template-columns: minmax(260px, 4fr) minmax(0, 7fr);
+    gap: clamp(44px, 7vw, 96px);
+    align-items: start;
+    padding: clamp(44px, 7vw, 92px) 0 clamp(60px, 8vw, 112px);
+  }
+
+  .film-poster { position: relative; border: 1px solid var(--ink); }
+  .film-poster img { display: block; width: 100%; height: auto; object-fit: contain; }
+  .film-poster__missing { aspect-ratio: 2 / 3; display: grid; place-items: center; color: var(--muted); }
+
+  .film-kicker { margin: 0 0 24px; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+  .film-intro h1 { max-width: 11ch; margin: 0; font-family: var(--editorial-serif); font-size: clamp(58px, 8vw, 118px); font-weight: 700; letter-spacing: -.055em; line-height: .94; }
+  .film-original { display: flex; gap: 14px; margin: 22px 0 0; color: var(--muted); font-family: var(--editorial-serif); font-size: 18px; font-style: italic; }
+  .film-original span { font-family: Inter, sans-serif; font-size: 10px; font-style: normal; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .film-deck { max-width: 680px; margin: clamp(28px, 4vw, 50px) 0 36px; font-family: var(--editorial-serif); font-size: clamp(19px, 2vw, 27px); line-height: 1.65; }
+
+  .film-facts { margin: 0; }
+  .film-facts--hero { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block: 1px solid var(--line); }
+  .film-facts--hero > div { padding: 16px 12px 18px 0; }
+  .film-facts--hero > div + div { padding-left: 16px; border-left: 1px solid var(--line); }
+  .film-facts dt { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .film-facts dd { margin: 7px 0 0; font-family: var(--editorial-serif); font-size: 15px; font-weight: 600; }
+  .film-actions { margin-top: 24px; }
+  :global(.editorial-interactions) { gap: 22px; }
+  :global(.editorial-interactions button) { color: var(--ink); }
+
+  .film-reading__body { display: grid; grid-template-columns: minmax(0, 2fr) minmax(250px, 1fr); gap: clamp(52px, 8vw, 116px); padding-bottom: 100px; }
+  .film-section-heading, .film-related__heading { display: flex; align-items: baseline; padding-top: 18px; border-top: 2px solid var(--ink); }
+  .film-topics { width: min(100%, 58rem); }
+  .film-section-heading h2, .film-related__heading h2 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(30px, 4vw, 54px); line-height: 1.05; }
+  .film-prose { max-width: none; margin-top: 46px; font-family: var(--editorial-serif); font-size: 18px; line-height: 1.95; text-align: justify; text-justify: auto; hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+  .film-prose :global(p) { margin: 0 0 1.65em; }
+  .film-prose :global(p:first-child::first-letter) { float: left; margin: .08em .12em 0 0; color: var(--accent); font-size: 4.2em; font-weight: 700; line-height: .75; }
+  .film-prose :global(h2), .film-prose :global(h3) { margin: 2em 0 .7em; font-family: var(--editorial-serif); line-height: 1.25; }
+  .film-prose :global(a) { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .film-prose :global(blockquote) { margin: 2.2em 0; padding: 8px 0 8px 28px; border-left: 3px solid var(--accent); font-size: 1.25em; font-style: italic; }
+
+  .film-topics { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: baseline; margin-top: 54px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; }
+  .film-topics > span { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .film-topics a { border-bottom: 1px solid var(--line); }
+  .film-topics a:hover { color: var(--accent); border-color: var(--accent); }
+
+  .film-marginalia { padding-top: 2px; }
+  .film-marginalia section { padding: 20px 0 28px; border-top: 1px solid var(--line); }
+  .film-marginalia h2 { margin: 0 0 18px; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .film-marginalia .film-facts > div { display: grid; grid-template-columns: 100px 1fr; gap: 14px; padding: 8px 0; align-items: baseline; }
+  .film-marginalia .film-facts dd { margin: 0; font-family: Inter, sans-serif; font-size: 13px; font-weight: 500; line-height: 1.55; }
+  .film-name-list { margin: 0; color: var(--muted); font-family: var(--editorial-serif); font-size: 15px; line-height: 1.75; }
+  .film-marginalia ul { margin: 0; padding: 0; list-style: none; }
+  .film-marginalia li { position: relative; padding: 0 0 12px 16px; color: var(--muted); font-family: var(--editorial-serif); font-size: 14px; line-height: 1.6; }
+  .film-marginalia li::before { content: ""; position: absolute; top: .72em; left: 0; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
+  .film-source-list { border-top: 1px solid var(--ink); }
+  .film-source-list a { display: flex; justify-content: space-between; gap: 24px; padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .film-source-list a:hover { color: var(--accent); }
+  .film-source-list p { color: var(--muted); font-size: 13px; }
+
+  .film-related { padding: clamp(56px, 8vw, 108px) max(20px, calc((100vw - var(--editorial-canvas-width)) / 2)); color: #f4f0e8; background: #171614; }
+  .film-related__heading { border-color: #f4f0e8; }
+  .film-related__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 44px; border-top: 1px solid #4a4641; }
+  .film-related__item { position: relative; display: grid; grid-template-columns: 56px 72px minmax(0, 1fr); gap: 16px; align-items: center; min-height: 144px; padding: 20px 18px 20px 0; border-bottom: 1px solid #4a4641; }
+  .film-related__item + .film-related__item { padding-left: 18px; border-left: 1px solid #4a4641; }
+  .film-related__item:hover h3 { color: #ff514b; }
+  .film-related__number { align-self: start; color: #ff514b; font-size: 11px; font-weight: 800; letter-spacing: .12em; }
+  .film-related__item img { width: 72px; height: 104px; object-fit: cover; filter: grayscale(.2); }
+  .film-related__item > div > span { color: #aaa39a; font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .film-related__item h3 { margin: 8px 0 6px; font-family: var(--editorial-serif); font-size: 18px; line-height: 1.2; transition: color .2s ease; }
+  .film-related__item p { margin: 0; color: #aaa39a; font-size: 11px; }
+
+  .film-reading__community { padding: 4px 0 96px; }
+  :global(.editorial-discussion) { font-family: var(--editorial-sans); }
+  :global(.editorial-discussion > h2) { font-family: var(--editorial-serif); font-size: clamp(30px, 4vw, 48px); }
+
+  @media (max-width: 960px) {
+    .film-hero { grid-template-columns: minmax(220px, 2fr) minmax(0, 3fr); gap: 36px; }
+    .film-facts--hero { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .film-facts--hero > div:nth-child(3) { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+    .film-facts--hero > div:nth-child(4) { border-top: 1px solid var(--line); }
+    .film-reading__body { grid-template-columns: minmax(0, 1fr) 260px; gap: 44px; }
+    .film-related__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .film-related__item:nth-child(3) { padding-left: 0; border-left: 0; }
+  }
+
+  @media (max-width: 700px) {
+    .film-reading__rail, .film-reading__community { width: calc(100% - var(--editorial-mobile-gutter)); }
+    .film-breadcrumb { padding-top: 16px; }
+    .film-hero { grid-template-columns: 1fr; align-items: start; padding: 30px 0 68px; }
+    .film-poster { width: min(74vw, 340px); }
+    .film-intro { padding-top: 12px; }
+    .film-kicker { margin-bottom: 16px; }
+    .film-intro h1 { max-width: none; font-size: clamp(48px, 16vw, 76px); }
+    .film-original { margin-top: 16px; font-size: 16px; }
+    .film-deck { margin: 26px 0; font-size: 18px; line-height: 1.7; }
+    .film-reading__body { grid-template-columns: 1fr; gap: 66px; padding-bottom: 70px; }
+    .film-prose { margin-top: 34px; font-size: 17px; line-height: 1.88; }
+    .film-marginalia { order: -1; }
+    .film-marginalia section:first-child { border-top: 2px solid var(--ink); }
+    .film-related { padding-inline: 12px; }
+    .film-related__grid { grid-template-columns: 1fr; }
+    .film-related__item, .film-related__item + .film-related__item { grid-template-columns: 38px 64px 1fr; min-height: 122px; padding: 16px 0; border-left: 0; }
+    .film-related__item img { width: 64px; height: 92px; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .film-poster img { transition: opacity .2s ease; }
+    .film-poster:hover img { opacity: .94; }
+  }
+</style>

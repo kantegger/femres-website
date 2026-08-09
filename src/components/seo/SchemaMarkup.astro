@@ -1,0 +1,168 @@
+---
+export interface Props {
+  type:
+    | "Book"
+    | "Movie"
+    | "Article"
+    | "ScholarlyArticle"
+    | "VideoObject"
+    | "PodcastEpisode"
+    | "WebSite";
+  data: Record<string, unknown>;
+  url?: string;
+}
+
+import { buildCanonicalUrl } from "../../lib/seo.mjs";
+
+const { type, data, url } = Astro.props;
+const currentUrl = buildCanonicalUrl(url || Astro.url.pathname);
+
+type SchemaObject = Record<string, unknown>;
+
+const toOptionalString = (value: unknown): string | undefined => {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+  return String(value);
+};
+
+const toIsoDurationSeconds = (value: unknown): string | undefined => {
+  const seconds = Number(value);
+  return Number.isFinite(seconds) && seconds > 0
+    ? `PT${Math.round(seconds)}S`
+    : undefined;
+};
+
+const toAbsoluteUrl = (value: unknown): string | undefined => {
+  const stringValue = toOptionalString(value);
+  return stringValue ? new URL(stringValue, currentUrl).href : undefined;
+};
+
+const publisher = {
+  "@type": "Organization",
+  name: "FemRes",
+  url: "https://www.femres.org/",
+};
+
+let schema: SchemaObject = {
+  "@context": "https://schema.org",
+  "@type": type,
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": currentUrl,
+  },
+  url: currentUrl,
+};
+
+// Data normalization
+if (type === "Book") {
+  schema = {
+    ...schema,
+    name: data.title,
+    author: [
+      {
+        "@type": "Person",
+        name: data.author,
+      },
+    ],
+    datePublished: toOptionalString(data.publicationYear),
+    description: data.description,
+    image: toAbsoluteUrl(data.coverImage),
+    isbn: data.isbn || undefined,
+    inLanguage: data.contentLanguage || data.language || undefined,
+  };
+} else if (type === "Movie") {
+  schema = {
+    ...schema,
+    name: data.title,
+    director: [
+      {
+        "@type": "Person",
+        name: data.director,
+      },
+    ],
+    datePublished: toOptionalString(data.releaseDate ?? data.year),
+    description: data.description,
+    image: toAbsoluteUrl(data.coverImage),
+    inLanguage: data.contentLanguage || data.language || undefined,
+  };
+} else if (type === "ScholarlyArticle" || type === "Article") {
+  schema = {
+    ...schema,
+    headline: data.title,
+    author: [
+      {
+        "@type": "Person",
+        name: data.author,
+      },
+    ],
+    datePublished: data.publishDate,
+    description: data.description || data.abstract,
+    image: toAbsoluteUrl(data.coverImage),
+    inLanguage: data.contentLanguage || undefined,
+    publisher,
+  };
+} else if (type === "VideoObject") {
+  const thumbnail = toAbsoluteUrl(data.thumbnail ?? data.coverImage);
+  const thumbnailUrl = thumbnail ? [thumbnail] : undefined;
+
+  schema = {
+    ...schema,
+    name: data.title,
+    description: data.description,
+    thumbnailUrl,
+    uploadDate: data.publishDate,
+    embedUrl: data.embedUrl,
+    contentUrl: data.sourceUrl,
+    duration: toIsoDurationSeconds(data.duration),
+    inLanguage: data.contentLanguage || undefined,
+    author: {
+      "@type": "Person",
+      name: data.author,
+    },
+  };
+} else if (type === "PodcastEpisode") {
+  const isEpisode = Number.isFinite(Number(data.episodeNumber));
+  schema = {
+    ...schema,
+    "@type": isEpisode ? "PodcastEpisode" : "PodcastSeries",
+    name: data.title,
+    description: data.description,
+    datePublished: data.publishDate,
+    image: toAbsoluteUrl(data.thumbnail),
+    inLanguage: data.contentLanguage || undefined,
+    author: data.author
+      ? {
+          "@type": "Person",
+          name: data.author,
+        }
+      : undefined,
+    associatedMedia: isEpisode
+      ? {
+          "@type": "MediaObject",
+          contentUrl: data.audioUrl || data.sourceUrl,
+        }
+      : undefined,
+  };
+} else if (type === "WebSite") {
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: data.name || "FemRes",
+    url: currentUrl,
+    inLanguage: ["zh-CN", "en", "ja", "fr", "zh-TW"],
+    publisher,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${new URL(currentUrl).origin}/search?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+---
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(schema)}
+  is:inline
+/>

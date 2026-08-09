@@ -1,0 +1,81 @@
+---
+interface Props {
+  title: string;
+  tagline: string;
+  intro?: string;
+  stats?: { value: string; label: string }[];
+}
+
+const { title, tagline, intro, stats = [] } = Astro.props;
+---
+
+<div class="ed-shell">
+  <header class="ed-shell__hero">
+    <div>
+      <h1>{title}</h1>
+      <p>{tagline}</p>
+    </div>
+    {intro && <p class="ed-shell__intro">{intro}</p>}
+    {stats.length > 0 && (
+      <dl class="ed-shell__stats">
+        {stats.map((stat) => (
+          <div><dt>{stat.value}</dt><dd>{stat.label}</dd></div>
+        ))}
+      </dl>
+    )}
+  </header>
+
+  {Astro.slots.has("filters") && <slot name="filters" />}
+
+  <section class="ed-shell__catalogue">
+    <slot name="featured" />
+    <slot />
+    {Astro.slots.has("pagination") && <slot name="pagination" />}
+  </section>
+
+  {Astro.slots.has("aside") && (
+    <aside class="ed-shell__aside">
+      <slot name="aside" />
+    </aside>
+  )}
+</div>
+
+<style>
+  .ed-shell { min-height: 100dvh; color: var(--ink); background: var(--paper); font-family: var(--editorial-sans); }
+
+  .ed-shell__hero,
+  .ed-shell__catalogue,
+  .ed-shell__aside { width: min(100% - var(--editorial-canvas-gutter), var(--editorial-canvas-width)); margin-inline: auto; }
+
+  .ed-shell__hero { display: grid; grid-template-columns: 1.35fr .85fr; gap: 26px 80px; padding: 72px 0 58px; }
+  .ed-shell__hero > div:first-child { align-self: end; }
+  .ed-shell__hero h1 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(86px, 12vw, 176px); font-weight: 600; letter-spacing: -.075em; line-height: .8; }
+  .ed-shell__hero > div:first-child > p { margin: 30px 0 0; font-family: var(--editorial-serif); font-size: clamp(18px, 2vw, 28px); }
+  .ed-shell__intro { align-self: end; max-width: 510px; margin: 0 0 2px; font-family: var(--editorial-serif); font-size: clamp(19px, 2.2vw, 31px); line-height: 1.48; }
+  .ed-shell__stats { display: grid; grid-column: 1 / -1; grid-auto-flow: column; grid-auto-columns: minmax(0, 220px); justify-content: start; margin: 44px 0 0; border-top: 1px solid var(--line); }
+  .ed-shell__stats div { padding: 16px 20px 0 0; border-right: 1px solid var(--line); }
+  .ed-shell__stats dt { color: var(--accent); font-family: var(--editorial-serif); font-size: 34px; line-height: 1; }
+  .ed-shell__stats dd { margin: 8px 0 0; color: var(--muted); font-size: 10px; letter-spacing: .04em; }
+
+  .ed-shell__catalogue { padding: 66px 0 100px; }
+  .ed-shell__aside { padding: 74px 0 86px; border-top: 2px solid var(--ink); }
+
+  @media (max-width: 900px) {
+    .ed-shell__hero { grid-template-columns: 1fr; }
+    .ed-shell__intro { max-width: 680px; }
+  }
+
+  @media (max-width: 700px) {
+    .ed-shell__hero, .ed-shell__catalogue, .ed-shell__aside { width: calc(100% - 24px); }
+    .ed-shell__hero { gap: 28px; padding: 54px 0 38px; }
+    .ed-shell__hero h1 { font-size: 84px; }
+    .ed-shell__hero > div:first-child > p { margin-top: 22px; font-size: 18px; }
+    .ed-shell__intro { font-size: 20px; }
+    .ed-shell__stats { grid-auto-flow: row; grid-template-columns: repeat(2, 1fr); margin-top: 14px; }
+    .ed-shell__stats div { padding-right: 10px; }
+    .ed-shell__stats dt { font-size: 29px; }
+    .ed-shell__stats dd { font-size: 8px; }
+    .ed-shell__catalogue { padding: 48px 0 74px; }
+    .ed-shell__aside { padding: 56px 0 68px; }
+  }
+</style>

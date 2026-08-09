@@ -1,0 +1,14 @@
+---
+export const prerender = true;
+import EditorialContact from "../../components/EditorialContact.astro";
+import Layout from "../../layouts/Layout.astro";
+import { createT, type Locale } from "../../i18n";
+
+export function getStaticPaths() { return ["en", "zh-TW", "ja", "fr"].map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = createT(locale);
+---
+
+<Layout title={`${t("contactPage.metaTitle")} - FemRes`} description={t("contactPage.metaDescription")} headerVariant="editorial" showMusicPlayer={false}>
+  <EditorialContact locale={locale} />
+</Layout>

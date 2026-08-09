@@ -1,0 +1,23 @@
+---
+export const prerender = true;
+
+import Layout from "../../../layouts/Layout.astro";
+import EditorialPaperDetail from "../../../components/EditorialPaperDetail.astro";
+import SchemaMarkup from "../../../components/seo/SchemaMarkup.astro";
+import { getLocalizedCollectionDetailPaths } from "../../../lib/content";
+import { getEditorialShareImage } from "../../../lib/editorialShareImage";
+import { nonDefaultDetailLocales, type SupportedDetailLocale } from "../../../lib/localeDetails";
+
+export async function getStaticPaths() {
+  return getLocalizedCollectionDetailPaths("papers", nonDefaultDetailLocales, "paper", "allPapers");
+}
+
+const { paper, locale, allPapers } = Astro.props;
+const currentLocale = locale as SupportedDetailLocale;
+const shareImage = getEditorialShareImage("paper");
+---
+
+<Layout title={`${paper.data.title} - FemRes`} description={paper.data.description} image={shareImage} headerVariant="editorial" showMusicPlayer={false}>
+  <SchemaMarkup slot="head" type="ScholarlyArticle" data={{ ...paper.data, coverImage: shareImage }} />
+  <EditorialPaperDetail paper={paper} allPapers={allPapers} locale={currentLocale} />
+</Layout>

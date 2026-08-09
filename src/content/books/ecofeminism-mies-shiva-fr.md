@@ -1,0 +1,27 @@
+---
+title: "Écoféminisme"
+originalTitle: "Ecofeminism"
+author: "Maria Mies and Vandana Shiva"
+description: "Maria Mies et Vandana Shiva réunissent capitalisme patriarcal, développement colonial, travail gratuit des femmes et destruction écologique dans une économie politique, puis proposent une perspective de subsistance centrée sur la vie."
+publishDate: 1993-01-01
+isbn: "9781780325637"
+contentLanguage: "en"
+topics: ["Ecofeminism","Capitalism Critique","Decolonial Feminism","Climate Justice","Global Feminism"]
+sourceUrl: "https://exhibitions.lib.udel.edu/50-feminist-books/exhibition-item/ecofeminism/"
+coverImage: "https://media.femres.org/images/books/ecofeminism-mies-shiva.jpg"
+status: "published"
+---
+
+Publié en 1993, Ecofeminism n’est pas un plaidoyer modéré visant à prouver que les femmes seraient naturellement plus proches de la nature. C’est l’acte d’accusation commun de Maria Mies et Vandana Shiva contre l’ordre mondial qui se forme après la guerre froide. Elles réunissent corps des femmes, care non rémunéré, ressources colonisées et nature non humaine dans une même économie politique. Le capitalisme moderne s’étend, affirment-elles, en déclarant certaines vies et certains travaux librement disponibles, infiniment consommables et extérieurs à ses comptes. Destruction écologique et oppression de genre sont ainsi deux effets reliés d’un même régime d’accumulation.
+
+Mies concentre son analyse sur le « développement de rattrapage » et la ménagérisation. Le mode de vie des sociétés riches ne peut être universalisé, car il repose sur le travail, les terres et les matières premières bon marché du Sud global, mais aussi sur le travail féminin naturalisé au sein des foyers. La modernisation présente l’emploi salarié comme seule production valable tout en déclarant non productifs l’accouchement, l’éducation, la cuisine, le nettoyage et l’entretien des communautés. Le capitalisme n’a donc pas abandonné la famille patriarcale : il l’utilise pour dissimuler le coût de reproduction du travail et de la vie quotidienne.
+
+Shiva aborde l’agriculture, la biodiversité et la politique des savoirs. La science moderne réduit souvent des écosystèmes complexes à des ressources mesurables, brevetables et vendables. La conservation paysanne des semences, la gestion féminine de cultures diverses et les savoirs écologiques locaux sont jugés arriérés, puis deviennent sources de profit lorsque des entreprises biotechnologiques obtiennent des droits sur les semences et les gènes. Les analyses du GATT, de la révolution verte et des biotechnologies redéfinissent ainsi l’« innovation » comme lutte pour la propriété, la répartition des risques et l’autorité épistémique.
+
+Les autrices rapprochent aussi technologies reproductives et agricoles. Qu’il s’agisse du corps d’une femme ou d’une semence, un dispositif technique peut décomposer les relations capables de régénérer la vie en éléments gérables, placés sous le contrôle des experts, du marché et du droit. La technologie n’est pas nécessairement mauvaise en soi ; les questions féministes sont de savoir qui en fixe le but, qui possède ses produits, qui supporte les risques irréversibles et si les personnes dont elle réorganise la vie peuvent refuser. Ce cadre reste pertinent pour la procréation assistée, l’édition génétique, l’agriculture pilotée par les données ou l’ingénierie climatique.
+
+Mies et Shiva proposent en retour une « perspective de subsistance » : l’économie devrait partir du travail réel qui entretient la vie, reconnaître les limites écologiques et l’interdépendance, valoriser autonomie locale et réciprocité plutôt qu’une croissance illimitée des marchandises. La subsistance ne signifie ici ni célébrer la privation ni renvoyer les femmes au foyer. Elle refuse de traiter care, alimentation et reproduction écologique comme des subventions inépuisables. Des mouvements tels que Chipko comptent parce que leurs participantes comprennent la forêt comme fondement d’une vie commune, et non comme stock de bois disponible.
+
+La puissance de ce classique s’accompagne de limites sérieuses. Ses grandes oppositions entre femme et nature ou Nord et Sud transforment parfois les femmes du Sud global en sujet écologique homogène, effaçant les différences de caste, classe, ethnicité, sexualité, expérience trans et handicap. Communautés locales et traditions ne sont pas automatiquement justes. Romantiser le travail de subsistance des femmes peut leur imposer encore une fois la réparation gratuite des dommages du capitalisme. L’écologie politique féministe ultérieure et les pensées écologiques dalits, autochtones, queer et trans sont des correctifs indispensables à cette tendance essentialiste.
+
+Ecofeminism se lit donc aujourd’hui comme une intervention historique contestée mais encore productive. Son apport durable est d’obliger à compter simultanément l’extraction des ressources, le care et les rapports coloniaux cachés derrière une marchandise, puis à demander si le développement vert ne déplace pas simplement ses coûts vers les groupes les moins visibles. Le livre ne fournit pas un programme universel prêt à l’emploi. Il aiguise toutefois un critère féministe décisif : une politique environnementale qui ne change ni la propriété de la terre et des technologies, ni l’autorité sur le savoir, ni le partage du travail reproductif peut reconduire le capitalisme patriarcal sous un nom plus vert.

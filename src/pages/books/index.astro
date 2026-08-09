@@ -1,0 +1,15 @@
+---
+import EditorialBookIndex from "../../components/EditorialBookIndex.astro";
+import Layout from "../../layouts/Layout.astro";
+
+const currentLocale = "zh-CN";
+---
+
+<Layout
+  title="书籍 - FemRes"
+  description="精选女性主义书籍合集，涵盖理论、实践、历史等多个方面。"
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <EditorialBookIndex locale={currentLocale} pathMode="root" />
+</Layout>

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Allow access to ads.txt for ad networks
+Allow: /ads.txt
+
+Sitemap: https://www.femres.org/sitemap-index.xml

@@ -1,0 +1,27 @@
+---
+export const prerender = true;
+
+import Layout from "../../../layouts/Layout.astro";
+import EditorialPodcastDetail from "../../../components/EditorialPodcastDetail.astro";
+import SchemaMarkup from "../../../components/seo/SchemaMarkup.astro";
+import { getLocalizedCollectionDetailPaths } from "../../../lib/content";
+import { nonDefaultDetailLocales, type SupportedDetailLocale } from "../../../lib/localeDetails";
+
+export async function getStaticPaths() {
+  return getLocalizedCollectionDetailPaths("podcasts", nonDefaultDetailLocales, "podcast", "allPodcasts");
+}
+
+const { podcast, locale, allPodcasts } = Astro.props;
+const currentLocale = locale as SupportedDetailLocale;
+---
+
+<Layout
+  title={`${podcast.data.title} - FemRes`}
+  description={podcast.data.description}
+  image={podcast.data.thumbnail}
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <SchemaMarkup slot="head" type="PodcastEpisode" data={podcast.data} />
+  <EditorialPodcastDetail podcast={podcast} allPodcasts={allPodcasts} locale={currentLocale} />
+</Layout>

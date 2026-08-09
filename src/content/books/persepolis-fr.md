@@ -1,0 +1,38 @@
+---
+title: "Persépolis"
+originalTitle: "Persepolis"
+author: "Marjane Satrapi"
+description: "Un roman graphique autobiographique dépeignant les années tumultueuses de la Révolution islamique et de la guerre Iran-Irak à travers les yeux d'une jeune fille. Il explore l'esprit de rébellion en quête de liberté, les luttes identitaires et l'oppression par le pouvoir d'État. Un témoignage profondément humain et puissant de résilience raconté par des dessins en noir et blanc épurés."
+publishDate: 2000-01-01
+isbn: "9780375714573"
+contentLanguage: "en"
+topics: ["Women's History", "Women's Literature", "International Context", "Historical Context", "Mental Health", "Social Movements"]
+sourceUrl: "https://www.amazon.sg/s?k=persepolis+marjane+satrapi&tag=inkrupt-22"
+coverImage: "https://media.femres.org/images/books/persepolis.jpg"
+status: "published"
+---
+
+Publié en 2000, « Persépolis » de Marjane Satrapi est un monument de la littérature du XXIe siècle qui a à la fois élargi les possibilités du format roman graphique et fait découvrir au monde l'histoire complexe de l'Iran moderne ainsi que les « visages » des femmes qui y vivent. Rendue dans un puissant contraste noir et blanc, l'œuvre est basée sur les propres expériences de Satrapi, de l'enfance au début de l'âge adulte. Elle utilise l'humour et une profonde tristesse pour dépeindre la croissance personnelle d'une femme et la réalité d'une société en plein effondrement à travers la Révolution islamique de 1979, la guerre Iran-Irak qui a suivi, et sa vie d'exilée en Europe.
+
+L'auteure, Marjane Satrapi, a grandi dans une famille progressiste aux penchants communistes et à l'ascendance noble. Son éducation a servi de microcosme au choc entre tradition et modernisation, sécularisme et conservatisme religieux en Iran. Dans « Persépolis », Satrapi ne se dépeint pas comme une « héroïne parfaite » mais comme une fille à taille humaine qui se met en colère, se perd et fait parfois preuve de bravoure, élevant les faits historiques d'un pays lointain au rang de drame humain universel.
+
+La première partie de l'histoire dépeint les bouleversements politiques à Téhéran à la fin des années 1970. Elle relate le processus désespéré par lequel des personnes s'étant battues pour la liberté ont été exécutées ou emprisonnées sous la nouvelle théocratie instaurée après la révolution. La jeune Marjane cache ses affiches d'icônes du punk rock qu'elle admirait autrefois et porte le voile obligatoire (hijab), tout en refusant d'abandonner sa rébellion intérieure. Satrapi révèle avec une intuition acérée comment le sens pur de la justice d'un enfant est exposé et érodé par la cruauté de la politique. La description de la manière dont un système étatique massif tente de contrôler chaque recoin de la vie quotidienne individuelle et de la liberté corporelle reste un avertissement saisissant aujourd'hui.
+
+L'éclatement de la guerre Iran-Irak jette une ombre encore plus sombre sur le récit. La peur des bombardements, la pénurie de biens et l'absurdité de jeunes hommes envoyés au front avec des « clés du paradis ». Satrapi ne se contente pas de dépeindre la tragédie comme telle ; elle en capture l'absurdité et la résilience humaine qui s'y cachent. Les soirées dansantes secrètes chez des parents et les moments de partage d'alcool interdit servaient d'actes de résistance clandestins — des bouées de sauvetage pour que les individus gardent la raison au sein d'une société oppressive.
+
+D'un point de vue féministe, « Persépolis » est une critique puissante des rôles de genre obligatoires et de la politisation du corps féminin. Dans l'Iran post-révolutionnaire, même une mèche de cheveux dépassant du voile ou la couleur des lèvres d'une femme sont devenues des sujets de surveillance politique. Satrapi décrit comment son corps a été géré et exproprié par l'État sous couvert de « moralité », tout en détaillant comment elle et les femmes autour d'elle tentaient habilement de repousser ces limites. Pour elle, la lutte pour protéger son autonomie en tant que femme était une question littérale de vie ou de mort.
+
+Au milieu de l'histoire, Marjane est envoyée seule à Vienne pour échapper à la guerre et à l'oppression. À partir de là, le récit entre dans une nouvelle phase : la crise identitaire et l'aliénation auxquelles est confrontée une exilée. Dans l'air libre de l'Europe, elle lutte pour redéfinir qui elle est. Elle confesse avec honnêteté l'état psychologique déchiré de celui qui vit à la frontière — le regard qui la voit comme un « objet étranger » venant d'Orient, la solitude de ne pas voir la réalité horrifiante de son pays d'origine comprise, et la culpabilité de tenter de cacher ses racines par honte.
+
+En ce qui concerne la santé mentale, l'œuvre est une histoire de reconstruction après un traumatisme profond et une dépression. Après avoir touché le fond et connu l'échec à Vienne, le retour de Marjane en Iran dépeint le processus par lequel quelqu'un ayant vécu une perte extrême se relève et recoud les morceaux de soi-même. Elle affronte le paysage de Téhéran dévasté par la guerre et un système social oppressif inchangé, où elle apprend à élever à nouveau sa « voix », décidant finalement de quitter l'Iran pour de bon.
+
+Le format roman graphique choisi par Satrapi joue un rôle décisif dans la transmission du message de l'œuvre. En évitant les représentations réalistes et en adoptant des dessins symboliques et plats, une expression universelle de tous les peuples opprimés émerge au-delà du visage d'un individu spécifique. Le jeu exquis entre image et texte transperce le cœur du lecteur de peur, d'amour et d'esprit de rébellion, transcendant les barrières linguistiques.
+
+« Persépolis » n'est pas une simple « critique de la société islamique ». C'est une protestation contre toutes les formes de dogme et de pouvoir qui cherchent à dépouiller la liberté. Satrapi soutient que peu importe l'idéologie, si elle est imposée de force et qu'elle porte atteinte à la dignité humaine, elle doit être combattue. Les figures de femmes fortes comme sa mère et sa grand-mère servent de guides constants à Marjane, lui enseignant que la véritable éducation consiste à « avoir le courage de penser par soi-même et de défendre ce que l'on croit juste ».
+
+Après sa publication, l'œuvre est devenue un best-seller mondial explosif et a été adaptée en un film d'animation acclamé. Bien qu'il soit traité presque comme un livre interdit en Iran, le fait qu'il continue d'être lu clandestinement par de nombreux jeunes prouve que la « soif de liberté » ancrée dans l'œuvre résonne à travers le temps et l'espace. Lors des manifestations iraniennes de 2022 pour « Femme, Vie, Liberté », l'esprit de « Persépolis » a servi de pilier au cœur de nombreuses personnes.
+
+En conclusion, « Persépolis » de Marjane Satrapi est un chef-d'œuvre unique de la littérature féminine et des mémoires contemporains. Il oblige les lecteurs à reconnaître à quel point la « liberté » que nous tenions pour acquise est précieuse et comment elle doit être protégée par une lutte constante. La dernière case que Satrapi dessine en pensant à sa patrie, l'Iran, grave de façon permanente dans nos cœurs la beauté de la tristesse alliée à une âme humaine qui ne se rend jamais.
+
+Marjane clôt son histoire sur une scène à l'aéroport alors qu'elle quitte sa terre natale. C'était un adieu douloureux, mais aussi un premier pas vers une nouvelle vie où elle pourrait continuer à écrire sa propre histoire de ses propres mains. Ce « Persépolis », qu'elle a achevé comme promis, est son plus grand acte de résistance et de justice. À travers ce livre, nous ressentons les battements de cœur de l'Iran et témoignons du feu de la passion qui ne meurt jamais chez les femmes qui y vivent.
+

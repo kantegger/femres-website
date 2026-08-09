@@ -1,0 +1,29 @@
+---
+title: "Women in Black"
+originalTitle: "Women in Black: Against Violence, for Peace with Justice"
+author: "Cynthia Cockburn and Sue Finch"
+description: "A feminist movement history spanning more than three decades and five continents, documenting how Women in Black used black clothing, silent vigils, and local coalitions against occupation, war, militarism, apartheid, and gendered violence."
+publishDate: 2023-11-01
+isbn: "9781773636542"
+contentLanguage: "en"
+topics: ["War and Peace","Social Movements","Militarism","Transnational Feminism","Political Participation"]
+sourceUrl: "https://fernwoodpublishing.ca/books/women-in-black"
+coverImage: "https://media.femres.org/images/books/women-in-black.jpg"
+status: "published"
+---
+
+*Women in Black: Against Violence, for Peace with Justice* is both a movement history and a rescued collective archive. Feminist sociologist and peace activist Cynthia Cockburn began writing it in 2018; before her death in 2019, she entrusted an unfinished manuscript and twenty boxes of material to her companions. Sue Finch and members of the Women in Black network completed the remaining chapters, checked the record, and added stories from their regions. The finished book therefore resists turning a living network into one founder’s legend and preserves the relay through which activist knowledge survives.
+
+The movement has a specific beginning: Israel in 1988. After the first Palestinian intifada began, women stood in public dressed in black and demanded an end to the occupation of the West Bank and Gaza. The book situates that action within a highly militarized and unequal Israel–Palestine and records the difficult, necessary collaboration among Jewish Israeli women, Palestinian citizens of Israel, and Palestinian women in the Occupied Territories. This origin matters. Women in Black did not emerge from an abstract belief that women are naturally peaceful, but from opposition to concrete state policy, territorial domination, and responsibility within one’s own society.
+
+Its most durable action is strikingly spare: a regular vigil at a busy public location, black clothing, usually silence, and boldly worded political messages. Black makes mourning visible; silence refuses the noisy, masculinized language of war. Neither means passivity. Groups have also used street theatre, demonstrations, and direct action, including blockading roads to nuclear testing and bomb-assembly sites. The political force lies less in a single spectacle than in returning to the same place at the same time, keeping violence visible after the news cycle would prefer to move on.
+
+The book then follows this “formula for action” as it changes across borders. Only six months after the Jerusalem vigils, Jewish women peace activists organized related actions in the United States. Italy’s Donne in Nero connected vigils to visits to conflict zones; Žene u crnom in the disintegrating Yugoslavia joined antimilitarism and antinationalism to confronting wartime rape. Chapters on Britain, Spain, Belgium, India, South Africa, Central and South America, and Armenia show that Women in Black is not an organization commanded by a headquarters. It is a network held by websites, international encounters, shared symbols, and relationships, with each locality redefining the violence it confronts.
+
+That architecture practices transversal feminism rather than assuming that women are naturally the same. Militarism links battlefield, border, police, household, and economy: rape, femicide, apartheid, occupation, displacement, and the transfer of public wealth into military budgets are not separate concerns. By working with feminist, peace, antiracist, and antinuclear movements, Women in Black turns moral outrage into coalition. Yet coalition continually raises political questions: who can speak for a conflict, who risks publicly opposing their own government, and where international attention and resources flow.
+
+Cockburn and Finch’s method combines participant movement history, archival reconstruction, and political analysis. The chapters travel through Israel–Palestine, the United States, Italy, former Yugoslavia, Britain, European meeting points, India, South Africa, the Americas, and Armenia, recording organizations and pivotal events alongside activists’ reflections on black clothing, silence, and solidarity. Completion by the network after Cockburn’s death makes the book an instance of the ethic it describes: no one owns the whole history, and preserving memory is itself movement infrastructure.
+
+The inside perspective is also a limitation. The book prioritizes preservation and encouragement over systematic evidence of how vigils changed policy or public opinion; regional records vary in depth, and groups or disagreements outside the archive may be missing. Decentralization protects local autonomy but complicates common accountability, unequal resources, and the boundaries of “women” as a political subject. In the Israel–Palestine chapters especially, transnational sisterhood must not flatten the power asymmetry of occupation. Readers should continue into histories and present analyses produced by Palestinian feminists themselves.
+
+A useful reading path is to study one local chapter closely and then compare it with another. What do black clothing and silence mean there, whom are activists addressing, what risks do they assume, and which alliances become possible? Those questions can then audit protest design today: does a symbol serve a precise demand, how will repeated action be sustained, who performs the care and archive work, and do those most affected retain authority? Women in Black’s legacy is not a visual brand ready for copying. It is a patient political technology that refuses to privatize grief, insists that peace include justice, and makes persistent presence a defense against militarized forgetting.

@@ -1,0 +1,77 @@
+---
+import { getLocalizedPath, type Locale } from "../i18n";
+import type { ContentType, NormalizedContent } from "../lib/content";
+
+interface Props {
+  items: NormalizedContent[];
+  locale: Locale;
+  labels: Record<ContentType, string>;
+  start?: number;
+  preserveImageRatio?: boolean;
+}
+
+const { items, locale, labels, start = 0, preserveImageRatio = false } = Astro.props;
+const collections: Record<ContentType, string> = {
+  book: "books",
+  article: "articles",
+  film: "films",
+  video: "videos",
+  podcast: "podcasts",
+  paper: "papers",
+};
+const itemLink = (item: NormalizedContent) =>
+  getLocalizedPath(`${collections[item.contentType]}/${item.cleanSlug}`, locale);
+const textOnlyContentTypes = new Set<ContentType>(["article", "paper"]);
+const cleanVisible = (value: string) => value.replace(/[\u2014\u2013]/g, " - ");
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat(locale, { year: "numeric", month: "short" }).format(date);
+---
+
+<div class="topic-rows">
+  {items.map((item, index) => (
+    <a class={`topic-row ${preserveImageRatio ? "topic-row--preserve-ratio" : ""} ${textOnlyContentTypes.has(item.contentType) ? "topic-row--text" : ""}`} href={itemLink(item)}>
+      <span class="topic-row__number">{String(start + index + 1).padStart(2, "0")}</span>
+      {!textOnlyContentTypes.has(item.contentType) && (
+        <div class={`topic-row__media topic-row__media--${item.contentType}`}>
+          {item.image ? (
+            <img src={item.image} alt="" loading="lazy" decoding="async" />
+          ) : (
+            <span>{labels[item.contentType]}</span>
+          )}
+        </div>
+      )}
+      <div class="topic-row__copy">
+        <p><strong>{labels[item.contentType]}</strong> · {formatDate(item.date)}</p>
+        <h3>{cleanVisible(item.title)}</h3>
+        {item.originalTitle && item.originalTitle !== item.title && <em>{cleanVisible(item.originalTitle)}</em>}
+        <small>{cleanVisible(item.author)}</small>
+      </div>
+      <p class="topic-row__description">{cleanVisible(item.description)}</p>
+      <svg class="topic-row__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg>
+    </a>
+  ))}
+</div>
+
+<style>
+  .topic-rows { border-top:1px solid var(--ink); }
+  .topic-row { display:grid; grid-template-columns:34px 108px minmax(220px,.9fr) minmax(240px,1.1fr) 28px; gap:22px; align-items:center; min-height:166px; padding:18px 0; border-bottom:1px solid var(--line); }
+  .topic-row--text { grid-template-columns:34px minmax(280px,.9fr) minmax(300px,1.1fr) 28px; min-height:142px; }
+  .topic-row:hover h3,.topic-row:hover .topic-row__arrow { color:var(--accent); }
+  .topic-row__number { align-self:start; padding-top:4px; color:var(--muted); font-size:9px; }
+  .topic-row__media { display:grid; place-items:center; width:108px; aspect-ratio:4 / 3; overflow:hidden; color:var(--muted); background:var(--paper-deep); font-size:9px; }
+  .topic-row__media img { width:100%; height:100%; object-fit:contain; transition:transform .35s ease; }
+  .topic-row--preserve-ratio .topic-row__media { aspect-ratio:auto; align-items:start; }
+  .topic-row--preserve-ratio .topic-row__media img { width:100%; height:auto; }
+  .topic-row:hover .topic-row__media img { transform:scale(1.03); }
+  .topic-row__copy { min-width:0; }
+  .topic-row__copy > p { margin:0 0 7px; color:var(--muted); font-size:9px; }
+  .topic-row__copy strong { color:var(--accent); letter-spacing:.06em; text-transform:uppercase; }
+  .topic-row h3 { margin:0; font-family:var(--editorial-serif); font-size:clamp(23px,2.6vw,37px); font-weight:600; letter-spacing:-.03em; line-height:1.13; transition:color .2s ease; }
+  .topic-row em { display:block; margin-top:5px; overflow:hidden; color:var(--muted); font:italic 12px/1.35 Georgia,serif; text-overflow:ellipsis; white-space:nowrap; }
+  .topic-row small { display:block; margin-top:9px; color:var(--muted); font-size:10px; }
+  .topic-row__description { display:-webkit-box; margin:0; overflow:hidden; color:var(--muted); font-family:var(--editorial-serif); font-size:13px; line-height:1.7; -webkit-box-orient:vertical; -webkit-line-clamp:3; }
+  .topic-row__arrow { width:24px; color:var(--ink); fill:none; stroke:currentColor; stroke-linecap:round; stroke-linejoin:round; stroke-width:1.4; transition:color .2s ease; }
+  @media(max-width:850px){ .topic-row{grid-template-columns:28px 92px minmax(0,1fr) 22px}.topic-row--text{grid-template-columns:28px minmax(0,1fr) 22px}.topic-row__description{display:none}.topic-row__media{width:92px} }
+  @media(max-width:620px){ .topic-row{grid-template-columns:18px 66px minmax(0,1fr);gap:10px;min-height:120px;padding:14px 0}.topic-row--text{grid-template-columns:18px minmax(0,1fr);min-height:104px}.topic-row__media{width:66px}.topic-row h3{font-size:19px}.topic-row__copy>p{font-size:10px}.topic-row small{font-size:10px}.topic-row__arrow{display:none} }
+  @media(prefers-reduced-motion:reduce){ .topic-row__media img{transition:none} }
+</style>

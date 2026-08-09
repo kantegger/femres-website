@@ -1,0 +1,124 @@
+---
+import { getLocalizedPath, type Locale } from "../i18n";
+import { encodeTopicForUrl } from "../i18n/topicsUtils";
+import { contentTypeToCollection, type ContentType } from "../lib/content";
+import { EDITORIAL_CONTENT_TYPE_ORDER } from "../lib/contentTypeOrder";
+import type { LibraryPageData } from "../lib/homePage";
+
+interface Props {
+  locale: Locale;
+  data: LibraryPageData;
+}
+
+const { locale, data } = Astro.props;
+
+const copy: Record<Locale, {
+  title: string;
+  deck: string;
+  explore: string;
+  topics: string;
+  allTopics: string;
+  items: string;
+  issues: string;
+  issuesDeck: string;
+  openIssues: string;
+}> = {
+  "zh-CN": { title: "资源库", deck: "一个持续生长的女性主义知识现场：按媒介进入，或沿着议题继续深入。", explore: "查看", topics: "热门议题", allTopics: "完整星图", items: "份资源", issues: "换一种读法", issuesDeck: "资源库按媒介组织，期刊按主题组织——每一期把这些资源重新编成一本杂志。", openIssues: "浏览往期" },
+  "zh-TW": { title: "資源庫", deck: "一個持續生長的女性主義知識現場：按媒介進入，或沿著議題繼續深入。", explore: "查看", topics: "熱門議題", allTopics: "完整星圖", items: "份資源", issues: "換一種讀法", issuesDeck: "資源庫按媒介組織，期刊按主題組織——每一期把這些資源重新編成一本雜誌。", openIssues: "瀏覽往期" },
+  en: { title: "Library", deck: "A growing field of feminist knowledge: enter by medium, or keep following the issues.", explore: "View", topics: "Popular topics", allTopics: "Full atlas", items: "items", issues: "Another way to read", issuesDeck: "The library is organised by medium; the journal is organised by theme — each issue re-edits these resources into a magazine.", openIssues: "Browse issues" },
+  ja: { title: "資料庫", deck: "育ち続けるフェミニズムの知の現場。メディア別に入るか、論点をたどって深めます。", explore: "見る", topics: "注目の論点", allTopics: "全体の星図", items: "件", issues: "もうひとつの読み方", issuesDeck: "資料庫はメディアで、雑誌はテーマで編まれます。各号はこれらの資料を一冊の雑誌として編み直します。", openIssues: "バックナンバーを見る" },
+  fr: { title: "Ressources", deck: "Un champ de savoir féministe en croissance : entrez par média, ou continuez à suivre les enjeux.", explore: "Voir", topics: "Sujets récurrents", allTopics: "Atlas complet", items: "ressources", issues: "Une autre lecture", issuesDeck: "La bibliothèque est organisée par média, la revue par thème — chaque numéro réédite ces ressources en magazine.", openIssues: "Voir les numéros" },
+};
+const labels = copy[locale];
+
+const typeLabels: Record<Locale, Record<ContentType, string>> = {
+  "zh-CN": { book: "书籍", film: "电影", article: "文章", video: "视频", podcast: "播客", paper: "论文" },
+  "zh-TW": { book: "書籍", film: "電影", article: "文章", video: "影片", podcast: "播客", paper: "論文" },
+  en: { book: "Books", film: "Films", article: "Articles", video: "Videos", podcast: "Podcasts", paper: "Papers" },
+  ja: { book: "書籍", film: "映画", article: "記事", video: "動画", podcast: "ポッドキャスト", paper: "論文" },
+  fr: { book: "Livres", film: "Films", article: "Articles", video: "Vidéos", podcast: "Podcasts", paper: "Études" },
+};
+---
+
+<main class="library-page">
+  <header class="library-page__hero">
+    <h1>{labels.title}</h1>
+    <div>
+      <p>{labels.deck}</p>
+      <dl><dt>{String(data.totalCount).padStart(3, "0")}</dt><dd>{labels.items}</dd></dl>
+    </div>
+  </header>
+
+  <section class="library-page__index" aria-label={labels.title}>
+    {EDITORIAL_CONTENT_TYPE_ORDER.map((type, index) => (
+      <a href={getLocalizedPath(contentTypeToCollection[type], locale)}>
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        <strong>{typeLabels[locale][type]}</strong>
+        <em>{data.contentCounts[type]} {labels.items}</em>
+        <small>{labels.explore} →</small>
+      </a>
+    ))}
+  </section>
+
+  <section class="library-page__topics" aria-label={labels.topics}>
+    <h2>{labels.topics}</h2>
+    <div class="library-page__topic-line">
+      {data.popularTopics.slice(0, 12).map((topic) => (
+        <a href={getLocalizedPath(`topics/${encodeTopicForUrl(topic.topic)}`, locale)}>{topic.label}</a>
+      ))}
+      <a class="library-page__topic-all" href={getLocalizedPath("topics", locale)}>{labels.allTopics} →</a>
+    </div>
+  </section>
+
+  <aside class="library-page__issues">
+    <div>
+      <h2>{labels.issues}</h2>
+      <p>{labels.issuesDeck}</p>
+    </div>
+    <a href={getLocalizedPath("issues", locale)}>{labels.openIssues}<span aria-hidden="true"> →</span></a>
+  </aside>
+</main>
+
+<style>
+  .library-page { min-height: 100dvh; padding-bottom: 80px; color: var(--ink); background: var(--paper); font-family: var(--editorial-sans); }
+  .library-page__hero, .library-page__index, .library-page__topics, .library-page__issues { width: min(100% - var(--editorial-canvas-gutter), var(--editorial-canvas-width)); margin-inline: auto; }
+
+  .library-page__hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 60px; align-items: end; padding: 56px 0 46px; }
+  .library-page__hero h1 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(72px, 10vw, 140px); font-weight: 600; letter-spacing: -.07em; line-height: .85; }
+  .library-page__hero p { max-width: 560px; margin: 0; color: var(--muted); font-family: var(--editorial-serif); font-size: clamp(16px, 1.7vw, 22px); line-height: 1.6; }
+  .library-page__hero dl { display: flex; align-items: baseline; gap: 10px; margin: 18px 0 0; }
+  .library-page__hero dt { color: var(--accent); font-family: Georgia, serif; font-size: 28px; }
+  .library-page__hero dd { margin: 0; color: var(--muted); font-size: 9px; }
+
+  .library-page__index { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 2px solid var(--ink); border-left: 1px solid var(--line); }
+  .library-page__index a { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; min-height: 150px; padding: 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .library-page__index a:hover { color: var(--paper); background: var(--ink); }
+  .library-page__index span { color: var(--accent); font-size: 9px; }
+  .library-page__index strong { font-family: var(--editorial-serif); font-size: clamp(24px, 2.6vw, 36px); font-weight: 600; letter-spacing: -.03em; line-height: 1.05; }
+  .library-page__index em { grid-column: 2; color: var(--muted); font-size: 10px; font-style: normal; }
+  .library-page__index small { grid-column: 2; align-self: end; color: var(--accent); font-size: 10px; font-weight: 700; }
+  .library-page__index a:hover em { color: color-mix(in srgb, var(--paper) 65%, transparent); }
+
+  .library-page__topics { padding: 56px 0 20px; }
+  .library-page__topics h2 { margin: 0 0 22px; font-family: var(--editorial-serif); font-size: clamp(34px, 4vw, 54px); font-weight: 600; letter-spacing: -.04em; }
+  .library-page__topic-line { display: flex; flex-wrap: wrap; gap: 12px 22px; font-size: 14px; }
+  .library-page__topic-line a { color: var(--muted); border-bottom: 1px solid var(--line); }
+  .library-page__topic-line a:hover { color: var(--accent); border-color: var(--accent); }
+  .library-page__topic-line a.library-page__topic-all { color: var(--accent); font-weight: 650; }
+
+  .library-page__issues { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: end; margin-top: 56px; padding: 40px 0; border-block: 2px solid var(--ink); }
+  .library-page__issues h2 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(34px, 4vw, 54px); font-weight: 600; letter-spacing: -.04em; }
+  .library-page__issues p { max-width: 620px; margin: 14px 0 0; color: var(--muted); font-family: var(--editorial-serif); font-size: 15px; line-height: 1.65; }
+  .library-page__issues > a { padding-bottom: 6px; color: var(--accent); border-bottom: 1px solid currentColor; font-size: 11px; font-weight: 700; white-space: nowrap; }
+
+  @media (max-width: 800px) {
+    .library-page__hero { grid-template-columns: 1fr; gap: 24px; }
+    .library-page__index { grid-template-columns: repeat(2, 1fr); }
+    .library-page__issues { grid-template-columns: 1fr; gap: 22px; }
+  }
+  @media (max-width: 560px) {
+    .library-page__hero, .library-page__index, .library-page__topics, .library-page__issues { width: calc(100% - 24px); }
+    .library-page__index { grid-template-columns: 1fr; }
+    .library-page__index a { min-height: 110px; }
+  }
+</style>

@@ -1,0 +1,195 @@
+<script>
+  type MotionState = "pending" | "revealed" | "reduced";
+  type MotionType = "hero" | "section" | "item";
+
+  interface EditorialMotionController {
+    refresh: () => void;
+  }
+
+  declare global {
+    interface Window {
+      __femresEditorialMotion?: EditorialMotionController;
+    }
+  }
+
+  (() => {
+    const existingController = window.__femresEditorialMotion;
+    if (existingController?.refresh) {
+      existingController.refresh();
+      return;
+    }
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const heroSelector = [
+      ".issue-hero",
+      ".ed-shell__hero",
+      "header[class$='-hero']",
+      "header[class*='-hero ']",
+      "header[class$='__hero']",
+      "header[class*='__hero ']",
+      "header[class*='masthead']",
+    ].join(",");
+    const structuralSelector = [
+      "body > main > div > :is(header, section, aside, .shelf)",
+      "body > main > main > :is(header, section, aside, nav, .shelf)",
+      "body > main > article > :is(header, section, aside, [class$='__community'])",
+      "body > main > .ed-shell > :is(header, section, aside)",
+      "body > main > article > [class$='__rail'] > :is(header, section)",
+      "body > main > article > [class$='__rail'] > [class$='__body'] > main > :is([class$='-section-heading'], [class$='__heading'])",
+      "body > main > article > [class$='__rail'] > [class$='__body'] > aside > section",
+      "body > main > * > main > :is(header, section, aside, nav)",
+    ].join(",");
+    const itemSelector = [
+      ".issue-feature",
+      ".issue-body__group",
+      ".issue-card",
+      ".book-entry",
+      ".film-entry",
+      ".podcast-featured",
+      ".podcast-brief",
+      ".podcast-entry",
+      ".paper-lead",
+      ".paper-brief",
+      ".paper-entry",
+      ".article-lead",
+      ".article-brief",
+      ".article-entry",
+      ".video-screening",
+      ".video-entry",
+      ".search-entry",
+      ".topic-row",
+      ".topic-family",
+      "[class*='-related__item']",
+      ".principle-list > article",
+      ".method-grid > article",
+      ".medium-index > a",
+      ".topic-index > article",
+      ".formats article",
+      ".process article",
+      ".support__reasons > article",
+      ".honors > article",
+      ".contact-routes article",
+    ].join(",");
+
+    let observer: IntersectionObserver | undefined;
+    let mutationObserver: MutationObserver | undefined;
+    let mutationFrame = 0;
+
+    const setState = (element: HTMLElement, state: MotionState) => {
+      element.dataset.motionState = state;
+      if (state === "revealed" || state === "reduced") observer?.unobserve(element);
+    };
+
+    const prepare = (element: Element, type: MotionType, delay = 0) => {
+      if (!(element instanceof HTMLElement) || element.dataset.motion) return;
+      if (element.closest(".editorial-header, dialog, [role='dialog']")) return;
+
+      element.dataset.motion = type;
+      element.dataset.motionState = reducedMotion.matches ? "reduced" : "pending";
+      element.style.setProperty("--motion-delay", `${delay}ms`);
+
+      if (type === "hero") {
+        [...element.children].forEach((child, index) => {
+          if (!(child instanceof HTMLElement)) return;
+          child.dataset.motionChild = "";
+          child.style.setProperty("--motion-child-delay", `${Math.min(index, 4) * 70}ms`);
+        });
+      }
+    };
+
+    const annotate = () => {
+      const main = document.querySelector<HTMLElement>("body > main");
+      if (!main) return [];
+
+      main.querySelectorAll(heroSelector).forEach((element) => prepare(element, "hero"));
+
+      const groupIndexes = new Map<Element, number>();
+      main.querySelectorAll(itemSelector).forEach((element) => {
+        const group = element.parentElement;
+        const index = group ? groupIndexes.get(group) ?? 0 : 0;
+        if (group) groupIndexes.set(group, index + 1);
+        prepare(element, "item", Math.min(index, 5) * 55);
+      });
+
+      document.querySelectorAll(structuralSelector).forEach((element) => {
+        if (!(element instanceof HTMLElement)) return;
+        if (element.matches(".issue-shell")) {
+          element.querySelectorAll(":scope > .issue-hero, :scope > .idea-network")
+            .forEach((child) => prepare(child, child.classList.contains("issue-hero") ? "hero" : "section"));
+          return;
+        }
+
+        if (element.querySelector(":scope [data-motion='item']")) {
+          const heading = element.querySelector(":scope > :is(header, .section-heading, [class$='__heading'])");
+          if (heading instanceof HTMLElement) prepare(heading, "section");
+          return;
+        }
+
+        prepare(element, element.matches("header") ? "hero" : "section");
+      });
+
+      return [...main.querySelectorAll<HTMLElement>("[data-motion][data-motion-state='pending']")];
+    };
+
+    const observePending = () => {
+      const pending = annotate();
+      document.documentElement.classList.add("motion-ready");
+
+      if (reducedMotion.matches) {
+        document.querySelectorAll<HTMLElement>("[data-motion]").forEach((element) => setState(element, "reduced"));
+        return;
+      }
+
+      if (!("IntersectionObserver" in window)) {
+        pending.forEach((element) => setState(element, "revealed"));
+        return;
+      }
+
+      pending.forEach((element) => {
+        if (element.dataset.motion === "hero" && element.getBoundingClientRect().top < window.innerHeight) {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              if (element.isConnected && element.dataset.motionState === "pending") {
+                setState(element, "revealed");
+              }
+            });
+          });
+          return;
+        }
+        observer?.observe(element);
+      });
+    };
+
+    const refresh = () => {
+      observer?.disconnect();
+      mutationObserver?.disconnect();
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.target instanceof HTMLElement) setState(entry.target, "revealed");
+        });
+      }, { threshold: 0.08, rootMargin: "0px 0px -10%" });
+
+      observePending();
+
+      mutationObserver = new MutationObserver(() => {
+        cancelAnimationFrame(mutationFrame);
+        mutationFrame = requestAnimationFrame(observePending);
+      });
+      mutationObserver.observe(document.body, { childList: true, subtree: true });
+    };
+
+    const handlePreferenceChange = () => refresh();
+    reducedMotion.addEventListener?.("change", handlePreferenceChange);
+    document.addEventListener("astro:before-swap", () => {
+      document.documentElement.classList.remove("motion-ready");
+    });
+    document.addEventListener("astro:page-load", refresh);
+    window.__femresEditorialMotion = { refresh };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", refresh, { once: true });
+    } else {
+      refresh();
+    }
+  })();
+</script>

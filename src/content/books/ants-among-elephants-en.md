@@ -1,0 +1,26 @@
+---
+title: "Ants Among Elephants: An Untouchable Family and the Making of Modern India"
+author: "Sujatha Gidla"
+description: "Through her mother and uncles, Sujatha Gidla shows how caste, class, and patriarchy shaped the meaning of freedom across colonial rule, independence, and revolutionary politics."
+publishDate: 2017-07-18
+isbn: "9781911547228"
+contentLanguage: "en"
+topics: ["Dalit Feminism","Caste and Gender","Historical Context","Social Movements","Women's Literature"]
+sourceUrl: "https://dauntbookspublishing.co.uk/book/ants-among-elephants/"
+coverImage: "https://media.femres.org/images/books/ants-among-elephants.jpg"
+status: "published"
+---
+
+*Ants Among Elephants* begins with Sujatha Gidla’s realization that what counted only as unspeakable life in India became, after she left, a family history worth writing. She was born into an educated Dalit Christian family in Andhra Pradesh, yet schooling and middle-class employment did not cancel untouchability. Caste could be inferred from neighborhood, name, food, marriage, and ordinary social questions. Concealment might postpone discrimination, but it also made family stories impossible to tell. The memoir’s first political act is therefore to break a silence maintained through shame.
+
+The narrative follows Gidla’s mother, Manjula, and her uncles Satyam and Carey across the final decades of British rule, independence, the formation of Andhra, and communist insurgency. Mission schools established by Canadian Christians gave a small number of family members access to literacy and higher education, but education is no simple ladder out. Schools, hostels, and universities reproduce segregation, humiliation, and scarcity; a teaching post cannot stop supervisors, colleagues, landlords, or marriage networks from enforcing caste. By attending to domestic life, Gidla shows that modernity did not leave caste in the “traditional village.” It carried caste into the state, the city, and professional institutions.
+
+Satyam supplies the history’s most dramatic line. He moves from student, organizer, and poet to a major revolutionary, convinced that class struggle can overthrow poverty and oppression. Gidla recognizes that communist politics gave subordinated young people language, discipline, and collective purpose, while recording the left’s failure to confront caste within its own ranks. When class becomes the sole explanation, Dalit cadres may remain answerable to upper-caste leaders and revolutionary organizations can reproduce the hierarchy they promise to destroy. The book’s hard question is whether a class revolution without anti-caste politics can deliver freedom—and for whom.
+
+The memoir’s feminist weight falls especially on Manjula and the women around her. They must convert education into wages, keep relatives alive through poverty, endure control and violence in marriage, and supply the emotional and material infrastructure for men’s political ambitions. Manjula’s fight to study and work does not remove her from patriarchy or caste. Greater qualification often brings a greater demand to be grateful, preserve family respectability, and absorb institutional humiliation privately. These women are not passive sacrifices behind revolutionary men: they argue, leave, plan, raise children, and hold jobs. But their agency unfolds inside severely unequal choices.
+
+Gidla’s method matters as much as the chronology. She combines family testimony, memory, and political history without letting a triumphant national story absorb individual lives. Hunger, fees, clothes, housing, love, jealousy, and quarrels occupy the same scale as demonstrations, arrests, and underground movements. This history “from below” does not merely add Dalit victims to a success story of independent India; it changes the measure of independence. If legal citizenship does not change who may draw water, share a meal, enter a classroom, choose a partner, or live without humiliation, national freedom remains unfinished.
+
+The book should also be read with tension rather than treated as total explanation. It is a literary family memoir rooted in one region and political tradition, not a substitute for the many histories of Dalit life across India. The analogy Gidla uses to explain caste through American racism can open a conversation but should not collapse the systems into each other. Satyam’s revolutionary career occupies much of the narrative, sometimes allowing the drama of male politics to overshadow Manjula and other women. Its sharp judgments about religion, Gandhian nationalism, and communist organization deserve comparison with Ambedkarite thought, Dalit women’s autobiographies, and anti-caste work from other regions.
+
+For FemRes readers, the central lesson is that caste, class, and gender cannot be solved in sequence. Domestic labor sustains political movements; education opens exits while producing new filters; marriage carries collective hierarchy into intimacy; and the left itself must answer to anti-caste critique. Ask throughout: who is permitted to become the subject of revolution, who performs the care that makes revolutionary action possible, and whose suffering is dismissed as private? Gidla turns family history into a severe audit of modern India’s promise of freedom.

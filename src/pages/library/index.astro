@@ -1,0 +1,12 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import EditorialLibraryIndex from "../../components/EditorialLibraryIndex.astro";
+import type { Locale } from "../../i18n";
+import { buildLibraryPageData } from "../../lib/homePage";
+const currentLocale: Locale = "zh-CN";
+const data = await buildLibraryPageData(currentLocale);
+---
+<Layout title="资源库 - FemRes" description="一个持续生长的女性主义知识现场：按媒介进入，或沿着议题继续深入。" headerVariant="editorial" showMusicPlayer={false}>
+  <EditorialLibraryIndex locale={currentLocale} data={data} />
+</Layout>

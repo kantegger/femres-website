@@ -1,0 +1,70 @@
+:root {
+  --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-duration: 560ms;
+}
+
+html.motion-ready [data-motion] {
+  transition:
+    opacity var(--motion-duration) var(--motion-ease-out) var(--motion-delay, 0ms),
+    transform var(--motion-duration) var(--motion-ease-out) var(--motion-delay, 0ms);
+}
+
+html.motion-ready [data-motion="item"] {
+  --motion-duration: 480ms;
+}
+
+html.motion-ready [data-motion-state="pending"] {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  will-change: opacity, transform;
+}
+
+html.motion-ready [data-motion="item"][data-motion-state="pending"] {
+  transform: translate3d(0, 12px, 0);
+}
+
+html.motion-ready [data-motion-state="revealed"],
+html.motion-ready [data-motion-state="reduced"] {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+html.motion-ready [data-motion="hero"] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+html.motion-ready [data-motion="hero"] > [data-motion-child] {
+  transition:
+    opacity 640ms var(--motion-ease-out) var(--motion-child-delay, 0ms),
+    transform 640ms var(--motion-ease-out) var(--motion-child-delay, 0ms);
+}
+
+html.motion-ready [data-motion="hero"][data-motion-state="pending"] > [data-motion-child] {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  will-change: opacity, transform;
+}
+
+html.motion-ready [data-motion="hero"][data-motion-state="revealed"] > [data-motion-child],
+html.motion-ready [data-motion="hero"][data-motion-state="reduced"] > [data-motion-child] {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.motion-ready [data-motion],
+  html.motion-ready [data-motion] > [data-motion-child] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

@@ -1,0 +1,24 @@
+---
+export const prerender = true;
+
+import ProfilePage from "../../../components/ProfilePage.astro";
+import { createT, type Locale } from "../../../i18n";
+import { getProfileUiStrings } from "../../../lib/profileTranslations";
+import { nonDefaultDetailLocales } from "../../../lib/localeDetails";
+
+export function getStaticPaths() {
+  return nonDefaultDetailLocales.map((locale) => ({ params: { locale } }));
+}
+
+const { locale } = Astro.params;
+const currentLocale = locale as Locale;
+const t = createT(currentLocale);
+const uiStrings = getProfileUiStrings(currentLocale);
+---
+
+<ProfilePage
+  locale={currentLocale}
+  title={t("profilePage.title")}
+  description={t("profilePage.description")}
+  uiStrings={uiStrings}
+/>

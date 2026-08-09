@@ -1,0 +1,94 @@
+---
+import { createT, getLocalizedPath, getTranslationValue, type Locale } from "../i18n";
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = createT(locale);
+type FaqItem = { question: string; answer: string };
+const isFaqItem = (value: unknown): value is FaqItem => typeof value === "object" && value !== null && typeof (value as FaqItem).question === "string" && typeof (value as FaqItem).answer === "string";
+const faqValue = getTranslationValue(locale, "contactPage.faq.items");
+const faqItems = Array.isArray(faqValue) ? faqValue.filter(isFaqItem) : [];
+const privacyPath = getLocalizedPath("privacy", locale);
+const termsPath = getLocalizedPath("terms", locale);
+const routes = [
+  ["general", "info@femres.org"], ["submission", "submissions@femres.org"],
+  ["partnership", "partnership@femres.org"], ["volunteer", "volunteer@femres.org"],
+] as const;
+const copy: Record<Locale, { index:string; routes:string; write:string; writeDeck:string; response:string; select:string; legal:string; details:string; responseLabel:string; scopeLabel:string; }> = {
+  "zh-CN": { index:"联系索引", routes:"找到正确的入口", write:"写给编辑部", writeDeck:"描述你的问题、建议或合作想法，我们会把它交给最合适的人。", response:"通常在 48 小时内回复", select:"请选择", legal:"隐私政策 / 服务条款", details:"联络方式", responseLabel:"回复", scopeLabel:"范围" },
+  "zh-TW": { index:"聯絡索引", routes:"找到正確的入口", write:"寫給編輯部", writeDeck:"描述你的問題、建議或合作想法，我們會把它交給最合適的人。", response:"通常在 48 小時內回覆", select:"請選擇", legal:"隱私政策 / 服務條款", details:"聯絡方式", responseLabel:"回覆", scopeLabel:"範圍" },
+  en: { index:"Contact index", routes:"Find the right desk", write:"Write to the editors", writeDeck:"Describe your question, proposal, or idea. We will route it to the right person.", response:"Usually answered within 48 hours", select:"Choose a subject", legal:"Privacy policy / Terms", details:"Contact details", responseLabel:"Response", scopeLabel:"Scope" },
+  ja: { index:"連絡先一覧", routes:"適切な窓口を選ぶ", write:"編集部に書く", writeDeck:"質問、提案、協働のアイデアをお寄せください。適切な担当者につなぎます。", response:"通常48時間以内に返信", select:"件名を選択", legal:"プライバシー / 利用規約", details:"連絡先", responseLabel:"返信", scopeLabel:"対応範囲" },
+  fr: { index:"Index de contact", routes:"Trouver le bon interlocuteur", write:"Écrire à la rédaction", writeDeck:"Décrivez votre question, proposition ou idée de collaboration. Nous la transmettrons à la bonne personne.", response:"Réponse habituelle sous 48 heures", select:"Choisir un sujet", legal:"Confidentialité / Conditions", details:"Coordonnées", responseLabel:"Réponse", scopeLabel:"Périmètre" },
+};
+const labels = copy[locale];
+---
+
+<main class="contact-page">
+  <header class="contact-hero">
+    <p>FemRes / 02</p>
+    <h1>{t("contactPage.hero.title")}</h1>
+    <div><strong>{t("contactPage.hero.subtitle")}</strong><span>{labels.response}</span></div>
+  </header>
+
+  <section class="contact-routes" aria-labelledby="contact-routes-title">
+    <header><span>01</span><h2 id="contact-routes-title">{labels.routes}</h2><p>{labels.index}</p></header>
+    <div>
+      {routes.map(([route, email], index) => (
+        <article>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <h3>{t(`contactPage.options.${route}.title`)}</h3>
+          <p>{t(`contactPage.options.${route}.description`)}</p>
+          <a href={`mailto:${email}`}>{email}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="contact-form-section" aria-labelledby="contact-form-title">
+    <div class="contact-form-intro"><span>02</span><h2 id="contact-form-title">{labels.write}</h2><p>{labels.writeDeck}</p></div>
+    <form action="https://formspree.io/f/095b5cdff33f424185e21befd3273767" method="POST">
+      <div class="field-row">
+        <label>{t("contactPage.form.name")}<input type="text" name="name" required placeholder={t("contactPage.form.placeholderName")} /></label>
+        <label>{t("contactPage.form.email")}<input type="email" name="email" required placeholder={t("contactPage.form.placeholderEmail")} /></label>
+      </div>
+      <label>{t("contactPage.form.subject")}
+        <select name="subject" required>
+          <option value="">{labels.select}</option>
+          {(["general", "content", "partnership", "volunteer", "feedback", "other"] as const).map((subject) => <option value={subject}>{t(`contactPage.form.subjects.${subject}`)}</option>)}
+        </select>
+      </label>
+      <label>{t("contactPage.form.message")}<textarea name="message" rows="7" required placeholder={t("contactPage.form.placeholderMessage")}></textarea></label>
+      <label class="consent"><input type="checkbox" name="privacy" required /><span>{t("contactPage.form.agreement")} <a href={privacyPath}>{t("contactPage.form.privacy")}</a> / <a href={termsPath}>{t("contactPage.form.terms")}</a></span></label>
+      <button type="submit">{t("contactPage.form.submit")} <span aria-hidden="true">→</span></button>
+    </form>
+  </section>
+
+  <div class="contact-extra">
+    <section class="faq" aria-labelledby="faq-title">
+      <header><span>03</span><h2 id="faq-title">{t("contactPage.faq.title")}</h2><p>{t("contactPage.faq.subtitle")}</p></header>
+      <div>{faqItems.map((item, index) => <details><summary><span>{String(index + 1).padStart(2, "0")}</span><span class="faq__q">{item.question}</span></summary><p>{item.answer}</p></details>)}</div>
+    </section>
+
+    <section class="contact-info" aria-labelledby="contact-info-title">
+      <div><span>04</span><h2 id="contact-info-title">{labels.details}</h2></div>
+      <dl>
+        <div><dt>{t("contactPage.info.email")}</dt><dd><a href="mailto:contact@femres.org">contact@femres.org</a></dd></div>
+        <div><dt>{labels.responseLabel}</dt><dd>{t("contactPage.info.response")}</dd></div>
+        <div><dt>{labels.scopeLabel}</dt><dd>{t("contactPage.info.scope")}</dd></div>
+      </dl>
+      <p>{t("contactPage.info.note")}</p>
+    </section>
+  </div>
+</main>
+
+<style>
+  .contact-page{--deep:#eee9e0;min-height:100dvh;padding-bottom:80px;color:var(--ink);background:var(--paper);font-family:var(--editorial-sans)}.contact-page>:is(header,section,.contact-extra){width:min(100% - var(--editorial-canvas-gutter),var(--editorial-canvas-width));margin-inline:auto}:global(.dark) .contact-page{--deep:#22201d}
+  .contact-hero{display:grid;grid-template-columns:110px 1.15fr .65fr;gap:36px;align-items:end;padding:56px 0 48px;border-bottom:2px solid var(--ink)}.contact-hero>p,.contact-routes header>span,.contact-form-intro>span,.faq header>span,.contact-info>div>span{align-self:start;margin:8px 0 0;color:var(--accent);font:12px/1.4 Georgia,serif}.contact-hero h1,.contact-routes h2,.contact-form-intro h2,.faq h2,.contact-info h2{margin:0;font-family:var(--editorial-serif);font-weight:600;letter-spacing:-.06em}.contact-hero h1{font-size:clamp(78px,10vw,140px);line-height:.82}.contact-hero>div{padding-left:26px;border-left:1px solid var(--line)}.contact-hero strong{display:block;font-family:var(--editorial-serif);font-size:22px;line-height:1.4}.contact-hero>div span{display:block;margin-top:22px;color:var(--muted);font-size:12px}
+  .contact-routes>header,.faq>header{display:grid;grid-template-columns:80px 1fr .65fr;gap:30px;align-items:end;padding:70px 0 30px}.faq>header{grid-template-columns:80px 1fr}.faq header p{grid-column:2;margin-top:14px}.contact-routes h2,.faq h2{font-size:clamp(50px,6.5vw,88px);line-height:.92}.contact-routes header p,.faq header p{margin:0 0 7px;color:var(--muted);font-family:var(--editorial-serif);font-size:15px}.contact-routes>div{display:grid;grid-template-columns:repeat(4,1fr);border-block:2px solid var(--ink)}.contact-routes article{display:grid;align-content:start;gap:14px;padding:24px 22px 28px 0;border-right:1px solid var(--line)}.contact-routes article+article{padding-left:22px}.contact-routes article>span{color:var(--accent);font:11px Georgia,serif}.contact-routes h3{margin:10px 0 0;font-family:var(--editorial-serif);font-size:28px;font-weight:600}.contact-routes article p{margin:0;color:var(--muted);font-family:var(--editorial-serif);font-size:14px;line-height:1.65}.contact-routes article a{width:max-content;max-width:100%;margin-top:8px;padding-bottom:5px;overflow-wrap:anywhere;color:var(--accent);border-bottom:1px solid var(--accent);font-size:11px;font-weight:700}
+  .contact-form-section{display:grid;grid-template-columns:.72fr 1.2fr;gap:80px;padding:82px 0;border-bottom:2px solid var(--ink)}.contact-form-intro{display:grid;grid-template-columns:50px 1fr;align-content:start}.contact-form-intro h2{font-size:clamp(52px,6vw,78px);line-height:.95}.contact-form-intro p{grid-column:2;margin:26px 0 0;color:var(--muted);font-family:var(--editorial-serif);font-size:15px;line-height:1.7}.contact-form-section form{display:grid;gap:24px}.field-row{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}.contact-form-section label{display:grid;gap:9px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}.contact-form-section :is(input,select,textarea){width:100%;padding:12px 0;color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;font:14px/1.5 var(--editorial-sans);outline:0}.contact-form-section :is(input,select,textarea):focus{border-color:var(--accent)}.contact-form-section textarea{padding:14px;resize:vertical;border:1px solid var(--line);text-transform:none}.consent{display:flex!important;grid-template-columns:auto 1fr;align-items:start;text-transform:none!important;font-size:12px!important;font-weight:400!important;letter-spacing:0!important}.consent input{width:15px!important;height:15px;margin:0}.consent a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}.contact-form-section button{width:max-content;padding:13px 0;color:var(--accent);background:transparent;border:0;border-bottom:2px solid var(--accent);font:700 12px var(--editorial-sans);cursor:pointer}.contact-form-section button span{margin-left:34px}
+  .contact-extra{display:grid;grid-template-columns:1.15fr .85fr;gap:70px;padding-bottom:76px;border-bottom:2px solid var(--ink)}.faq>div{border-top:2px solid var(--ink)}.faq details{border-bottom:1px solid var(--line)}.faq summary{display:grid;align-items:center;min-height:72px;padding:15px 0;cursor:pointer;font-family:var(--editorial-serif);font-size:18px;font-weight:600;list-style:none}.faq summary::-webkit-details-marker{display:none}.faq summary>span:first-child{color:var(--accent);font:11px Georgia,serif}.faq details p{max-width:780px;margin:0 0 28px;color:var(--muted);font-family:var(--editorial-serif);font-size:14px;line-height:1.75}
+  .contact-info{align-self:start;display:grid;gap:36px;padding-top:70px}.contact-info>div{display:grid;grid-template-columns:45px 1fr}.contact-info h2{font-size:clamp(44px,5vw,66px);line-height:.95}.contact-info dl{margin:0}.contact-info dl div{display:grid;grid-template-columns:110px 1fr;gap:20px;padding:13px 0;border-bottom:1px solid var(--line)}.contact-info dt{color:var(--muted);font-size:11px;text-transform:uppercase}.contact-info dd{margin:0;font-family:var(--editorial-serif);font-size:13px}.contact-info>p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}
+  @media(max-width:900px){.contact-hero{grid-template-columns:70px 1fr}.contact-hero>div{grid-column:2}.contact-routes>header,.faq>header{grid-template-columns:60px 1fr}.contact-routes header p,.faq header p{grid-column:2}.contact-routes>div{grid-template-columns:repeat(2,1fr)}.contact-form-section{grid-template-columns:1fr;gap:48px}.contact-extra{grid-template-columns:1fr;gap:0}.contact-info{padding-top:44px;gap:34px}}
+  @media(max-width:650px){.contact-page>:is(header,section,.contact-extra){width:calc(100% - 24px)}.contact-hero{grid-template-columns:1fr;padding:50px 0 38px}.contact-hero>p{margin:0}.contact-hero h1{font-size:68px}.contact-hero>div{grid-column:1;padding:22px 0 0;border-left:0;border-top:1px solid var(--line)}.contact-routes>header,.faq>header{display:block;padding:52px 0 25px}.contact-routes h2,.faq h2{margin-top:18px;font-size:50px}.contact-routes header p,.faq header p{margin-top:18px}.contact-routes>div{grid-template-columns:1fr}.contact-routes article,.contact-routes article+article{padding:20px 0 24px;border-right:0;border-bottom:1px solid var(--line)}.contact-form-section{padding:58px 0}.contact-form-intro{grid-template-columns:34px 1fr}.contact-form-intro h2{font-size:48px}.field-row{grid-template-columns:1fr}.contact-extra{padding-bottom:54px}.faq summary{grid-template-columns:36px 1fr;font-size:16px}.faq details p{margin-left:36px}.contact-info{padding-top:52px;gap:34px}.contact-info>div{grid-template-columns:34px 1fr}.contact-info h2{font-size:46px}.contact-info dl div{grid-template-columns:1fr;gap:6px}}
+</style>

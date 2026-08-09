@@ -1,0 +1,16 @@
+---
+import EditorialNotFound from "../components/EditorialNotFound.astro";
+import { createT, getLocaleFromUrl } from "../i18n";
+
+const currentLocale = getLocaleFromUrl(Astro.url);
+const t = createT(currentLocale);
+---
+
+<EditorialNotFound
+  locale={currentLocale}
+  title={t("errorPage.title")}
+  message={t("errorPage.message")}
+  backHome={t("errorPage.backHome")}
+  goBack={t("errorPage.goBack")}
+  tagline={t("errorPage.tagline")}
+/>

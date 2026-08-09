@@ -1,0 +1,28 @@
+---
+title: "The New Jim Crow: Mass Incarceration in the Age of Colorblindness"
+author: "Michelle Alexander"
+description: "The New Jim Crow: Mass Incarceration in the Age of Colorblindness connects punishment, gender, race, and community safety, strengthening FemRes coverage of abolition feminism and transformative justice."
+publishDate: 2010-01-05
+isbn: "9781595581037"
+contentLanguage: "en"
+topics: ["Prison Abolition","Race and Gender","Black Feminism","Legal Equality","Social Justice"]
+sourceUrl: "https://thenewpress.org/books/the-new-jim-crow/"
+coverImage: "https://media.femres.org/images/books/the-new-jim-crow.jpg"
+status: "published"
+---
+
+*The New Jim Crow* made its contrary claim at the high point of “post-racial” optimism, after the United States elected its first Black president: formal Jim Crow had ended, but racial caste had not disappeared; it had been redesigned through mass incarceration. Civil-rights lawyer Michelle Alexander treats the criminal system as a regime of racialized citizenship. It need not say “Black” in its statutes. Operating through neutral language of drugs, crime, and public safety, it can mark vast numbers of Black men as felons and assign them a legally inferior status long after a sentence ends.
+
+The book first traces a line from slavery, the backlash against Reconstruction, and Jim Crow to “law and order” politics and the War on Drugs. As one openly racial regime loses legitimacy, another can reorganize white advantage through apparently nonracial justifications. Alexander focuses on the Southern Strategy, the Reagan administration’s escalation of drug enforcement, and media images of Black dealers and “crack addicts” that preceded rather than merely reported the crisis. Race disappears from official vocabulary while continuing to shape whom the public learns to see as a criminal threat.
+
+The mechanics of “the lockdown” form the book’s most explanatory section. Police exercise extraordinary discretion in drug stops and searches; prosecutors use severe charges and mandatory minimums to induce guilty pleas; poor defendants rarely possess resources for a full trial. Racial differences in drug use and sale cannot explain the enormous enforcement disparity, but police concentrate on Black neighborhoods, where outdoor transactions are more visible than private ones. Meanwhile, colorblind constitutional doctrine demands proof of explicit discriminatory intent, making predictable systemic disparities exceptionally difficult to challenge as racial discrimination.
+
+Prison is only the middle of the process. Alexander’s “cruel hand” consists of exclusions from housing, employment, education, benefits, juries, and voting attached to a felony label, along with probation, parole, debt, and stigma. After “paying a debt,” a person must repeatedly disclose the status, face legalized discrimination, and risk reincarceration for a technical violation. Permanent marginality also restructures families and neighborhoods: income and care are removed, partners and mothers absorb visits, legal costs, and childrearing, while political representation and public resources weaken as residents are incarcerated elsewhere.
+
+The Jim Crow analogy is powerful because it makes scattered policing, sentencing, and civil penalties visible as a coherent racial hierarchy, but Alexander herself acknowledges that the systems are not identical. Today’s penal order can incorporate Black officers, judges, politicians, and portions of Black public opinion; it does not mandate formal segregation and harms several racial groups. The analogy should reveal racial control and stigma at the level of function, not flatten the distinct violence of slavery and Jim Crow or imply that only “innocent” people and those convicted of nonviolent offenses merit freedom.
+
+Feminist readers also need an honest caveat: the book centers Black men, and gender is not a fully developed axis of its analysis. Women’s incarceration, police sexual violence, pregnancy and reproductive control, queer and trans criminalization, and feminized unpaid labor in prisoners’ families require other books. That does not make Alexander irrelevant to feminism. Felony citizenship reorganizes intimacy, motherhood, household economies, and community safety. A feminist reading should bring those social-reproductive costs, largely peripheral in the text, back to the center rather than crediting the book with work it does not perform.
+
+Scholarly criticism usefully calibrates the book’s enormous influence. James Forman Jr. and others argue that the drug war alone cannot explain most state-prison populations; violent convictions, local variation, class distinctions, complicated Black political responses to crime, and the experiences of Latinx and other groups need more attention. A federal drug-policy frame may understate prosecutors, county jails, and divergent state politics. Penal policy, legal cannabis, and movements against policing have also changed since 2010. The book is best treated as a field-changing synthesis and public argument, not the final causal model for every incarceration statistic.
+
+Follow the six-part movement: caste reborn, lockdown, the color of justice, the cruel hand after prison, the Jim Crow comparison, and the call for a new movement. Pair it with *Golden Gulag* for political economy and geography, *Arrested Justice* for Black women and the anti-violence movement, and *Queer (In)Justice* for the criminalization of sexuality and gender. Its core method for FemRes is to judge equality not merely by whether law mentions race, but by tracking which apparently neutral procedures continuously remove freedom, housing, work, votes, and dignity from whom.

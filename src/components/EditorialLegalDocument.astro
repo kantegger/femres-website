@@ -1,0 +1,280 @@
+---
+import Layout from "../layouts/Layout.astro";
+import type { Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+  kind: "privacy" | "terms";
+  title: string;
+  intro?: string;
+  lastUpdated?: Date;
+}
+
+const { locale, kind, title, intro, lastUpdated } = Astro.props;
+
+const copy = {
+  "zh-CN": {
+    section: "法律文件",
+    privacy: "隐私说明",
+    terms: "使用条款",
+    updated: "更新日期",
+    note: "本文件说明您使用 FemRes 时适用的规则与权利。",
+    contact: "如有疑问，请联系我们",
+  },
+  "zh-TW": {
+    section: "法律文件",
+    privacy: "隱私說明",
+    terms: "使用條款",
+    updated: "更新日期",
+    note: "本文件說明您使用 FemRes 時適用的規則與權利。",
+    contact: "如有疑問，請聯絡我們",
+  },
+  en: {
+    section: "Legal document",
+    privacy: "Privacy notice",
+    terms: "Terms of use",
+    updated: "Last updated",
+    note: "This document sets out the rules and rights that apply when you use FemRes.",
+    contact: "Questions? Contact us",
+  },
+  ja: {
+    section: "法的文書",
+    privacy: "プライバシーについて",
+    terms: "利用規約",
+    updated: "更新日",
+    note: "本書は、FemRes の利用に適用される規則と権利について説明します。",
+    contact: "ご質問はお問い合わせください",
+  },
+  fr: {
+    section: "Document juridique",
+    privacy: "Avis de confidentialité",
+    terms: "Conditions d’utilisation",
+    updated: "Dernière mise à jour",
+    note: "Ce document présente les règles et les droits applicables à votre utilisation de FemRes.",
+    contact: "Une question ? Contactez-nous",
+  },
+} satisfies Record<Locale, Record<string, string>>;
+
+const t = copy[locale] || copy.en;
+const date = lastUpdated?.toISOString().split("T")[0];
+const prefix = locale === "zh-CN" ? "" : `/${locale}`;
+---
+
+<Layout
+  title={`${title} - FemRes`}
+  description={intro || t.note}
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <main class="legal-document">
+    <header class="legal-document__masthead">
+      <div class="legal-document__kicker">
+        <span>{t.section}</span>
+      </div>
+      <div class="legal-document__title-row">
+        <div>
+          <p class="legal-document__eyebrow">
+            {kind === "privacy" ? t.privacy : t.terms}
+          </p>
+          <h1>{title}</h1>
+        </div>
+        <p class="legal-document__intro">{intro || t.note}</p>
+      </div>
+    </header>
+
+    <div class="legal-document__rule"></div>
+
+    <div class="legal-document__grid">
+      <aside class="legal-document__meta" aria-label={t.section}>
+        {date && (
+          <div class="legal-document__meta-block">
+            <span>{t.updated}</span>
+            <strong>{date}</strong>
+          </div>
+        )}
+        <p>{t.note}</p>
+        <a href={`${prefix}/contact`}>{t.contact}</a>
+      </aside>
+
+      <article class="legal-document__body">
+        <slot />
+      </article>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .legal-document {
+    --rule: #c9c3b9;
+    min-height: 100vh;
+    padding: clamp(3.5rem, 7vw, 6rem) clamp(1.25rem, 4vw, 4.5rem) 7rem;
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  :global(.dark) .legal-document {
+    --rule: #403d38;
+  }
+
+  .legal-document__masthead,
+  .legal-document__grid,
+  .legal-document__rule {
+    width: min(1180px, 100%);
+    margin-inline: auto;
+  }
+
+  .legal-document__kicker {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    font: 600 0.7rem/1.2 var(--editorial-sans);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .legal-document__kicker span:first-child { color: var(--accent); }
+
+  .legal-document__title-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 0.7fr);
+    align-items: end;
+    gap: clamp(2rem, 8vw, 8rem);
+  }
+
+  .legal-document__eyebrow {
+    margin: 0 0 1.1rem;
+    color: var(--accent);
+    font: 600 0.76rem/1.2 var(--editorial-sans);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .legal-document h1 {
+    max-width: 12ch;
+    margin: 0;
+    font: 600 clamp(3.25rem, 6vw, 6rem)/0.95 var(--editorial-serif);
+    letter-spacing: -0.05em;
+  }
+
+  .legal-document__intro {
+    max-width: 32rem;
+    margin: 0 0 0.4rem;
+    color: var(--muted);
+    font: 400 clamp(1rem, 1.4vw, 1.2rem)/1.7 var(--editorial-sans);
+  }
+
+  .legal-document__rule {
+    height: 1px;
+    margin-top: 3rem;
+    background: var(--ink);
+  }
+
+  .legal-document__grid {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.32fr) minmax(0, 1fr);
+    gap: clamp(3rem, 8vw, 7rem);
+    padding-top: 2.5rem;
+  }
+
+  .legal-document__meta {
+    align-self: start;
+    position: sticky;
+    top: 7rem;
+    color: var(--muted);
+    font: 400 0.78rem/1.65 var(--editorial-sans);
+  }
+
+  .legal-document__meta-block {
+    display: grid;
+    gap: 0.35rem;
+    padding-bottom: 1.3rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .legal-document__meta-block span {
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .legal-document__meta-block strong {
+    color: var(--ink);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .legal-document__meta p { margin: 1.4rem 0; }
+
+  .legal-document__meta a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  :global(.legal-document__body) {
+    max-width: 48rem;
+    font: 400 1rem/1.85 var(--editorial-sans);
+  }
+
+  :global(.legal-document__body > :first-child) { margin-top: 0; }
+
+  :global(.legal-document__body h2) {
+    margin: 3.5rem 0 1.25rem;
+    padding-top: 0;
+    border-top: 0;
+    color: var(--ink);
+    font: 600 clamp(1.65rem, 2.5vw, 2.25rem)/1.2 var(--editorial-serif);
+    letter-spacing: -0.025em;
+  }
+
+  :global(.legal-document__body h3) {
+    margin: 2.5rem 0 0.8rem;
+    color: var(--ink);
+    font: 600 1.15rem/1.4 var(--editorial-sans);
+  }
+
+  :global(.legal-document__body p),
+  :global(.legal-document__body li) { color: color-mix(in srgb, var(--ink) 82%, var(--paper)); }
+  :global(.legal-document__body p) { margin: 0 0 1.25rem; }
+  :global(.legal-document__body ul),
+  :global(.legal-document__body ol) { margin: 0 0 1.75rem; padding-left: 1.25rem; }
+  :global(.legal-document__body li) { margin-bottom: 0.55rem; padding-left: 0.45rem; }
+  :global(.legal-document__body li::marker) { color: var(--accent); }
+  :global(.legal-document__body a) { color: var(--ink); text-decoration-color: var(--accent); text-underline-offset: 0.22em; }
+  :global(.legal-document__body strong) { color: var(--ink); font-weight: 600; }
+
+  :global(.legal-document__body > div) {
+    margin-top: 3rem !important;
+    padding: 0.25rem 0 0.25rem 1.25rem !important;
+    border-left: 2px solid var(--accent);
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+
+  :global(.legal-document__body > div h3),
+  :global(.legal-document__body > div p) {
+    color: var(--ink) !important;
+  }
+
+  :global(html .legal-document__body > div[class*="bg-purple"]) {
+    border-left: 2px solid var(--accent) !important;
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+
+  :global(.legal-document__body > .legal-note) {
+    border-left-color: var(--accent) !important;
+  }
+
+  @media (max-width: 760px) {
+    .legal-document { padding: 3.25rem 1.15rem 5rem; }
+    .legal-document__kicker { margin-bottom: 3.5rem; }
+    .legal-document__title-row { grid-template-columns: 1fr; gap: 2rem; }
+    .legal-document h1 { font-size: clamp(3rem, 16vw, 5rem); }
+    .legal-document__rule { margin-top: 2.75rem; }
+    .legal-document__grid { grid-template-columns: 1fr; gap: 3.5rem; }
+    .legal-document__meta { position: static; }
+    :global(.legal-document__body h2) { margin-top: 3rem; }
+  }
+</style>

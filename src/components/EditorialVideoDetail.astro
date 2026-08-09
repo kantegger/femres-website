@@ -1,0 +1,336 @@
+---
+import type { CollectionEntry } from "astro:content";
+import InteractionButtons from "./InteractionButtons";
+import Discussion from "./Discussion";
+import NewsletterSignup from "./NewsletterSignup.astro";
+import SupportPromo from "./SupportPromo.astro";
+import { createT, getLocalizedPath, type Locale } from "../i18n/index";
+import { getLanguageName } from "../i18n/languageUtils";
+import { encodeTopicForUrl, getTopicTranslation } from "../i18n/topicsUtils";
+import { buildCollectionDetailView, cleanLocalizedSlug } from "../lib/content";
+import { getLocaleDateLocale } from "../lib/localeDetails";
+import { getDiscussionCopy } from "../lib/discussionCopy";
+
+interface Props {
+  video: CollectionEntry<"videos">;
+  allVideos: CollectionEntry<"videos">[];
+  locale: Locale;
+}
+
+const { video, allVideos, locale } = Astro.props;
+const t = createT(locale);
+const { Content, relatedEntries } = await buildCollectionDetailView(video, allVideos, 4);
+
+const homeLink = getLocalizedPath("", locale);
+const videosLink = getLocalizedPath("videos", locale);
+const videoLink = (slug: string) => getLocalizedPath(`videos/${cleanLocalizedSlug(slug)}`, locale);
+const topicLink = (topic: string) => getLocalizedPath(`topics/${encodeTopicForUrl(topic)}`, locale);
+const formatDate = (date: Date) => date.toLocaleDateString(getLocaleDateLocale(locale), {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const formatDuration = (seconds?: number) => {
+  if (!seconds) return "";
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainder = seconds % 60;
+  return hours > 0
+    ? `${hours}:${String(minutes).padStart(2, "0")}:${String(remainder).padStart(2, "0")}`
+    : `${minutes}:${String(remainder).padStart(2, "0")}`;
+};
+const getPlatform = (url: string) => {
+  if (url.includes("youtube.com") || url.includes("youtu.be")) return "YouTube";
+  if (url.includes("ted.com")) return "TED";
+  if (url.includes("netflix.com")) return "Netflix";
+  if (url.includes("vimeo.com")) return "Vimeo";
+  return new URL(url).hostname.replace(/^www\./, "");
+};
+const canEmbed = (url?: string) => Boolean(url && (
+  url.includes("youtube.com/embed/") ||
+  url.includes("player.vimeo.com/") ||
+  url.includes("embed.ted.com/")
+));
+
+const labels: Record<Locale, {
+  section: string;
+  programme: string;
+  author: string;
+  published: string;
+  duration: string;
+  language: string;
+  platform: string;
+  watch: string;
+  watchOriginal: string;
+  notes: string;
+  topics: string;
+  related: string;
+  next: string;
+  noImage: string;
+  discussion: string;
+  discussionDescription: string;
+  support: string;
+}> = {
+  "zh-CN": { section: "放映", programme: "放映档案", author: "创作者", published: "发布", duration: "时长", language: "语言", platform: "平台", watch: "开始观看", watchOriginal: "前往原平台观看", notes: "观看笔记", topics: "议题索引", related: "下一场放映", next: "继续观看", noImage: "暂无画面", discussion: "映后讨论", discussionDescription: "分享你的观看感受，或补充一条值得继续观看的线索。", support: "支持 FemRes" },
+  "zh-TW": { section: "放映", programme: "放映檔案", author: "創作者", published: "發布", duration: "時長", language: "語言", platform: "平台", watch: "開始觀看", watchOriginal: "前往原平台觀看", notes: "觀看筆記", topics: "議題索引", related: "下一場放映", next: "繼續觀看", noImage: "暫無畫面", discussion: "映後討論", discussionDescription: "分享你的觀看感受，或補充一條值得繼續觀看的線索。", support: "支持 FemRes" },
+  en: { section: "Screening", programme: "Screening file", author: "Creator", published: "Published", duration: "Runtime", language: "Language", platform: "Platform", watch: "Start watching", watchOriginal: "Watch on the original platform", notes: "Screening notes", topics: "Issue index", related: "Next screening", next: "Continue watching", noImage: "No image", discussion: "After the screening", discussionDescription: "Share your response or add another moving-image thread worth following.", support: "Support FemRes" },
+  ja: { section: "上映", programme: "上映資料", author: "制作者", published: "公開", duration: "時間", language: "言語", platform: "配信元", watch: "視聴する", watchOriginal: "配信元で見る", notes: "鑑賞ノート", topics: "論点索引", related: "次の上映", next: "続けて観る", noImage: "画像なし", discussion: "上映後の対話", discussionDescription: "鑑賞後の感想や、次に観るべき映像の手がかりを共有してください。", support: "FemResを支援" },
+  fr: { section: "Projection", programme: "Fiche de projection", author: "Création", published: "Publication", duration: "Durée", language: "Langue", platform: "Plateforme", watch: "Voir maintenant", watchOriginal: "Voir sur la plateforme d'origine", notes: "Notes de projection", topics: "Index des enjeux", related: "Prochaine projection", next: "Continuer à regarder", noImage: "Sans image", discussion: "Après la projection", discussionDescription: "Partagez votre regard ou ajoutez une autre piste audiovisuelle à suivre.", support: "Soutenir FemRes" },
+};
+const copy = labels[locale];
+const primaryTopic = video.data.topics?.[0]
+  ? getTopicTranslation(video.data.topics[0], locale)
+  : null;
+const copyWithPrimaryTopic = primaryTopic
+  ? `${primaryTopic} · ${copy.section}`
+  : copy.section;
+const embeddable = canEmbed(video.data.embedUrl);
+---
+
+<article class="video-reading">
+  <div class="video-reading__rail">
+    <nav class="video-breadcrumb" aria-label={t("common.breadcrumb")}>
+      <a href={homeLink}>{t("nav.home")}</a>
+      <span aria-hidden="true">/</span>
+      <a href={videosLink}>{t("nav.videos")}</a>
+      <span aria-hidden="true">/</span>
+      <span>{video.data.title}</span>
+    </nav>
+
+    <header class="video-hero">
+      <div class="video-hero__title">
+        <p class="video-kicker">{copyWithPrimaryTopic}</p>
+        <h1>{video.data.title}</h1>
+        <p class="video-deck">{video.data.description}</p>
+      </div>
+      <aside class="video-programme">
+        <h2>{copy.programme}</h2>
+        <dl>
+          <div><dt>{copy.author}</dt><dd>{video.data.author}</dd></div>
+          <div><dt>{copy.published}</dt><dd>{formatDate(video.data.publishDate)}</dd></div>
+          {video.data.duration && <div><dt>{copy.duration}</dt><dd>{formatDuration(video.data.duration)}</dd></div>}
+          <div><dt>{copy.language}</dt><dd>{getLanguageName(video.data.contentLanguage, locale)}</dd></div>
+          <div><dt>{copy.platform}</dt><dd>{getPlatform(video.data.sourceUrl)}</dd></div>
+        </dl>
+      </aside>
+    </header>
+
+    <section class="video-stage" aria-label={copy.watch}>
+      <div class="video-stage__frame">
+        {embeddable ? (
+          <iframe
+            src={video.data.embedUrl}
+            title={video.data.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            loading="eager"
+          />
+        ) : (
+          <a href={video.data.sourceUrl} target="_blank" rel="noopener noreferrer" class="video-stage__poster">
+            {video.data.thumbnail ? (
+              <img src={video.data.thumbnail} alt="" width="1280" height="720" loading="eager" decoding="async" fetchpriority="high" />
+            ) : (
+              <span>{copy.noImage}</span>
+            )}
+            <span class="video-stage__play" aria-hidden="true">
+              <svg viewBox="0 0 64 64" role="img"><circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="2"/><path d="M26 20 46 32 26 44Z" fill="currentColor"/></svg>
+            </span>
+            <strong>{copy.watchOriginal}</strong>
+          </a>
+        )}
+      </div>
+      <footer>
+        <span>{getPlatform(video.data.sourceUrl)} / {video.data.duration ? formatDuration(video.data.duration) : formatDate(video.data.publishDate)}</span>
+        <div>
+          <InteractionButtons
+            contentId={`video-${video.id}`}
+            contentType="video"
+            className="editorial-interactions"
+            client:visible
+            t={{
+              like: t("interactions.like"),
+              unlike: t("interactions.unlike"),
+              bookmark: t("interactions.bookmark"),
+              unbookmark: t("interactions.unbookmark"),
+              loginToInteract: t("interactions.loginToInteract"),
+            }}
+          />
+          <a href={video.data.sourceUrl} target="_blank" rel="noopener noreferrer">{copy.watchOriginal} ↗</a>
+        </div>
+      </footer>
+    </section>
+
+    <div class="video-reading__body">
+      <main class="video-notes">
+        <div class="video-section-heading">
+          <span>01</span>
+          <h2>{copy.notes}</h2>
+        </div>
+        <div class="video-prose" lang={locale}>
+          <Content />
+        </div>
+      </main>
+
+      <aside class="video-topics">
+        <h2>{copy.topics}</h2>
+        <div>
+          {video.data.topics.map((topic, index) => (
+            <a href={topicLink(topic)}><span>{String(index + 1).padStart(2, "0")}</span>{getTopicTranslation(topic, locale)}</a>
+          ))}
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  {relatedEntries.length > 0 && (
+    <section class="video-related" aria-labelledby="video-related-title">
+      <div class="video-related__heading">
+        <span>02</span>
+        <h2 id="video-related-title">{copy.related}</h2>
+      </div>
+      <div class="video-related__grid">
+        {relatedEntries.map((related, index) => (
+          <a href={videoLink(related.id)} class="video-related__item">
+            <span class="video-related__number">0{index + 1}</span>
+            {related.data.thumbnail ? (
+              <img src={related.data.thumbnail} alt="" loading="lazy" decoding="async" />
+            ) : (
+              <span class="video-related__missing">{copy.noImage}</span>
+            )}
+            <div>
+              <span>{copy.next} / {getPlatform(related.data.sourceUrl)}</span>
+              <h3>{related.data.title}</h3>
+              <p>{related.data.author}{related.data.duration ? ` / ${formatDuration(related.data.duration)}` : ""}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <div class="video-reading__community">
+    <NewsletterSignup
+      title={t("newsletter.title")}
+      description={t("newsletter.description")}
+      emailPlaceholder={t("auth.emailPlaceholder")}
+      buttonLabel={t("common.subscribe")}
+      source="video_detail"
+      successMessage={t("newsletter.success")}
+      errorMessage={t("newsletter.error")}
+      genericErrorMessage={t("newsletter.genericError")}
+    />
+
+    <Discussion
+      contentId={`video-${video.id}`}
+      contentType="video"
+      locale={locale}
+      copy={getDiscussionCopy(locale, "video", copy.discussion, copy.discussionDescription)}
+      className="editorial-discussion"
+      variant="editorial"
+      client:visible
+    />
+
+    <SupportPromo
+      title={t("common.support")}
+      message={t("common.supportMessage")}
+      buttonLabel={copy.support}
+    />
+  </div>
+</article>
+
+<style>
+  .video-reading { color: var(--ink); background: var(--paper); font-family: var(--editorial-sans); }
+
+  .video-reading__rail, .video-reading__community { width: min(100% - var(--editorial-canvas-gutter), var(--editorial-canvas-width)); margin-inline: auto; }
+  .video-breadcrumb { display: flex; gap: 10px; align-items: center; padding: 22px 0 18px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .video-breadcrumb a:hover { color: var(--accent); }
+  .video-breadcrumb span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .video-hero { display: grid; grid-template-columns: minmax(0, 8fr) minmax(230px, 3fr); gap: clamp(48px, 8vw, 112px); align-items: end; padding: clamp(48px, 7vw, 92px) 0 52px; }
+  .video-kicker { margin: 0 0 22px; color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+  .video-hero h1 { max-width: 13ch; margin: 0; font-family: var(--editorial-serif); font-size: clamp(52px, 7vw, 102px); font-weight: 700; letter-spacing: -.05em; line-height: .98; }
+  .video-deck { max-width: 780px; margin: 34px 0 0; font-family: var(--editorial-serif); font-size: clamp(19px, 2vw, 26px); line-height: 1.66; }
+  .video-programme { padding-top: 18px; border-top: 2px solid var(--ink); }
+  .video-programme h2 { margin: 0 0 16px; color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .video-programme dl { margin: 0; }
+  .video-programme dl > div { display: grid; grid-template-columns: 80px 1fr; gap: 12px; padding: 7px 0; align-items: baseline; }
+  .video-programme dt { color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .video-programme dd { margin: 0; font-family: var(--editorial-serif); font-size: 13px; line-height: 1.5; }
+
+  .video-stage { margin: 0 0 clamp(70px, 9vw, 118px); }
+  .video-stage__frame { position: relative; aspect-ratio: 16 / 9; border: 1px solid #000; background: #080808; }
+  .video-stage iframe, .video-stage__poster { display: block; width: 100%; height: 100%; border: 0; }
+  .video-stage__poster { position: relative; overflow: hidden; color: #fff; }
+  .video-stage__poster img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.72) saturate(.8); transition: filter .25s ease; }
+  .video-stage__poster > span:first-child { display: grid; place-items: center; height: 100%; color: #aaa; }
+  .video-stage__play { position: absolute; inset: 50% auto auto 50%; width: 74px; height: 74px; transform: translate(-50%, -50%); }
+  .video-stage__poster strong { position: absolute; left: 24px; bottom: 22px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+  .video-stage__poster:hover img { filter: brightness(.88) saturate(1); }
+  .video-stage footer { display: flex; justify-content: space-between; gap: 26px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .video-stage footer > div { display: flex; gap: 28px; align-items: center; }
+  .video-stage footer a:hover { color: var(--accent); }
+  :global(.editorial-interactions) { gap: 22px; }
+  :global(.editorial-interactions button) { color: var(--ink); }
+
+  .video-reading__body { display: grid; grid-template-columns: minmax(0, 2fr) minmax(250px, 1fr); gap: clamp(52px, 8vw, 116px); padding-bottom: 104px; }
+  .video-section-heading, .video-related__heading { display: flex; gap: 20px; align-items: baseline; padding-top: 18px; border-top: 2px solid var(--ink); }
+  .video-section-heading span, .video-related__heading span { color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .12em; }
+  .video-section-heading h2, .video-related__heading h2 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(30px, 4vw, 54px); line-height: 1.05; }
+  .video-prose { max-width: none; margin-top: 46px; font-family: var(--editorial-serif); font-size: 18px; line-height: 1.95; text-align: justify; text-justify: auto; hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+  .video-prose :global(p) { margin: 0 0 1.65em; }
+  .video-prose :global(p:first-child::first-letter) { float: left; margin: .08em .12em 0 0; color: var(--accent); font-size: 4.2em; font-weight: 700; line-height: .75; }
+  .video-prose :global(h2), .video-prose :global(h3) { margin: 2em 0 .7em; font-family: var(--editorial-serif); line-height: 1.25; }
+  .video-prose :global(a) { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .video-prose :global(blockquote) { margin: 2.2em 0; padding: 8px 0 8px 28px; border-left: 3px solid var(--accent); font-size: 1.2em; font-style: italic; }
+  .video-topics { padding-top: 20px; border-top: 1px solid var(--line); }
+  .video-topics h2 { margin: 0 0 18px; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .video-topics > div { border-top: 1px solid var(--ink); }
+  .video-topics a { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); font-family: var(--editorial-serif); font-size: 14px; }
+  .video-topics a span { color: var(--accent); font: 800 9px/1.6 Inter, sans-serif; }
+  .video-topics a:hover { color: var(--accent); }
+
+  .video-related { padding: clamp(58px, 8vw, 108px) max(20px, calc((100vw - var(--editorial-canvas-width)) / 2)); color: #f4f0e8; background: #171614; }
+  .video-related__heading { border-color: #f4f0e8; }
+  .video-related__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 44px; border-top: 1px solid #4a4641; }
+  .video-related__item { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; align-content: start; min-height: 250px; padding: 20px 16px 22px 0; border-bottom: 1px solid #4a4641; }
+  .video-related__item + .video-related__item { padding-left: 16px; border-left: 1px solid #4a4641; }
+  .video-related__number { color: #ff514b; font-size: 10px; font-weight: 800; letter-spacing: .1em; }
+  .video-related__item img, .video-related__missing { grid-column: 2; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+  .video-related__missing { display: grid; place-items: center; border: 1px solid #4a4641; color: #aaa39a; font-size: 9px; }
+  .video-related__item > div { grid-column: 2; }
+  .video-related__item > div > span { color: #aaa39a; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .video-related__item h3 { margin: 9px 0 7px; font-family: var(--editorial-serif); font-size: 18px; line-height: 1.25; transition: color .2s ease; }
+  .video-related__item:hover h3 { color: #ff514b; }
+  .video-related__item p { margin: 0; color: #aaa39a; font-size: 11px; }
+
+  .video-reading__community { padding: 4px 0 96px; }
+  :global(.editorial-discussion) { font-family: var(--editorial-sans); }
+  :global(.editorial-discussion > h2) { font-family: var(--editorial-serif); font-size: clamp(30px, 4vw, 48px); }
+
+  @media (max-width: 900px) {
+    .video-hero { grid-template-columns: minmax(0, 1fr) 220px; gap: 44px; }
+    .video-reading__body { grid-template-columns: minmax(0, 1fr) 250px; gap: 44px; }
+    .video-related__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .video-related__item:nth-child(3) { padding-left: 0; border-left: 0; }
+  }
+  @media (max-width: 700px) {
+    .video-reading__rail, .video-reading__community { width: calc(100% - var(--editorial-mobile-gutter)); }
+    .video-breadcrumb { padding-top: 16px; }
+    .video-hero { grid-template-columns: 1fr; padding: 34px 0 30px; }
+    .video-kicker { margin-bottom: 16px; }
+    .video-hero h1 { max-width: none; font-size: clamp(44px, 14vw, 70px); }
+    .video-deck { margin-top: 24px; font-size: 18px; line-height: 1.72; }
+    .video-programme { margin-top: 6px; }
+    .video-stage { width: calc(100% + 24px); margin-left: -12px; margin-bottom: 70px; }
+    .video-stage footer { align-items: flex-start; padding-inline: 12px; }
+    .video-stage footer > div { flex-direction: column; gap: 12px; align-items: flex-end; text-align: right; }
+    .video-reading__body { grid-template-columns: 1fr; gap: 66px; padding-bottom: 72px; }
+    .video-topics { order: -1; border-top: 2px solid var(--ink); }
+    .video-section-heading { gap: 14px; }
+    .video-prose { margin-top: 34px; font-size: 17px; line-height: 1.9; }
+    .video-related { padding-inline: 12px; }
+    .video-related__grid { grid-template-columns: 1fr; }
+    .video-related__item, .video-related__item + .video-related__item { grid-template-columns: 30px minmax(0, 1fr); min-height: 0; padding: 16px 0 20px; border-left: 0; }
+  }
+</style>

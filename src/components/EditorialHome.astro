@@ -1,0 +1,1131 @@
+---
+import type { Locale } from "../i18n";
+import { getLocalizedPath } from "../i18n";
+import {
+  contentTypeToCollection,
+  type ContentType,
+  type NormalizedContent,
+} from "../lib/content";
+import { EDITORIAL_CONTENT_TYPE_ORDER } from "../lib/contentTypeOrder";
+import type { HomePageData } from "../lib/homePage";
+import { buildIssueView, issueDefinitions } from "../lib/issues";
+import { getIssueBodyItems } from "../lib/issueSelection";
+import { encodeTopicForUrl, getTopicTranslation } from "../i18n/topicsUtils";
+
+export interface Props {
+  locale: Locale;
+  data: HomePageData;
+}
+
+const { locale, data } = Astro.props;
+const { cover, connections } = data.issue;
+
+const currentIssueSlug =
+  issueDefinitions.find((issue) => issue.current)?.slug ?? issueDefinitions[0].slug;
+const currentIssue = await buildIssueView(currentIssueSlug, locale);
+if (!currentIssue) {
+  throw new Error(`Current issue is unavailable: ${currentIssueSlug}`);
+}
+
+const copyByLocale: Record<Locale, {
+  theme: string;
+  title: string;
+  deck: string;
+  coverStory: string;
+  readCover: string;
+  contents: string;
+  criticism: string;
+  interview: string;
+  booksFilm: string;
+  connections: string;
+  hideConnections: string;
+  mobileConnections: string;
+  issueContent: string;
+  furtherReading: string;
+  whyRelated: string;
+  whyBody: string;
+  fullContents: string;
+  topics: string;
+}> = {
+  "zh-CN": {
+    theme: "本期主题",
+    title: "",
+    deck: "",
+    coverStory: "封面故事",
+    readCover: "阅读封面故事",
+    contents: "本期重点",
+    criticism: "婚姻：亲密为何令人孤独",
+    interview: "方法：倾听也是一种练习",
+    booksFilm: "友谊：在家庭之外相互支撑",
+    connections: "查看关系",
+    hideConnections: "隐藏关系",
+    mobileConnections: "关联与延伸阅读",
+    issueContent: "本期内容",
+    furtherReading: "延伸阅读",
+    whyRelated: "为什么相关",
+    whyBody: "《欢乐时光》把时间本身变成一种注意力练习。它借友谊、婚姻与沉默追问：如何倾听另一个人，却不占有她的选择。",
+    fullContents: "本期更多内容",
+    topics: "本期线索",
+  },
+  "zh-TW": {
+    theme: "本期主題",
+    title: "",
+    deck: "",
+    coverStory: "封面故事",
+    readCover: "閱讀封面故事",
+    contents: "本期重點",
+    criticism: "婚姻：親密為何令人孤獨",
+    interview: "方法：傾聽也是一種練習",
+    booksFilm: "友誼：在家庭之外相互支撐",
+    connections: "查看關係",
+    hideConnections: "隱藏關係",
+    mobileConnections: "關聯與延伸閱讀",
+    issueContent: "本期內容",
+    furtherReading: "延伸閱讀",
+    whyRelated: "為什麼相關",
+    whyBody: "《歡樂時光》把時間本身變成一種注意力練習。它藉友誼、婚姻與沉默追問：如何傾聽另一個人，卻不佔有她的選擇。",
+    fullContents: "本期更多內容",
+    topics: "本期線索",
+  },
+  en: {
+    theme: "Current theme",
+    title: "",
+    deck: "",
+    coverStory: "Cover story",
+    readCover: "Read the cover story",
+    contents: "Highlights",
+    criticism: "Marriage: Intimacy and loneliness",
+    interview: "Ideas: Listening takes practice",
+    booksFilm: "Friendship: Lives held in common",
+    connections: "Show connections",
+    hideConnections: "Hide connections",
+    mobileConnections: "Connections & Further Reading",
+    issueContent: "In this issue",
+    furtherReading: "Further reading",
+    whyRelated: "Why they connect",
+    whyBody: "Happy Hour turns time itself into a practice of attention. Through friendship, marriage and silence, it asks how we might hear another person without taking possession of her choices.",
+    fullContents: "Beyond the Cover",
+    topics: "Issue threads",
+  },
+  ja: {
+    theme: "今号のテーマ",
+    title: "",
+    deck: "",
+    coverStory: "カバーストーリー",
+    readCover: "カバーストーリーを読む",
+    contents: "見どころ",
+    criticism: "結婚：親密さはなぜ孤独を生むのか",
+    interview: "方法：聴くこともまた実践である",
+    booksFilm: "友情：家族の外で支え合う生",
+    connections: "関係を見る",
+    hideConnections: "関係を隠す",
+    mobileConnections: "つながりとあわせて読む",
+    issueContent: "今号の内容",
+    furtherReading: "あわせて読む",
+    whyRelated: "なぜつながるのか",
+    whyBody: "『ハッピーアワー』は時間そのものを注意深く聴くための実践に変えます。友情、結婚、沈黙を通して、相手の選択を所有せずに声を聴くことは可能かと問いかけます。",
+    fullContents: "表紙の外へ",
+    topics: "今号の手がかり",
+  },
+  fr: {
+    theme: "Thème du numéro",
+    title: "",
+    deck: "",
+    coverStory: "En couverture",
+    readCover: "Lire l'article de couverture",
+    contents: "À retenir",
+    criticism: "Mariage : Intimité et solitude",
+    interview: "Idées : Écouter s’apprend",
+    booksFilm: "Amitié : Des vies mises en commun",
+    connections: "Voir les liens",
+    hideConnections: "Masquer les liens",
+    mobileConnections: "Connexions et lectures complémentaires",
+    issueContent: "Dans ce numéro",
+    furtherReading: "Pour aller plus loin",
+    whyRelated: "Pourquoi ce lien",
+    whyBody: "Happy Hour fait du temps même une pratique de l’attention. À travers l’amitié, le mariage et le silence, le film demande comment entendre l’autre sans s’approprier ses choix.",
+    fullContents: "Au-delà de la couverture",
+    topics: "Fils du numéro",
+  },
+};
+const baseCopy = copyByLocale[locale];
+const themeSeparator = locale === "en" || locale === "fr" ? ": " : "：";
+const copy = {
+  ...baseCopy,
+  theme: `${baseCopy.theme}${themeSeparator}${currentIssue.copy.theme}`,
+  title: currentIssue.copy.title,
+  deck: currentIssue.copy.deck,
+};
+
+const typeLabels: Record<Locale, Record<ContentType, string>> = {
+  "zh-CN": { book: "书籍", film: "电影", article: "文章", video: "视频", podcast: "播客", paper: "论文" },
+  "zh-TW": { book: "書籍", film: "電影", article: "文章", video: "影片", podcast: "播客", paper: "論文" },
+  en: { book: "Books", film: "Films", article: "Articles", video: "Videos", podcast: "Podcasts", paper: "Papers" },
+  ja: { book: "書籍", film: "映画", article: "記事", video: "動画", podcast: "ポッドキャスト", paper: "論文" },
+  fr: { book: "Livres", film: "Films", article: "Articles", video: "Vidéos", podcast: "Podcasts", paper: "Études" },
+};
+
+const contentLink = (item: NormalizedContent) =>
+  getLocalizedPath(`${contentTypeToCollection[item.contentType]}/${item.cleanSlug}`, locale);
+const coverTitle = cover.title;
+const resourceTypes = EDITORIAL_CONTENT_TYPE_ORDER;
+const networkItems = connections.slice(0, 4);
+
+// Concept nodes: the two topics shared most across this issue's works,
+// rendered as clickable links into the topic atlas.
+const conceptLabel = locale === "en" || locale === "fr" ? "Concept" : locale === "ja" ? "概念" : "概念";
+const issueTopicCounts = new Map<string, number>();
+[cover, ...networkItems].forEach((item) => {
+  item.topics.forEach((topic) => issueTopicCounts.set(topic, (issueTopicCounts.get(topic) ?? 0) + 1));
+});
+const conceptTopics = [...issueTopicCounts.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 2)
+  .map(([name]) => ({
+    label: getTopicTranslation(name, locale),
+    href: getLocalizedPath(`topics/${encodeTopicForUrl(name)}`, locale),
+  }));
+
+// Highlights are a preview surface and may be hidden by the layout. The lower
+// directory therefore repeats highlighted resources and excludes only the
+// cover story, making its count match the complete rendered directory.
+const bodyItems = getIssueBodyItems(currentIssue.items, [cover]);
+const issueBodyCount = bodyItems.length;
+const features = bodyItems.slice(0, 5);
+const featureLead = features.find((item) => item.contentType === "book") ?? features[0];
+const featureSecondaryPool = featureLead
+  ? bodyItems.filter((item) => item.cleanSlug !== featureLead.cleanSlug)
+  : [];
+const remainingSecondary = [...featureSecondaryPool];
+const pickFeature = (preferred: readonly ContentType[], fallback: readonly ContentType[]) => {
+  const candidate =
+    remainingSecondary.find((item) => preferred.includes(item.contentType)) ??
+    remainingSecondary.find((item) => fallback.includes(item.contentType));
+  if (!candidate) return undefined;
+  const index = remainingSecondary.findIndex((item) => item.cleanSlug === candidate.cleanSlug);
+  if (index !== -1) remainingSecondary.splice(index, 1);
+  return candidate;
+};
+const featureSecondary = [
+  pickFeature(["film"], ["article", "video", "podcast", "paper"]),
+  pickFeature(["article"], ["video", "podcast", "film", "paper"]),
+  pickFeature(["video"], ["podcast", "article", "film", "paper"]),
+  pickFeature(["podcast"], ["video", "article", "film", "paper"]),
+].filter((item): item is NormalizedContent => Boolean(item));
+const featureSelection = featureLead ? [featureLead, ...featureSecondary] : featureSecondary;
+const featureIds = new Set(featureSelection.map((item) => item.cleanSlug));
+const listGroups = resourceTypes
+  .map((type) => ({
+    type,
+    items: bodyItems.filter(
+      (item) => item.contentType === type && !featureIds.has(item.cleanSlug),
+    ),
+  }))
+  .filter((group) => group.items.length > 0);
+
+// Fill the hero contents rail to the full height of the hero.
+const asideLabels = [copy.criticism, copy.interview, copy.booksFilm];
+const asideEntries = [
+  { item: cover, label: copy.coverStory },
+  ...networkItems.map((item, index) => ({
+    item,
+    label: asideLabels[index] ?? typeLabels[locale][item.contentType],
+  })),
+  ...bodyItems
+    .filter((item) => !featureIds.has(item.cleanSlug))
+    .map((item) => ({ item, label: typeLabels[locale][item.contentType] })),
+].slice(0, 8);
+---
+
+<div class="editorial-home">
+  <section id="current-issue" class="issue-shell" aria-labelledby="issue-title">
+    <div class="issue-hero">
+      <div class="issue-lead">
+        <p class="issue-theme">{copy.theme}</p>
+        <h1 id="issue-title">{copy.title}</h1>
+        <p class="issue-deck">{copy.deck}</p>
+        <a class="primary-link" href={contentLink(cover)}>
+          <span>{copy.readCover}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+        <div class="relationship-legend" aria-label={copy.topics}>
+          <span><i class="legend-current"></i>{copy.issueContent}</span>
+          <span><i class="legend-more"></i>{copy.furtherReading}</span>
+          <button type="button" data-connections-toggle aria-pressed="true">
+            <span data-show-label>{copy.connections}</span>
+            <span data-hide-label>{copy.hideConnections}</span>
+          </button>
+        </div>
+      </div>
+
+      <a class="cover-story" href={contentLink(cover)} aria-label={`${copy.readCover}: ${coverTitle}`}>
+        <div class="cover-story__image">
+          {cover.image && (
+            <img
+              src={cover.image}
+              alt=""
+              width="800"
+              height="1200"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+            />
+          )}
+        </div>
+      </a>
+
+      <aside class="issue-contents" aria-labelledby="issue-contents-title">
+        <h2 id="issue-contents-title">{copy.contents}</h2>
+        <ol>
+          {asideEntries.map(({ item, label }) => (
+            <li>
+              <a href={contentLink(item)}>
+                <span class="issue-contents__text">
+                  <strong>{label}</strong>
+                  <span>{item.title}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </aside>
+    </div>
+
+    <div id="connections" class="idea-network" data-idea-network>
+      <h2 class="idea-network__mobile-heading">{copy.mobileConnections}</h2>
+      <svg class="network-lines" viewBox="0 0 1200 520" preserveAspectRatio="none" aria-hidden="true">
+        <path class="network-line network-line--active network-line--entry" d="M788 4 C760 84 680 138 588 210"></path>
+        <path class="network-line" d="M588 210 C470 182 387 185 270 255"></path>
+        <path class="network-line network-line--active" d="M588 210 C725 190 814 207 930 278"></path>
+        <path class="network-line" d="M588 210 C535 295 500 343 420 410"></path>
+        <path class="network-line" d="M588 210 C690 310 735 350 790 420"></path>
+        <path class="network-line network-line--dotted" d="M270 255 C175 290 128 336 76 416"></path>
+        <path class="network-line network-line--dotted" d="M930 278 C1028 315 1072 350 1128 414"></path>
+        <circle class="network-dot network-dot--active" cx="588" cy="210" r="6"></circle>
+        <circle class="network-dot" cx="270" cy="255" r="5"></circle>
+        <circle class="network-dot network-dot--active" cx="930" cy="278" r="5"></circle>
+        <circle class="network-dot" cx="420" cy="410" r="5"></circle>
+        <circle class="network-dot" cx="790" cy="420" r="5"></circle>
+      </svg>
+
+      <div class="network-center">
+        <span>{copy.coverStory}</span>
+        <strong>{coverTitle}</strong>
+      </div>
+
+      {networkItems.map((item, index) => (
+        <a
+          class={`network-node network-node--${index + 1}${item.image ? " network-node--with-image" : ""}`}
+          href={contentLink(item)}
+        >
+          {item.image && <img src={item.image} alt="" loading="lazy" decoding="async" />}
+          <span>{typeLabels[locale][item.contentType]}</span>
+          <strong>{item.title}</strong>
+          <small>{item.author}</small>
+        </a>
+      ))}
+
+      {conceptTopics[0] && (
+        <a class="concept-node concept-node--gaze" href={conceptTopics[0].href}>
+          <span>{conceptLabel}</span>
+          <strong>{conceptTopics[0].label}</strong>
+        </a>
+      )}
+      {conceptTopics[1] && (
+        <a class="concept-node concept-node--body" href={conceptTopics[1].href}>
+          <span>{conceptLabel}</span>
+          <strong>{conceptTopics[1].label}</strong>
+        </a>
+      )}
+
+      <aside class="relation-note">
+        <h3>{copy.whyRelated}</h3>
+        <p>{copy.whyBody}</p>
+      </aside>
+    </div>
+  </section>
+
+  <section id="issue-body" class="issue-body" aria-labelledby={copy.fullContents ? "issue-body-title" : "issue-body-count"}>
+    <div class="section-heading">
+      {copy.fullContents && <h2 id="issue-body-title">{copy.fullContents}</h2>}
+      <p id="issue-body-count">{issueBodyCount} · {currentIssue.copy.title}</p>
+    </div>
+
+    <div class="issue-features">
+      {featureLead && (
+        <a class={`issue-feature issue-feature--lead issue-feature--${featureLead.contentType}`} href={contentLink(featureLead)}>
+          <span class="issue-feature__kicker">{typeLabels[locale][featureLead.contentType]}</span>
+          <strong class="issue-feature__title">{featureLead.title}</strong>
+          {featureLead.author && <span class="issue-feature__meta">{featureLead.author}</span>}
+        </a>
+      )}
+
+      {featureSecondary.map((item, index) => (
+        <a
+          class={`issue-feature issue-feature--${item.contentType} issue-feature--slot-${index}`}
+          href={contentLink(item)}
+        >
+          <span class="issue-feature__kicker">{typeLabels[locale][item.contentType]}</span>
+          <strong class="issue-feature__title">{item.title}</strong>
+        </a>
+      ))}
+    </div>
+
+    {listGroups.map((group) => (
+      <section class="issue-body__group" aria-label={typeLabels[locale][group.type]}>
+        <h3><span>{typeLabels[locale][group.type]}</span><small>{group.items.length}</small></h3>
+        <ol class="issue-list">
+          {group.items.map((item) => (
+            <li>
+              <a href={contentLink(item)}>
+                <span class="issue-list__text">
+                  <span class="issue-list__title">{item.title}</span>
+                  <span class="issue-list__meta">
+                    {[item.author, String(item.date.getFullYear())].filter(Boolean).join(" · ")}
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
+  </section>
+</div>
+
+<script is:inline>
+  function initIssueConnections() {
+    const toggle = document.querySelector("[data-connections-toggle]");
+    const network = document.querySelector("[data-idea-network]");
+    if (!(toggle instanceof HTMLButtonElement) || !(network instanceof HTMLElement)) return;
+    if (toggle.dataset.ready === "true") return;
+    toggle.dataset.ready = "true";
+
+    toggle.addEventListener("click", () => {
+      const visible = toggle.getAttribute("aria-pressed") === "true";
+      toggle.setAttribute("aria-pressed", String(!visible));
+      network.classList.toggle("connections-hidden", visible);
+    });
+  }
+  document.addEventListener("astro:page-load", initIssueConnections);
+</script>
+
+<style>
+  .editorial-home {
+    --paper-soft: #eee9df;
+    --muted: #68635c;
+    --accent: #cf2721;
+    --display: var(--editorial-serif);
+    min-height: 100dvh;
+    color: var(--ink);
+    background: var(--paper);
+  }
+
+  :global(.dark) .editorial-home {
+    --paper-soft: #24221f;
+    --line: #45413b;
+    --accent: #ff5149;
+  }
+
+  .issue-shell,
+  .archive-section,
+  .library-section {
+    width: min(calc(100% - var(--editorial-canvas-gutter)), var(--editorial-canvas-width));
+    margin: 0 auto;
+  }
+
+  .issue-shell {
+    padding-top: clamp(2rem, 3vw, 2.75rem);
+  }
+
+  .issue-hero {
+    display: grid;
+    grid-template-columns: minmax(400px, 1.618fr) minmax(300px, 1fr) minmax(180px, 0.55fr);
+    gap: clamp(1.5rem, 3vw, 3.25rem);
+    align-items: stretch;
+  }
+
+  .issue-lead {
+    align-self: center;
+  }
+
+  .issue-theme {
+    margin: 0 0 1.25rem;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 750;
+    letter-spacing: 0.1em;
+  }
+
+  .issue-lead h1 {
+    max-width: 8.6em;
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(3.3rem, 5.4vw, 6.5rem);
+    font-weight: 650;
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .issue-deck {
+    max-width: 31rem;
+    margin: 1.7rem 0 1.8rem;
+    color: var(--muted);
+    font-family: var(--display);
+    font-size: clamp(1rem, 1.25vw, 1.2rem);
+    line-height: 1.85;
+  }
+
+  .primary-link {
+    min-height: 48px;
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 0.85rem 1.15rem;
+    color: white;
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    font-size: 0.92rem;
+    font-weight: 700;
+    transition: transform 160ms ease, background 160ms ease;
+  }
+
+  .primary-link:hover {
+    transform: translateY(-2px);
+    background: #bd211c;
+  }
+
+  .primary-link:active {
+    transform: translateY(0);
+  }
+
+  .relationship-legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.75rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+
+  .relationship-legend span,
+  .relationship-legend button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+  }
+
+  .relationship-legend i {
+    width: 7px;
+    height: 7px;
+    display: inline-block;
+    border-radius: 50%;
+  }
+
+  .legend-current { background: var(--accent); }
+  .legend-more { background: var(--line); }
+
+  .relationship-legend button {
+    padding: 0;
+    color: var(--ink);
+    background: transparent;
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  [data-hide-label] { display: none; }
+  [aria-pressed="true"] [data-show-label] { display: none; }
+  [aria-pressed="true"] [data-hide-label] { display: inline; }
+
+  .cover-story {
+    align-self: start;
+    min-height: 0;
+    overflow: hidden;
+    display: block;
+    background: transparent;
+  }
+
+  .cover-story__image {
+    background: var(--paper-soft);
+  }
+
+  .cover-story__image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: none;
+    mix-blend-mode: normal;
+    opacity: 1;
+    transition: opacity 240ms ease;
+  }
+
+  .cover-story:hover .cover-story__image img {
+    opacity: 0.92;
+  }
+
+  .issue-contents {
+    display: flex;
+    flex-direction: column;
+    padding-left: 1.25rem;
+    border-left: 1px solid var(--line);
+  }
+
+  .issue-contents h2 {
+    margin: 0 0 1rem;
+    font-family: var(--display);
+    font-size: 1.05rem;
+  }
+
+  .issue-contents ol {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .issue-contents li {
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    border-top: 1px solid var(--line);
+  }
+
+  .issue-contents a {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    width: 100%;
+    padding: 0.55rem 0;
+    color: inherit;
+  }
+
+  .issue-contents__text {
+    min-width: 0;
+  }
+
+  .issue-contents__text strong,
+  .issue-contents__text span {
+    display: block;
+  }
+
+  .issue-contents__text strong {
+    color: var(--accent);
+    font-size: 0.68rem;
+    font-weight: 720;
+    line-height: 1.4;
+  }
+
+  .issue-contents__text span {
+    margin-top: 0.25rem;
+    color: var(--muted);
+    font-family: var(--display);
+    font-size: 0.8rem;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .issue-contents a:hover .issue-contents__text span {
+    color: var(--accent);
+  }
+
+  .idea-network {
+    position: relative;
+    height: 590px;
+    margin-top: -0.75rem;
+    transition: height 320ms ease, opacity 240ms ease;
+  }
+
+  .idea-network.connections-hidden {
+    height: 70px;
+    overflow: hidden;
+    opacity: 0.16;
+  }
+
+  .idea-network__mobile-heading {
+    display: none;
+  }
+
+  .network-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .network-line {
+    fill: none;
+    stroke: color-mix(in srgb, var(--ink) 42%, transparent);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .network-line--active { stroke: var(--accent); }
+  .network-line--dotted { stroke-dasharray: 4 6; }
+  .network-dot { fill: var(--paper); stroke: var(--ink); stroke-width: 1.5; }
+  .network-dot--active { fill: var(--accent); stroke: var(--accent); }
+
+  .network-center,
+  .network-node,
+  .concept-node,
+  .relation-note {
+    position: absolute;
+    z-index: 2;
+  }
+
+  .concept-node {
+    max-width: 220px;
+    color: inherit;
+  }
+
+  .concept-node:hover strong {
+    color: var(--accent);
+  }
+
+  .network-center {
+    top: 31%;
+    left: 48.8%;
+    width: 180px;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .network-center span,
+  .network-node span,
+  .concept-node span {
+    display: block;
+    color: var(--accent);
+    font-size: 0.62rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+  }
+
+  .network-center strong {
+    display: block;
+    margin-top: 0.3rem;
+    color: var(--accent);
+    font-family: var(--display);
+    font-size: 1.55rem;
+    font-weight: 540;
+    line-height: 1;
+  }
+
+  .network-node {
+    width: 190px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 0.75rem;
+    color: inherit;
+  }
+
+  .network-node--with-image {
+    grid-template-columns: 46px minmax(0, 1fr);
+  }
+
+  .network-node img {
+    grid-row: 1 / 4;
+    width: 46px;
+    height: 64px;
+    object-fit: contain;
+    background: var(--paper-deep);
+    filter: grayscale(1);
+  }
+
+  .network-node strong,
+  .concept-node strong {
+    display: block;
+    margin-top: 0.18rem;
+    font-family: var(--display);
+    font-size: 1rem;
+    font-weight: 620;
+    line-height: 1.15;
+  }
+
+  .network-node small {
+    display: block;
+    margin-top: 0.2rem;
+    color: var(--muted);
+    font-size: 0.66rem;
+  }
+
+  .network-node--1 { top: 42%; left: 9%; }
+  .network-node--2 { top: 70%; left: 31%; }
+  .network-node--3 { top: 72%; left: 63%; }
+  .network-node--4 { top: 44%; right: 8%; }
+
+  .concept-node--gaze { top: 31%; right: 24%; }
+  .concept-node--body { top: 36%; left: 27%; }
+
+  .relation-note {
+    right: 0;
+    bottom: 3.5rem;
+    width: 260px;
+    padding: 1.2rem 0 0 1.2rem;
+    border-left: 2px solid var(--accent);
+  }
+
+  .relation-note h3 {
+    margin: 0;
+    color: var(--accent);
+    font-family: var(--display);
+    font-size: 1rem;
+  }
+
+  .relation-note p {
+    margin: 0.7rem 0 0;
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.65;
+  }
+
+  .issue-body {
+    width: min(100% - var(--editorial-canvas-gutter), var(--editorial-canvas-width));
+    margin-inline: auto;
+    padding: clamp(4rem, 8vw, 8rem) 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .section-heading {
+    max-width: 46rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-heading h2 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 560;
+    line-height: 1;
+    letter-spacing: -0.055em;
+  }
+
+  .section-heading p {
+    max-width: 38rem;
+    margin: 1.2rem 0 0;
+    color: var(--muted);
+    font-family: var(--display);
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .issue-features {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.3rem 2.2rem;
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--line);
+    align-items: start;
+  }
+
+  .issue-feature {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    color: inherit;
+  }
+
+  .issue-feature--lead {
+    grid-column: 1 / 2;
+    grid-row: span 2;
+    padding-right: 1.2rem;
+    border-right: 1px solid var(--line);
+  }
+
+  .issue-feature:not(.issue-feature--lead) {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .issue-feature:not(.issue-feature--lead):nth-child(even) {
+    border-right: 1px solid var(--line);
+    padding-right: 1rem;
+  }
+
+  .issue-feature--slot-0 {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .issue-feature--slot-1 {
+    grid-column: 3;
+    grid-row: 1;
+    margin-top: 0;
+  }
+
+  .issue-feature--slot-2 {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 0;
+  }
+
+  .issue-feature--slot-3 {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  .issue-feature__media {
+    display: block;
+    background: var(--paper-soft);
+  }
+
+  .issue-feature__media img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .issue-feature--podcast .issue-feature__media {
+    aspect-ratio: 1 / 1;
+  }
+
+  .issue-feature--podcast .issue-feature__media img {
+    aspect-ratio: 1 / 1;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .issue-feature__kicker {
+    color: var(--accent);
+    font-size: 0.68rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+  }
+
+  .issue-feature__title {
+    font-family: var(--display);
+    font-size: 1.02rem;
+    font-weight: 620;
+    line-height: 1.3;
+  }
+
+  .issue-feature--lead .issue-feature__title {
+    font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+  }
+
+  .issue-feature__meta {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .issue-feature:hover .issue-feature__title {
+    color: var(--accent);
+  }
+
+  .issue-body__group { margin-bottom: clamp(2.5rem, 5vw, 4.5rem); }
+
+  .issue-body__group > h3 {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin: 0 0 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--ink);
+    font-family: var(--display);
+    font-size: clamp(1.4rem, 2.2vw, 2rem);
+    font-weight: 560;
+    letter-spacing: -0.03em;
+  }
+
+  .issue-body__group > h3 small {
+    color: var(--muted);
+    font-family: var(--editorial-sans);
+    font-size: 0.68rem;
+    font-weight: 400;
+  }
+
+  .issue-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: entry;
+    columns: 3;
+    column-gap: 2.4rem;
+  }
+
+  .issue-list li {
+    counter-increment: entry;
+    break-inside: avoid;
+  }
+
+  .issue-list a {
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.55rem 0;
+    color: inherit;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .issue-list a::before {
+    content: counter(entry, decimal-leading-zero);
+    flex: none;
+    padding-top: 0.2rem;
+    color: var(--accent);
+    font-size: 0.66rem;
+    font-weight: 700;
+  }
+
+  .issue-list__text {
+    min-width: 0;
+  }
+
+  .issue-list__title {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .issue-list__meta {
+    display: block;
+    margin-top: 0.15rem;
+    color: var(--muted);
+    font-size: 0.7rem;
+  }
+
+  .issue-list a:hover .issue-list__title {
+    color: var(--accent);
+  }
+
+  @media (max-width: 1400px) {
+    .issue-hero {
+      grid-template-columns: minmax(0, 1.618fr) minmax(280px, 1fr);
+    }
+    .issue-contents {
+      display: none;
+    }
+    .concept-node--gaze { right: 12%; }
+    .concept-node--body { top: 28%; left: 12%; }
+    .network-node--3 { left: 52%; }
+    .relation-note { width: 210px; }
+  }
+
+  @media (max-width: 1120px) {
+    .issue-features {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .issue-feature {
+      grid-row: auto;
+      grid-column: auto;
+    }
+
+    .issue-feature--lead {
+      grid-column: 1;
+      grid-row: auto;
+    }
+
+    .issue-list {
+      columns: 2;
+    }
+    .issue-feature--slot-0,
+    .issue-feature--slot-1,
+    .issue-feature--slot-2,
+    .issue-feature--slot-3 {
+      grid-column: auto;
+      grid-row: auto;
+      margin-top: 0;
+    }
+    .idea-network { height: 560px; }
+    .network-node--4 { right: 2%; }
+  }
+
+  @media (max-width: 900px) {
+    .idea-network {
+      height: auto;
+      margin-top: 2.5rem;
+      padding: 1.5rem 0 3rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      border-top: 1px solid var(--line);
+    }
+    .idea-network__mobile-heading {
+      display: block;
+      margin: 0;
+      padding: 0 0 1.15rem;
+      border-bottom: 2px solid var(--ink);
+      font-family: var(--display);
+      font-size: clamp(1.65rem, 4vw, 2.15rem);
+      font-weight: 560;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+    }
+    .idea-network.connections-hidden { height: 0; padding: 0; border: 0; }
+    .network-lines,
+    .network-center,
+    .concept-node { display: none; }
+    .network-node,
+    .relation-note {
+      position: static;
+      width: 100%;
+    }
+    .network-node {
+      min-width: 0;
+      padding: 1.15rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .network-node strong {
+      line-height: 1.22;
+      overflow-wrap: anywhere;
+    }
+    .network-node small {
+      line-height: 1.45;
+    }
+    .relation-note { margin-top: 1.5rem; }
+  }
+
+  @media (max-width: 767px) {
+    .issue-shell,
+    .issue-body {
+      width: calc(100% - var(--editorial-mobile-gutter));
+    }
+    .issue-shell { padding-top: 2.2rem; }
+    .issue-hero { grid-template-columns: 1fr; }
+    .issue-lead h1 {
+      max-width: 8em;
+      font-size: clamp(3rem, 13.5vw, 4.75rem);
+      line-height: 1.08;
+      letter-spacing: -0.055em;
+    }
+    .issue-deck {
+      margin-top: 1.25rem;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .issue-features {
+      grid-template-columns: 1fr;
+      gap: 1.8rem;
+      padding-top: 1rem;
+    }
+
+    .issue-feature--lead {
+      grid-row: auto;
+      grid-column: 1;
+    }
+    .issue-list {
+      columns: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .primary-link,
+    .cover-story__image img,
+    .idea-network {
+      transition: none;
+    }
+  }
+</style>

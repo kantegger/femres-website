@@ -1,0 +1,15 @@
+---
+import EditorialPodcastIndex from "../../components/EditorialPodcastIndex.astro";
+import Layout from "../../layouts/Layout.astro";
+
+const currentLocale = "zh-CN";
+---
+
+<Layout
+  title="播客 - FemRes"
+  description="汇聚女性主义声音、深度对话与公共思想节目。"
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <EditorialPodcastIndex locale={currentLocale} pathMode="root" />
+</Layout>

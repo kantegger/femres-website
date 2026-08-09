@@ -1,0 +1,28 @@
+---
+title: "The Trauma of Caste: A Dalit Feminist Meditation on Survivorship, Healing, and Abolition"
+author: "Thenmozhi Soundararajan"
+description: "Thenmozhi Soundararajan combines memoir, Dalit feminism, engaged Buddhism, and embodied practice to examine how caste injury enters bodies, communities, and transnational institutions."
+publishDate: 2022-11-15
+isbn: "9781623177652"
+contentLanguage: "en"
+topics: ["Dalit Feminism","Caste and Gender","Prison Abolition","Healing Justice","Intersectional Feminism"]
+sourceUrl: "https://www.northatlanticbooks.com/shop/the-trauma-of-caste/"
+coverImage: "https://media.femres.org/images/books/trauma-of-caste.jpg"
+status: "published"
+---
+
+*The Trauma of Caste* is neither a conventional history of caste nor a self-help book that converts social oppression into private recovery. Dalit American organizer Thenmozhi Soundararajan interweaves memoir, manifesto, engaged Buddhism, and embodied exercises to ask a question institutional analysis often misses: when caste repeatedly tells some people through family, school, work, religion, and public culture that they are lesser, how does domination enter the nervous system, memory, intimacy, and life between generations?
+
+Soundararajan begins from continuity between South Asia and the diaspora, rejecting the fantasy that caste belongs to a sealed-off “traditional India.” In the United States, surnames, food, marriage networks, religious organizations, and technology workplaces can all become means of reading and policing caste position. Dalit identity is often kept hidden precisely because disclosure carries danger, making discrimination difficult to name in familiar civil-rights terms. One of the book’s important moves is to place fear of being outed beside overt violence: a hierarchy need not announce itself in formal rules if the oppressed continually anticipate punishment.
+
+Trauma here is not a loose synonym for every form of pain. It describes how prolonged domination patterns bodily response and collective memory. Shame, vigilance, silence, rage, grief, and dissociation may be survival strategies developed in dangerous environments rather than defects in individual character. Dalit women encounter further gendered injury: sexual violence may enforce caste boundaries, while family or community appeals to honor can demand silence. The author therefore refuses to rank anti-caste and anti-patriarchal struggle, and refuses to romanticize resilience as an obligation to absorb limitless harm.
+
+The diagnosis leads into a Dalit feminist abolitionism. Abolition, for Soundararajan, means more than removing one discriminatory policy; it seeks to end the Brahmanical logics of purity and pollution, superiority and degradation, punishment and obedience through which caste reproduces itself. She places Dalit liberation in conversation with Black, Indigenous, Latinx, queer, femme, and disability justice movements while insisting that coalition must proceed from distinct histories rather than flatten them into one model. Engaged Buddhism supplies an ethical vocabulary for examining attachment, false separation, and collective liberation.
+
+Breathing practices, body scans, reflective prompts, and meditations interrupt the political analysis. Healing is not presented as teaching oppressed people to tolerate injustice more calmly. It is the recovery of boundaries, language, grief, connection, and the capacity to act; it must remain linked to organizing, institutional accountability, and redistribution. The author also addresses dominant-caste readers. Guilt and discomfort that end in private self-examination merely recentre privilege. Repair requires relinquishing power, breaking caste silence, and supporting change led by Dalit communities.
+
+This conjunction of body and institution is the book’s most useful and most easily appropriated contribution. Feminist politics often separates “personal healing” from “structural struggle,” while Soundararajan insists that the traumatized body is one site where institutions operate, and that tending to it can sustain political work. She does not claim that meditation substitutes for labor protection, anti-discrimination enforcement, or movement infrastructure. Extracting the exercises from their anti-caste purpose and selling them as generic wellness would repeat the capture of Dalit knowledge the book opposes.
+
+Critical distance remains necessary. This is an activist meditation organized through the author’s experience, not a clinical trauma study or comprehensive social survey. Readers seeking granular historical evidence may find some large comparisons and spiritual vocabulary expansive. Cross-movement solidarity is necessary, but caste cannot simply be renamed race, class, enslavement, or colonialism. Nor can one healing framework represent Dalit communities differentiated by region, religion, gender, sexuality, disability, and class. The book is strongest when read as situated invitation and political ethics, not total theory.
+
+Begin with a historical account of caste and Dalit feminism, then enter Soundararajan’s memoir and exercises. Keep separate notes on institutional claims, lived experience, ethical propositions, and embodied practices rather than asking one category to prove all the others. Read beside *Gender and Caste* for historical structure, *Caste Matters* or *Coming Out as Dalit* for South Asian and diasporic position, and healing-justice or abolitionist work for comparison. Its central demand is more exacting than survival: liberation must create relations in which endurance is no longer the price of belonging.

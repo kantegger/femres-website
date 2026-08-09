@@ -1,0 +1,228 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getLocalizedPath, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+  title: string;
+  message: string;
+  backHome: string;
+  goBack: string;
+  tagline: string;
+}
+
+const { locale, title, message, backHome, goBack, tagline } = Astro.props;
+const homeLink = getLocalizedPath("", locale);
+const searchLink = getLocalizedPath("search", locale);
+const topicsLink = getLocalizedPath("topics", locale);
+
+const labels: Record<Locale, {
+  missing: string;
+  folio: string;
+  search: string;
+  topics: string;
+  note: string;
+  brand: string;
+}> = {
+  "zh-CN": { missing: "缺页", folio: "本页未收入目录", search: "搜索 FemRes", topics: "浏览思想星图", note: "可能是链接已经变更，也可能是这份资料还没有进入我们的档案。", brand: "持续生长的评论" },
+  "zh-TW": { missing: "缺頁", folio: "本頁未收入目錄", search: "搜尋 FemRes", topics: "瀏覽思想星圖", note: "可能是連結已經變更，也可能是這份資料還沒有進入我們的檔案。", brand: "持續生長的評論" },
+  en: { missing: "Missing page", folio: "Not filed in this issue", search: "Search FemRes", topics: "Browse the idea atlas", note: "The link may have changed, or this resource may not have entered our archive yet.", brand: "The Living Review" },
+  ja: { missing: "欠落したページ", folio: "このページは目録にありません", search: "FemRes を検索", topics: "思想星図を見る", note: "リンクが変更されたか、この資料はまだアーカイブに収録されていない可能性があります。", brand: "成長し続けるレビュー" },
+  fr: { missing: "Page manquante", folio: "Cette page n’est pas au sommaire", search: "Rechercher sur FemRes", topics: "Parcourir l’atlas d’idées", note: "Le lien a peut-être changé, ou cette ressource n’a pas encore rejoint nos archives.", brand: "La revue vivante" },
+};
+
+const copy = labels[locale];
+---
+
+<Layout
+  title={`404 - ${title} | FemRes`}
+  description={message}
+  indexable={false}
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <main class="not-found">
+    <div class="not-found__folio">
+      <span>{copy.missing}</span>
+      <span>FemRes / 404</span>
+    </div>
+
+    <section class="not-found__hero">
+      <div class="not-found__number" aria-hidden="true">404</div>
+      <div class="not-found__copy">
+        <p>{copy.folio}</p>
+        <h1>{title}</h1>
+        <div class="not-found__description">
+          <p>{message}</p>
+          <p>{copy.note}</p>
+        </div>
+      </div>
+    </section>
+
+    <nav class="not-found__routes" aria-label={title}>
+      <a href={homeLink}><span>01</span><strong>{backHome}</strong></a>
+      <a href={searchLink}><span>02</span><strong>{copy.search}</strong></a>
+      <a href={topicsLink}><span>03</span><strong>{copy.topics}</strong></a>
+      <button type="button" data-not-found-back data-home={homeLink}><span>04</span><strong>{goBack}</strong></button>
+    </nav>
+
+    <footer class="not-found__footer">
+      <p>{tagline}</p>
+      <p>{copy.brand}</p>
+    </footer>
+  </main>
+</Layout>
+
+<script is:inline>
+  document.querySelector("[data-not-found-back]")?.addEventListener("click", (event) => {
+    const button = event.currentTarget;
+    if (!(button instanceof HTMLButtonElement)) return;
+    if (window.history.length > 1) window.history.back();
+    else window.location.href = button.dataset.home || "/";
+  });
+</script>
+
+<style>
+  .not-found {
+    min-height: calc(100dvh - 72px);
+    padding: 3rem clamp(1.25rem, 4vw, 4.5rem) 4rem;
+    color: var(--ink);
+    background: var(--paper);
+    font-family: var(--editorial-sans);
+  }
+
+  .not-found__folio,
+  .not-found__hero,
+  .not-found__routes,
+  .not-found__footer {
+    width: min(1180px, 100%);
+    margin-inline: auto;
+  }
+
+  .not-found__folio {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--ink);
+    font-size: .68rem;
+    font-weight: 650;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .not-found__folio span:first-child { color: var(--accent); }
+
+  .not-found__hero {
+    display: grid;
+    grid-template-columns: minmax(20rem, .9fr) minmax(0, 1.1fr);
+    min-height: 31rem;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .not-found__number {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    padding-right: clamp(2rem, 6vw, 6rem);
+    border-right: 1px solid var(--line);
+    color: var(--accent);
+    font-family: var(--editorial-serif);
+    font-size: clamp(8rem, 19vw, 17rem);
+    font-weight: 500;
+    letter-spacing: -.09em;
+    line-height: .75;
+  }
+
+  .not-found__copy {
+    align-self: center;
+    padding: 3.5rem 0 3.5rem clamp(2rem, 7vw, 7rem);
+  }
+
+  .not-found__copy > p {
+    margin: 0 0 1.5rem;
+    color: var(--accent);
+    font-size: .7rem;
+    font-weight: 650;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .not-found h1 {
+    max-width: 12ch;
+    margin: 0;
+    font-family: var(--editorial-serif);
+    font-size: clamp(3rem, 6vw, 6rem);
+    font-weight: 500;
+    letter-spacing: -.055em;
+    line-height: .95;
+  }
+
+  .not-found__description {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2.5rem;
+    color: var(--muted);
+    font-size: .82rem;
+    line-height: 1.7;
+  }
+
+  .not-found__description p { margin: 0; }
+
+  .not-found__routes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .not-found__routes a,
+  .not-found__routes button {
+    display: flex;
+    min-width: 0;
+    min-height: 7rem;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.2rem;
+    border: 0;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    background: transparent;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .not-found__routes > :first-child { border-left: 1px solid var(--line); }
+  .not-found__routes span { color: var(--accent); font: 600 .65rem/1.2 var(--editorial-sans); }
+  .not-found__routes strong { font-family: var(--editorial-serif); font-size: 1.05rem; font-weight: 500; }
+  .not-found__routes a:hover,
+  .not-found__routes a:focus-visible,
+  .not-found__routes button:hover,
+  .not-found__routes button:focus-visible { color: var(--paper); background: var(--ink); outline: 0; }
+
+  .not-found__footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-top: 1.25rem;
+    color: var(--muted);
+    font-size: .65rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .not-found__footer p { margin: 0; }
+
+  @media (max-width: 760px) {
+    .not-found { padding: 2rem 1rem 3rem; }
+    .not-found__hero { grid-template-columns: 1fr; min-height: 0; }
+    .not-found__number { min-height: 14rem; padding: 2rem 0; border-right: 0; border-bottom: 1px solid var(--line); font-size: clamp(8rem, 48vw, 12rem); }
+    .not-found__copy { padding: 2.5rem 0; }
+    .not-found h1 { font-size: clamp(3rem, 15vw, 5rem); }
+    .not-found__description { grid-template-columns: 1fr; gap: 1rem; }
+    .not-found__routes { grid-template-columns: 1fr 1fr; }
+    .not-found__routes > :nth-child(3) { border-left: 1px solid var(--line); }
+    .not-found__footer { display: grid; }
+  }
+</style>

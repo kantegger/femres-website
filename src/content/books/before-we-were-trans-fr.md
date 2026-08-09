@@ -1,0 +1,29 @@
+---
+title: "Avant que nous soyons trans"
+originalTitle: "Before We Were Trans"
+author: "Kit Heyam"
+description: "Kit Heyam conteste les origines modernes, blanches et médicalisées de la diversité de genre, tout en montrant comment écrire une histoire trans sans imposer une identité définitive aux personnes du passé."
+publishDate: 2022-09-13
+isbn: "9781541603080"
+contentLanguage: "en"
+topics: ["Trans Studies","Historical Context","Decolonial Feminism","Gender Diversity","Queer Theory"]
+sourceUrl: "https://www.sealpress.com/titles/dr-kit-heyam-ph-d/before-we-were-trans/9781541603080/"
+coverImage: "https://media.femres.org/images/books/before-we-were-trans.jpg"
+status: "published"
+---
+
+Le titre *Avant que nous soyons trans* ne suggère pas que les personnes trans seraient apparues récemment. Il rappelle que “transgender” possède une histoire moderne particulière et que les personnes du passé ne se comprenaient pas nécessairement par une identité stable, binaire et médicalisée. Kit Heyam refuse deux simplifications : prétendre que la diversité de genre est une invention contemporaine et déclarer rétrospectivement trans, au sens actuel, quiconque franchit une frontière de genre. Le soin historique consiste à préserver des possibilités complexes lorsque les preuves ne permettent pas de trancher une vie.
+
+Le livre voyage de la Venise renaissante et de l’Europe moderne à l’Afrique de l’Ouest, au Japon d’Edo, aux camps d’internement de la Première Guerre mondiale, à l’Amérique du Nord et à l’Asie du Sud. Njinga Mbande gouverne le Ndongo du XVIIe siècle en qualité de roi ; Ahebi Ugbabe acquiert une autorité politique masculine au Nigeria colonial ; l’image royale de Hatshepsut traverse elle aussi les signes du genre. Ces personnes ne peuvent être comprimées dans une seule identité, mais montrent que masculin et féminin se construisent avec souveraineté, héritage, vêtement, administration coloniale et reconnaissance sociale.
+
+Heyam déplace le regard de l’identité stable pour la vie entière vers la mode, la performance et les espaces temporaires. Dans l’Europe moderne, le vêtement pouvait attester un changement de genre social, voire de « sexe », provoquant une panique autour des robes, manteaux et déplacements publics. Le théâtre des camps d’internement de la Première Guerre mondiale a permis à des personnes classées hommes de nouer des relations et de vivre durablement comme femmes ; certaines ont continué après leur libération. Une histoire qui ne cherche que diagnostic, chirurgie ou déclaration explicite perd les possibilités ouvertes par la situation et la pratique.
+
+Un autre fil concerne l’histoire entremêlée de l’homosexualité, de l’expérience trans et des corps intersexes. La médecine et le droit des XIXe et XXe siècles n’ont pas d’abord distingué clairement corps, désir et identité avant de les gérer séparément. Ils ont produit ces frontières en classant l’« anormal ». Le désir pour une personne pouvait servir de preuve d’un autre genre, et la variation corporelle justifier des hiérarchies raciales et sexuelles. Heyam refuse de projeter la taxonomie LGBTQIA+ actuelle en arrière, mais aussi de séparer des histoires ayant partagé institutions et langage.
+
+La méthode a une portée décoloniale. Les colonisateurs européens ont imposé genre binaire, morale sexuelle chrétienne et classification administrative comme normes de civilisation, mal lisant ou supprimant les organisations locales du rôle politique, de la spiritualité, de la parenté et du corps. Dans les passages sur l’Afrique de l’Ouest, l’Amérique du Nord et l’Asie du Sud, la diversité n’est pas collectionnée comme précédent exotique pour l’Occident : il faut d’abord comprendre vocabulaire et pouvoir communautaires. Prouver que « les personnes trans existaient ailleurs » reste colonial si une catégorie occidentale conserve le dernier mot.
+
+Heyam expose franchement la difficulté des sources. Beaucoup viennent des tribunaux, policiers, médecins, missionnaires et administrateurs coloniaux ; elles conservent pourquoi une autorité jugeait quelqu’un dangereux, pas nécessairement ce que la personne ressentait. Une lettre, un vêtement ou un pronom attribué par autrui ne résout pas automatiquement l’identité. Employer « peut-être », plusieurs pronoms et des possibilités ouvertes n’est pas esquiver le jugement, mais pratiquer une éthique du soin : reconnaître le désir contemporain de trouver des ancêtres sans laisser ce besoin politique effacer l’irréductible chez les morts.
+
+Ce n’est pas une histoire mondiale exhaustive : l’autrice choisit des cas pour élargir l’imagination, non construire une encyclopédie. L’échelle géographique crée une profondeur inégale ; certaines personnes n’apparaissent que dans des archives coloniales ou une traduction secondaire. Historiens et communautés autochtones peuvent légitimement contester l’intérêt politique d’inscrire des vies si différentes dans l’« histoire trans ». L’inclusion elle-même peut devenir une nouvelle catégorie totale laissant croire que toutes les personnes non conformes partageaient la même identité intérieure. L’incertitude du livre doit rester méthode.
+
+Pour chaque cas, on peut noter les termes disponibles dans la communauté, les rôles sociaux transformés, l’auteur de la preuve survivante et ce que le cadre trans actuel éclaire ou masque. Il faut ensuite ajouter une histoire des mouvements trans modernes et une histoire du genre écrite par la communauté concernée, afin que le panorama mondial ne soit pas une fin. La lecture de *Reclaiming Two-Spirits* est particulièrement utile : Heyam enseigne la prudence face aux étiquettes rétrospectives ; Smithers montre que nommer relève aussi de la langue et de la souveraineté autochtones. Il ne s’agit pas d’agrandir une armoire d’identités, mais de laisser les vies étrangères demeurer étrangères.

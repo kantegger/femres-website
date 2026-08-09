@@ -1,0 +1,240 @@
+---
+import { getLocalizedPath, type Locale } from "../i18n";
+import { getLanguageName } from "../i18n/languageUtils";
+import { cleanLocalizedSlug } from "../lib/content";
+import { buildDateTitleListingPageData } from "../lib/listingPage";
+import { getTranslatedTopicLabel } from "../lib/listingTopics";
+import CoverImage from "./editorial/CoverImage.astro";
+import FilterRow from "./editorial/FilterRow.astro";
+import IndexShell from "./editorial/IndexShell.astro";
+import Pagination from "./editorial/Pagination.astro";
+import SortSelect from "./editorial/SortSelect.astro";
+
+interface Props {
+  locale: Locale;
+  pathMode: "root" | "locale";
+}
+
+const { locale, pathMode } = Astro.props;
+const data = await buildDateTitleListingPageData({
+  collectionName: "books",
+  locale,
+  url: Astro.url,
+  pathMode,
+  perPage: 12,
+  featuredCount: 1,
+  allTopicLabelKey: "booksPage.topics.all",
+});
+const {
+  t,
+  allTopics,
+  currentTopic,
+  currentSort,
+  currentItems,
+  featuredItems,
+  totalItems,
+  visibleTotal,
+  totalPages,
+  validPage,
+  currentTopicLabel,
+  getListingUrl: getBooksUrl,
+} = data;
+
+const bookLink = (slug: string) =>
+  getLocalizedPath(`books/${cleanLocalizedSlug(slug)}`, locale);
+const cleanVisible = (value: string) => value.replace(/[—–]/g, " - ");
+
+const labels: Record<Locale, {
+  title: string;
+  index: string;
+  filters: string;
+  catalogue: string;
+  sort: string;
+  show: string;
+  hide: string;
+  results: string;
+  previous: string;
+  next: string;
+  noImage: string;
+  by: string;
+  guide: string;
+}> = {
+  "zh-CN": { title: "书籍", index: "女性主义阅读与研究书目", filters: "按话题查找", catalogue: "全部书目", sort: "排序", show: "展开全部话题", hide: "收起话题", results: "本", previous: "上一页", next: "下一页", noImage: "暂无封面", by: "作者", guide: "从哪里开始" },
+  "zh-TW": { title: "書籍", index: "女性主義閱讀與研究書目", filters: "按話題查找", catalogue: "全部書目", sort: "排序", show: "展開全部話題", hide: "收起話題", results: "本", previous: "上一頁", next: "下一頁", noImage: "暫無封面", by: "作者", guide: "從哪裡開始" },
+  en: { title: "Books", index: "A feminist reading and research index", filters: "Browse by topic", catalogue: "The catalogue", sort: "Sort", show: "Show all topics", hide: "Show fewer topics", results: "books", previous: "Previous", next: "Next", noImage: "No cover", by: "By", guide: "Where to begin" },
+  ja: { title: "書籍", index: "フェミニズムの読書・研究目録", filters: "トピックから探す", catalogue: "全書目", sort: "並び順", show: "すべてのトピック", hide: "トピックを閉じる", results: "冊", previous: "前へ", next: "次へ", noImage: "表紙なし", by: "著者", guide: "読み始めるには" },
+  fr: { title: "Livres", index: "Index de lecture et de recherche féministes", filters: "Parcourir par sujet", catalogue: "Le catalogue", sort: "Trier", show: "Tous les sujets", hide: "Réduire les sujets", results: "livres", previous: "Précédent", next: "Suivant", noImage: "Sans couverture", by: "Par", guide: "Par où commencer" },
+};
+const copy = labels[locale];
+
+const topicValues = [
+  { value: "all", label: t("booksPage.topics.all"), href: getBooksUrl({ topic: "all", page: 1 }) },
+  ...allTopics.map((topic) => ({
+    value: topic,
+    label: getTranslatedTopicLabel(topic, locale),
+    href: getBooksUrl({ topic, page: 1 }),
+  })),
+];
+
+const sortOptions = [
+  { value: "date-desc", label: t("booksPage.list.latest") },
+  { value: "date-asc", label: t("booksPage.list.oldest") },
+  { value: "title-asc", label: t("booksPage.list.titleAsc") },
+  { value: "title-desc", label: t("booksPage.list.titleDesc") },
+];
+
+const lead = featuredItems[0];
+---
+
+<IndexShell
+  title={copy.title}
+  tagline={copy.index}
+  intro={cleanVisible(t("booksPage.subtitle"))}
+  stats={[
+    { value: String(totalItems).padStart(3, "0"), label: t("booksPage.stats.totalBooks", { count: totalItems }) },
+    { value: String(allTopics.length).padStart(2, "0"), label: t("booksPage.stats.topicCategories", { count: allTopics.length }) },
+  ]}
+>
+  <FilterRow
+    slot="filters"
+    heading={copy.filters}
+    values={topicValues}
+    currentValue={currentTopic}
+    showLabel={copy.show}
+    hideLabel={copy.hide}
+  />
+
+  <div slot="featured" class="book-heading">
+    <div>
+      <h2>{currentTopic === "all" ? copy.catalogue : currentTopicLabel}</h2>
+      <p>{visibleTotal} {copy.results}</p>
+    </div>
+    <SortSelect
+      id="book-sort-select"
+      label={copy.sort}
+      options={sortOptions}
+      currentValue={currentSort}
+      defaultValue="date-desc"
+    />
+  </div>
+
+  {lead && (
+    <a slot="featured" href={bookLink(lead.id)} class="book-lead">
+      <CoverImage src={lead.data.coverImage} kind="cover" loading="eager">
+        <span slot="placeholder">{copy.noImage}</span>
+      </CoverImage>
+      <div class="book-lead__copy">
+        <span>{lead.data.publishDate.getFullYear()} / {getLanguageName(lead.data.contentLanguage, locale)}</span>
+        <h3>{cleanVisible(lead.data.title)}</h3>
+        {lead.data.originalTitle && lead.data.originalTitle !== lead.data.title && <em>{cleanVisible(lead.data.originalTitle)}</em>}
+        <p><b>{copy.by}</b> {cleanVisible(lead.data.author)}</p>
+        <small>{cleanVisible(lead.data.description)}</small>
+      </div>
+    </a>
+  )}
+
+  {currentItems.length > 0 ? (
+    <div class="book-grid">
+      {currentItems.map((book) => (
+        <a href={bookLink(book.id)} class="book-entry">
+          <CoverImage src={book.data.coverImage} kind="cover">
+            <span slot="placeholder">{copy.noImage}</span>
+          </CoverImage>
+          <div class="book-entry__copy">
+            <span>{book.data.publishDate.getFullYear()} / {getLanguageName(book.data.contentLanguage, locale)}</span>
+            <h3>{cleanVisible(book.data.title)}</h3>
+            {book.data.originalTitle && book.data.originalTitle !== book.data.title && <em>{cleanVisible(book.data.originalTitle)}</em>}
+            <p><b>{copy.by}</b> {cleanVisible(book.data.author)}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  ) : (
+    <div class="book-empty">
+      <h3>{t("booksPage.emptyState.title")}</h3>
+      <p>{t("booksPage.emptyState.description")}</p>
+    </div>
+  )}
+
+  <Pagination
+    slot="pagination"
+    totalPages={totalPages}
+    validPage={validPage}
+    getUrl={(page) => getBooksUrl({ page })}
+    previousLabel={copy.previous}
+    nextLabel={copy.next}
+    navLabel={t("common.pagination.navigation")}
+  />
+
+  <Fragment slot="aside">
+    <h2 class="book-guide__heading">{copy.guide}</h2>
+    <div class="book-guide__grid">
+      <section><h3>{t("booksPage.guide.beginner.title")}</h3><p>{cleanVisible(t("booksPage.guide.beginner.description"))}</p></section>
+      <section><h3>{t("booksPage.guide.deepReading.title")}</h3><p>{cleanVisible(t("booksPage.guide.deepReading.description"))}</p></section>
+      <section><h3>{t("booksPage.guide.discussion.title")}</h3><p>{cleanVisible(t("booksPage.guide.discussion.description"))}</p></section>
+    </div>
+  </Fragment>
+</IndexShell>
+
+<style>
+  .book-heading { display: flex; align-items: end; justify-content: space-between; gap: 40px; margin-bottom: 36px; }
+  .book-heading > div { display: flex; align-items: baseline; gap: 22px; }
+  .book-heading h2 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(48px, 6vw, 82px); font-weight: 600; letter-spacing: -.045em; line-height: 1; }
+  .book-heading p { margin: 0; color: var(--muted); font-size: 11px; white-space: nowrap; }
+
+  .book-lead { display: grid; grid-template-columns: minmax(220px, 360px) 1fr; gap: clamp(36px, 6vw, 90px); padding: clamp(28px, 4vw, 54px); border: 1px solid var(--line); border-bottom: 0; }
+  .book-lead__copy { align-self: center; max-width: 720px; }
+  .book-lead__copy > span { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+  .book-lead__copy h3 { max-width: 18ch; margin: 12px 0 7px; font-family: var(--editorial-serif); font-size: clamp(48px, 6vw, 86px); font-weight: 600; letter-spacing: -.035em; line-height: 1.15; transition: color .2s ease; }
+  .book-lead:hover h3 { color: var(--accent); }
+  .book-lead__copy em { display: block; margin-bottom: 10px; color: var(--muted); font-family: Georgia, serif; font-size: 19px; line-height: 1.35; }
+  .book-lead__copy p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
+  .book-lead__copy p b { color: var(--ink); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+  .book-lead__copy small { display: block; max-width: 62ch; margin-top: 22px; color: var(--muted); font-family: var(--editorial-serif); font-size: 15px; line-height: 1.75; }
+
+  .book-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .book-entry { display: grid; grid-template-rows: auto 1fr; gap: 20px; min-width: 0; padding: 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .book-entry:hover h3 { color: var(--accent); }
+  .book-entry:hover :global(.ed-cover img), .book-lead:hover :global(.ed-cover img) { transform: scale(1.025); }
+  .book-entry__copy > span { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+  .book-entry__copy h3 { margin: 12px 0 7px; font-family: var(--editorial-serif); font-size: clamp(23px, 2.25vw, 34px); font-weight: 600; letter-spacing: -.035em; line-height: 1.15; transition: color .2s ease; }
+  .book-entry__copy em { display: block; margin-bottom: 10px; color: var(--muted); font-family: Georgia, serif; font-size: 14px; line-height: 1.35; }
+  .book-entry__copy p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+  .book-entry__copy p b { color: var(--ink); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+
+  .book-empty { padding: 90px 0; border-block: 1px solid var(--line); text-align: center; }
+  .book-empty h3 { margin: 0 0 14px; font-family: var(--editorial-serif); font-size: 36px; }
+  .book-empty p { margin: 0; color: var(--muted); }
+
+  .book-guide__heading { max-width: 760px; margin: 0 0 54px; font-family: var(--editorial-serif); font-size: clamp(52px, 7vw, 96px); font-weight: 600; letter-spacing: -.055em; line-height: .95; }
+  .book-guide__grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+  .book-guide__grid section { padding: 26px 46px 0 0; }
+  .book-guide__grid section + section { padding-left: 30px; border-left: 1px solid var(--line); }
+  .book-guide__grid h3 { margin: 0 0 14px; color: var(--accent); font-size: 13px; }
+  .book-guide__grid p { margin: 0; color: var(--muted); font-family: var(--editorial-serif); font-size: 17px; line-height: 1.65; }
+
+  @media (max-width: 900px) {
+    .book-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 700px) {
+    .book-heading { display: block; }
+    .book-heading > div { display: block; }
+    .book-heading h2 { font-size: 52px; }
+    .book-heading p { margin-top: 8px; }
+    .book-lead { grid-template-columns: minmax(112px, 42%) 1fr; gap: 20px; padding: 18px 12px; }
+    .book-lead__copy h3 { margin-top: 8px; font-size: clamp(27px, 8vw, 38px); }
+    .book-lead__copy em { font-size: 12px; }
+    .book-lead__copy p { font-size: 11px; }
+    .book-lead__copy small { display: none; }
+    .book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .book-entry { gap: 14px; padding: 12px; }
+    .book-entry__copy h3 { font-size: 22px; }
+    .book-entry__copy em { font-size: 12px; }
+    .book-entry__copy p { font-size: 11px; }
+    .book-guide__heading { margin-bottom: 36px; font-size: 54px; }
+    .book-guide__grid { grid-template-columns: 1fr; }
+    .book-guide__grid section { padding: 24px 0; }
+    .book-guide__grid section + section { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+  }
+</style>

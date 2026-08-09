@@ -1,0 +1,29 @@
+---
+title: "Reconquérir les identités Two-Spirit"
+originalTitle: "Reclaiming Two-Spirits"
+author: "Gregory D. Smithers"
+description: "Gregory D. Smithers retrace la répression, la survie et le renouveau des traditions de genre autochtones, situant la réappropriation moderne de Two-Spirit dans les luttes de langue, de spiritualité et de souveraineté."
+publishDate: 2022-04-26
+isbn: "9780807003466"
+contentLanguage: "en"
+topics: ["Two-Spirit","Indigenous Feminism","Decolonial Feminism","Queer Theory","Indigenous Sovereignty"]
+sourceUrl: "https://www.beacon.org/Reclaiming-Two-Spirits-P1784.aspx"
+coverImage: "https://media.femres.org/images/books/reclaiming-two-spirits.jpg"
+status: "published"
+---
+
+*Reconquérir les identités Two-Spirit* corrige d’abord une idée répandue : Two-Spirit n’est pas une identité uniforme et immémoriale qui remplacerait « LGBTQ+ autochtone ». Ce terme anglais intertribal a été adopté lors d’une rencontre d’Autochtones gays et lesbiennes à Winnipeg en 1990, notamment pour rejeter l’insulte anthropologique coloniale *berdache*, chargée d’histoires d’asservissement et d’abaissement sexuel. Il s’agit d’une création politique et spirituelle moderne qui répond à des traditions beaucoup plus anciennes, mais différentes entre elles. Tenir ensemble ces deux temporalités est le point de départ.
+
+Avant la colonisation européenne, les nations d’Amérique du Nord possédaient leurs propres mots, rôles sociaux et relations spirituelles, parmi lesquels aakíí’skassi, miati, okitcitakwe et bien d’autres. Ils ne désignaient pas tous la même combinaison d’esprits masculin et féminin, ni ne correspondaient directement à gay, trans ou non binaire. Certains concernaient vêtement, travail, mariage, cérémonie, guérison ou parenté particulière. Gregory D. Smithers ramène constamment le lecteur de l’identité abstraite à la différence nationale : Two-Spirit peut permettre une solidarité intertribale sans annuler l’autorité de chaque peuple à se nommer.
+
+La colonne vertébrale historique est l’attaque coloniale contre la souveraineté sexuelle et de genre. Envahisseurs espagnols, missionnaires, administrateurs et pensionnats ont imposé le genre binaire chrétien et le mariage hétérosexuel comme tests de civilisation. Massacre, inquisition, vêtements forcés, division du travail, interdiction des langues et retrait des enfants ont visé les personnes non conformes. Cette discipline n’est pas l’effet secondaire d’un conflit culturel : pour restructurer famille, héritage et autorité politique afin de prendre la terre, l’État colonial devait rendre les corps autochtones classables et gouvernables.
+
+Smithers mobilise écrits coloniaux, archéologie, art, traditions orales et témoignages Two-Spirit actuels pour retrouver les personnes enfouies dans des archives hostiles. Les auteurs coloniaux ont réduit des rôles complexes à des comportements sexuels au moyen de « péché », « déviance » ou *berdache* ; la forme même de l’archive fait donc violence. L’histoire ne peut se contenter d’en extraire des faits. Elle doit demander pourquoi le scripteur a nommé ainsi, quelles voix n’ont pu être conservées et pourquoi le savoir oral ne devrait pas rester subordonné à la validation de l’écrit colonial.
+
+Ce n’est pourtant pas une histoire de destruction à sens unique. Familles et communautés ont mis à l’abri cérémonies, récits, vêtements et connaissance des rôles, les maintenant sous la persécution. À la fin du XXe siècle, des organisateurs Two-Spirit ont relié lutte contre le VIH/sida, rencontres culturelles, renouveau linguistique et réseaux intertribaux. Le nom de 1990 n’a pas inventé une identité à la mode à partir de rien ; il a donné un espace politique commun à des relations survivantes. La reconquête comprend le retour individuel vers une identité niée et le pouvoir des nations de décider appartenance et responsabilité spirituelle ou publique.
+
+Voilà pourquoi l’histoire du genre rejoint la souveraineté. Si l’autorité coloniale a défini les corps normaux, ajouter Two-Spirit à une liste publique ou commerciale de diversité LGBTQ+ ne suffit pas. Terre, eau, langue, cérémonie, éducation et gouvernement tribal déterminent si les traditions peuvent vivre. La participation Two-Spirit à la protection de l’eau et au renouveau culturel n’ajoute pas une question écologique à la politique identitaire. Elle restaure les relations entre corps, territoire et nation que le gouvernement colonial a cherché à rompre.
+
+Une synthèse couvrant des siècles et de nombreuses nations a des limites. Un ouvrage anglophone comprime des savoirs nationaux dans un récit accessible au grand public, tandis que l’abondance des archives coloniales risque de donner trop de place au vocabulaire des agresseurs. L’attention de Smithers aux voix vivantes ne remplace pas les histoires des chercheurs, aînés et auteurs Two-Spirit de chaque nation ; certains savoirs ne sont pas ouverts au public non autochtone. Lire le livre n’autorise pas une personne non autochtone à revendiquer Two-Spirit, ni à imaginer que toute nation précoloniale « vénérait » sans conflit un rôle identique.
+
+Il faut distinguer trois niveaux : les mots et rôles propres à chaque nation ; le nom intertribal Two-Spirit employé depuis 1990 ; les termes LGBTQ+ ou trans qu’une personne peut également choisir aujourd’hui. Ils se chevauchent sans se remplacer. Devant chaque passage colonial, demandons ce que le scripteur voulait gouverner, puis vérifions auprès d’auteurs autochtones et de la nation concernée. *Before We Were Trans* apprend la prudence envers les étiquettes rétrospectives ; les travaux sur la restitution des terres, les pensionnats et le féminisme autochtone donnent le contexte politique. Reconquérir le genre, ce n’est pas ajouter une identité à l’archive, mais rendre aux nations vivantes l’autorité d’interpréter leurs relations vivantes.

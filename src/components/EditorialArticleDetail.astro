@@ -1,0 +1,317 @@
+---
+import type { CollectionEntry } from "astro:content";
+import InteractionButtons from "./InteractionButtons";
+import Discussion from "./Discussion";
+import NewsletterSignup from "./NewsletterSignup.astro";
+import SupportPromo from "./SupportPromo.astro";
+import { createT, getLocalizedPath, type Locale } from "../i18n/index";
+import { encodeTopicForUrl, getTopicTranslation } from "../i18n/topicsUtils";
+import { buildCollectionDetailView, cleanLocalizedSlug } from "../lib/content";
+import { getLocaleDateLocale } from "../lib/localeDetails";
+import { getDiscussionCopy } from "../lib/discussionCopy";
+
+interface Props {
+  article: CollectionEntry<"articles">;
+  allArticles: CollectionEntry<"articles">[];
+  locale: Locale;
+}
+
+const { article, allArticles, locale } = Astro.props;
+const t = createT(locale);
+const { Content, relatedEntries } = await buildCollectionDetailView(article, allArticles, 3);
+
+const homeLink = getLocalizedPath("", locale);
+const articlesLink = getLocalizedPath("articles", locale);
+const articleLink = (slug: string) => getLocalizedPath(`articles/${cleanLocalizedSlug(slug)}`, locale);
+const topicLink = (topic: string) => getLocalizedPath(`topics/${encodeTopicForUrl(topic)}`, locale);
+const formatDate = (date: Date) => date.toLocaleDateString(getLocaleDateLocale(locale), {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const labels: Record<Locale, {
+  section: string;
+  standfirst: string;
+  essay: string;
+  filed: string;
+  source: string;
+  sourceAction: string;
+  related: string;
+  next: string;
+  noImage: string;
+  discussion: string;
+  discussionDescription: string;
+  support: string;
+  by: string;
+  author: string;
+  published: string;
+  readingTime: string;
+}> = {
+  "zh-CN": { section: "评论", standfirst: "摘要", essay: "文章解析", filed: "文章档案", source: "原始出处", sourceAction: "阅读原文", related: "继续追踪这个议题", next: "延伸阅读", noImage: "暂无题图", discussion: "读者来信", discussionDescription: "回应这篇文章，或补充一条值得纳入讨论的资料。", support: "支持 FemRes", by: "作者", author: "作者", published: "发布", readingTime: "阅读时间" },
+  "zh-TW": { section: "評論", standfirst: "摘要", essay: "文章解析", filed: "文章檔案", source: "原始出處", sourceAction: "閱讀原文", related: "繼續追蹤這個議題", next: "延伸閱讀", noImage: "暫無題圖", discussion: "讀者來信", discussionDescription: "回應這篇文章，或補充一條值得納入討論的資料。", support: "支持 FemRes", by: "作者", author: "作者", published: "發布", readingTime: "閱讀時間" },
+  en: { section: "Commentary", standfirst: "Standfirst", essay: "Article analysis", filed: "Article file", source: "Original source", sourceAction: "Read the original", related: "Continue following this issue", next: "Further reading", noImage: "No lead image", discussion: "Letters from readers", discussionDescription: "Respond to this article or add a source that belongs in the discussion.", support: "Support FemRes", by: "By", author: "Author", published: "Published", readingTime: "Reading time" },
+  ja: { section: "論考", standfirst: "要旨", essay: "記事解析", filed: "記事資料", source: "原典", sourceAction: "原文を読む", related: "この論点を追う", next: "あわせて読む", noImage: "画像なし", discussion: "読者からの手紙", discussionDescription: "この記事への応答や、議論に加えるべき資料を共有してください。", support: "FemResを支援", by: "執筆", author: "著者", published: "公開", readingTime: "読了時間" },
+  fr: { section: "Commentaire", standfirst: "Chapô", essay: "Analyse de l'article", filed: "Fiche de l'article", source: "Source originale", sourceAction: "Lire l'original", related: "Poursuivre cette question", next: "Pour aller plus loin", noImage: "Sans image", discussion: "Courrier des lecteurs", discussionDescription: "Répondez à cet article ou ajoutez une source utile au débat.", support: "Soutenir FemRes", by: "Par", author: "Auteur", published: "Publication", readingTime: "Temps de lecture" },
+};
+const copy = labels[locale];
+const kicker = article.data.topics[0]
+  ? `${getTopicTranslation(article.data.topics[0], locale)} · ${copy.section}`
+  : copy.section;
+---
+
+<article class="article-reading">
+  <div class="article-reading__rail">
+    <nav class="article-breadcrumb" aria-label={t("common.breadcrumb")}>
+      <a href={homeLink}>{t("nav.home")}</a>
+      <span aria-hidden="true">/</span>
+      <a href={articlesLink}>{t("nav.articles")}</a>
+      <span aria-hidden="true">/</span>
+      <span>{article.data.title}</span>
+    </nav>
+
+    <header class="article-hero">
+      <div class="article-hero__title">
+        <p class="article-kicker">{kicker}</p>
+        <h1>{article.data.title}</h1>
+      </div>
+      <div class="article-hero__byline">
+        <span>{copy.by}</span>
+        <strong>{article.data.author}</strong>
+        <time datetime={article.data.publishDate.toISOString()}>{formatDate(article.data.publishDate)}</time>
+        {article.data.readingTime && <small>{t("common.readTimeFormat", { time: article.data.readingTime })}</small>}
+      </div>
+      <div class="article-standfirst">
+        <span>{copy.standfirst}</span>
+        <p>{article.data.description}</p>
+      </div>
+    </header>
+
+    {article.data.editorialImage && (
+      <figure class="article-editorial-image">
+        <img
+          src={article.data.editorialImage}
+          alt={article.data.editorialImageAlt || ""}
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+        {article.data.editorialImageCredit && <figcaption>{article.data.editorialImageCredit}</figcaption>}
+      </figure>
+    )}
+
+    <div class="article-actions">
+      <span>FemRes / {formatDate(article.data.publishDate)}</span>
+      <InteractionButtons
+        contentId={`article-${article.id}`}
+        contentType="article"
+        className="editorial-interactions"
+        client:visible
+        t={{
+          like: t("interactions.like"),
+          unlike: t("interactions.unlike"),
+          bookmark: t("interactions.bookmark"),
+          unbookmark: t("interactions.unbookmark"),
+          loginToInteract: t("interactions.loginToInteract"),
+        }}
+      />
+    </div>
+
+    <div class="article-reading__body">
+      <main class="article-essay">
+        <div class="article-section-heading">
+          <span>01</span>
+          <h2>{copy.essay}</h2>
+        </div>
+        <div class="article-prose" lang={locale}>
+          <Content />
+        </div>
+      </main>
+
+      <aside class="article-marginalia">
+        <section>
+          <h2>{copy.filed}</h2>
+          <dl>
+            <div><dt>{copy.author}</dt><dd>{article.data.author}</dd></div>
+            <div><dt>{copy.published}</dt><dd>{formatDate(article.data.publishDate)}</dd></div>
+            {article.data.readingTime && <div><dt>{copy.readingTime}</dt><dd>{t("common.readTimeFormat", { time: article.data.readingTime })}</dd></div>}
+          </dl>
+        </section>
+
+        <section>
+          <h2>{t("common.topics")}</h2>
+          <div class="article-topics">
+            {article.data.topics.map((topic) => <a href={topicLink(topic)}>{getTopicTranslation(topic, locale)}</a>)}
+          </div>
+        </section>
+
+        <section>
+          <h2>{copy.source}</h2>
+          {article.data.featuredImage && (
+            <a
+              class="article-source-preview"
+              href={article.data.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${copy.sourceAction}: ${article.data.title}`}
+            >
+              <img src={article.data.featuredImage} alt="" loading="lazy" decoding="async" />
+            </a>
+          )}
+          <a class="article-source" href={article.data.sourceUrl} target="_blank" rel="noopener noreferrer">
+            <span>{copy.sourceAction}</span><strong aria-hidden="true">↗</strong>
+          </a>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  {relatedEntries.length > 0 && (
+    <section class="article-related" aria-labelledby="article-related-title">
+      <div class="article-related__heading">
+        <span>02</span>
+        <h2 id="article-related-title">{copy.related}</h2>
+      </div>
+      <div class="article-related__grid">
+        {relatedEntries.map((related, index) => (
+          <a href={articleLink(related.id)} class="article-related__item">
+            <span class="article-related__number">0{index + 1}</span>
+            <div>
+              <span>{copy.next} / {formatDate(related.data.publishDate)}</span>
+              <h3>{related.data.title}</h3>
+              <p>{related.data.author}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <div class="article-reading__community">
+    <NewsletterSignup
+      title={t("newsletter.title")}
+      description={t("newsletter.description")}
+      emailPlaceholder={t("auth.emailPlaceholder")}
+      buttonLabel={t("common.subscribe")}
+      source="article_detail"
+      successMessage={t("newsletter.success")}
+      errorMessage={t("newsletter.error")}
+      genericErrorMessage={t("newsletter.genericError")}
+    />
+
+    <Discussion
+      contentId={`article-${article.id}`}
+      contentType="article"
+      locale={locale}
+      copy={getDiscussionCopy(locale, "article", copy.discussion, copy.discussionDescription)}
+      className="editorial-discussion"
+      variant="editorial"
+      client:visible
+    />
+
+    <SupportPromo
+      title={t("common.support")}
+      message={t("common.supportMessage")}
+      buttonLabel={copy.support}
+    />
+  </div>
+</article>
+
+<style>
+  .article-reading {
+    color: var(--ink);
+    background: var(--paper);
+    font-family: var(--editorial-sans);
+  }
+
+  .article-reading__rail, .article-reading__community { width: min(100% - var(--editorial-canvas-gutter), var(--editorial-canvas-width)); margin-inline: auto; }
+  .article-breadcrumb { display: flex; gap: 10px; align-items: center; padding: 22px 0 18px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .article-breadcrumb a:hover { color: var(--accent); }
+  .article-breadcrumb span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .article-hero { display: grid; grid-template-columns: minmax(0, 8fr) minmax(220px, 3fr); gap: 30px clamp(48px, 8vw, 110px); padding: clamp(48px, 7vw, 90px) 0 48px; }
+  .article-kicker { margin: 0 0 24px; color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+  .article-hero h1 { max-width: 14ch; margin: 0; font-family: var(--editorial-serif); font-size: clamp(54px, 7.3vw, 108px); font-weight: 700; letter-spacing: -.055em; line-height: .98; }
+  .article-hero__byline { align-self: end; padding: 18px 0 2px; border-top: 2px solid var(--ink); }
+  .article-hero__byline span { display: block; color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .article-hero__byline strong { display: block; margin-top: 12px; font-family: var(--editorial-serif); font-size: 18px; line-height: 1.45; }
+  .article-hero__byline time, .article-hero__byline small { display: block; margin-top: 9px; color: var(--muted); font-size: 11px; }
+  .article-standfirst { grid-column: 1; display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 18px; max-width: 820px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .article-standfirst > span { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .article-standfirst p { margin: 0; font-family: var(--editorial-serif); font-size: clamp(19px, 2vw, 27px); line-height: 1.65; }
+
+  .article-editorial-image { margin: 0 0 16px; }
+  .article-editorial-image img { display: block; width: 100%; height: auto; max-height: 720px; object-fit: contain; object-position: left center; }
+  .article-editorial-image figcaption { padding: 10px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 10px; line-height: 1.5; }
+  .article-actions { display: flex; justify-content: space-between; gap: 24px; align-items: center; margin-bottom: clamp(70px, 8vw, 108px); padding: 14px 0; border-block: 1px solid var(--line); color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  :global(.editorial-interactions) { gap: 22px; }
+  :global(.editorial-interactions button) { color: var(--ink); }
+
+  .article-reading__body { display: grid; grid-template-columns: minmax(0, 2fr) minmax(250px, 1fr); gap: clamp(52px, 8vw, 116px); padding-bottom: 104px; }
+  .article-section-heading, .article-related__heading { display: flex; gap: 20px; align-items: baseline; padding-top: 18px; border-top: 2px solid var(--ink); }
+  .article-section-heading span, .article-related__heading span { color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .12em; }
+  .article-section-heading h2, .article-related__heading h2 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(30px, 4vw, 54px); line-height: 1.05; }
+  .article-prose { max-width: none; margin-top: 46px; font-family: var(--editorial-serif); font-size: 18px; line-height: 1.95; text-align: justify; text-justify: auto; hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+  .article-prose :global(p) { margin: 0 0 1.65em; }
+  .article-prose :global(p:first-child::first-letter) { float: left; margin: .08em .12em 0 0; color: var(--accent); font-size: 4.2em; font-weight: 700; line-height: .75; }
+  .article-prose :global(h2), .article-prose :global(h3) { margin: 2em 0 .7em; font-family: var(--editorial-serif); line-height: 1.25; }
+  .article-prose :global(a) { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .article-prose :global(blockquote) { margin: 2.2em 0; padding: 8px 0 8px 28px; border-left: 3px solid var(--accent); font-size: 1.2em; font-style: italic; }
+  .article-prose :global(img) { width: 100%; margin: 2.4em 0; }
+
+  .article-marginalia { padding-top: 2px; }
+  .article-marginalia section { padding: 20px 0 28px; border-top: 1px solid var(--line); }
+  .article-marginalia h2 { margin: 0 0 18px; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .article-marginalia dl { margin: 0; }
+  .article-marginalia dl > div { display: grid; grid-template-columns: 92px 1fr; gap: 14px; padding: 8px 0; align-items: baseline; }
+  .article-marginalia dt { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .article-marginalia dd { margin: 0; font-family: var(--editorial-serif); font-size: 14px; line-height: 1.55; }
+  .article-topics { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .article-topics a { padding-bottom: 3px; border-bottom: 1px solid var(--line); font-family: var(--editorial-serif); font-size: 14px; }
+  .article-topics a:hover { color: var(--accent); border-color: var(--accent); }
+  .article-source { display: flex; justify-content: space-between; gap: 24px; padding: 13px 0; border-block: 1px solid var(--ink); font-size: 13px; }
+  .article-source:hover { color: var(--accent); }
+  .article-source-preview { display: grid; width: 100%; min-height: 54px; margin-bottom: 12px; place-items: start; overflow: hidden; background: var(--paper-deep); }
+  .article-source-preview img { display: block; width: auto; max-width: 100%; height: auto; max-height: 140px; object-fit: contain; object-position: left top; filter: saturate(.72) contrast(1.02); transition: filter .2s ease; }
+  .article-source-preview:hover img { filter: saturate(1) contrast(1); }
+
+  .article-related { padding: clamp(58px, 8vw, 108px) max(20px, calc((100vw - var(--editorial-canvas-width)) / 2)); color: #f4f0e8; background: #171614; }
+  .article-related__heading { border-color: #f4f0e8; }
+  .article-related__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 44px; border-top: 1px solid #4a4641; }
+  .article-related__item { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 18px; align-content: start; min-height: 230px; padding: 22px 22px 24px 0; border-bottom: 1px solid #4a4641; }
+  .article-related__item + .article-related__item { padding-left: 22px; border-left: 1px solid #4a4641; }
+  .article-related__number { color: #ff514b; font-size: 10px; font-weight: 800; letter-spacing: .1em; }
+  .article-related__item > div { grid-column: 2; }
+  .article-related__item > div > span { color: #aaa39a; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .article-related__item h3 { margin: 10px 0 8px; font-family: var(--editorial-serif); font-size: 21px; line-height: 1.25; transition: color .2s ease; }
+  .article-related__item:hover h3 { color: #ff514b; }
+  .article-related__item p { margin: 0; color: #aaa39a; font-size: 11px; }
+
+  .article-reading__community { padding: 4px 0 96px; }
+  :global(.editorial-discussion) { font-family: var(--editorial-sans); }
+  :global(.editorial-discussion > h2) { font-family: var(--editorial-serif); font-size: clamp(30px, 4vw, 48px); }
+
+  @media (max-width: 900px) {
+    .article-hero { grid-template-columns: minmax(0, 1fr) 220px; gap: 30px 44px; }
+    .article-reading__body { grid-template-columns: minmax(0, 1fr) 250px; gap: 44px; }
+  }
+  @media (max-width: 700px) {
+    .article-reading__rail, .article-reading__community { width: calc(100% - var(--editorial-mobile-gutter)); }
+    .article-breadcrumb { padding-top: 16px; }
+    .article-hero { grid-template-columns: 1fr; padding: 34px 0 30px; }
+    .article-kicker { margin-bottom: 16px; }
+    .article-hero h1 { max-width: none; font-size: clamp(44px, 14vw, 70px); }
+    .article-hero__byline { grid-row: 3; }
+    .article-standfirst { grid-column: 1; grid-template-columns: 1fr; padding-top: 18px; }
+    .article-standfirst p { font-size: 18px; line-height: 1.72; }
+    .article-actions { align-items: flex-start; margin-bottom: 70px; }
+    .article-reading__body { grid-template-columns: 1fr; gap: 66px; padding-bottom: 72px; }
+    .article-marginalia { order: -1; }
+    .article-marginalia section:first-child { border-top: 2px solid var(--ink); }
+    .article-section-heading { gap: 14px; }
+    .article-prose { margin-top: 34px; font-size: 17px; line-height: 1.9; }
+    .article-related { padding-inline: 12px; }
+    .article-related__grid { grid-template-columns: 1fr; }
+    .article-related__item, .article-related__item + .article-related__item { grid-template-columns: 32px minmax(0, 1fr); min-height: 0; padding: 18px 0 22px; border-left: 0; }
+  }
+</style>

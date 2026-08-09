@@ -1,0 +1,19 @@
+---
+import EditorialNotFound from "../../components/EditorialNotFound.astro";
+import { createT } from "../../i18n";
+import { isSupportedDetailLocale } from "../../lib/localeDetails";
+
+const { locale } = Astro.params;
+if (!isSupportedDetailLocale(locale)) return Astro.redirect("/404");
+const currentLocale = locale;
+const t = createT(currentLocale);
+---
+
+<EditorialNotFound
+  locale={currentLocale}
+  title={t("errorPage.title")}
+  message={t("errorPage.message")}
+  backHome={t("errorPage.backHome")}
+  goBack={t("errorPage.goBack")}
+  tagline={t("errorPage.tagline")}
+/>

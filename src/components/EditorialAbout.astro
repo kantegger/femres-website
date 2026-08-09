@@ -1,0 +1,169 @@
+---
+import { createT, getLocalizedPath, getTranslationValue, type Locale } from "../i18n";
+import { getPublishedCollectionEntries } from "../lib/content";
+import { EDITORIAL_CONTENT_TYPE_ORDER } from "../lib/contentTypeOrder";
+import CoverImage from "./editorial/CoverImage.astro";
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = createT(locale);
+
+const [shelfBooks, shelfFilms] = await Promise.all([
+  getPublishedCollectionEntries("books", locale),
+  getPublishedCollectionEntries("films", locale),
+]);
+const shelf = [
+  ...shelfBooks
+    .filter((book) => book.data.coverImage)
+    .slice(0, 4)
+    .map((book) => ({ src: book.data.coverImage as string, kind: "cover" as const })),
+  ...shelfFilms
+    .filter((film) => film.data.posterImage)
+    .slice(0, 3)
+    .map((film) => ({ src: film.data.posterImage as string, kind: "poster" as const })),
+];
+
+const getStringList = (key: string): string[] => {
+  const value = getTranslationValue(locale, key);
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+};
+
+const values = ["genderEquality", "intersectionality", "knowledgeEmpowerment", "openInclusion"];
+const features = ["smartAggregation", "preciseClassification", "diverseContent"];
+const contentTypeDetails = {
+  book: ["books", "books"],
+  film: ["films", "films"],
+  video: ["videos", "videos"],
+  podcast: ["podcasts", "podcasts"],
+  article: ["articles", "articles"],
+  paper: ["papers", "papers"],
+} as const;
+const contentTypes = EDITORIAL_CONTENT_TYPE_ORDER.map((type) => contentTypeDetails[type]);
+const topics = [
+  "workplaceEquality", "bodilyAutonomy", "educationRights", "politicalParticipation",
+  "familyRoles", "genderViolence", "mediaRepresentation", "historicalFigures",
+];
+
+const copy: Record<Locale, { statement:string; method:string; scope:string; principles:string; source:string; sourceDeck:string; license:string; audit:string; participate:string; code:string; trust:string; }> = {
+  "zh-CN": { statement:"一份持续生长的女性主义公共档案", method:"我们如何工作", scope:"内容坐标", principles:"共同维护的原则", source:"公开的基础设施", sourceDeck:"FemRes 的代码与编辑方法持续公开，让知识平台本身也可以被检查、修正与共同建设。", license:"MIT 开源许可", audit:"代码公开可审计", participate:"参与共同建设", code:"代码", trust:"信任" },
+  "zh-TW": { statement:"一份持續生長的女性主義公共檔案", method:"我們如何工作", scope:"內容座標", principles:"共同維護的原則", source:"公開的基礎設施", sourceDeck:"FemRes 的程式碼與編輯方法持續公開，讓知識平台本身也可以被檢查、修正與共同建設。", license:"MIT 開源授權", audit:"程式碼公開可稽核", participate:"參與共同建設", code:"程式碼", trust:"信任" },
+  en: { statement:"A living public archive of feminist knowledge", method:"How we work", scope:"Editorial coordinates", principles:"Principles we maintain together", source:"Open infrastructure", sourceDeck:"FemRes keeps its code and editorial method open so the platform itself can be inspected, corrected, and built collectively.", license:"MIT licensed", audit:"Publicly auditable", participate:"Build it with us", code:"Code", trust:"Trust" },
+  ja: { statement:"成長し続けるフェミニズムの公共アーカイブ", method:"私たちの方法", scope:"コンテンツの座標", principles:"共に守る原則", source:"開かれた基盤", sourceDeck:"FemRes はコードと編集方法を公開し、プラットフォーム自体を検証し、修正し、共につくれる状態に保ちます。", license:"MIT ライセンス", audit:"公開監査可能", participate:"共につくる", code:"コード", trust:"信頼" },
+  fr: { statement:"Une archive publique et vivante des savoirs féministes", method:"Notre méthode", scope:"Coordonnées éditoriales", principles:"Principes entretenus ensemble", source:"Une infrastructure ouverte", sourceDeck:"FemRes garde son code et sa méthode éditoriale ouverts afin que la plateforme puisse être examinée, corrigée et construite collectivement.", license:"Licence MIT", audit:"Code publiquement vérifiable", participate:"Construire avec nous", code:"Code", trust:"Confiance" },
+};
+const labels = copy[locale];
+---
+
+<main class="institution institution--about">
+  <header class="institution-hero">
+    <p class="institution-hero__index">FemRes / 01</p>
+    <h1>{t("about.title")}</h1>
+    <div class="institution-hero__deck">
+      <strong>{labels.statement}</strong>
+      <p>{t("about.subtitle")}</p>
+    </div>
+  </header>
+
+  <div class="shelf" aria-hidden="true">
+    {shelf.map((item) => (
+      <CoverImage src={item.src} kind={item.kind} />
+    ))}
+  </div>
+
+  <section class="mission" aria-labelledby="mission-title">
+    <div class="section-number">01</div>
+    <div class="mission__title">
+      <h2 id="mission-title">{t("about.mission.title")}</h2>
+      <p>{t("about.mission.values")}</p>
+    </div>
+    <div class="mission__copy">
+      <p>{t("about.mission.description1")}</p>
+      <p>{t("about.mission.description2")}</p>
+      <dl>
+        <div><dt>{t("about.mission.globalPerspective")}</dt><dd>{t("about.mission.globalDescription")}</dd></div>
+        <div><dt>{t("about.mission.curatedContent")}</dt><dd>{t("about.mission.curatedDescription")}</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="principles" aria-labelledby="principles-title">
+    <header class="section-heading"><span>02</span><h2 id="principles-title">{t("about.coreValues.title")}</h2><p>{labels.principles}</p></header>
+    <div class="principle-list">
+      {values.map((value, index) => (
+        <article>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <h3>{t(`about.coreValues.${value}.title`)}</h3>
+          <p>{t(`about.coreValues.${value}.description`)}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="method" aria-labelledby="method-title">
+    <header class="section-heading"><span>03</span><h2 id="method-title">{labels.method}</h2><p>{t("about.features.subtitle")}</p></header>
+    <div class="method-grid">
+      {features.map((feature, index) => (
+        <article>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <h3>{t(`about.features.${feature}.title`)}</h3>
+          <p>{t(`about.features.${feature}.description`)}</p>
+          <ul>{getStringList(`about.features.${feature}.features`).map((item) => <li>{item}</li>)}</ul>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="scope" aria-labelledby="scope-title">
+    <header class="section-heading"><span>04</span><h2 id="scope-title">{labels.scope}</h2><p>{t("about.contentTypes.subtitle")}</p></header>
+    <div class="medium-index">
+      {contentTypes.map(([key, path], index) => (
+        <a href={getLocalizedPath(path, locale)}>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <strong>{t(`about.contentTypes.${key}.title`)}</strong>
+          <small>{t(`about.contentTypes.${key}.description`)}</small>
+        </a>
+      ))}
+    </div>
+    <div class="topic-index">
+      {topics.map((topic, index) => (
+        <article><span>{String(index + 1).padStart(2, "0")}</span><h3>{t(`about.coreTopics.${topic}.title`)}</h3><p>{t(`about.coreTopics.${topic}.description`)}</p></article>
+      ))}
+    </div>
+  </section>
+
+  <section class="team" aria-labelledby="team-title">
+    <div class="team__intro"><span>05</span><h2 id="team-title">{t("about.team.title")}</h2><p>{t("about.team.description")}</p></div>
+    <dl>
+      {(["openSource", "communityDriven", "nonProfit"] as const).map((item, index) => (
+        <div><dt><span>{String(index + 1).padStart(2, "0")}</span>{t(`about.team.${item}.title`)}</dt><dd>{t(`about.team.${item}.description`)}</dd></div>
+      ))}
+    </dl>
+  </section>
+
+  <section class="open-source" aria-labelledby="source-title">
+    <div><span>06</span><h2 id="source-title">{labels.source}</h2><p>{labels.sourceDeck}</p></div>
+    <dl><div><dt>{labels.license}</dt><dd>{labels.code}</dd></div><div><dt>{labels.audit}</dt><dd>{labels.trust}</dd></div></dl>
+    <a href="https://github.com/kantegger/femres" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+  </section>
+
+  <aside class="institution-cta">
+    <div><h2>{t("about.joinUs.title")}</h2><p>{t("about.joinUs.description")}</p></div>
+    <nav><a class="primary" href={getLocalizedPath("contribute", locale)}>{labels.participate}</a><a href={getLocalizedPath("contact", locale)}>{t("footer.links.contact")}</a></nav>
+  </aside>
+</main>
+
+<style>
+  .institution{--deep:#eee9e0;min-height:100dvh;padding-bottom:80px;color:var(--ink);background:var(--paper);font-family:var(--editorial-sans)}.institution>:is(header,section,aside,.shelf){width:min(100% - var(--editorial-canvas-gutter),var(--editorial-canvas-width));margin-inline:auto}:global(.dark) .institution{--deep:#22201d}
+  .shelf{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:18px;padding:36px 0 54px;border-bottom:2px solid var(--ink)}.shelf :global(.ed-cover){box-shadow:0 12px 28px rgba(23,22,20,.1)}
+  .institution-hero{display:grid;grid-template-columns:120px 1.2fr .65fr;gap:36px;align-items:end;padding:56px 0 48px;border-bottom:2px solid var(--ink)}.institution-hero__index{align-self:start;margin:10px 0 0;color:var(--accent);font:12px/1.4 Georgia,serif}.institution-hero h1{margin:0;font-family:var(--editorial-serif);font-size:clamp(76px,9vw,132px);font-weight:600;letter-spacing:-.075em;line-height:.82}.institution-hero__deck{padding-left:26px;border-left:1px solid var(--line)}.institution-hero__deck strong{display:block;font-family:var(--editorial-serif);font-size:22px;line-height:1.35}.institution-hero__deck p{margin:20px 0 0;color:var(--muted);font-size:14px;line-height:1.7}
+  .mission{display:grid;grid-template-columns:90px .7fr 1.1fr;gap:30px;padding:68px 0;border-bottom:1px solid var(--line)}.section-number,.section-heading>span,.team__intro>span,.open-source>div>span{color:var(--accent);font:12px/1.4 Georgia,serif}.mission h2,.section-heading h2,.team h2,.open-source h2,.institution-cta h2{margin:0;font-family:var(--editorial-serif);font-weight:600;letter-spacing:-.05em}.mission h2{font-size:clamp(48px,5.5vw,72px);line-height:.95}.mission__title>p{margin:24px 0 0;color:var(--accent);font-family:var(--editorial-serif);font-size:19px}.mission__copy>p{margin:0 0 22px;font-family:var(--editorial-serif);font-size:17px;line-height:1.8}.mission__copy dl{display:grid;grid-template-columns:repeat(2,1fr);margin:38px 0 0;border-top:1px solid var(--line)}.mission__copy dl div{padding:18px 18px 0 0;border-right:1px solid var(--line)}.mission__copy dt{font-weight:700;font-size:12px}.mission__copy dd{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.6}
+  .section-heading{display:grid;grid-template-columns:90px 1fr .65fr;gap:30px;align-items:end;padding:76px 0 34px}.section-heading h2{font-size:clamp(54px,7vw,94px);line-height:.9}.section-heading p{margin:0 0 8px;color:var(--muted);font-family:var(--editorial-serif);font-size:15px;line-height:1.6}
+  .principle-list{border-top:2px solid var(--ink)}.principle-list article{display:grid;grid-template-columns:90px .65fr 1.2fr;gap:30px;align-items:start;padding:25px 0;border-bottom:1px solid var(--line)}.principle-list span,.method-grid>article>span,.topic-index span{color:var(--accent);font:11px/1.4 Georgia,serif}.principle-list h3,.method-grid h3,.topic-index h3{margin:0;font-family:var(--editorial-serif);font-size:27px;font-weight:600}.principle-list p,.method-grid p,.topic-index p{margin:0;color:var(--muted);font-family:var(--editorial-serif);font-size:14px;line-height:1.7}
+  .method-grid{display:grid;grid-template-columns:repeat(3,1fr);border-block:2px solid var(--ink)}.method-grid article{padding:24px 28px 36px 0;border-right:1px solid var(--line)}.method-grid article+article{padding-left:28px}.method-grid h3{margin-top:32px;font-size:30px}.method-grid p{min-height:74px;margin-top:16px}.method-grid ul{margin:28px 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}.method-grid li{padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .medium-index{display:grid;grid-template-columns:repeat(3,1fr);border-block:2px solid var(--ink)}.medium-index a{display:grid;gap:8px;padding:24px;border-right:1px solid var(--line)}.medium-index a:nth-child(n+4){border-top:1px solid var(--line)}.medium-index a:hover{color:var(--paper);background:var(--ink)}.medium-index span{color:var(--muted);font-size:11px}.medium-index strong{font-family:var(--editorial-serif);font-size:26px;font-weight:600}.medium-index small{color:var(--muted);font-size:13px;line-height:1.55}.medium-index a:hover span,.medium-index a:hover small{color:color-mix(in srgb,var(--paper) 65%,transparent)}.topic-index{display:grid;grid-template-columns:repeat(2,1fr);margin-top:56px;border-top:1px solid var(--line)}.topic-index article{display:grid;grid-template-columns:36px .65fr 1fr;gap:18px;padding:20px 20px 20px 0;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.topic-index h3{font-size:18px}.topic-index p{font-size:13px}
+  .team{display:grid;grid-template-columns:1fr 1fr;gap:70px;margin-top:82px;padding:56px 0;border-block:2px solid var(--ink)}.team__intro{display:grid;grid-template-columns:50px 1fr}.team h2{font-size:clamp(52px,6vw,78px);line-height:.95}.team__intro p{grid-column:2;margin:26px 0 0;font-family:var(--editorial-serif);font-size:16px;line-height:1.75}.team dl{margin:0}.team dl div{display:grid;grid-template-columns:.75fr 1fr;gap:20px;padding:18px 0;border-bottom:1px solid var(--line)}.team dt{font-family:var(--editorial-serif);font-size:18px;font-weight:600}.team dt span{display:inline-block;width:34px;color:var(--accent);font:11px Georgia,serif}.team dd{margin:0;color:var(--muted);font-size:13px;line-height:1.65}
+  .open-source{display:grid;grid-template-columns:1.2fr .7fr auto;gap:55px;align-items:end;padding:68px 0}.open-source>div{display:grid;grid-template-columns:50px 1fr}.open-source h2{font-size:clamp(44px,5vw,70px);line-height:.95}.open-source p{grid-column:2;margin:22px 0 0;color:var(--muted);font-family:var(--editorial-serif);font-size:14px;line-height:1.7}.open-source dl{display:grid;grid-template-columns:repeat(2,1fr);margin:0;border-top:1px solid var(--line)}.open-source dl div{padding:15px 20px 0 0;border-right:1px solid var(--line)}.open-source dt{font-size:11px;font-weight:700}.open-source dd{margin:5px 0 0;color:var(--muted);font-size:13px}.open-source>a,.institution-cta a{padding:11px 0;border-bottom:1px solid var(--accent);font-size:11px;font-weight:700}.open-source>a{color:var(--accent)}
+  .institution-cta{display:grid;grid-template-columns:1.1fr .7fr;gap:70px;align-items:end;padding:54px 0;border-block:2px solid var(--ink)}.institution-cta h2{font-size:clamp(48px,6vw,82px);line-height:.95}.institution-cta p{max-width:700px;margin:20px 0 0;color:var(--muted);font-family:var(--editorial-serif);font-size:15px;line-height:1.7}.institution-cta nav{display:flex;justify-content:flex-end;gap:28px}.institution-cta .primary{color:var(--accent)}
+  @media(max-width:900px){.institution-hero{grid-template-columns:70px 1fr}.institution-hero__deck{grid-column:2}.shelf{grid-template-columns:repeat(5,minmax(0,1fr))}.shelf>:nth-child(n+6){display:none}.mission{grid-template-columns:60px 1fr}.mission__copy{grid-column:2}.section-heading{grid-template-columns:60px 1fr}.section-heading p{grid-column:2}.principle-list article{grid-template-columns:60px .7fr 1fr}.topic-index,.team,.institution-cta{grid-template-columns:1fr}.open-source{grid-template-columns:1fr 1fr}.open-source>a{grid-column:2}.institution-cta nav{justify-content:flex-start}}
+  @media(max-width:650px){.institution>:is(header,section,aside,.shelf){width:calc(100% - 24px)}.institution-hero{grid-template-columns:1fr;padding:50px 0 38px}.institution-hero__index{margin:0}.institution-hero h1{font-size:68px}.institution-hero__deck{grid-column:1;padding:22px 0 0;border-left:0;border-top:1px solid var(--line)}.shelf{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:28px 0 40px}.shelf>:nth-child(n+4){display:none}.mission{grid-template-columns:1fr;gap:20px;padding:48px 0}.mission__copy{grid-column:1}.mission__copy>p{font-size:15px}.section-heading{display:block;padding:56px 0 26px}.section-heading h2{margin-top:18px;font-size:52px}.section-heading p{margin-top:18px}.principle-list article{grid-template-columns:34px 1fr}.principle-list p{grid-column:2;margin-top:10px}.method-grid{grid-template-columns:1fr}.method-grid article,.method-grid article+article{padding:22px 0 30px;border-right:0;border-bottom:1px solid var(--line)}.method-grid p{min-height:0}.medium-index{grid-template-columns:repeat(2,1fr)}.medium-index a:nth-child(n+3){border-top:1px solid var(--line)}.topic-index{grid-template-columns:1fr}.topic-index article{grid-template-columns:30px 1fr;border-right:0}.topic-index p{grid-column:2}.team{gap:38px;margin-top:56px;padding:42px 0}.team__intro{grid-template-columns:34px 1fr}.team h2{font-size:48px}.team dl div{grid-template-columns:1fr}.open-source{grid-template-columns:1fr;gap:32px;padding:52px 0}.open-source>div{grid-template-columns:34px 1fr}.open-source dl{grid-column:1}.open-source>a{grid-column:1;width:max-content}.institution-cta{gap:30px;padding:46px 0}.institution-cta h2{font-size:48px}.institution-cta nav{flex-wrap:wrap}}
+</style>

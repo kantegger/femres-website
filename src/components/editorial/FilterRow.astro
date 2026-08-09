@@ -1,0 +1,154 @@
+---
+interface Props {
+  heading: string;
+  headingClass?: string;
+  values: { value: string; label: string; href: string }[];
+  currentValue: string;
+  collapsedCount?: number;
+  mobileCollapsedCount?: number;
+  showLabel: string;
+  hideLabel: string;
+}
+
+const {
+  heading,
+  headingClass,
+  values,
+  currentValue,
+  collapsedCount = 14,
+  mobileCollapsedCount,
+  showLabel,
+  hideLabel,
+} = Astro.props;
+
+const headingId = `ed-filter-${Math.random().toString(36).slice(2, 8)}`;
+const totalValues = values.length;
+const effectiveMobileCollapsedCount =
+  mobileCollapsedCount !== undefined ? mobileCollapsedCount : collapsedCount;
+const shouldCollapseDesktop = totalValues > collapsedCount;
+const shouldCollapseMobile = totalValues > effectiveMobileCollapsedCount;
+const shouldRenderToggle = shouldCollapseDesktop || shouldCollapseMobile;
+const defaultExpanded = !shouldCollapseDesktop;
+---
+
+  <section
+  class="ed-filter"
+  aria-labelledby={headingId}
+  data-ed-filter
+  data-total-values={String(totalValues)}
+  data-collapsed-desktop={String(collapsedCount)}
+  data-collapsed-mobile={String(effectiveMobileCollapsedCount)}
+  data-initial-expanded={String(defaultExpanded)}
+>
+  <h2 class:list={headingClass} id={headingId}>{heading}</h2>
+  <div class="ed-filter__values" data-ed-filter-values data-expanded={String(defaultExpanded)}>
+    {values.map((entry) => (
+      <a class:list={["ed-filter__link", { active: currentValue === entry.value }]} href={entry.href}>
+        {entry.label}
+      </a>
+    ))}
+  </div>
+  {shouldRenderToggle && (
+    <button
+      type="button"
+      class="ed-filter__toggle"
+      data-ed-filter-toggle
+      data-show={showLabel}
+      data-hide={hideLabel}
+      aria-expanded={defaultExpanded}
+    >
+      {defaultExpanded ? hideLabel : showLabel}
+    </button>
+  )}
+</section>
+
+<script>
+  function updateFilterRows() {
+    const isMobile = window.matchMedia("(max-width: 700px)").matches;
+
+    document.querySelectorAll<HTMLElement>("[data-ed-filter]").forEach((section) => {
+      const values = section.querySelector<HTMLElement>("[data-ed-filter-values]");
+      const button = section.querySelector<HTMLButtonElement>("[data-ed-filter-toggle]");
+      if (!values) return;
+
+      const totalValues = Number(section.dataset.totalValues ?? "0");
+      const desktopLimit = Number(section.dataset.collapsedDesktop ?? "14");
+      const mobileLimit = Number(section.dataset.collapsedMobile ?? section.dataset.collapsedDesktop ?? "14");
+      const shouldRenderToggle = isMobile
+        ? totalValues > mobileLimit
+        : totalValues > desktopLimit;
+
+      if (!shouldRenderToggle) {
+        values.dataset.expanded = "true";
+        if (button) {
+          button.hidden = true;
+          button.setAttribute("aria-expanded", "true");
+          button.textContent = button.dataset.hide ?? "";
+          button.dataset.userInteracted = "0";
+        }
+        return;
+      }
+
+      if (!button) return;
+      button.hidden = false;
+
+      const userInteracted = button.dataset.userInteracted === "1";
+      if (!userInteracted) {
+        const initialExpanded = section.dataset.initialExpanded === "true";
+        values.dataset.expanded = String(isMobile ? false : initialExpanded);
+      }
+
+      const isExpanded = values.dataset.expanded === "true";
+      button.setAttribute("aria-expanded", String(isExpanded));
+      button.textContent = isExpanded ? (button.dataset.hide ?? "") : (button.dataset.show ?? "");
+    });
+  }
+
+  function initEditorialFilterRows() {
+    const mediaQuery = window.matchMedia("(max-width: 700px)");
+
+    document.querySelectorAll<HTMLButtonElement>("[data-ed-filter-toggle]").forEach((element) => {
+      if (element.dataset.ready === "true") return;
+      const section = element.closest<HTMLElement>("[data-ed-filter]");
+      const values = section?.querySelector<HTMLElement>("[data-ed-filter-values]");
+      if (!section || !values) return;
+
+      element.dataset.ready = "true";
+      element.dataset.userInteracted = "0";
+
+      element.addEventListener("click", () => {
+        const expanded = values.dataset.expanded === "true";
+        values.dataset.expanded = String(!expanded);
+        element.dataset.userInteracted = "1";
+        element.setAttribute("aria-expanded", String(!expanded));
+        element.textContent = !expanded ? (element.dataset.hide ?? "") : (element.dataset.show ?? "");
+      });
+    });
+
+    updateFilterRows();
+    mediaQuery.addEventListener("change", updateFilterRows);
+  }
+
+  document.addEventListener("astro:page-load", initEditorialFilterRows);
+</script>
+
+<style>
+  .ed-filter { display: grid; grid-template-columns: 190px 1fr; gap: 24px 46px; width: min(100% - var(--editorial-canvas-gutter), var(--editorial-canvas-width)); margin-inline: auto; padding: 36px 0 44px; border-block: 2px solid var(--ink); }
+  .ed-filter + .ed-filter { border-top: 0; }
+  .ed-filter h2 { margin: 0; font-family: var(--editorial-serif); font-size: 34px; font-weight: 600; }
+  .ed-filter__heading--country-region { white-space: pre-line; }
+  .ed-filter__values { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 15px 22px; max-height: 76px; overflow: hidden; }
+  .ed-filter__values[data-expanded="true"] { max-height: none; }
+  .ed-filter__link { padding-bottom: 3px; color: var(--muted); font-size: 13px; border-bottom: 1px solid transparent; }
+  .ed-filter__link:hover, .ed-filter__link.active { color: var(--accent); border-color: currentColor; }
+  .ed-filter__toggle { grid-column: 2; justify-self: start; padding: 4px 0; color: var(--ink); background: none; border: 0; border-bottom: 1px solid var(--accent); font-size: 11px; font-weight: 700; cursor: pointer; }
+  .ed-filter__link { min-width: 0; }
+
+  @media (max-width: 700px) {
+    .ed-filter { grid-template-columns: 1fr; gap: 22px; width: calc(100% - 24px); padding: 30px 0 34px; }
+    .ed-filter h2 { font-size: 32px; }
+    .ed-filter__values { gap: 14px 20px; max-height: 108px; }
+    .ed-filter__link { font-size: 12px; }
+    .ed-filter__toggle { grid-column: 1; }
+  }
+</style>

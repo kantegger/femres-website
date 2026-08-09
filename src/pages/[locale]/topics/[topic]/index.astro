@@ -1,0 +1,16 @@
+---
+export const prerender=true;
+import Layout from "../../../../layouts/Layout.astro";
+import EditorialTopicDetail from "../../../../components/EditorialTopicDetail.astro";
+import { createT,type Locale } from "../../../../i18n";
+import { buildTopicDetailView,getLocalizedTopicDetailStaticPaths } from "../../../../lib/topicPages";
+import { nonDefaultDetailLocales } from "../../../../lib/localeDetails";
+export function getStaticPaths(){return getLocalizedTopicDetailStaticPaths(nonDefaultDetailLocales);}
+const currentLocale=Astro.params.locale as Locale;
+const {topic}=Astro.props as {topic:string};
+const t=createT(currentLocale);
+const {translatedTopic}=await buildTopicDetailView(topic,currentLocale);
+---
+<Layout title={`${translatedTopic} - ${t("nav.topics")} - FemRes`} description={t("topicDetailPage.description").replace("{topic}",translatedTopic)} headerVariant="editorial" showMusicPlayer={false}>
+  <EditorialTopicDetail topic={topic} locale={currentLocale}/>
+</Layout>

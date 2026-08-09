@@ -1,0 +1,28 @@
+---
+title: "The Prisons We Broke"
+author: "Baby Kamble"
+description: "Baby Kamble’s memoir treats “prison” as a structure built by caste, poverty, religious discipline, and household patriarchy together."
+publishDate: 2018-06-04
+isbn: "9789352873708"
+contentLanguage: "en"
+topics: ["Dalit Feminism","Caste and Gender","Women's Literature","Social Movements","Historical Context"]
+sourceUrl: "https://www.orientblackswan.com/The-Prisons-We-Broke/details?format=paperback&obsin=3658"
+coverImage: "https://media.femres.org/images/books/prisons-we-broke.jpg"
+status: "published"
+---
+
+*The Prisons We Broke* translates Baby Kamble’s Marathi *Jina Amucha*, a title closer to “Our Life.” Published in book form in 1986, the original is widely recognized as the first autobiography by a Dalit woman in Marathi; Maya Pandit’s English translation appeared in 2008. The 2018 second edition represented here also includes Kamble’s prefaces to two Marathi editions, a translator’s introduction, an interview, an afterword, and a glossary. That history matters: this is not simply a retrospective account of individual success but a long effort by a participant in the Ambedkarite movement to place women’s collective memory inside literary and historical archives.
+
+Its formal breakthrough is the way “we” repeatedly displaces the autobiographical “I.” Kamble writes from the Maharwada of her Maharashtra childhood but gives the narrative to festivals, weddings, illness, hunger, children, quarrels, and formidable women; her own life moves in and out of a community’s experience. The result resembles a social autobiography. Food, clothing, bodies, and conversation, dismissed as trivia by official history, become evidence of how caste order feels and operates. Dalit women cease to be objects in somebody else’s research and become observers and theorists of society.
+
+The first prison is the village’s spatial and labor regime. Mahar settlements stand outside the main village; residents perform work declared dirty and low, depend on scraps and scarce resources, and face prohibitions around touch, water, and religious space. Poverty is not a cultural failure of effort but the political outcome of needing labor while naming its workers polluted. Kamble’s concrete attention to food, epidemic disease, and children’s bodies turns “untouchability” from an abstract legal category into the material organization of eating, walking, working, and surviving each day.
+
+A second prison lies within patriarchal relations in the community. Power between mothers- and daughters-in-law, early marriage, reproductive burdens, housework, and men’s violence place already caste-oppressed women at the bottom again. Kamble neither romanticizes Dalit households because they suffer external oppression nor presents internal violence as an innate community culture. She shows how people degraded by a larger order may reproduce power downward. Dalit women are excluded from the protections assigned to respectable dominant-caste femininity while being made responsible for household survival; caste, class, and gender cannot be separated in that position.
+
+Religious rituals, fear, explanations of illness, and longings for purity form some of the book’s most uncomfortable and easily misread scenes. Kamble sharply depicts the internalization of Brahmanical hierarchy and sometimes attacks superstition and self-abasement in Mahar life with anger. Dominant readers should not appropriate those passages as proof of a “backward culture.” They show how religious authority occupies the explanatory space left when medicine, education, land, and public dignity are denied. The prison consists not only of external restrictions but of a consciousness trained to mistake an assigned position for fate.
+
+The Ambedkarite movement creates a pronounced turn in the narrative. Education, self-respect, public meetings, refusal of stigmatized labor, and eventual conversion to Buddhism give Mahar communities a language for judging themselves outside Brahmanical value. Women attend gatherings, conserve resources for children’s schooling, and carry politics into domestic life. Kamble’s reverence for Ambedkar is unmistakable, yet her collective narration also shows that a leader’s call endures because innumerable women perform organizing, care, and subsistence. Writing change only as a great man’s gift would erase the labor that sustained the movement.
+
+Pandit’s translation should be read as part of the work. The Marathi title, oral cadence, kinship terms, and words marking precise caste location cannot cross into English without alteration; the second edition’s prefaces, interview, and glossary help readers see how the text enters new academic and global markets. Translation expands visibility but can repackage a work addressing particular Mahar readers as a universal tale of “Indian women’s suffering.” Preserving place, community difference, and narrative address matters more than producing frictionless identification.
+
+The memoir cannot represent every Dalit community, and memory is not a statistical survey. Its arc from a pre-Ambedkar world to awakening can compress conflicts within the movement, women’s demands left unfulfilled, and later political divisions. Read it with *We Also Made History* on women’s concrete movement work, Bama’s *Sangati* for collective women’s narration from another region and language, and *Against the Madness of Manu* and *Coming Out as Dalit* for endogamy and contemporary elite institutions. For FemRes, breaking prison means more than escaping one institution: it means reclaiming the authority to describe everyday life so hunger, care, shame, and resistance can enter history.

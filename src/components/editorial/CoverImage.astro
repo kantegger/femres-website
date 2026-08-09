@@ -1,0 +1,38 @@
+---
+interface Props {
+  src?: string;
+  alt?: string;
+  kind: "poster" | "cover" | "square" | "video" | "article";
+  loading?: "lazy" | "eager";
+  class?: string;
+}
+
+const { src, alt = "", kind, loading = "lazy", class: className } = Astro.props;
+---
+
+<div class:list={["ed-cover", `ed-cover--${kind}`, className]}>
+  {src ? (
+    <img src={src} alt={alt} loading={loading} decoding="async" />
+  ) : (
+    <span class="ed-cover__placeholder"><slot name="placeholder" /></span>
+  )}
+</div>
+
+<style>
+  .ed-cover { position: relative; overflow: hidden; }
+  .ed-cover img { position: absolute; inset: 0; width: 100%; height: 100%; transition: transform .35s ease; }
+  .ed-cover:hover img { transform: scale(1.025); }
+  .ed-cover--poster, .ed-cover--cover { display: grid; place-items: center; background: var(--paper-deep); }
+  .ed-cover--poster { aspect-ratio: 2 / 3; }
+  .ed-cover--cover { aspect-ratio: 3 / 4; }
+  .ed-cover--poster img, .ed-cover--cover img { object-fit: contain; }
+  .ed-cover--square { aspect-ratio: 1; }
+  .ed-cover--square img { object-fit: cover; }
+  .ed-cover--video, .ed-cover--article { aspect-ratio: 16 / 9; }
+  .ed-cover--video img, .ed-cover--article img { object-fit: cover; }
+  .ed-cover__placeholder { display: grid; place-items: center; height: 100%; color: var(--muted); font-size: 11px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ed-cover img { transition: none; }
+  }
+</style>

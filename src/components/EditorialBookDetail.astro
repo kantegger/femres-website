@@ -1,0 +1,311 @@
+---
+import type { CollectionEntry } from "astro:content";
+import InteractionButtons from "./InteractionButtons";
+import Discussion from "./Discussion";
+import NewsletterSignup from "./NewsletterSignup.astro";
+import SupportPromo from "./SupportPromo.astro";
+import { createT, getLocalizedPath, type Locale } from "../i18n/index";
+import { getLanguageName } from "../i18n/languageUtils";
+import { encodeTopicForUrl, getTopicTranslation } from "../i18n/topicsUtils";
+import { buildCollectionDetailView, cleanLocalizedSlug } from "../lib/content";
+import { getLocaleDateLocale } from "../lib/localeDetails";
+import { getDiscussionCopy } from "../lib/discussionCopy";
+import { isPublicSourceUrl } from "../lib/externalLinks";
+
+interface Props {
+  book: CollectionEntry<"books">;
+  allBooks: CollectionEntry<"books">[];
+  locale: Locale;
+}
+
+const { book, allBooks, locale } = Astro.props;
+const t = createT(locale);
+const { Content, relatedEntries } = await buildCollectionDetailView(book, allBooks, 4);
+
+const homeLink = getLocalizedPath("", locale);
+const booksLink = getLocalizedPath("books", locale);
+const bookLink = (slug: string) => getLocalizedPath(`books/${cleanLocalizedSlug(slug)}`, locale);
+const topicLink = (topic: string) => getLocalizedPath(`topics/${encodeTopicForUrl(topic)}`, locale);
+const formatDate = (date: Date) => date.toLocaleDateString(getLocaleDateLocale(locale), {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const labels: Record<Locale, {
+  section: string;
+  original: string;
+  essay: string;
+  file: string;
+  source: string;
+  sourceAction: string;
+  related: string;
+  next: string;
+  noCover: string;
+  discussion: string;
+  discussionDescription: string;
+  support: string;
+}> = {
+  "zh-CN": { section: "书页", original: "原书名", essay: "书评与导读", file: "书籍档案", source: "版本与出处", sourceAction: "查看原始来源", related: "沿着这条书目继续", next: "延伸阅读", noCover: "暂无封面", discussion: "读者批注", discussionDescription: "留下你的阅读感受，或补充一条值得继续追踪的线索。", support: "支持 FemRes" },
+  "zh-TW": { section: "書頁", original: "原書名", essay: "書評與導讀", file: "書籍檔案", source: "版本與出處", sourceAction: "查看原始來源", related: "沿著這條書目繼續", next: "延伸閱讀", noCover: "暫無封面", discussion: "讀者批註", discussionDescription: "留下你的閱讀感受，或補充一條值得繼續追蹤的線索。", support: "支持 FemRes" },
+  en: { section: "Books", original: "Original title", essay: "Review and reading guide", file: "Book file", source: "Edition and source", sourceAction: "View original source", related: "Continue through this bibliography", next: "Further reading", noCover: "No cover", discussion: "Readers' notes", discussionDescription: "Share your reading or add a thread worth following further.", support: "Support FemRes" },
+  ja: { section: "書物", original: "原題", essay: "書評と読書案内", file: "書籍資料", source: "版と出典", sourceAction: "出典を見る", related: "この書目をたどる", next: "次に読む", noCover: "表紙なし", discussion: "読者ノート", discussionDescription: "読後の考えや、さらに追いたい手がかりを共有してください。", support: "FemResを支援" },
+  fr: { section: "Livres", original: "Titre original", essay: "Critique et guide de lecture", file: "Fiche du livre", source: "Édition et source", sourceAction: "Voir la source", related: "Poursuivre cette bibliographie", next: "À lire ensuite", noCover: "Sans couverture", discussion: "Notes de lecture", discussionDescription: "Partagez votre lecture ou ajoutez une piste à poursuivre.", support: "Soutenir FemRes" },
+};
+const copy = labels[locale];
+const primaryTopic = book.data.topics.length > 0
+  ? getTopicTranslation(book.data.topics[0], locale)
+  : "";
+const copyWithPrimaryTopic = primaryTopic ? `${primaryTopic} · ${copy.section}` : copy.section;
+---
+
+<article class="book-reading">
+  <div class="book-reading__rail">
+    <nav class="book-breadcrumb" aria-label={t("common.breadcrumb")}>
+      <a href={homeLink}>{t("nav.home")}</a>
+      <span aria-hidden="true">/</span>
+      <a href={booksLink}>{t("nav.books")}</a>
+      <span aria-hidden="true">/</span>
+      <span>{book.data.title}</span>
+    </nav>
+
+    <header class="book-hero">
+      <div class="book-cover-wrap">
+        <div class="book-cover">
+          {book.data.coverImage ? (
+            <img src={book.data.coverImage} alt={book.data.title} width="800" height="1200" loading="eager" decoding="async" fetchpriority="high" />
+          ) : (
+            <div class="book-cover__missing">{copy.noCover}</div>
+          )}
+        </div>
+      </div>
+
+      <div class="book-intro">
+        <p class="book-kicker">{copyWithPrimaryTopic}</p>
+        <h1>{book.data.title}</h1>
+        {book.data.originalTitle && book.data.originalTitle !== book.data.title && (
+          <p class="book-original"><span>{copy.original}</span>{book.data.originalTitle}</p>
+        )}
+        <p class="book-author"><span>{t("book.author")}</span>{book.data.author}</p>
+        <p class="book-deck">{book.data.description}</p>
+
+        <div class="book-actions">
+          <InteractionButtons
+            contentId={`book-${book.id}`}
+            contentType="book"
+            className="editorial-interactions"
+            client:visible
+            t={{
+              like: t("interactions.like"),
+              unlike: t("interactions.unlike"),
+              bookmark: t("interactions.bookmark"),
+              unbookmark: t("interactions.unbookmark"),
+              loginToInteract: t("interactions.loginToInteract"),
+            }}
+          />
+        </div>
+      </div>
+    </header>
+
+    <div class="book-reading__body">
+      <main class="book-essay">
+        <div class="book-section-heading">
+          <span>01</span>
+          <h2>{copy.essay}</h2>
+        </div>
+        <div class="book-prose" lang={locale}>
+          <Content />
+        </div>
+
+        <div class="book-topics" aria-label={t("common.topics")}>
+          <span>{t("common.topics")}</span>
+          {book.data.topics.map((topic) => <a href={topicLink(topic)}>{getTopicTranslation(topic, locale)}</a>)}
+        </div>
+      </main>
+
+      <aside class="book-marginalia">
+        <section>
+          <h2>{copy.file}</h2>
+          <dl>
+            <div><dt>{t("book.author")}</dt><dd>{book.data.author}</dd></div>
+            <div><dt>{t("book.published")}</dt><dd>{formatDate(book.data.publishDate)}</dd></div>
+            {book.data.contentLanguage && <div><dt>{t("common.language")}</dt><dd>{getLanguageName(book.data.contentLanguage, locale)}</dd></div>}
+            {book.data.isbn && <div><dt>ISBN</dt><dd>{book.data.isbn}</dd></div>}
+          </dl>
+        </section>
+
+        {isPublicSourceUrl(book.data.sourceUrl) && (
+          <section>
+            <h2>{copy.source}</h2>
+            <a class="book-source" href={book.data.sourceUrl} target="_blank" rel="noopener noreferrer">
+              <span>{copy.sourceAction}</span><strong aria-hidden="true">↗</strong>
+            </a>
+          </section>
+        )}
+      </aside>
+    </div>
+  </div>
+
+  {relatedEntries.length > 0 && (
+    <section class="book-related" aria-labelledby="book-related-title">
+      <div class="book-related__heading">
+        <span>02</span>
+        <h2 id="book-related-title">{copy.related}</h2>
+      </div>
+      <div class="book-related__grid">
+        {relatedEntries.map((related, index) => (
+          <a href={bookLink(related.id)} class="book-related__item">
+            <span class="book-related__number">0{index + 1}</span>
+            {related.data.coverImage ? (
+              <img src={related.data.coverImage} alt="" loading="lazy" decoding="async" />
+            ) : (
+              <span class="book-related__missing">{copy.noCover}</span>
+            )}
+            <div>
+              <span>{copy.next} / {related.data.publishDate.getFullYear()}</span>
+              <h3>{related.data.title}</h3>
+              {related.data.originalTitle && related.data.originalTitle !== related.data.title && <em>{related.data.originalTitle}</em>}
+              <p>{related.data.author}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <div class="book-reading__community">
+    <NewsletterSignup
+      title={t("newsletter.title")}
+      description={t("newsletter.description")}
+      emailPlaceholder={t("auth.emailPlaceholder")}
+      buttonLabel={t("common.subscribe")}
+      source="book_detail"
+      successMessage={t("newsletter.success")}
+      errorMessage={t("newsletter.error")}
+      genericErrorMessage={t("newsletter.genericError")}
+    />
+
+    <Discussion
+      contentId={`book-${book.id}`}
+      contentType="book"
+      locale={locale}
+      copy={getDiscussionCopy(locale, "book", copy.discussion, copy.discussionDescription)}
+      className="editorial-discussion"
+      variant="editorial"
+      client:visible
+    />
+
+    <SupportPromo
+      title={t("common.support")}
+      message={t("common.supportMessage")}
+      buttonLabel={copy.support}
+    />
+  </div>
+</article>
+
+<style>
+  .book-reading {
+    --accent: #cf2721;
+    color: var(--ink);
+    background: var(--paper);
+    font-family: var(--editorial-sans);
+  }
+
+  .book-reading__rail, .book-reading__community { width: min(100% - var(--editorial-canvas-gutter), var(--editorial-canvas-width)); margin-inline: auto; }
+  .book-breadcrumb { display: flex; gap: 10px; align-items: center; padding: 22px 0 18px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .book-breadcrumb a:hover { color: var(--accent); }
+  .book-breadcrumb span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .book-hero { display: grid; grid-template-columns: minmax(250px, 4fr) minmax(0, 7fr); gap: clamp(48px, 8vw, 112px); align-items: center; padding: clamp(46px, 7vw, 94px) 0 clamp(70px, 9vw, 124px); }
+  .book-cover-wrap { position: relative; width: min(100%, 390px); }
+  .book-cover { position: relative; z-index: 1; border: 1px solid var(--ink); background: var(--paper-deep); box-shadow: 18px 18px 0 var(--paper-deep), 19px 19px 0 var(--line); }
+  .book-cover::before { content: ""; position: absolute; inset: 0 auto 0 0; z-index: 2; width: 9px; background: linear-gradient(90deg, rgb(0 0 0 / .22), transparent); pointer-events: none; }
+  .book-cover img { display: block; width: 100%; height: auto; object-fit: contain; filter: saturate(.82) contrast(1.04); }
+  .book-cover__missing { display: grid; place-items: center; aspect-ratio: 2 / 3; color: var(--muted); }
+  .book-kicker { margin: 0 0 24px; color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+  .book-intro h1 { max-width: 12ch; margin: 0; font-family: var(--editorial-serif); font-size: clamp(54px, 7.4vw, 108px); font-weight: 700; letter-spacing: -.05em; line-height: .96; }
+  .book-original { display: flex; gap: 14px; margin: 22px 0 0; color: var(--muted); font-family: var(--editorial-serif); font-size: 18px; font-style: italic; }
+  .book-original span, .book-author span { color: var(--muted); font-family: Inter, sans-serif; font-size: 10px; font-style: normal; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .book-author { display: flex; gap: 14px; align-items: baseline; margin: 20px 0 0; font-family: var(--editorial-serif); font-size: 18px; font-weight: 600; }
+  .book-deck { max-width: 700px; margin: clamp(28px, 4vw, 46px) 0 32px; font-family: var(--editorial-serif); font-size: clamp(19px, 2vw, 26px); line-height: 1.66; }
+  .book-actions { padding-top: 18px; border-top: 1px solid var(--line); }
+  :global(.editorial-interactions) { gap: 22px; }
+  :global(.editorial-interactions button) { color: var(--ink); }
+
+  .book-reading__body { display: grid; grid-template-columns: minmax(0, 2fr) minmax(250px, 1fr); gap: clamp(52px, 8vw, 116px); padding-bottom: 104px; }
+  .book-section-heading, .book-related__heading { display: flex; gap: 20px; align-items: baseline; padding-top: 18px; border-top: 2px solid var(--ink); }
+  .book-section-heading span, .book-related__heading span { color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .12em; }
+  .book-section-heading h2, .book-related__heading h2 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(30px, 4vw, 54px); line-height: 1.05; }
+  .book-prose { max-width: none; margin-top: 46px; font-family: var(--editorial-serif); font-size: 18px; line-height: 1.95; text-align: justify; text-justify: auto; hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+  .book-prose :global(p) { margin: 0 0 1.65em; }
+  .book-prose :global(p:first-child::first-letter) { float: left; margin: .08em .12em 0 0; color: var(--accent); font-size: 4.2em; font-weight: 700; line-height: .75; }
+  .book-prose :global(h2), .book-prose :global(h3) { margin: 2em 0 .7em; font-family: var(--editorial-serif); line-height: 1.25; }
+  .book-prose :global(a) { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .book-prose :global(blockquote) { margin: 2.2em 0; padding: 8px 0 8px 28px; border-left: 3px solid var(--accent); font-size: 1.2em; font-style: italic; }
+  .book-topics { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: baseline; margin-top: 54px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; }
+  .book-topics > span { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .book-topics a { border-bottom: 1px solid var(--line); }
+  .book-topics a:hover { color: var(--accent); border-color: var(--accent); }
+
+  .book-marginalia { padding-top: 2px; }
+  .book-marginalia section { padding: 20px 0 28px; border-top: 1px solid var(--line); }
+  .book-marginalia h2 { margin: 0 0 18px; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .book-marginalia dl { margin: 0; }
+  .book-marginalia dl > div { display: grid; grid-template-columns: 94px 1fr; gap: 14px; padding: 8px 0; align-items: baseline; }
+  .book-marginalia dt { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .book-marginalia dd { margin: 0; font-family: var(--editorial-serif); font-size: 14px; line-height: 1.55; }
+  .book-source { display: flex; justify-content: space-between; gap: 24px; padding: 13px 0; border-block: 1px solid var(--ink); font-size: 13px; }
+  .book-source:hover { color: var(--accent); }
+
+  .book-related { padding: clamp(58px, 8vw, 108px) max(20px, calc((100vw - var(--editorial-canvas-width)) / 2)); color: #f4f0e8; background: #171614; }
+  .book-related__heading { border-color: #f4f0e8; }
+  .book-related__heading span { color: #ff6b65; }
+  .book-related__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 44px; border-top: 1px solid #4a4641; }
+  .book-related__item { display: grid; grid-template-columns: 36px 74px minmax(0, 1fr); gap: 14px; align-items: center; min-height: 158px; padding: 20px 16px 20px 0; border-bottom: 1px solid #4a4641; }
+  .book-related__item + .book-related__item { padding-left: 16px; border-left: 1px solid #4a4641; }
+  .book-related__number { align-self: start; color: #ff514b; font-size: 10px; font-weight: 800; letter-spacing: .1em; }
+  .book-related__item img, .book-related__missing { width: 74px; height: 110px; object-fit: cover; }
+  .book-related__missing { display: grid; place-items: center; border: 1px solid #4a4641; color: #aaa39a; font-size: 9px; text-align: center; }
+  .book-related__item > div > span { color: #aaa39a; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .book-related__item h3 { margin: 8px 0 4px; font-family: var(--editorial-serif); font-size: 17px; line-height: 1.2; transition: color .2s ease; }
+  .book-related__item:hover h3 { color: #ff514b; }
+  .book-related__item em { display: block; overflow: hidden; color: #aaa39a; font-family: var(--editorial-serif); font-size: 11px; font-style: italic; text-overflow: ellipsis; white-space: nowrap; }
+  .book-related__item p { margin: 6px 0 0; color: #aaa39a; font-size: 11px; }
+
+  .book-reading__community { padding: 4px 0 96px; }
+  :global(.editorial-discussion) { font-family: var(--editorial-sans); }
+  :global(.editorial-discussion > h2) { font-family: var(--editorial-serif); font-size: clamp(30px, 4vw, 48px); }
+
+  @media (max-width: 960px) {
+    .book-hero { grid-template-columns: minmax(220px, 2fr) minmax(0, 3fr); gap: 48px; }
+    .book-reading__body { grid-template-columns: minmax(0, 1fr) 260px; gap: 44px; }
+    .book-related__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .book-related__item:nth-child(3) { padding-left: 0; border-left: 0; }
+  }
+  @media (max-width: 700px) {
+    .book-reading__rail, .book-reading__community { width: calc(100% - var(--editorial-mobile-gutter)); }
+    .book-breadcrumb { padding-top: 16px; }
+    .book-hero { grid-template-columns: 1fr; align-items: start; padding: 30px 0 72px; }
+    .book-cover-wrap { width: min(72vw, 330px); }
+    .book-cover { box-shadow: 11px 11px 0 var(--paper-deep), 12px 12px 0 var(--line); }
+    .book-intro { padding-top: 14px; }
+    .book-kicker { margin-bottom: 16px; }
+    .book-intro h1 { max-width: none; font-size: clamp(46px, 15vw, 72px); }
+    .book-original { margin-top: 16px; font-size: 15px; }
+    .book-author { margin-top: 16px; font-size: 16px; }
+    .book-deck { margin: 26px 0; font-size: 18px; line-height: 1.72; }
+    .book-reading__body { grid-template-columns: 1fr; gap: 66px; padding-bottom: 72px; }
+    .book-marginalia { order: -1; }
+    .book-marginalia section:first-child { border-top: 2px solid var(--ink); }
+    .book-section-heading { gap: 14px; }
+    .book-prose { margin-top: 34px; font-size: 17px; line-height: 1.9; }
+    .book-related { padding-inline: 12px; }
+    .book-related__grid { grid-template-columns: 1fr; }
+    .book-related__item, .book-related__item + .book-related__item { grid-template-columns: 34px 64px minmax(0, 1fr); min-height: 132px; padding: 16px 0; border-left: 0; }
+    .book-related__item img, .book-related__missing { width: 64px; height: 96px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .book-cover img { transition: filter .25s ease; }
+    .book-cover:hover img { filter: saturate(1) contrast(1.02); }
+  }
+</style>

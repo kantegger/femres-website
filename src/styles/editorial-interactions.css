@@ -1,0 +1,66 @@
+.editorial-interaction-buttons {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #6f6a62;
+}
+
+.editorial-interaction-buttons__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 0;
+  padding: 0.2rem 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+
+.editorial-interaction-buttons__action:hover,
+.editorial-interaction-buttons__action.is-active {
+  color: #df2d27;
+}
+
+.editorial-interaction-buttons__icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.editorial-interaction-buttons__count {
+  min-width: 1.5rem;
+  font: 600 0.78rem/1 Inter, "Noto Sans SC", sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.editorial-interaction-buttons__count.is-loading {
+  height: 0.65rem;
+  border-radius: 0;
+  background: linear-gradient(90deg, #cbc5bb 0 42%, transparent 42% 58%, #cbc5bb 58% 100%);
+  background-size: 200% 100%;
+  animation: editorial-count-loading 1s steps(2, end) infinite;
+}
+
+.editorial-interaction-buttons__notice {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 0.65rem);
+  z-index: 50;
+  width: max-content;
+  max-width: min(17rem, 80vw);
+  border-left: 3px solid #df2d27;
+  padding: 0.65rem 0.8rem;
+  background: #171614;
+  color: #fff;
+  font: 600 0.75rem/1.35 Inter, "Noto Sans SC", sans-serif;
+  letter-spacing: 0.025em;
+}
+
+@keyframes editorial-count-loading {
+  to { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editorial-interaction-buttons__count.is-loading { animation: none; }
+}

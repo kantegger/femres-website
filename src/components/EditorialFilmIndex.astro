@@ -1,0 +1,254 @@
+---
+import { getLocalizedPath, type Locale } from "../i18n";
+import { getRegionTranslation } from "../i18n/regionUtils";
+import { cleanLocalizedSlug } from "../lib/content";
+import { buildFilmListingPageData } from "../lib/filmListing";
+import { getTranslatedTopicLabel } from "../lib/listingTopics";
+import CoverImage from "./editorial/CoverImage.astro";
+import FilterRow from "./editorial/FilterRow.astro";
+import IndexShell from "./editorial/IndexShell.astro";
+import Pagination from "./editorial/Pagination.astro";
+import SortSelect from "./editorial/SortSelect.astro";
+
+interface Props {
+  locale: Locale;
+  basePath: string;
+}
+
+const PER_PAGE = 12;
+const FEATURED_COUNT = 1;
+
+const { locale, basePath } = Astro.props;
+const data = await buildFilmListingPageData({
+  locale,
+  url: Astro.url,
+  basePath,
+  perPage: PER_PAGE,
+  featuredCount: FEATURED_COUNT,
+});
+const {
+  t,
+  allTopics,
+  currentTopic,
+  currentSort,
+  currentItems,
+  featuredItems,
+  totalItems,
+  visibleTotal,
+  totalPages,
+  validPage,
+  allCountries,
+  allGenres,
+  currentCountry,
+  currentFilterLabel,
+  getFilmsUrl,
+} = data;
+
+const filmLink = (slug: string) =>
+  getLocalizedPath(`films/${cleanLocalizedSlug(slug)}`, locale);
+
+const labels: Record<Locale, {
+  title: string;
+  index: string;
+  sort: string;
+  show: string;
+  hide: string;
+  showCountries: string;
+  hideCountries: string;
+  results: string;
+  previous: string;
+  next: string;
+  noImage: string;
+  region: string;
+}> = {
+  "zh-CN": { title: "电影", index: "女性主义电影索引", sort: "排序", show: "展开全部话题", hide: "收起话题", showCountries: "显示全部地区", hideCountries: "收起地区", results: "部作品", previous: "上一页", next: "下一页", noImage: "暂无海报", region: "地区" },
+  "zh-TW": { title: "電影", index: "女性主義電影索引", sort: "排序", show: "展開全部話題", hide: "收起話題", showCountries: "顯示全部地區", hideCountries: "收起地區", results: "部作品", previous: "上一頁", next: "下一頁", noImage: "暫無海報", region: "地區" },
+  en: { title: "Films", index: "A feminist film index", sort: "Sort", show: "Show all topics", hide: "Show fewer topics", showCountries: "Show all regions", hideCountries: "Show fewer regions", results: "works", previous: "Previous", next: "Next", noImage: "No poster", region: "Region" },
+  ja: { title: "映画", index: "フェミニズム映画索引", sort: "並び順", show: "すべてのトピック", hide: "トピックを閉じる", showCountries: "すべての地域を表示", hideCountries: "地域を縮小表示", results: "作品", previous: "前へ", next: "次へ", noImage: "ポスターなし", region: "地域" },
+  fr: { title: "Films", index: "Index du cinéma féministe", sort: "Trier", show: "Tous les sujets", hide: "Réduire les sujets", showCountries: "Toutes les régions", hideCountries: "Moins de régions", results: "œuvres", previous: "Précédent", next: "Suivant", noImage: "Sans affiche", region: "Région" },
+};
+const copy = labels[locale];
+
+const topicValues = [
+  { value: "all", label: t("filmsPage.topics.all"), href: getFilmsUrl({ topic: "all", page: 1 }) },
+  ...allTopics.map((topic) => ({
+    value: topic,
+    label: getTranslatedTopicLabel(topic, locale),
+    href: getFilmsUrl({ topic, page: 1 }),
+  })),
+];
+
+const countryValues = [
+  { value: "all", label: t("filmsPage.country.all"), href: getFilmsUrl({ country: "all", page: 1 }) },
+  ...allCountries.map((country) => ({
+    value: country,
+    label: getRegionTranslation(country, locale),
+    href: getFilmsUrl({ country, page: 1 }),
+  })),
+];
+
+const sortOptions = [
+  { value: "date-desc", label: t("filmsPage.sort.latest") },
+  { value: "date-asc", label: t("filmsPage.sort.oldest") },
+  { value: "title-asc", label: t("filmsPage.sort.titleAZ") },
+  { value: "title-desc", label: t("filmsPage.sort.titleZA") },
+  { value: "year-desc", label: t("filmsPage.sort.yearNewest") },
+  { value: "year-asc", label: t("filmsPage.sort.yearOldest") },
+];
+
+const lead = featuredItems[0];
+---
+
+<IndexShell
+  title={copy.title}
+  tagline={copy.index}
+  intro={t("filmsPage.subtitle")}
+  stats={[
+    { value: String(totalItems).padStart(3, "0"), label: t("filmsPage.stats.totalFilms", { count: totalItems }) },
+    { value: String(allCountries.length).padStart(2, "0"), label: t("filmsPage.stats.countries", { count: allCountries.length }) },
+    { value: String(allGenres.length).padStart(2, "0"), label: t("filmsPage.stats.genres", { count: allGenres.length }) },
+  ]}
+>
+  <FilterRow
+    slot="filters"
+    heading={t("filmsPage.topics.title")}
+    values={topicValues}
+    currentValue={currentTopic}
+    showLabel={copy.show}
+    hideLabel={copy.hide}
+  />
+  <FilterRow
+    slot="filters"
+    heading={copy.region}
+    values={countryValues}
+    currentValue={currentCountry}
+    showLabel={copy.showCountries}
+    hideLabel={copy.hideCountries}
+    collapsedCount={countryValues.length}
+    mobileCollapsedCount={14}
+    headingClass="ed-filter__heading--country-region"
+  />
+
+  <div slot="featured" class="film-heading">
+    <div>
+      <h2>{currentFilterLabel}</h2>
+      <p>{visibleTotal} {copy.results}</p>
+    </div>
+    <SortSelect
+      id="film-sort-select"
+      label={copy.sort}
+      options={sortOptions}
+      currentValue={currentSort}
+      defaultValue="date-desc"
+    />
+  </div>
+
+  {lead && (
+    <a slot="featured" href={filmLink(lead.id)} class="film-lead">
+      <div class="film-lead__poster">
+        <CoverImage src={lead.data.posterImage} kind="poster" loading="eager">
+          <span slot="placeholder">{copy.noImage}</span>
+        </CoverImage>
+        <b>01</b>
+      </div>
+      <div class="film-lead__copy">
+        <span>{lead.data.year} · {getRegionTranslation(lead.data.country, locale)}</span>
+        <h3>{lead.data.title}</h3>
+        {lead.data.originalTitle && lead.data.originalTitle !== lead.data.title && <em>{lead.data.originalTitle}</em>}
+        <p>{lead.data.director}</p>
+        <small>{lead.data.description}</small>
+      </div>
+    </a>
+  )}
+
+  {currentItems.length > 0 ? (
+    <div class="film-grid">
+      {currentItems.map((film, index) => (
+        <a href={filmLink(film.id)} class="film-entry">
+          <div class="film-entry__poster">
+            <CoverImage src={film.data.posterImage} kind="poster">
+              <span slot="placeholder">{copy.noImage}</span>
+            </CoverImage>
+            <b>{String(FEATURED_COUNT + PER_PAGE * (validPage - 1) + index + 1).padStart(2, "0")}</b>
+          </div>
+          <div class="film-entry__copy">
+            <span>{film.data.year} · {getRegionTranslation(film.data.country, locale)}</span>
+            <h3>{film.data.title}</h3>
+            {film.data.originalTitle && film.data.originalTitle !== film.data.title && <em>{film.data.originalTitle}</em>}
+            <p>{film.data.director}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  ) : (
+    <div class="film-empty">
+      <h3>{t("filmsPage.emptyState.title")}</h3>
+      <p>{t("filmsPage.emptyState.description")}</p>
+    </div>
+  )}
+
+  <Pagination
+    slot="pagination"
+    totalPages={totalPages}
+    validPage={validPage}
+    getUrl={(page) => getFilmsUrl({ page })}
+    previousLabel={copy.previous}
+    nextLabel={copy.next}
+    navLabel={t("common.pagination.navigation")}
+  />
+</IndexShell>
+
+<style>
+  .film-heading { display: flex; align-items: end; justify-content: space-between; gap: 40px; margin-bottom: 36px; }
+  .film-heading > div { display: flex; align-items: baseline; gap: 22px; flex-wrap: wrap; }
+  .film-heading h2 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(48px, 6vw, 82px); font-weight: 600; letter-spacing: -.045em; line-height: 1; }
+  .film-heading p { margin: 0; color: var(--muted); font-size: 11px; white-space: nowrap; }
+
+  .film-lead { display: grid; grid-template-columns: minmax(220px, 340px) 1fr; gap: clamp(36px, 6vw, 90px); padding: clamp(28px, 4vw, 54px); border: 1px solid var(--line); border-bottom: 0; }
+  .film-lead__poster { position: relative; }
+  .film-lead__poster > b, .film-entry__poster > b { position: absolute; right: 10px; bottom: 6px; color: #fff; font-family: var(--editorial-serif); font-size: 44px; line-height: 1; text-shadow: 0 1px 8px rgba(0, 0, 0, .45); }
+  .film-lead__copy { align-self: center; max-width: 720px; }
+  .film-lead__copy > span { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; white-space: normal; overflow-wrap: anywhere; }
+  .film-lead__copy h3 { max-width: 18ch; margin: 12px 0 7px; font-family: var(--editorial-serif); font-size: clamp(42px, 5vw, 76px); font-weight: 600; letter-spacing: -.035em; line-height: 1.15; transition: color .2s ease; }
+  .film-lead:hover h3 { color: var(--accent); }
+  .film-lead__copy em { display: block; margin-bottom: 10px; color: var(--muted); font-family: Georgia, serif; font-size: 19px; line-height: 1.35; }
+  .film-lead__copy p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
+  .film-lead__copy small { display: block; max-width: 62ch; margin-top: 22px; color: var(--muted); font-family: var(--editorial-serif); font-size: 15px; line-height: 1.75; }
+
+  .film-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .film-entry { display: grid; grid-template-rows: auto 1fr; gap: 20px; min-width: 0; padding: 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .film-entry__poster { position: relative; }
+  .film-entry__poster > b { font-size: 34px; }
+  .film-entry:hover h3 { color: var(--accent); }
+  .film-entry__copy > span { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; white-space: normal; overflow-wrap: anywhere; }
+  .film-entry__copy h3 { margin: 12px 0 7px; font-family: var(--editorial-serif); font-size: clamp(23px, 2.25vw, 34px); font-weight: 600; letter-spacing: -.035em; line-height: 1.15; transition: color .2s ease; }
+  .film-entry__copy em { display: block; overflow: hidden; margin-bottom: 10px; color: var(--muted); font-family: Georgia, serif; font-size: 14px; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
+  .film-entry__copy p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+
+  .film-empty { padding: 90px 0; border-block: 1px solid var(--line); text-align: center; }
+  .film-empty h3 { margin: 0 0 14px; font-family: var(--editorial-serif); font-size: 36px; }
+  .film-empty p { margin: 0; color: var(--muted); }
+
+  @media (max-width: 960px) {
+    .film-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 700px) {
+    .film-heading { display: block; }
+    .film-heading > div { display: block; }
+    .film-heading h2 { font-size: 52px; }
+    .film-heading p { margin-top: 8px; }
+    .film-lead { grid-template-columns: minmax(112px, 42%) 1fr; gap: 20px; padding: 18px 12px; }
+    .film-lead__copy h3 { margin-top: 8px; font-size: clamp(27px, 8vw, 38px); }
+    .film-lead__copy em { font-size: 12px; }
+    .film-lead__copy p { font-size: 11px; }
+    .film-lead__copy small { display: none; }
+    .film-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .film-entry { gap: 14px; padding: 12px; }
+    .film-entry__copy h3 { font-size: 22px; }
+    .film-entry__copy em { font-size: 12px; }
+    .film-entry__copy p { font-size: 11px; }
+    .film-lead__copy > span,
+    .film-entry__copy > span { white-space: nowrap; overflow-wrap: normal; }
+  }
+</style>

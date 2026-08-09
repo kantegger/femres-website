@@ -1,0 +1,30 @@
+---
+export const prerender = true;
+import Layout from "../../../layouts/Layout.astro";
+import EditorialLibraryIndex from "../../../components/EditorialLibraryIndex.astro";
+import { type Locale } from "../../../i18n";
+import { nonDefaultDetailLocales } from "../../../lib/localeDetails";
+import { buildLibraryPageData } from "../../../lib/homePage";
+export function getStaticPaths() {
+  return nonDefaultDetailLocales.map((locale) => ({ params: { locale } }));
+}
+const currentLocale = Astro.params.locale as Locale;
+const data = await buildLibraryPageData(currentLocale);
+const titles: Record<Locale, string> = {
+  "zh-CN": "资源库 - FemRes",
+  "zh-TW": "資源庫 - FemRes",
+  en: "Library - FemRes",
+  ja: "資料庫 - FemRes",
+  fr: "Ressources - FemRes",
+};
+const descriptions: Record<Locale, string> = {
+  "zh-CN": "一个持续生长的女性主义知识现场：按媒介进入，或沿着议题继续深入。",
+  "zh-TW": "一個持續生長的女性主義知識現場：按媒介進入，或沿著議題繼續深入。",
+  en: "A growing feminist knowledge library of books, films, articles, videos, podcasts, and scholarship, connected across ideas and media.",
+  ja: "書籍、映画、記事、動画、ポッドキャスト、論文を思想とメディアのつながりからたどる、成長し続けるフェミニズム資料庫。",
+  fr: "Une bibliothèque féministe vivante de livres, films, articles, vidéos, podcasts et recherches, reliés par leurs idées et leurs médias.",
+};
+---
+<Layout title={titles[currentLocale]} description={descriptions[currentLocale]} headerVariant="editorial" showMusicPlayer={false}>
+  <EditorialLibraryIndex locale={currentLocale} data={data} />
+</Layout>

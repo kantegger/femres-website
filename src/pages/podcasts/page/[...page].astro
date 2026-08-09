@@ -1,0 +1,12 @@
+---
+export const prerender = false;
+
+return Astro.redirect(
+  "/podcasts?page=" + (
+    /^\d+$/.test(Astro.params.page || "")
+      ? Math.max(1, Number.parseInt(Astro.params.page || "1", 10))
+      : 1
+  ),
+  301,
+);
+---

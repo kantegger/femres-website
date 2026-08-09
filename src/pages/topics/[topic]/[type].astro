@@ -1,0 +1,15 @@
+---
+export const prerender=true;
+import Layout from "../../../layouts/Layout.astro";
+import EditorialTopicType from "../../../components/EditorialTopicType.astro";
+import { createT,type Locale } from "../../../i18n";
+import { buildTopicTypeView,getTopicTypeStaticPaths,type TopicTypeEntry } from "../../../lib/topicPages";
+export async function getStaticPaths(){return getTopicTypeStaticPaths();}
+const currentLocale:Locale="zh-CN";
+const {topic,typeObj}=Astro.props as {topic:string;typeObj:TopicTypeEntry};
+const t=createT(currentLocale);
+const {translatedTopic,typeLabels}=await buildTopicTypeView(topic,typeObj,currentLocale,t);
+---
+<Layout title={`${translatedTopic} - ${typeLabels[typeObj.contentType]} - FemRes`} description={t("topicDetailPage.description").replace("{topic}",translatedTopic)} headerVariant="editorial" showMusicPlayer={false}>
+  <EditorialTopicType topic={topic} typeObj={typeObj} locale={currentLocale}/>
+</Layout>

@@ -1,0 +1,27 @@
+---
+title: "La machine charismatique"
+originalTitle: "The Charisma Machine"
+author: "Morgan G. Ames"
+description: "À partir d’une enquête au Paraguay, Morgan G. Ames suit One Laptop per Child et montre comment le salut technologique universalise une enfance privilégiée tout en effaçant enseignement, care et infrastructures."
+publishDate: 2019-11-19
+isbn: "9780262537445"
+contentLanguage: "en"
+topics: ["Technology Critique","Feminist Education","Development Studies","Digital Feminism","Social Justice"]
+sourceUrl: "https://mitpress.mit.edu/9780262537445/the-charisma-machine/"
+coverImage: "https://media.femres.org/images/books/charisma-machine.jpg"
+status: "published"
+---
+
+*La machine charismatique* ne se contente pas d’expliquer l’échec de One Laptop per Child (OLPC). Le livre demande pourquoi un projet qui a si souvent manqué ses promesses a continué de captiver ingénieurs, gouvernements, philanthropes et médias. Annoncé en 2005, OLPC affirmait qu’un ordinateur XO bon marché, robuste et même alimenté par manivelle permettrait aux enfants du Sud global de contourner des écoles insuffisantes pour entrer seuls dans l’avenir numérique. La manivelle n’a jamais vu le jour, tandis que prix et entretien ont dépassé le slogan, mais la vision est restée séduisante. Ames nomme « charisme technologique » cette capacité à faire paraître un objet intrinsèquement moral et transformateur.
+
+Ce charisme possède une histoire culturelle. Ames la retrace dans la culture hacker du MIT, le constructionnisme de Seymour Papert et la figure du « garçon techniquement précoce ». Les concepteurs ont projeté sur tous les enfants le souvenir masculinisé d’une enfance de classe moyenne riche en ressources : l’enfant authentique voudrait démonter des machines, programmer et défier les professeurs, tandis que l’école ne serait qu’une usine étouffant la créativité. Ce profil n’est pas neutre. Il transforme un parcours marqué par le genre et la classe en instinct universel, et rend invisibles les enseignantes, les mères, les personnes qui prennent soin des enfants et ceux que le code n’intéresse pas.
+
+La force du livre vient de l’ethnographie menée par Ames au Paraguay. Pendant plusieurs mois, à partir d’observations, d’entretiens, de résultats scolaires et de registres de réparation, elle suit le quotidien d’environ dix mille XO. Il fallait câbler les écoles et installer les réseaux ; former des enseignants sous-payés et surchargés ; demander aux familles et à l’ONG locale de traduire, entretenir et soutenir sans relâche. La machine censée « parler d’elle-même » dépendait d’une vaste infrastructure humaine et matérielle. Pannes, connexions lentes et batteries épuisées n’étaient pas des détails d’exécution, mais des conditions centrales de toute possibilité éducative.
+
+Les enfants ont également refusé le scénario des concepteurs. Environ deux tiers utilisaient peu les ordinateurs : certains étaient cassés, beaucoup étaient simplement frustrants ou sans intérêt. Les utilisateurs réguliers recherchaient surtout Internet, musique, vidéos, jeux et échanges de fichiers plutôt que les logiciels constructionnistes prescrits. Ames ne réduit pas ces pratiques à l’échec. Refuser et détourner un objet manifeste une capacité d’agir. Mais celle-ci était aussi façonnée par la bande passante, les ressources familiales, les cultures de pairs et les entreprises médiatiques transnationales.
+
+Pour les études féministes des techniques, l’intervention décisive consiste à replacer la maintenance au centre du récit de l’innovation. Derrière les réussites se trouvaient souvent des mères, des tantes, des enseignantes et des personnes engagées localement qui encourageaient les enfants et maintenaient les systèmes ; le récit public créditait pourtant une machine charismatique et un enfant naturellement doué. Effacer le care genré fait paraître la technologie autonome ; effacer les infrastructures permet d’attribuer l’échec aux écoles, aux cultures locales ou au manque de motivation. Ce mécanisme demeure actif dans l’edtech, les tuteurs d’IA et les plateformes vendues comme remèdes à la pauvreté.
+
+Ames ne soutient ni que l’ordinateur ne peut aider à apprendre, ni que les enfants du Sud global sont des victimes passives. Elle critique le remplacement d’un investissement politique par un produit. Lorsque les écoles manquent d’installations sanitaires, de papier, d’électricité fiable, d’enseignants soutenus et d’un système durable de réparation, un appareil spectaculaire ne peut remplacer l’éducation publique. L’étude approfondie d’un projet paraguayen ne représente pas tous les déploiements d’OLPC ; cette échelle constitue néanmoins une force, car elle révèle les frictions, refus, bricolages et compromis que les évaluations agrégées effacent.
+
+Le livre offre ainsi une méthode pour reconnaître le salut technologique. Face à tout produit prétendant « disrupter » l’éducation ou supprimer l’inégalité, on peut demander : quelle enfance est érigée en norme ? Quels enseignants, aidants et réparateurs disparaissent du mérite ? Qui absorbe les pannes et les coûts durables ? Le projet renforce-t-il des institutions, ou met-il en scène un avenir séduisant pour les financeurs ? Pour FemRes, ces questions déplacent le féminisme numérique de la représentation vers le pouvoir de concevoir, le colonialisme épistémique, le travail reproductif et la distribution des ressources publiques.

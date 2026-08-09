@@ -1,0 +1,104 @@
+---
+interface Props {
+  title: string;
+  message: string;
+  buttonLabel: string;
+}
+
+const { title, message, buttonLabel } = Astro.props;
+const supportUrl = "https://buymeacoffee.com/femres";
+---
+
+<section class="support-editorial" aria-labelledby="support-editorial-title">
+  <div class="support-editorial__copy">
+    <h2 id="support-editorial-title">{title}</h2>
+    <p>{message}</p>
+  </div>
+  <a href={supportUrl} target="_blank" rel="noopener noreferrer">
+    {buttonLabel}
+  </a>
+</section>
+
+<style>
+  .support-editorial {
+    --support-ink: #171614;
+    --support-muted: #6f6a62;
+    --support-line: #c9c3b9;
+    --support-accent: #df2d27;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 32px;
+    align-items: end;
+    margin-top: 48px;
+    padding: 24px 0 0;
+    border-top: 1px solid var(--support-line);
+    color: var(--support-ink);
+  }
+
+  :global(.dark) .support-editorial {
+    --support-ink: #f3efe7;
+    --support-muted: #aaa39a;
+    --support-line: #403d38;
+    --support-accent: #ff514b;
+  }
+
+  .support-editorial h2 {
+    margin: 0;
+    font-family: var(--editorial-serif);
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+  }
+
+  .support-editorial p {
+    max-width: 52rem;
+    margin: 12px 0 0;
+    color: var(--support-muted);
+    font-family: Inter, "Noto Sans SC", sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .support-editorial a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 18px;
+    border: 1px solid var(--support-accent);
+    background: var(--support-accent);
+    color: #fff;
+    font-family: Inter, "Noto Sans SC", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: background-color .2s ease, border-color .2s ease;
+  }
+
+  .support-editorial a:hover {
+    border-color: var(--support-ink);
+    background: var(--support-ink);
+  }
+
+  .support-editorial a:focus-visible {
+    outline: 2px solid var(--support-accent);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 700px) {
+    .support-editorial {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .support-editorial a { justify-self: start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .support-editorial a { transition: none; }
+  }
+</style>

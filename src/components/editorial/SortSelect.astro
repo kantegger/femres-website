@@ -1,0 +1,48 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  options: { value: string; label: string }[];
+  currentValue: string;
+  defaultValue: string;
+}
+
+const { id, label, options, currentValue, defaultValue } = Astro.props;
+---
+
+<label class="ed-sort" for={id}>
+  <span>{label}</span>
+  <select id={id} data-ed-sort data-default-value={defaultValue}>
+    {options.map((option) => (
+      <option value={option.value} selected={currentValue === option.value}>{option.label}</option>
+    ))}
+  </select>
+</label>
+
+<script>
+  function initEditorialSortSelects() {
+    document.querySelectorAll("select[data-ed-sort]").forEach((element) => {
+      if (!(element instanceof HTMLSelectElement) || element.dataset.ready === "true") return;
+      element.dataset.ready = "true";
+      element.addEventListener("change", () => {
+        const params = new URLSearchParams(window.location.search);
+        params.delete("page");
+        if (element.value === element.dataset.defaultValue) params.delete("sort");
+        else params.set("sort", element.value);
+        const query = params.toString();
+        window.location.href = query ? `${window.location.pathname}?${query}` : window.location.pathname;
+      });
+    });
+  }
+
+  document.addEventListener("astro:page-load", initEditorialSortSelects);
+</script>
+
+<style>
+  .ed-sort { display: grid; grid-template-columns: auto minmax(150px, 190px); align-items: center; gap: 16px; font-size: 10px; font-weight: 700; }
+  .ed-sort select { width: 100%; padding: 10px 22px 10px 4px; color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--ink); border-radius: 0; font: 600 12px/1.3 var(--editorial-sans); cursor: pointer; }
+
+  @media (max-width: 700px) {
+    .ed-sort { grid-template-columns: auto 1fr; margin-top: 30px; }
+  }
+</style>

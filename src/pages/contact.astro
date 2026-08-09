@@ -1,0 +1,12 @@
+---
+import EditorialContact from "../components/EditorialContact.astro";
+import Layout from "../layouts/Layout.astro";
+import { createT } from "../i18n";
+
+const locale = "zh-CN";
+const t = createT(locale);
+---
+
+<Layout title={`${t("contactPage.metaTitle")} - FemRes`} description={t("contactPage.metaDescription")} headerVariant="editorial" showMusicPlayer={false}>
+  <EditorialContact locale={locale} />
+</Layout>

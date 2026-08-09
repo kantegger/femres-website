@@ -1,0 +1,16 @@
+---
+import EditorialHome from "../components/EditorialHome.astro";
+import SchemaMarkup from "../components/seo/SchemaMarkup.astro";
+import { createT, type Locale } from "../i18n/index";
+import Layout from "../layouts/Layout.astro";
+import { buildHomePageData } from "../lib/homePage";
+
+const currentLocale: Locale = "zh-CN";
+const t = createT(currentLocale);
+const data = await buildHomePageData(currentLocale);
+---
+
+<Layout title={t("homepage.metaTitle")} headerVariant="editorial" showMusicPlayer={false}>
+  <SchemaMarkup slot="head" type="WebSite" data={{ name: "FemRes", url: Astro.url.href }} />
+  <EditorialHome locale={currentLocale} data={data} />
+</Layout>

@@ -1,0 +1,29 @@
+---
+title: "Pushout : la criminalisation des filles noires à l’école"
+originalTitle: "Pushout: The Criminalization of Black Girls in Schools"
+author: "Monique W. Morris"
+description: "Pushout : la criminalisation des filles noires à l’école relie punition, genre, race et sécurité communautaire, renforçant la couverture FemRes du féminisme abolitionniste et de la justice transformatrice."
+publishDate: 2016-03-29
+isbn: "9781620970942"
+contentLanguage: "en"
+topics: ["Black Feminism","Education Equality","Race and Gender","Carceral Feminism","Youth Rights"]
+sourceUrl: "https://thenewpress.org/books/pushout/"
+coverImage: "https://media.femres.org/images/books/pushout.jpg"
+status: "published"
+---
+
+*Pushout* place à la jonction de l'éducation et de la justice pénale un problème longtemps masqué par des récits centrés sur les garçons : les filles noires ne quittent pas naturellement l'école après une « mauvaise conduite », elles sont progressivement expulsées de l'apprentissage par la discipline, la police, les traumatismes ignorés et le manque de ressources. Monique W. Morris élargit ainsi le « pipeline école-prison » en « parcours de l'école à l'enfermement ». Les destinations comprennent suspension, exclusion, détention, assignation à domicile, écoles judiciaires et surveillance continue ; le parcours se construit dans des décisions administratives ordinaires bien avant la cellule.
+
+Ce concept répare l'angle mort de deux débats. La lutte contre la criminalisation scolaire prend souvent les garçons noirs pour sujets implicites, tandis que les discussions sur le sexisme éducatif centrent les filles blanches : les filles noires disparaissent des deux. Morris combine statistiques, histoire, politiques publiques et entretiens avec les jeunes pour empêcher que race et genre soient de simples variables additionnées. Elle demande ce qui se passe lorsque l'attente de docilité féminine rencontre le stéréotype de la menace noire, et que voix, corps et autodéfense sont recodés en danger.
+
+L'« attitude » devient un mot clé de cette politique interprétative. Parler franchement, argumenter, refuser d'obéir, s'habiller d'une certaine façon ou répondre au harcèlement peut être classé comme défiance. Les filles noires sont aussi perçues comme plus âgées et plus averties que leurs camarades blanches, donc privées de la protection et du droit à l'erreur accordés aux enfants — ce que des recherches ultérieures nommeront biais d'adultification. La discipline ne répond pas seulement à un acte : enseignants, administration et police décident d'abord qui reste une enfant à aider et qui est déjà un corps à contrôler.
+
+Le traumatisme est particulièrement susceptible d'être traduit en indiscipline. Diamond, quinze ans, cesse d'aller à l'école après avoir été punie pour s'être défendue au milieu d'une exploitation sexuelle et de harcèlements que le personnel n'avait pas reconnus. Absence, colère, silence ou fuite de la classe peuvent être des réponses de survie à la violence sexuelle, à l'instabilité familiale, à la pauvreté, à l'homophobie ou à la transphobie. Quand l'école consigne seulement l'infraction sans demander ce qui s'est passé, la tolérance zéro punit les symptômes visibles du traumatisme et préserve ses causes.
+
+Morris cartographie ensuite l'infrastructure de la criminalisation. Police et sécurité scolaires absorbent la discipline ordinaire ; un conflit mineur devient arrestation et dossier judiciaire ; la suspension rompt la continuité des cours ; les écoles des tribunaux aggravent la rupture par un enseignement faible, un climat punitif et des crédits non transférables. Chaque dispositif se dit neutre ou sécuritaire, mais leur combinaison transforme l'élève en « dossier à risque ». Changer un règlement vestimentaire ne suffit donc pas : budgets, soutien psychologique, aménagement du handicap, recours effectifs et pouvoir policier à l'école doivent être examinés ensemble.
+
+Le livre ne réduit pas les filles noires à des chiffres en attente de sauvetage. Les entretiens conservent leurs analyses des enseignants, de l'école, de la famille et de l'avenir, ainsi que leurs désirs d'apprendre, de créer et de nouer des relations. Prendre leur parole comme savoir permet de distinguer résistance à l'oppression et tort envers autrui sans renommer toute agentivité « résilience » inspirante. Morris défend moins d'exclusion disciplinaire, des environnements informés par le trauma et orientés vers la guérison, une écoute sérieuse et la participation des filles à la définition de la sécurité. Éduquer n'est pas produire l'obéissance.
+
+Les limites viennent du temps et du lieu. Les États-Unis de 2016 ne représentent pas toutes les histoires scolaires, raciales et judiciaires ; les filles noires diffèrent aussi par classe, handicap, statut migratoire, couleur et identité de genre. L'édition originale pourrait mieux couvrir les élèves trans et non binaires. Une pratique restaurative sans analyse du pouvoir peut forcer une élève lésée à se réconcilier ; « informé par le trauma » peut devenir une étiquette de formation si ressources et pouvoir disciplinaire restent identiques. Une réforme se juge à ses effets, non à son vocabulaire.
+
+On peut suivre l'expérience d'une fille à chaque bifurcation : qui a vu la détresse, qui a traduit l'appel à l'aide en « attitude », quelle règle a déclenché la suspension, comment cours, logement ou soin se sont ensuite défaits ? Il faut alors consulter les données locales récentes ventilées par race, genre, handicap et sanction, puis les confronter aux organisations menées par des filles noires et à leurs récits. *Pushout* laisse au féminisme un avertissement durable : protéger n'est pas contrôler davantage. L'école cesse d'être l'antichambre de l'enfermement lorsqu'elle considère les filles noires comme des enfants complexes, dignes de ressources et capables de codéfinir la sécurité.

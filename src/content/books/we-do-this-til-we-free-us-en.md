@@ -1,0 +1,28 @@
+---
+title: "We Do This ’Til We Free Us: Abolitionist Organizing and Transforming Justice"
+author: "Mariame Kaba"
+description: "We Do This ’Til We Free Us: Abolitionist Organizing and Transforming Justice connects punishment, gender, race, and community safety, strengthening FemRes coverage of abolition feminism and transformative justice."
+publishDate: 2021-02-23
+isbn: "9781642595253"
+contentLanguage: "en"
+topics: ["Prison Abolition","Transformative Justice","Black Feminism","Social Movements","Community Activism"]
+sourceUrl: "https://www.haymarketbooks.org/books/1664-we-do-this-til-we-free-us"
+coverImage: "https://media.femres.org/images/books/we-do-this-til-we-free-us.jpg"
+status: "published"
+---
+
+*We Do This ’Til We Free Us* is not a linear monograph that advances from definition to conclusion. Edited by Tamara K. Nopper, it gathers more than two decades of Mariame Kaba’s essays, interviews, and speeches from movement settings. Kaba writes as an educator and longtime organizer against incarceration, youth criminalization, and gender violence; the pieces retain the time stamp of particular crises, disagreements inside coalitions, and strategies revised through practice. The result is a living movement archive, showing ideas made collectively rather than a theorist delivering answers from outside the struggle.
+
+Its best-known proposition is that abolition means more than the absence of prisons, police, and surveillance. It means eroding the conditions that make those institutions appear necessary while building the foundations of a different life. Housing, health care, education, food, income, disability support, and the capacity to address conflict are not benefits appended to safety; they constitute safety. Abolition therefore becomes constructive work in the present: shrink punitive institutions’ reach, resources, and legitimacy while expanding the relationships and systems through which people can survive without calling on them.
+
+That is why Kaba refuses to offer a universal blueprint. Organizing is not a search for a perfectly pure position but a collective craft of setting targets, assessing power, building alliances, acting, and learning from the result. Meaningful change is never the achievement of a lone heroic individual. Personal moral witness cannot substitute for durable organization, and hope is not a forecast that victory will come. It is a discipline of choosing to work with others even when the outcome cannot be seen or guaranteed.
+
+The collection is especially useful on the supposed choice between reform and abolition. Kaba does not dismiss every immediate reform as betrayal. She asks where a reform moves power and resources: does it reduce police contact, confinement, sentence length, and carceral budgets while increasing freedom and material support, or does it use humane language to enlarge training, surveillance, and alternative control? This resembles a non-reformist-reform test—win tangible reductions in harm now without treating the present institution as the permanent horizon of possibility.
+
+As Black feminist thought, the book continually challenges the assumption that protecting women must mean expanding punishment. Police and prisons themselves produce sexual violence, family separation, poverty, and racialized harm, while a survivor may fear both an abusive person and the state. Transformative justice seeks responsibility from those who cause harm, resources for those harmed, and changes to the conditions that permit repetition without defining success as making another human disposable. This path requires more relational labor than a police call or sentence, and Kaba never claims that “community” is naturally safe; collective capacities for conflict have to be built.
+
+Her phrase about hope as a discipline is often softened into personal inspiration. It does not command people in crisis to be positive or cover anger and grief with therapeutic language. It names a political experience of time: a generation may never witness complete freedom, yet can leave stronger organizations, shared knowledge, resources, and less harm for the next. Kaba turns uncertainty from a reason not to act into the condition under which action matters. Because there are no guarantees, movements need mutual dependence, honest study of failure, and unglamorous work after public attention moves on.
+
+The collection’s form is both strength and limitation. Written for different events and audiences, its concepts recur; some interventions presuppose Chicago and U.S. movement histories, and readers seeking a procedural manual will find many operational details undeveloped. Moving responsibilities from the state to “community” can also load vast unpaid labor onto women and queer workers already carrying disproportionate care. Without durable funding, expertise, transparent accountability, and rest, alternatives can exhaust participants or reproduce domination. The book offers a political compass, not an institutional design validated in every setting.
+
+Read each piece in relation to the struggle it addressed, then test current proposals with three questions: whose exposure to coercion decreases, what sustainable support is built, and do those most affected possess decision-making power? Pair the collection with *Abolition. Feminism. Now.* for a jointly articulated program, *Until We Reckon* and *Fumbling Towards Repair* for accountability processes, and *Beyond Survival* for varied community practices. Its value to FemRes lies in converting “opposition to prison” into the harder and richer task of continually organizing a life that does not rely on punishment for order.

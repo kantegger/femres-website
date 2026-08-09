@@ -1,0 +1,39 @@
+---
+import { createT, getLocalizedPath, type Locale } from "../i18n";
+import { encodeTopicForUrl } from "../i18n/topicsUtils";
+import { buildTopicTypeView, type TopicTypeEntry } from "../lib/topicPages";
+import EditorialTopicRows from "./EditorialTopicRows.astro";
+
+interface Props { topic:string; typeObj:TopicTypeEntry; locale:Locale; }
+const {topic,typeObj,locale}=Astro.props;
+const t=createT(locale);
+const {decodedTopic,translatedTopic,typeContent,typeLabels}=await buildTopicTypeView(topic,typeObj,locale,t);
+const copy:Record<Locale,{atlas:string;back:string;catalogue:string;count:string;empty:string;}>= {
+  "zh-CN":{atlas:"思想星图",back:"返回议题",catalogue:"媒介索引",count:"项内容",empty:"这一媒介下暂时没有内容。"},
+  "zh-TW":{atlas:"思想星圖",back:"返回議題",catalogue:"媒介索引",count:"項內容",empty:"這一媒介下暫時沒有內容。"},
+  en:{atlas:"Idea atlas",back:"Back to topic",catalogue:"Media index",count:"items",empty:"There is no material in this medium yet."},
+  ja:{atlas:"思想星図",back:"論点へ戻る",catalogue:"メディア索引",count:"件",empty:"このメディアにはまだ資料がありません。"},
+  fr:{atlas:"Atlas d’idées",back:"Retour au sujet",catalogue:"Index du médium",count:"éléments",empty:"Aucune ressource dans ce médium pour le moment."},
+};
+const labels=copy[locale];
+const topicPath=getLocalizedPath(`topics/${encodeTopicForUrl(decodedTopic)}`,locale);
+---
+
+<main class="topic-type">
+  <header class="topic-type__hero">
+    <nav aria-label={t("common.breadcrumb")}><a href={getLocalizedPath("topics",locale)}>{labels.atlas}</a><span>/</span><a href={topicPath}>{translatedTopic}</a><span>/</span><strong>{typeLabels[typeObj.contentType]}</strong></nav>
+    <p>{labels.catalogue}</p>
+    <h1>{translatedTopic}<span>{typeLabels[typeObj.contentType]}</span></h1>
+    <dl><dt>{String(typeContent.length).padStart(2,"0")}</dt><dd>{labels.count}</dd></dl>
+  </header>
+  <section class="topic-type__list">
+    {typeContent.length>0 ? <EditorialTopicRows items={typeContent} locale={locale} labels={typeLabels}/> : <div class="topic-type__empty"><h2>{labels.empty}</h2></div>}
+  </section>
+  <nav class="topic-type__end"><a href={topicPath}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H6M11 6l-6 6 6 6"></path></svg>{labels.back}</a><a href={getLocalizedPath("search",locale)}>{t("nav.search")}</a></nav>
+</main>
+
+<style>
+  .topic-type{min-height:100dvh;padding-bottom:80px;color:var(--ink);background:var(--paper);font-family:var(--editorial-sans)}.topic-type :is(.topic-type__hero,.topic-type__list,.topic-type__end){width:min(100% - var(--editorial-canvas-gutter),var(--editorial-canvas-width));margin-inline:auto}
+  .topic-type__hero{display:grid;grid-template-columns:1fr auto;gap:28px 50px;padding:52px 0 58px;border-bottom:2px solid var(--ink)}.topic-type__hero nav{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;color:var(--muted);font-size:10px}.topic-type__hero nav a:hover{color:var(--accent)}.topic-type__hero>p{grid-column:1/-1;margin:10px 0 -5px;color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.topic-type__hero h1{max-width:1100px;margin:0;font-family:var(--editorial-serif);font-size:clamp(62px,9vw,126px);font-weight:600;letter-spacing:-.065em;line-height:.88}.topic-type__hero h1 span{display:block;margin-top:20px;color:var(--muted);font-family:var(--editorial-sans);font-size:clamp(17px,2vw,28px);font-weight:600;letter-spacing:0}.topic-type__hero dl{align-self:end;margin:0;padding:14px 50px 0 0;border-top:1px solid var(--line)}.topic-type__hero dt{color:var(--accent);font:34px/1 Georgia,serif}.topic-type__hero dd{margin:7px 0 0;color:var(--muted);font-size:9px}.topic-type__list{padding:56px 0 70px}.topic-type__empty{padding:100px 0;text-align:center}.topic-type__empty h2{font-family:var(--editorial-serif);font-size:38px;font-weight:600}.topic-type__end{display:flex;justify-content:space-between;padding:22px 0;border-block:1px solid var(--ink);font-size:11px;font-weight:700}.topic-type__end a{display:flex;align-items:center;gap:9px}.topic-type__end a:last-child{color:var(--accent)}.topic-type__end svg{width:18px;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5}
+  @media(max-width:620px){.topic-type :is(.topic-type__hero,.topic-type__list,.topic-type__end){width:calc(100% - 24px)}.topic-type__hero{grid-template-columns:1fr;padding:42px 0}.topic-type__hero h1{font-size:56px}.topic-type__hero dl{justify-self:start}.topic-type__list{padding-top:38px}}
+</style>

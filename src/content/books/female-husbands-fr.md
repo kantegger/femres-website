@@ -1,0 +1,27 @@
+---
+title: "Maris assignés femmes"
+originalTitle: "Female Husbands"
+author: "Jen Manion"
+description: "Jen Manion reconstitue les vies dites de « maris assignés femmes » dans les mondes britannique et américain, en interrogeant le rôle du mariage, du travail, de la classe et de la presse dans la production du genre."
+publishDate: 2020-03-26
+isbn: "9781108718271"
+contentLanguage: "en"
+topics: ["Trans Studies","Queer Theory","Historical Context","Marriage Critique","Gender Diversity"]
+sourceUrl: "https://www.cambridge.org/core/books/female-husbands/4BC8AE77B6EAF6055BD1DA64035509B3"
+coverImage: "https://media.femres.org/images/books/female-husbands.jpg"
+status: "published"
+---
+
+Female Husbands étudie un terme historique autrefois très répandu, puis disparu du langage public. Jen Manion suit des personnes assignées femmes à la naissance qui ont vécu et travaillé comme hommes et épousé des femmes, en Grande-Bretagne entre environ 1740 et 1840, puis aux États-Unis entre 1830 et 1910. « Female husband » n’est pas traité comme une identité personnelle stable, mais comme une catégorie dont journaux, tribunaux et publics se servaient pour expliquer ces unions. Elle donne accès à des vies plus complexes que les vocabulaires du genre qui les ont ensuite recouvertes.
+
+Ces personnes entraient le plus souvent dans les archives lorsqu’elles étaient exposées : examen après un décès, demande d’assistance, arrestation, conflit conjugal ou spectacle journalistique déterminaient quelles vies seraient conservées sur papier. Les sources sont donc précieuses et hostiles. La presse réduit plusieurs décennies à l’histoire d’une femme qui en aurait trompé une autre, le droit se fixe sur l’inspection du corps et les archives gardent plus volontiers les mots des délateurs que ceux des sujets. Manion montre que l’histoire ne livre pas directement le passé : police, médecins et rédacteurs ont médiatisé les vies que nous pouvons aujourd’hui lire.
+
+Être « mari » constituait d’abord une position sociale, et non un simple changement de vêtements. Vivre comme homme pouvait ouvrir des salaires plus élevés, une mobilité professionnelle, la liberté de voyager, davantage de sécurité dans l’espace public et la possibilité de fonder un foyer avec une femme. Les cas de James et Mary Howe, entre autres, montrent comment mariage, travail et masculinité se soutenaient : pourvoir aux besoins du foyer, diriger une affaire et accomplir les devoirs du mari produisaient une reconnaissance sociale. La classe est décisive, car travailleurs itinérants et personnes pauvres risquaient davantage l’exposition par l’assistance, le logement et la justice, tout en laissant moins de lettres privées.
+
+Le livre libère aussi les épouses du scénario de la « femme trompée ». Beaucoup connaissaient vraisemblablement l’histoire corporelle de leur partenaire et participaient à la construction d’un mariage, d’un revenu et d’un foyer. Journalistes et fonctionnaires avaient intérêt à effacer ce savoir : reconnaître le choix conscient d’une femme aurait ébranlé l’idée que le mariage hétérosexuel unit naturellement deux sexes fixes. Le silence d’une épouse ne prouve donc pas son ignorance ; il peut être une manière de protéger sa ou son partenaire, ses moyens d’existence et une vie partagée. Le mariage apparaît comme pratique collaborative, plutôt que comme institution garantie par l’anatomie.
+
+Manion explique également la disparition de cette catégorie. À la fin du XIXe siècle, médecine, droit et sexologie font de plus en plus du sexe assigné à la naissance la vérité ultime d’une personne. Les rôles sociaux durablement vécus cèdent devant la classification corporelle, et la presse passe de la description d’un mari au diagnostic d’une « femme ». La diversité de genre n’est pas née avec la médecine moderne ; les institutions modernes ont plutôt rétréci le langage permettant de la comprendre. Le binaire se révèle non comme un sens commun éternel, mais comme le produit historique d’archives, d’expertises et d’un pouvoir d’État.
+
+L’un des choix les plus rigoureux du livre consiste à ne pas attribuer rétrospectivement une identité unique à chaque personne. Nous ignorons qui choisirait aujourd’hui les mots transgenre, non binaire, lesbienne ou un autre terme. Mais éviter l’anachronisme ne doit pas servir à renvoyer tout le monde à l’étiquette de femmes déguisées en hommes. Manion maintient l’incertitude tout en prenant au sérieux l’usage durable de noms, pronoms, métiers et positions conjugales masculins. Cette méthode formule une éthique de l’histoire trans : ne pas confisquer aux morts le pouvoir de se nommer, sans l’abandonner entièrement à des archives hostiles.
+
+L’étude couvre surtout les mondes britannique et américain ; les traces conservées surreprésentent les personnes blanches et les classes laborieuses saisies par la justice. Elles ne peuvent représenter toutes les vies de genre variant, tandis que les formations raciales et coloniales demandent d’autres histoires. Female Husbands demeure pourtant une intervention féministe et trans majeure : le livre réintroduit salaires, logement, réputation, mobilité et agentivité des épouses dans l’histoire du genre. Il ne cherche pas de simples ancêtres aux identités présentes, mais montre comment les institutions fabriquent un genre « intelligible » et comment des personnes ont bâti des vies communes dans les espaces qu’elles ne parvenaient pas à fermer.

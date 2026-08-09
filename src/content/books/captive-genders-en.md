@@ -1,0 +1,28 @@
+---
+title: "Captive Genders: Trans Embodiment and the Prison Industrial Complex"
+author: "Eric A. Stanley, Nat Smith"
+description: "Captive Genders: Trans Embodiment and the Prison Industrial Complex connects punishment, gender, race, and community safety, strengthening FemRes coverage of abolition feminism and transformative justice."
+publishDate: 2015-09-01
+isbn: "9781849352345"
+contentLanguage: "en"
+topics: ["Trans Feminism","Prison Abolition","Queer Theory","Carceral Feminism","Gender Diversity"]
+sourceUrl: "https://www.akpress.org/captivegenders.html"
+coverImage: "https://media.femres.org/images/books/captive-genders.jpg"
+status: "published"
+---
+
+*Captive Genders* begins with a question that liberal transgender politics often avoids: if prison operates through a rigid male/female division, racial classification, and bodily coercion, is placing trans people in the “correct” prison sufficient to count as justice? Edited by Eric A. Stanley and Nat Smith, the collection argues that trans and queer liberation must grow together with prison abolition. The expanded 2015 edition opens with a foreword by Black trans abolitionist CeCe McDonald and joins writing by current and former prisoners, organizers, artists, and scholars. It is not merely a study about incarcerated people, but political knowledge produced from within experiences of captivity.
+
+The gender classification of prisons is not neutral administration. It determines where a person is confined, who searches them, whether they can obtain hormones and other healthcare, whether “protective” isolation will become prolonged solitary confinement, and whether reports of sexual violence will be believed. Trans women placed in men’s facilities face acute danger from staff and other prisoners. Yet a more “inclusive” classification or a specialized unit can also intensify surveillance and make the institution appear repairable. The collection requires readers to distinguish reforms needed to reduce immediate harm from reforms that expand prison legitimacy and capacity.
+
+Captivity begins well before sentencing. Homelessness, family rejection, employment discrimination, mismatched documents, and the denial of healthcare push poor trans people toward street economies, sex work, and other heavily policed forms of survival. Race, disability, and immigration status shape who is most likely to be stopped, arrested, and convicted. Trans people do not simply fall by accident into a neutral criminal system; particular gender expressions and survival strategies are actively constructed as suspicious. After release, exclusions from housing, work, and healthcare can return people to the same cycle.
+
+This analysis challenges anti-trans-violence strategies centered on hate-crime sentence enhancements. A longer sentence may signal public condemnation, but it gives the work of ending violence to the same police and prisons that harass, confine, and injure trans people. The collection does not minimize lethal anti-queer and anti-trans violence. It points out that the state can acknowledge the value of selected victims after death through punishment while continuing to expose living people to poverty, police, and medical refusal. Safety requires changing those conditions, not only incarcerating another person for longer.
+
+The book’s mixed forms are part of its method. Theory, interviews, poetry, visual work, prison writing, and organizing resources sit together so that academic prose cannot monopolize what counts as evidence. Activists such as Miss Major Griffin-Gracy show how gender is policed beyond prison walls by welfare offices, hospitals, police, and street norms. Writing from inside turns strip search, isolation, and medical deprivation from policy labels into embodied consequences. Beginning from consequences rather than legal promises is an important correction to parts of trans studies.
+
+Abolition is not a horizon that begins only after prisons vanish. It includes supporting people inside, resisting solitary confinement and coercive searches, securing healthcare, reducing arrest and pretrial detention, and building housing, income, mutual aid, and crisis response that does not default to police. These aims can seem contradictory: immediate survival demands better conditions, while “better trans prisons” cannot become the endpoint. The collection keeps that tension visible and asks whether a change expands freedom, reduces contact with punishment, and moves resources away from confinement.
+
+As an interdisciplinary anthology, it is uneven and historically bounded. Essays differ in theoretical density, evidence, and strategy, and the collection remains centered on the United States rather than colonial policing, varied legal-gender regimes, and global prison conditions. Since 2015, nonbinary language, immigration detention, digital surveillance, and policy attacks on trans youth have also shifted. Communities can reproduce anti-Blackness, transphobia, and gender violence, so they cannot be romanticized as naturally safe simply because the state is dangerous.
+
+For FemRes readers, *Captive Genders* changes the standard by which transgender “progress” is measured. Beyond asking whether an institution uses the correct pronoun or classification, ask whether it reduces searches, isolation, detention, and police contact; whether healthcare and housing are freed from compliance tests; and whether poor, incarcerated, and survival-economy trans people hold decision-making power. The book moves trans politics from a demand for admission to existing institutions toward a more radical question: which institutions should not continue to exist in their present form at all?

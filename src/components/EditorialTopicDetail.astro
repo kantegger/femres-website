@@ -1,0 +1,69 @@
+---
+import { createT, getLocalizedPath, type Locale } from "../i18n";
+import { encodeTopicForUrl, getTopicTranslation } from "../i18n/topicsUtils";
+import { buildTopicDetailView, getTopicTypeLabels, topicTypeEntries } from "../lib/topicPages";
+import EditorialTopicRows from "./EditorialTopicRows.astro";
+
+interface Props { topic: string; locale: Locale; }
+const { topic, locale } = Astro.props;
+const t = createT(locale);
+const { decodedTopic, translatedTopic, topicContent, contentByType, relatedTopics, topRelatedTopics } = await buildTopicDetailView(topic, locale);
+const typeLabels = getTopicTypeLabels(t);
+const copy: Record<Locale,{atlas:string;connections:string;contents:string;latest:string;all:string;related:string;search:string;back:string;empty:string;}> = {
+  "zh-CN":{atlas:"思想星图",connections:"关系路径",contents:"内容构成",latest:"沿议题阅读",all:"查看全部",related:"相邻议题",search:"继续搜索",back:"返回主题图谱",empty:"这个坐标仍在等待第一份内容。"},
+  "zh-TW":{atlas:"思想星圖",connections:"關係路徑",contents:"內容構成",latest:"沿議題閱讀",all:"查看全部",related:"相鄰議題",search:"繼續搜尋",back:"返回主題圖譜",empty:"這個座標仍在等待第一份內容。"},
+  en:{atlas:"Idea atlas",connections:"Connection paths",contents:"Media composition",latest:"Read along this issue",all:"View all",related:"Adjacent topics",search:"Continue searching",back:"Back to topic atlas",empty:"This coordinate is still waiting for its first work."},
+  ja:{atlas:"思想星図",connections:"関係の経路",contents:"資料の構成",latest:"論点から読む",all:"すべて見る",related:"隣接する論点",search:"検索を続ける",back:"トピック図譜へ",empty:"この座標には、まだ最初の資料がありません。"},
+  fr:{atlas:"Atlas d’idées",connections:"Chemins de relation",contents:"Composition",latest:"Lire à travers cet enjeu",all:"Tout voir",related:"Sujets voisins",search:"Poursuivre la recherche",back:"Retour à l’atlas",empty:"Cette coordonnée attend encore sa première ressource."},
+};
+const labels=copy[locale];
+const typePath=(param:string)=>getLocalizedPath(`topics/${encodeTopicForUrl(decodedTopic)}/${param}`,locale);
+const relatedNodes=topRelatedTopics.slice(0,8).map((name,index)=>({name,label:getTopicTranslation(name,locale),count:relatedTopics[name]??0,angle:(Math.PI*2*index)/Math.max(1,Math.min(8,topRelatedTopics.length)),radius:index%2===0?39:45}));
+const relatedPath=(name:string)=>getLocalizedPath(`topics/${encodeTopicForUrl(name)}`,locale);
+---
+
+<main class="topic-detail">
+  <header class="topic-detail__hero">
+    <nav aria-label={t("common.breadcrumb")}><a href={getLocalizedPath("topics",locale)}>{labels.atlas}</a><span>/</span><strong>{translatedTopic}</strong></nav>
+    <div><h1>{translatedTopic}</h1><p>{t("topicDetailPage.description").replace("{topic}",translatedTopic)}</p></div>
+    <dl><div><dt>{String(topicContent.length).padStart(3,"0")}</dt><dd>{t("common.itemsCount",{count:topicContent.length})}</dd></div><div><dt>{String(topRelatedTopics.length).padStart(2,"0")}</dt><dd>{labels.connections}</dd></div></dl>
+  </header>
+
+  <section class="topic-orbit" aria-labelledby="topic-orbit-title">
+    <header><h2 id="topic-orbit-title">{labels.connections}</h2><p>{labels.related}</p></header>
+    {relatedNodes.length>0 ? <div class="topic-orbit__canvas">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">{relatedNodes.map(node=><line x1="50" y1="50" x2={50+Math.cos(node.angle)*node.radius} y2={50+Math.sin(node.angle)*node.radius}></line>)}</svg>
+      <div class="topic-orbit__center"><span></span><strong>{translatedTopic}</strong><small>{topicContent.length}</small></div>
+      {relatedNodes.map(node=><a href={relatedPath(node.name)} style={`--x:${50+Math.cos(node.angle)*node.radius}%;--y:${50+Math.sin(node.angle)*node.radius}%`}><span></span><strong>{node.label}</strong><small>{node.count}</small></a>)}
+    </div> : <p class="topic-orbit__empty">{labels.empty}</p>}
+    <div class="topic-orbit__mobile">{relatedNodes.map(node=><a href={relatedPath(node.name)}><strong>{node.label}</strong><small>{node.count}</small></a>)}</div>
+  </section>
+
+  <section class="topic-media" aria-labelledby="topic-media-title">
+    <h2 id="topic-media-title">{labels.contents}</h2>
+    <nav>{topicTypeEntries.map(({param,contentType},index)=>{
+      const items=contentByType[contentType];
+      return <a href={typePath(param)}><span>{String(index+1).padStart(2,"0")}</span><strong>{typeLabels[contentType]}</strong><small>{items.length}</small></a>;
+    })}</nav>
+  </section>
+
+  {topicContent.length>0 ? <section class="topic-reading" aria-labelledby="topic-reading-title">
+    <header><h2 id="topic-reading-title">{labels.latest}</h2><p>{topicContent.length} · {translatedTopic}</p></header>
+    {topicTypeEntries.map(({param,contentType})=>{
+      const items=contentByType[contentType];
+      return items.length>0 && <section class="topic-reading__section"><div><h3>{typeLabels[contentType]}</h3><a href={typePath(param)}>{labels.all}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg></a></div><EditorialTopicRows items={items.slice(0,6)} locale={locale} labels={typeLabels}/></section>;
+    })}
+  </section> : <section class="topic-detail__empty"><h2>{labels.empty}</h2><a href={getLocalizedPath("topics",locale)}>{labels.back}</a></section>}
+
+  <aside class="topic-detail__end"><a href={getLocalizedPath("topics",locale)}>{labels.back}</a><a href={getLocalizedPath("search",locale)}>{labels.search}</a></aside>
+</main>
+
+<style>
+  .topic-detail{min-height:100dvh;padding-bottom:78px;color:var(--ink);background:var(--paper);font-family:var(--editorial-sans)}.topic-detail :is(.topic-detail__hero,.topic-orbit,.topic-media,.topic-reading,.topic-detail__empty,.topic-detail__end){width:min(100% - var(--editorial-canvas-gutter),var(--editorial-canvas-width));margin-inline:auto}
+  .topic-detail__hero{display:grid;grid-template-columns:1.25fr .75fr;gap:36px 80px;padding:52px 0 58px}.topic-detail__hero>nav{grid-column:1/-1;display:flex;gap:10px;color:var(--muted);font-size:10px}.topic-detail__hero>nav a:hover{color:var(--accent)}.topic-detail__hero>div h1{max-width:11ch;margin:0;font-family:var(--editorial-serif);font-size:clamp(72px,10vw,142px);font-weight:600;letter-spacing:-.07em;line-height:.86}.topic-detail__hero>div p{max-width:650px;margin:32px 0 0;color:var(--muted);font-family:var(--editorial-serif);font-size:clamp(17px,1.8vw,25px);line-height:1.6}.topic-detail__hero dl{align-self:end;display:grid;grid-template-columns:repeat(2,1fr);margin:0;border-top:1px solid var(--line)}.topic-detail__hero dl div{padding:16px 16px 0 0;border-right:1px solid var(--line)}.topic-detail__hero dt{color:var(--accent);font:32px/1 Georgia,serif}.topic-detail__hero dd{margin:7px 0 0;color:var(--muted);font-size:9px}
+  .topic-orbit{padding:38px 0 52px;border-block:2px solid var(--ink)}.topic-orbit>header{display:flex;align-items:baseline;justify-content:space-between}.topic-orbit h2{margin:0;font-family:var(--editorial-serif);font-size:clamp(46px,6vw,78px);font-weight:600;letter-spacing:-.05em}.topic-orbit>header p{margin:0;color:var(--muted);font-size:10px}.topic-orbit__canvas{position:relative;height:570px;margin-top:22px}.topic-orbit__canvas svg{position:absolute;inset:0;width:100%;height:100%}.topic-orbit__canvas line{stroke:var(--line);stroke-width:.16;vector-effect:non-scaling-stroke}.topic-orbit__center,.topic-orbit__canvas>a{position:absolute;left:var(--x,50%);top:var(--y,50%);display:grid;grid-template-columns:auto auto;gap:4px 9px;transform:translate(-50%,-50%);white-space:nowrap}.topic-orbit__center>span,.topic-orbit__canvas>a>span{grid-row:1/3;align-self:start;width:8px;height:8px;margin-top:5px;background:var(--accent);border-radius:50%}.topic-orbit__center strong,.topic-orbit__canvas>a strong{font-family:var(--editorial-serif);font-size:17px;font-weight:600}.topic-orbit__center small,.topic-orbit__canvas>a small{color:var(--muted);font-size:9px}.topic-orbit__center strong{color:var(--accent);font-size:clamp(36px,5vw,66px)}.topic-orbit__center>span{width:12px;height:12px;margin-top:17px}.topic-orbit__canvas>a:hover strong{color:var(--accent)}.topic-orbit__mobile{display:none}.topic-orbit__empty{padding:80px 0;color:var(--muted);text-align:center}
+  .topic-media{display:grid;grid-template-columns:240px 1fr;gap:40px;padding:44px 0;border-bottom:2px solid var(--ink)}.topic-media h2{margin:0;font-family:var(--editorial-serif);font-size:34px;font-weight:600}.topic-media nav{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.topic-media a{display:grid;grid-template-columns:auto 1fr auto;gap:10px;min-height:70px;padding:14px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.topic-media a:hover{color:var(--paper);background:var(--ink)}.topic-media span,.topic-media small{color:var(--muted);font-size:8px}.topic-media strong{font-family:var(--editorial-serif);font-size:17px;font-weight:600}
+  .topic-reading{padding:70px 0}.topic-reading>header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:42px}.topic-reading>header h2{margin:0;font-family:var(--editorial-serif);font-size:clamp(54px,7vw,96px);font-weight:600;letter-spacing:-.055em}.topic-reading>header p{margin:0;color:var(--muted);font-size:10px}.topic-reading__section{margin-bottom:62px}.topic-reading__section>div{display:flex;align-items:end;justify-content:space-between;padding-bottom:14px}.topic-reading__section h3{margin:0;font-family:var(--editorial-serif);font-size:31px;font-weight:600}.topic-reading__section>div a{display:flex;align-items:center;gap:8px;color:var(--accent);font-size:10px;font-weight:700}.topic-reading__section svg{width:18px;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5}.topic-detail__empty{padding:90px 0;text-align:center}.topic-detail__empty h2{font-family:var(--editorial-serif);font-size:38px}.topic-detail__empty a{color:var(--accent);border-bottom:1px solid currentColor}.topic-detail__end{display:flex;justify-content:space-between;padding:24px 0;border-block:1px solid var(--ink);font-size:11px;font-weight:700}.topic-detail__end a:last-child{color:var(--accent)}
+  @media(max-width:800px){.topic-detail__hero{grid-template-columns:1fr}.topic-detail__hero dl{max-width:520px}.topic-media{grid-template-columns:1fr}.topic-media nav{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:620px){.topic-detail :is(.topic-detail__hero,.topic-orbit,.topic-media,.topic-reading,.topic-detail__empty,.topic-detail__end){width:calc(100% - 24px)}.topic-detail__hero{gap:30px;padding:42px 0}.topic-detail__hero>div h1{font-size:64px}.topic-detail__hero>div p{margin-top:24px;font-size:17px}.topic-orbit{padding:30px 0}.topic-orbit h2{font-size:48px}.topic-orbit__canvas{display:none}.topic-orbit__mobile{display:grid;grid-template-columns:repeat(2,1fr);margin-top:25px;border-top:1px solid var(--line);border-left:1px solid var(--line)}.topic-orbit__mobile a{display:grid;min-height:62px;padding:11px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.topic-orbit__mobile strong{font-family:var(--editorial-serif);font-size:14px}.topic-orbit__mobile small{color:var(--muted);font-size:8px}.topic-media nav{grid-template-columns:repeat(2,1fr)}.topic-reading{padding-top:48px}.topic-reading>header{display:block}.topic-reading>header h2{font-size:50px}.topic-reading>header p{margin-top:8px}.topic-reading__section h3{font-size:27px}}
+</style>

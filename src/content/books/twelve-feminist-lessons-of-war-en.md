@@ -1,0 +1,28 @@
+---
+title: "Twelve Feminist Lessons of War"
+author: "Cynthia Enloe"
+description: "Cynthia Enloe develops twelve connected principles for tracing the gender politics of recruitment, care, wounds, wartime rape, women soldiers, feminist organizing, and the long aftermath misleadingly called “postwar.”"
+publishDate: 2023-09-01
+isbn: "9780520397675"
+contentLanguage: "en"
+topics: ["Feminist Security Studies","War and Peace","Militarism","Social Movements","Global Feminism"]
+sourceUrl: "https://www.ucpress.edu/books/twelve-feminist-lessons-of-war"
+coverImage: "https://media.femres.org/images/books/twelve-feminist-lessons-of-war.jpg"
+status: "published"
+---
+
+*Twelve Feminist Lessons of War* is not a guide for teaching women to wage war more effectively. It distills decades of Cynthia Enloe’s feminist work on international politics into a method of inquiry. Written in direct response to the world reshaped by Russia’s full-scale invasion of Ukraine, it also moves through Myanmar, Somalia, Vietnam, Rwanda, Algeria, Syria, Northern Ireland, and elsewhere. Its twelve lessons practice “feminist curiosity”: when strategists speak only of territory, weapons, and national interest, ask who cares for children, loses income, can cross a border, has a wound counted, or is never invited to analyze the conflict.
+
+The first lesson, “Women’s Wars Are Not Men’s Wars,” does not make either women or men into a uniform category. It shows how institutions make the same war land differently. Marriage law, property, parenting, food allocation, reproductive health, and paid work are already gendered in peacetime, and war magnifies their inequalities. A mother fleeing with children, a grandmother refusing to leave, a woman eating last during shortages, and a conscripted man inhabit one conflict but carry different restrictions, labor, and risks. Without those differences, even an apparently neutral accounting of war’s costs is false.
+
+Enloe then examines how war machines manufacture usable masculinity. Recruitment is not as natural as propaganda suggests: states must mobilize honor, shame, male camaraderie, economic opportunity, and the stigma of cowardice to persuade men to fight. Adding women to the armed forces is therefore not automatically liberation. If command, harassment, racial and class hierarchy, and the valorization of violence remain intact, representation can merely modernize the military’s image. Women’s participation in armed insurgencies also demands concrete questions: what political power did they gain, and were they sent back to subordinate roles afterward?
+
+The lessons on wounds and wartime rape refuse to classify sexual violence as a collateral “women’s issue.” Which injuries count as combat wounds and which are relegated to shame or private life determines access to treatment, compensation, veteran status, and public memory. Making wartime rape visible is essential, but visibility must not freeze women as weeping victims or become credible only when an enemy needs demonizing. Feminist investigation follows command responsibility, military culture, ethnic politics, medical care, and legal evidence while protecting survivors’ authority over whether and how they speak.
+
+The book also rejects the idea that women must wait until war ends to pursue rights. Feminists organize safe transport, anti-trafficking responses, rape crisis centers, peace vigils, supply networks, and political documentation during bombing, occupation, and repression. They do not always agree. Ukrainian feminists seeking weapons for self-defense may clash with the antimilitarist conclusions Serbian activists drew from the Yugoslav wars. Enloe does not resolve that tension by deciding that one side is insufficiently feminist. Transnational solidarity begins by hearing what concrete dangers local organizers are trying to survive.
+
+“Postwar” is not a clean period beginning with a signed ceasefire. Missing people, mines, disability, trauma, debt, destroyed public services, gendered care, and nationalism can persist for generations; women’s wartime jobs and public authority are often withdrawn when men return. Conversely, militarization begins well before shooting, through schools, families, borders, arms employment, policing, and public budgets. A society that treats military expansion as security and care spending as a burden has already decided which lives count before a war is declared.
+
+The twelve lessons are powerful because they bring international relations down to investigable everyday relations while refusing to shrink women into passive victims or inflate them into naturally peaceful heroines. This is a lucid synthesis, not a comprehensive history of every conflict it mentions. Its global range sometimes compresses differences in colonial history, class, religion, and local politics, and it offers no universal recipe for peace. Each example should open a question and lead readers toward fuller accounts by local feminist researchers, survivors, and organizers.
+
+The chapter titles can be used as an audit: how were men recruited before the war, what did women’s enlistment change, how were wounds classified, who investigated sexual violence, how did feminists organize during fighting, and which costs remained after the ceasefire? Applied to a news story, these questions do more than add a few “women’s voices”; they revise its account of causation, strategy, and budgets. Enloe’s claim is not that gender explains everything. It is that without taking diverse women’s lives and analysis seriously, our explanations of why wars begin, how they operate, and what they leave behind will be dangerously unrealistic.

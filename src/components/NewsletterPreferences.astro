@@ -1,0 +1,65 @@
+---
+import Layout from "../layouts/Layout.astro";
+import type { Locale } from "../i18n";
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+
+const copy: Record<Locale, { title:string; description:string; label:string; placeholder:string; submit:string; success:string; error:string; privacy:string; eyebrow:string; }> = {
+  "zh-CN": { title:"取消邮件订阅", description:"输入订阅时使用的邮箱。无论该地址是否存在，我们都会返回相同结果以保护你的隐私。", label:"邮箱地址", placeholder:"you@example.com", submit:"取消订阅", success:"退订请求已处理。你将不再收到 FemRes 邮件。", error:"暂时无法处理，请稍后再试。", privacy:"查看隐私政策", eyebrow:"邮件通讯 / 隐私" },
+  "zh-TW": { title:"取消郵件訂閱", description:"輸入訂閱時使用的電子郵件。無論該地址是否存在，我們都會回傳相同結果以保護你的隱私。", label:"電子郵件", placeholder:"you@example.com", submit:"取消訂閱", success:"取消訂閱請求已處理。你將不再收到 FemRes 郵件。", error:"暫時無法處理，請稍後再試。", privacy:"查看隱私政策", eyebrow:"電子報 / 隱私" },
+  en: { title:"Unsubscribe from email", description:"Enter the address used to subscribe. We return the same result whether or not it exists, protecting your privacy.", label:"Email address", placeholder:"you@example.com", submit:"Unsubscribe", success:"Your unsubscribe request has been processed. You will no longer receive FemRes email.", error:"We could not process this request. Please try again.", privacy:"Read the privacy policy", eyebrow:"Newsletter / Privacy" },
+  ja: { title:"メール配信を停止", description:"登録に使用したメールアドレスを入力してください。プライバシー保護のため、登録状況にかかわらず同じ結果を表示します。", label:"メールアドレス", placeholder:"you@example.com", submit:"配信を停止", success:"配信停止を受け付けました。FemResからのメールは今後届きません。", error:"処理できませんでした。しばらくしてからもう一度お試しください。", privacy:"プライバシーポリシー", eyebrow:"ニュースレター / プライバシー" },
+  fr: { title:"Se désabonner", description:"Saisissez l’adresse utilisée lors de l’inscription. Le résultat reste identique que l’adresse existe ou non afin de protéger votre vie privée.", label:"Adresse e-mail", placeholder:"vous@exemple.fr", submit:"Se désabonner", success:"Votre demande a été traitée. Vous ne recevrez plus d’e-mails de FemRes.", error:"Impossible de traiter la demande. Veuillez réessayer.", privacy:"Lire la politique de confidentialité", eyebrow:"Lettre d’information / Confidentialité" },
+};
+
+const text = copy[locale];
+const prefix = locale === "zh-CN" ? "" : `/${locale}`;
+---
+
+<Layout title={`${text.title} - FemRes`} description={text.description} headerVariant="editorial" showMusicPlayer={false}>
+  <main class="newsletter-preferences">
+    <span>{text.eyebrow}</span>
+    <h1>{text.title}</h1>
+    <p>{text.description}</p>
+    <form data-unsubscribe-form data-success={text.success} data-error={text.error}>
+      <label for="unsubscribe-email">{text.label}</label>
+      <div>
+        <input id="unsubscribe-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder={text.placeholder} required />
+        <button type="submit">{text.submit}</button>
+      </div>
+      <p role="status" aria-live="polite" data-unsubscribe-message></p>
+    </form>
+    <a href={`${prefix}/privacy`}>{text.privacy}</a>
+  </main>
+</Layout>
+
+<script>
+  const form = document.querySelector("[data-unsubscribe-form]");
+  if (form instanceof HTMLFormElement) {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const input = form.elements.namedItem("email");
+      const button = form.querySelector("button");
+      const message = form.querySelector("[data-unsubscribe-message]");
+      if (!(input instanceof HTMLInputElement) || !(button instanceof HTMLButtonElement) || !(message instanceof HTMLElement)) return;
+      button.disabled = true;
+      message.textContent = "";
+      try {
+        const response = await fetch("/api/unsubscribe", { method:"POST", headers:{ "Content-Type":"application/json" }, body:JSON.stringify({ email:input.value }) });
+        message.textContent = response.ok ? form.dataset.success || "" : form.dataset.error || "";
+        message.dataset.state = response.ok ? "success" : "error";
+        if (response.ok) form.reset();
+      } catch {
+        message.textContent = form.dataset.error || "";
+        message.dataset.state = "error";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+</script>
+
+<style>
+  .newsletter-preferences{width:min(850px,calc(100% - 2rem));min-height:70vh;margin:0 auto;padding:clamp(4rem,10vw,8rem) 0;color:#171614}.newsletter-preferences>span{color:#df2d27;font:700 .7rem/1.3 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase}.newsletter-preferences h1{max-width:10ch;margin:1rem 0 1.5rem;font:600 clamp(3.5rem,9vw,7.5rem)/.9 var(--editorial-serif);letter-spacing:-.055em}.newsletter-preferences>p{max-width:42rem;margin:0;color:#6f6a62;font:1rem/1.75 var(--editorial-serif)}.newsletter-preferences form{margin-top:4rem;padding:1.5rem 0;border-top:1px solid #171614;border-bottom:1px solid #c9c3b9}.newsletter-preferences label{display:block;margin-bottom:1rem;font:700 .7rem/1.3 Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase}.newsletter-preferences form>div{display:grid;grid-template-columns:minmax(0,1fr) auto;border-bottom:1px solid #171614}.newsletter-preferences input{min-width:0;border:0;outline:0;padding:.9rem 0;background:transparent;color:#171614;font:1rem/1.4 Inter,sans-serif}.newsletter-preferences button{border:0;padding:.9rem 1.2rem;background:#df2d27;color:#fff;font:700 .72rem/1 Inter,sans-serif;letter-spacing:.07em;text-transform:uppercase}.newsletter-preferences button:disabled{cursor:wait;opacity:.5}.newsletter-preferences form p{min-height:1.4em;margin:1rem 0 0;color:#247044;font:.8rem/1.5 Inter,sans-serif}.newsletter-preferences form p[data-state="error"]{color:#df2d27}.newsletter-preferences>a{display:inline-block;margin-top:2rem;color:#171614;font:600 .72rem/1.4 Inter,sans-serif;text-decoration:underline;text-underline-offset:.3em}@media(max-width:560px){.newsletter-preferences form>div{grid-template-columns:1fr}.newsletter-preferences button{width:100%}}
+</style>

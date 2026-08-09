@@ -1,0 +1,295 @@
+---
+import type { CollectionEntry } from "astro:content";
+import InteractionButtons from "./InteractionButtons";
+import Discussion from "./Discussion";
+import NewsletterSignup from "./NewsletterSignup.astro";
+import SupportPromo from "./SupportPromo.astro";
+import { createT, getLocalizedPath, type Locale } from "../i18n/index";
+import { getLanguageName } from "../i18n/languageUtils";
+import { encodeTopicForUrl, getTopicTranslation } from "../i18n/topicsUtils";
+import { buildCollectionDetailView, cleanLocalizedSlug } from "../lib/content";
+import { getLocaleDateLocale } from "../lib/localeDetails";
+import { getDiscussionCopy } from "../lib/discussionCopy";
+
+interface Props {
+  podcast: CollectionEntry<"podcasts">;
+  allPodcasts: CollectionEntry<"podcasts">[];
+  locale: Locale;
+}
+
+const { podcast, allPodcasts, locale } = Astro.props;
+const t = createT(locale);
+const { Content, relatedEntries } = await buildCollectionDetailView(podcast, allPodcasts, 4);
+
+const homeLink = getLocalizedPath("", locale);
+const podcastsLink = getLocalizedPath("podcasts", locale);
+const podcastLink = (slug: string) => getLocalizedPath(`podcasts/${cleanLocalizedSlug(slug)}`, locale);
+const topicLink = (topic: string) => getLocalizedPath(`topics/${encodeTopicForUrl(topic)}`, locale);
+const formatDate = (date: Date) => date.toLocaleDateString(getLocaleDateLocale(locale), {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+const formatDuration = (minutes?: number) => {
+  if (!minutes) return "";
+  const hours = Math.floor(minutes / 60);
+  const remainder = minutes % 60;
+  return hours > 0 ? `${hours}h ${String(remainder).padStart(2, "0")}m` : `${minutes}m`;
+};
+const getPlatform = (url: string) => {
+  if (url.includes("spotify.com")) return "Spotify";
+  if (url.includes("podcasts.apple.com") || url.includes("apple.com/podcasts")) return "Apple Podcasts";
+  if (url.includes("soundcloud.com")) return "SoundCloud";
+  return new URL(url).hostname.replace(/^www\./, "");
+};
+const canEmbed = (url?: string) => Boolean(url && url.startsWith("https://open.spotify.com/embed/"));
+
+const labels: Record<Locale, {
+  section: string;
+  file: string;
+  host: string;
+  published: string;
+  duration: string;
+  language: string;
+  platform: string;
+  listen: string;
+  listenOriginal: string;
+  notes: string;
+  topics: string;
+  related: string;
+  next: string;
+  noCover: string;
+  discussion: string;
+  discussionDescription: string;
+  support: string;
+}> = {
+  "zh-CN": { section: "声音", file: "声音档案", host: "主持与制作", published: "收录", duration: "时长", language: "语言", platform: "平台", listen: "开始收听", listenOriginal: "前往原平台收听", notes: "听读笔记", topics: "议题索引", related: "继续收听", next: "下一档声音", noCover: "暂无封面", discussion: "听后讨论", discussionDescription: "分享你的收听感受，或补充一条值得继续聆听的声音线索。", support: "支持 FemRes" },
+  "zh-TW": { section: "聲音", file: "聲音檔案", host: "主持與製作", published: "收錄", duration: "時長", language: "語言", platform: "平台", listen: "開始收聽", listenOriginal: "前往原平台收聽", notes: "聽讀筆記", topics: "議題索引", related: "繼續收聽", next: "下一檔聲音", noCover: "暫無封面", discussion: "聽後討論", discussionDescription: "分享你的收聽感受，或補充一條值得繼續聆聽的聲音線索。", support: "支持 FemRes" },
+  en: { section: "Audio", file: "Listening file", host: "Hosted and produced by", published: "Added", duration: "Duration", language: "Language", platform: "Platform", listen: "Start listening", listenOriginal: "Listen on the original platform", notes: "Listening notes", topics: "Issue index", related: "Keep listening", next: "Next voice", noCover: "No cover", discussion: "After listening", discussionDescription: "Share what stayed with you or add another audio thread worth following.", support: "Support FemRes" },
+  ja: { section: "音声", file: "音声資料", host: "制作・配信", published: "収録", duration: "時間", language: "言語", platform: "配信元", listen: "聴く", listenOriginal: "配信元で聴く", notes: "リスニングノート", topics: "論点索引", related: "続けて聴く", next: "次の声", noCover: "カバーなし", discussion: "聴取後の対話", discussionDescription: "心に残ったことや、次に聴くべき音声の手がかりを共有してください。", support: "FemResを支援" },
+  fr: { section: "Audio", file: "Fiche d’écoute", host: "Présentation et production", published: "Ajout", duration: "Durée", language: "Langue", platform: "Plateforme", listen: "Écouter", listenOriginal: "Écouter sur la plateforme d’origine", notes: "Notes d’écoute", topics: "Index des enjeux", related: "Poursuivre l’écoute", next: "Voix suivante", noCover: "Sans couverture", discussion: "Après l’écoute", discussionDescription: "Partagez ce qui vous a marquée ou ajoutez une autre piste sonore à suivre.", support: "Soutenir FemRes" },
+};
+const copy = labels[locale];
+const primaryTopic = podcast.data.topics?.[0]
+  ? getTopicTranslation(podcast.data.topics[0], locale)
+  : null;
+const copyWithPrimaryTopic = primaryTopic
+  ? `${primaryTopic} · ${copy.section}`
+  : copy.section;
+const embeddable = canEmbed(podcast.data.embedUrl);
+const contentLanguageLabel = (() => {
+  return getLanguageName(podcast.data.contentLanguage, locale) || copy.noCover;
+})();
+---
+
+<article class="podcast-reading">
+  <div class="podcast-reading__rail">
+    <nav class="podcast-breadcrumb" aria-label={t("common.breadcrumb")}>
+      <a href={homeLink}>{t("nav.home")}</a><span aria-hidden="true">/</span>
+      <a href={podcastsLink}>{t("nav.podcasts")}</a><span aria-hidden="true">/</span>
+      <span>{podcast.data.title}</span>
+    </nav>
+
+    <header class="podcast-hero">
+      <div class="podcast-hero__title">
+        <p class="podcast-kicker">{copyWithPrimaryTopic}</p>
+        <h1>{podcast.data.title}</h1>
+        {podcast.data.originalTitle && podcast.data.originalTitle !== podcast.data.title && (
+          <p class="podcast-original">{podcast.data.originalTitle}</p>
+        )}
+        <p class="podcast-deck">{podcast.data.description}</p>
+      </div>
+      <aside class="podcast-file">
+        <h2>{copy.file}</h2>
+        <dl>
+          <div><dt>{copy.host}</dt><dd>{podcast.data.author}</dd></div>
+          <div><dt>{copy.published}</dt><dd>{formatDate(podcast.data.publishDate)}</dd></div>
+          {podcast.data.duration && <div><dt>{copy.duration}</dt><dd>{formatDuration(podcast.data.duration)}</dd></div>}
+          <div><dt>{copy.language}</dt><dd>{contentLanguageLabel}</dd></div>
+          <div><dt>{copy.platform}</dt><dd>{getPlatform(podcast.data.sourceUrl)}</dd></div>
+        </dl>
+      </aside>
+    </header>
+
+    <section class="podcast-player" aria-label={copy.listen}>
+      <div class="podcast-player__frame">
+        {embeddable ? (
+          <iframe
+            src={podcast.data.embedUrl}
+            title={podcast.data.title}
+            width="100%"
+            height="352"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="eager"
+          />
+        ) : podcast.data.audioUrl ? (
+          <audio src={podcast.data.audioUrl} controls preload="metadata"></audio>
+        ) : (
+          <a href={podcast.data.sourceUrl} target="_blank" rel="noopener noreferrer" class="podcast-player__external">
+            <span class="podcast-player__disc" aria-hidden="true"></span>
+            <span><strong>{copy.listenOriginal}</strong><small>{getPlatform(podcast.data.sourceUrl)}</small></span>
+          </a>
+        )}
+      </div>
+      <footer>
+        <span>{getPlatform(podcast.data.sourceUrl)}{podcast.data.duration ? ` / ${formatDuration(podcast.data.duration)}` : ""}</span>
+        <div>
+          <InteractionButtons
+            contentId={`podcast-${podcast.id}`}
+            contentType="podcast"
+            className="editorial-interactions"
+            client:visible
+            t={{ like: t("interactions.like"), unlike: t("interactions.unlike"), bookmark: t("interactions.bookmark"), unbookmark: t("interactions.unbookmark"), loginToInteract: t("interactions.loginToInteract") }}
+          />
+          <a href={podcast.data.sourceUrl} target="_blank" rel="noopener noreferrer">{copy.listenOriginal} ↗</a>
+        </div>
+      </footer>
+    </section>
+
+    <div class="podcast-reading__body">
+      <main>
+        <div class="podcast-section-heading"><span>01</span><h2>{copy.notes}</h2></div>
+        <div class="podcast-prose" lang={locale}><Content /></div>
+      </main>
+      <aside class="podcast-topics">
+        <h2>{copy.topics}</h2>
+        <div>{podcast.data.topics.map((topic, index) => (
+          <a href={topicLink(topic)}><span>{String(index + 1).padStart(2, "0")}</span>{getTopicTranslation(topic, locale)}</a>
+        ))}</div>
+      </aside>
+    </div>
+  </div>
+
+  {relatedEntries.length > 0 && (
+    <section class="podcast-related" aria-labelledby="podcast-related-title">
+      <div class="podcast-related__heading"><span>02</span><h2 id="podcast-related-title">{copy.related}</h2></div>
+      <div class="podcast-related__grid">{relatedEntries.map((related, index) => (
+        <a href={podcastLink(related.id)} class="podcast-related__item">
+          <span class="podcast-related__number">0{index + 1}</span>
+          {related.data.thumbnail ? <img src={related.data.thumbnail} alt="" loading="lazy" decoding="async" /> : <span class="podcast-related__missing">{copy.noCover}</span>}
+          <div><span>{copy.next} / {getPlatform(related.data.sourceUrl)}</span><h3>{related.data.title}</h3><p>{related.data.author}{related.data.duration ? ` / ${formatDuration(related.data.duration)}` : ""}</p></div>
+        </a>
+      ))}</div>
+    </section>
+  )}
+
+  <div class="podcast-reading__community">
+    <NewsletterSignup title={t("newsletter.title")} description={t("newsletter.description")} emailPlaceholder={t("auth.emailPlaceholder")} buttonLabel={t("common.subscribe")} source="podcast_detail" successMessage={t("newsletter.success")} errorMessage={t("newsletter.error")} genericErrorMessage={t("newsletter.genericError")} />
+    <Discussion contentId={`podcast-${podcast.id}`} contentType="podcast" locale={locale} copy={getDiscussionCopy(locale, "podcast", copy.discussion, copy.discussionDescription)} className="editorial-discussion" variant="editorial" client:visible />
+    <SupportPromo title={t("common.support")} message={t("common.supportMessage")} buttonLabel={copy.support} />
+  </div>
+</article>
+
+<style>
+  .podcast-reading { color: var(--ink); background: var(--paper); font-family: var(--editorial-sans); }
+
+  .podcast-reading__rail, .podcast-reading__community { width: min(100% - var(--editorial-canvas-gutter), var(--editorial-canvas-width)); margin-inline: auto; }
+  .podcast-breadcrumb { display: flex; gap: 10px; align-items: center; padding: 22px 0 18px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .podcast-breadcrumb a:hover { color: var(--accent); }
+  .podcast-breadcrumb span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .podcast-hero { display: grid; grid-template-columns: 2fr 1fr; gap: clamp(34px, 5vw, 72px); align-items: end; padding: clamp(48px, 7vw, 88px) 0 54px; }
+  .podcast-kicker { margin: 0 0 20px; color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+  :global(.podcast-hero__title > i),
+  :global(.podcast-hero__title > img),
+  :global(.podcast-hero__title > svg),
+  :global(.podcast-hero__title > .podcast-title-logo),
+  :global(.podcast-hero__title :is(i, svg, img)),
+  :global(.podcast-hero__title [class*="logo"]),
+  :global(.podcast-hero__title > h1::before),
+  :global(.podcast-hero__title > h1::after) { display: none; }
+  .podcast-hero h1 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(46px, 5.4vw, 82px); font-weight: 700; letter-spacing: -.05em; line-height: .98; }
+  .podcast-original { margin: 18px 0 0; color: var(--muted); font-family: var(--editorial-serif); font-size: 16px; font-style: italic; }
+  .podcast-deck { max-width: 680px; margin: 28px 0 0; font-family: var(--editorial-serif); font-size: clamp(18px, 1.65vw, 22px); line-height: 1.62; }
+  .podcast-file { padding-top: 16px; border-top: 2px solid var(--ink); }
+  .podcast-file h2 { margin: 0 0 14px; color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .podcast-file dl { margin: 0; }
+  .podcast-file dl > div { display: grid; grid-template-columns: 72px 1fr; gap: 10px; align-items: baseline; padding: 7px 0; }
+  .podcast-file dt { color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+  .podcast-file dd { margin: 0; font-family: var(--editorial-serif); font-size: 12px; line-height: 1.45; }
+
+  .podcast-player { margin-bottom: clamp(76px, 9vw, 116px); }
+  .podcast-player__frame { min-height: 154px; padding: 22px; border: 1px solid #000; background: #171614; }
+  .podcast-player iframe { display: block; width: 100%; border: 0; }
+  .podcast-player audio { width: 100%; margin-top: 42px; }
+  .podcast-player__external { display: flex; gap: 28px; align-items: center; min-height: 150px; padding: 20px 34px; color: #f4f0e8; }
+  .podcast-player__disc { width: 96px; height: 96px; border: 30px solid #f4f0e8; border-radius: 50%; outline: 1px solid #77716a; background: #df2d27; box-shadow: inset 0 0 0 7px #171614; }
+  .podcast-player__external strong { display: block; font-family: var(--editorial-serif); font-size: clamp(22px, 3vw, 38px); }
+  .podcast-player__external small { display: block; margin-top: 10px; color: #aaa39a; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .podcast-player footer { display: flex; justify-content: space-between; gap: 26px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .podcast-player footer > div { display: flex; gap: 28px; align-items: center; }
+  .podcast-player footer a:hover { color: var(--accent); }
+  :global(.editorial-interactions) { gap: 22px; }
+  :global(.editorial-interactions button) { color: var(--ink); }
+
+  .podcast-reading__body { display: grid; grid-template-columns: minmax(0, 2fr) minmax(250px, 1fr); gap: clamp(52px, 8vw, 116px); padding-bottom: 104px; }
+  .podcast-section-heading, .podcast-related__heading { display: flex; gap: 20px; align-items: baseline; padding-top: 18px; border-top: 2px solid var(--ink); }
+  .podcast-section-heading span, .podcast-related__heading span { color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .12em; }
+  .podcast-section-heading h2, .podcast-related__heading h2 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(30px, 4vw, 54px); line-height: 1.05; }
+  .podcast-prose { max-width: none; margin-top: 46px; font-family: var(--editorial-serif); font-size: 18px; line-height: 1.95; text-align: justify; text-justify: auto; hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+  .podcast-prose :global(p) { margin: 0 0 1.65em; }
+  .podcast-prose :global(p:first-child::first-letter) { float: left; margin: .08em .12em 0 0; color: var(--accent); font-size: 4.2em; font-weight: 700; line-height: .75; }
+  .podcast-prose :global(h2), .podcast-prose :global(h3) { margin: 2em 0 .7em; font-family: var(--editorial-serif); line-height: 1.25; }
+  .podcast-prose :global(ul), .podcast-prose :global(ol) { padding-left: 1.35em; }
+  .podcast-prose :global(a) { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .podcast-prose :global(blockquote) { margin: 2.2em 0; padding: 8px 0 8px 28px; border-left: 3px solid var(--accent); font-size: 1.2em; font-style: italic; }
+  .podcast-topics { padding-top: 20px; border-top: 1px solid var(--line); }
+  .podcast-topics h2 { margin: 0 0 18px; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .podcast-topics > div { border-top: 1px solid var(--ink); }
+  .podcast-topics a { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); font-family: var(--editorial-serif); font-size: 14px; }
+  .podcast-topics a span { color: var(--accent); font: 800 9px/1.6 Inter, sans-serif; }
+
+  .podcast-related { padding: clamp(58px, 8vw, 108px) max(20px, calc((100vw - var(--editorial-canvas-width)) / 2)); color: #f4f0e8; background: #171614; }
+  .podcast-related__heading { border-color: #f4f0e8; }
+  .podcast-related__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 44px; border-top: 1px solid #4a4641; }
+  .podcast-related__item { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; align-content: start; min-height: 280px; padding: 20px 16px 22px 0; border-bottom: 1px solid #4a4641; }
+  .podcast-related__item + .podcast-related__item { padding-left: 16px; border-left: 1px solid #4a4641; }
+  .podcast-related__number { color: #ff514b; font-size: 10px; font-weight: 800; }
+  .podcast-related__item img, .podcast-related__missing { grid-column: 2; width: 100%; aspect-ratio: 1; object-fit: cover; }
+  .podcast-related__missing { display: grid; place-items: center; border: 1px solid #4a4641; color: #aaa39a; font-size: 9px; }
+  .podcast-related__item > div { grid-column: 2; }
+  .podcast-related__item > div > span { color: #aaa39a; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .podcast-related__item h3 { margin: 9px 0 7px; font-family: var(--editorial-serif); font-size: 18px; line-height: 1.25; transition: color .2s ease; }
+  .podcast-related__item:hover h3 { color: #ff514b; }
+  .podcast-related__item p { margin: 0; color: #aaa39a; font-size: 11px; }
+
+  .podcast-reading__community { padding: 4px 0 96px; }
+  :global(.editorial-discussion) { font-family: var(--editorial-sans); }
+  :global(.editorial-discussion > h2) { font-family: var(--editorial-serif); font-size: clamp(30px, 4vw, 48px); }
+
+  @media (max-width: 980px) {
+    .podcast-hero { grid-template-columns: minmax(0, 1fr); }
+    .podcast-file { grid-column: 1 / -1; display: grid; grid-template-columns: 150px 1fr; gap: 24px; }
+    .podcast-file dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .podcast-related__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .podcast-related__item:nth-child(3) { padding-left: 0; border-left: 0; }
+  }
+  @media (max-width: 700px) {
+    .podcast-reading__rail, .podcast-reading__community { width: calc(100% - var(--editorial-mobile-gutter)); }
+    .podcast-breadcrumb { padding-top: 16px; }
+    .podcast-hero { grid-template-columns: 1fr; gap: 24px; padding: 34px 0 30px; align-items: start; }
+    .podcast-hero__title { grid-column: 1; }
+    .podcast-kicker { margin-bottom: 12px; }
+    .podcast-hero h1 { font-size: clamp(36px, 11vw, 56px); }
+    .podcast-original { margin-top: 12px; font-size: 13px; }
+    .podcast-deck { margin-top: 24px; font-size: 18px; line-height: 1.72; }
+    .podcast-file { grid-column: 1 / -1; display: block; }
+    .podcast-file dl { display: block; }
+    .podcast-player { width: calc(100% + 24px); margin-left: -12px; margin-bottom: 70px; }
+    .podcast-player__frame { padding: 12px; }
+    .podcast-player iframe { height: 352px; }
+    .podcast-player footer { align-items: flex-start; padding-inline: 12px; }
+    .podcast-player footer > div { flex-direction: column; gap: 12px; align-items: flex-end; text-align: right; }
+    .podcast-player__external { min-height: 130px; padding: 16px; }
+    .podcast-player__disc { width: 66px; height: 66px; border-width: 20px; }
+    .podcast-reading__body { grid-template-columns: 1fr; gap: 66px; padding-bottom: 72px; }
+    .podcast-topics { order: -1; border-top: 2px solid var(--ink); }
+    .podcast-section-heading { gap: 14px; }
+    .podcast-prose { margin-top: 34px; font-size: 17px; line-height: 1.9; }
+    .podcast-related { padding-inline: 12px; }
+    .podcast-related__grid { grid-template-columns: 1fr; }
+    .podcast-related__item, .podcast-related__item + .podcast-related__item { grid-template-columns: 30px 92px minmax(0, 1fr); min-height: 0; padding: 16px 0 20px; border-left: 0; }
+    .podcast-related__item img, .podcast-related__missing { grid-column: 2; grid-row: 1 / span 2; }
+    .podcast-related__item > div { grid-column: 3; }
+  }
+</style>

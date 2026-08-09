@@ -1,0 +1,291 @@
+---
+import InteractionButtons from "./InteractionButtons";
+import { formatDate, getLocalizedPath, type Locale } from "../i18n";
+import { cleanLocalizedSlug } from "../lib/content";
+import {
+  buildDateTitleListingPageData,
+} from "../lib/listingPage";
+import { getTranslatedTopicLabel } from "../lib/listingTopics";
+import FilterRow from "./editorial/FilterRow.astro";
+import IndexShell from "./editorial/IndexShell.astro";
+import Pagination from "./editorial/Pagination.astro";
+import SortSelect from "./editorial/SortSelect.astro";
+
+interface Props {
+  locale: Locale;
+  pathMode: "root" | "locale";
+}
+
+const { locale, pathMode } = Astro.props;
+const data = await buildDateTitleListingPageData({
+  collectionName: "articles",
+  locale,
+  url: Astro.url,
+  pathMode,
+  perPage: 12,
+  featuredCount: 3,
+  allTopicLabelKey: "articlesPage.allArticlesHeading",
+});
+const {
+  t,
+  allTopics,
+  currentTopic,
+  currentSort,
+  currentItems,
+  featuredItems,
+  totalItems,
+  visibleTotal,
+  totalPages,
+  validPage,
+  currentTopicLabel,
+  getListingUrl: getArticlesUrl,
+} = data;
+
+const articleLink = (slug: string) =>
+  getLocalizedPath(`articles/${cleanLocalizedSlug(slug)}`, locale);
+const cleanVisible = (value: string) => value.replace(/[—–]/g, " - ");
+const articleKicker = (article: (typeof currentItems)[number]) => {
+  const topic = article.data.topics[0];
+  return topic ? getTranslatedTopicLabel(topic, locale) : t("common.articleTypes.blog");
+};
+
+const labels: Record<Locale, {
+  title: string;
+  index: string;
+  filters: string;
+  catalogue: string;
+  sort: string;
+  show: string;
+  hide: string;
+  results: string;
+  previous: string;
+  next: string;
+  noImage: string;
+  guide: string;
+}> = {
+  "zh-CN": { title: "文章", index: "女性主义分析、评论与研究", filters: "按话题阅读", catalogue: "全部文章", sort: "排序", show: "展开全部话题", hide: "收起话题", results: "篇", previous: "上一页", next: "下一页", noImage: "暂无图片", guide: "如何阅读" },
+  "zh-TW": { title: "文章", index: "女性主義分析、評論與研究", filters: "按話題閱讀", catalogue: "全部文章", sort: "排序", show: "展開全部話題", hide: "收起話題", results: "篇", previous: "上一頁", next: "下一頁", noImage: "暫無圖片", guide: "如何閱讀" },
+  en: { title: "Articles", index: "Feminist analysis, commentary, and research", filters: "Read by topic", catalogue: "All articles", sort: "Sort", show: "Show all topics", hide: "Show fewer topics", results: "articles", previous: "Previous", next: "Next", noImage: "No image", guide: "How to read" },
+  ja: { title: "記事", index: "フェミニズムの分析・評論・研究", filters: "トピックから読む", catalogue: "すべての記事", sort: "並び順", show: "すべてのトピック", hide: "トピックを閉じる", results: "記事", previous: "前へ", next: "次へ", noImage: "画像なし", guide: "読み方" },
+  fr: { title: "Articles", index: "Analyses, commentaires et recherches féministes", filters: "Lire par sujet", catalogue: "Tous les articles", sort: "Trier", show: "Tous les sujets", hide: "Réduire les sujets", results: "articles", previous: "Précédent", next: "Suivant", noImage: "Sans image", guide: "Comment lire" },
+};
+const copy = labels[locale];
+
+const topicValues = [
+  { value: "all", label: t("articlesPage.allArticles"), href: getArticlesUrl({ topic: "all", page: 1 }) },
+  ...allTopics.map((topic) => ({
+    value: topic,
+    label: getTranslatedTopicLabel(topic, locale),
+    href: getArticlesUrl({ topic, page: 1 }),
+  })),
+];
+
+const sortOptions = [
+  { value: "date-desc", label: t("articlesPage.sort.latest") },
+  { value: "date-asc", label: t("articlesPage.sort.oldest") },
+  { value: "title-asc", label: t("articlesPage.sort.titleAZ") },
+  { value: "title-desc", label: t("articlesPage.sort.titleZA") },
+];
+
+const interactionCopy = {
+  like: t("interactions.like"),
+  unlike: t("interactions.unlike"),
+  bookmark: t("interactions.bookmark"),
+  unbookmark: t("interactions.unbookmark"),
+  loginToInteract: t("interactions.loginToInteract"),
+};
+
+const lead = featuredItems[0];
+const briefs = featuredItems.slice(1, 3);
+---
+
+<IndexShell
+  title={copy.title}
+  tagline={copy.index}
+  intro={cleanVisible(t("articlesPage.subtitle"))}
+  stats={[
+    { value: String(totalItems).padStart(3, "0"), label: t("articlesPage.stats.totalArticles", { count: totalItems }) },
+    { value: String(allTopics.length).padStart(2, "0"), label: t("articlesPage.stats.topicCategories", { count: allTopics.length }) },
+  ]}
+>
+  <FilterRow
+    slot="filters"
+    heading={copy.filters}
+    values={topicValues}
+    currentValue={currentTopic}
+    collapsedCount={15}
+    showLabel={copy.show}
+    hideLabel={copy.hide}
+  />
+
+  <div slot="featured" class="article-heading">
+    <div>
+      <h2>{currentTopic === "all" ? copy.catalogue : currentTopicLabel}</h2>
+      <p>{visibleTotal} {copy.results}</p>
+    </div>
+    <SortSelect
+      id="article-sort-select"
+      label={copy.sort}
+      options={sortOptions}
+      currentValue={currentSort}
+      defaultValue="date-desc"
+    />
+  </div>
+
+  {lead && (
+    <div slot="featured" class="article-headlines">
+      <article class="article-lead">
+        <a href={articleLink(lead.id)}>
+          <div class="article-folio" aria-hidden="true">
+            <span>{articleKicker(lead)}</span>
+            <strong>{lead.data.publishDate.getFullYear()}</strong>
+            <small>{lead.data.readingTime ? `${lead.data.readingTime} ${t("common.minutes")}` : cleanVisible(lead.data.author)}</small>
+          </div>
+          <div class="article-lead__copy">
+            <span>{articleKicker(lead)} / {formatDate(lead.data.publishDate, locale)}</span>
+            <h3>{cleanVisible(lead.data.title)}</h3>
+            <p>{cleanVisible(lead.data.description)}</p>
+            <small>{cleanVisible(lead.data.author)}{lead.data.readingTime ? ` / ${lead.data.readingTime} ${t("common.minutes")}` : ""}</small>
+          </div>
+        </a>
+        <div class="article-actions">
+          <InteractionButtons contentId={`article-${cleanLocalizedSlug(lead.id)}`} contentType="article" t={interactionCopy} client:visible />
+        </div>
+      </article>
+
+      {briefs.length > 0 && (
+        <div class="article-briefs">
+          {briefs.map((article) => (
+            <article class="article-brief">
+              <a href={articleLink(article.id)}>
+                <span>{articleKicker(article)} / {formatDate(article.data.publishDate, locale)}</span>
+                <h3>{cleanVisible(article.data.title)}</h3>
+                <p>{cleanVisible(article.data.author)}</p>
+              </a>
+              <div class="article-actions">
+                <InteractionButtons contentId={`article-${cleanLocalizedSlug(article.id)}`} contentType="article" t={interactionCopy} client:visible />
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  )}
+
+  {currentItems.length > 0 && (
+    <div class="article-stream">
+      {currentItems.map((article, index) => (
+        <article class="article-entry">
+          <a href={articleLink(article.id)}>
+            <b>{String((validPage - 1) * 12 + index + 4).padStart(2, "0")}</b>
+            <div class="article-entry__copy">
+              <span>{articleKicker(article)} / {formatDate(article.data.publishDate, locale)}</span>
+              <h3>{cleanVisible(article.data.title)}</h3>
+              <p>{cleanVisible(article.data.description)}</p>
+              <small>{cleanVisible(article.data.author)}{article.data.readingTime ? ` / ${article.data.readingTime} ${t("common.minutes")}` : ""}</small>
+            </div>
+          </a>
+          <div class="article-actions">
+            <InteractionButtons contentId={`article-${cleanLocalizedSlug(article.id)}`} contentType="article" t={interactionCopy} client:visible />
+          </div>
+        </article>
+      ))}
+    </div>
+  )}
+
+  {featuredItems.length === 0 && currentItems.length === 0 && (
+    <div class="article-empty"><p>{t("articlesPage.noArticles")}</p></div>
+  )}
+
+  <Pagination
+    slot="pagination"
+    totalPages={totalPages}
+    validPage={validPage}
+    getUrl={(page) => getArticlesUrl({ page })}
+    previousLabel={copy.previous}
+    nextLabel={copy.next}
+    navLabel={t("common.pagination.navigation")}
+  />
+
+  <Fragment slot="aside">
+    <h2 class="article-guide__heading">{copy.guide}</h2>
+    <div class="article-guide__grid">
+      <section><h3>{t("articlesPage.guide.deepReading.title")}</h3><p>{cleanVisible(t("articlesPage.guide.deepReading.description"))}</p></section>
+      <section><h3>{t("articlesPage.guide.intersectionalPerspective.title")}</h3><p>{cleanVisible(t("articlesPage.guide.intersectionalPerspective.description"))}</p></section>
+      <section><h3>{t("articlesPage.guide.criticalThinking.title")}</h3><p>{cleanVisible(t("articlesPage.guide.criticalThinking.description"))}</p></section>
+    </div>
+  </Fragment>
+</IndexShell>
+
+<style>
+  .article-heading { display: flex; align-items: end; justify-content: space-between; gap: 40px; margin-bottom: 34px; }
+  .article-heading > div { display: flex; align-items: baseline; gap: 22px; }
+  .article-heading h2 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(48px, 6vw, 82px); font-weight: 600; letter-spacing: -.045em; line-height: 1; }
+  .article-heading p { margin: 0; color: var(--muted); font-size: 11px; white-space: nowrap; }
+
+  .article-headlines { display: grid; grid-template-columns: minmax(0, 2fr) minmax(260px, .82fr); border-block: 1px solid var(--ink); }
+  .article-lead { padding: 28px 32px 28px 0; border-right: 1px solid var(--line); }
+  .article-lead__copy { padding-top: 24px; }
+  .article-lead__copy > span, .article-brief > a > span, .article-entry__copy > span { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .06em; }
+  .article-lead__copy h3 { max-width: 18ch; margin: 12px 0; font-family: var(--editorial-serif); font-size: clamp(42px, 4.7vw, 68px); font-weight: 600; letter-spacing: -.045em; line-height: 1.08; }
+  .article-lead__copy p { max-width: 70ch; margin: 0; color: var(--muted); font-family: var(--editorial-serif); font-size: 16px; line-height: 1.7; }
+  .article-lead__copy small, .article-entry__copy small { display: block; margin-top: 18px; color: var(--ink); font-size: 10px; }
+
+  .article-folio { display: flex; min-height: 320px; padding: 26px; flex-direction: column; justify-content: space-between; color: var(--paper); background: var(--ink); }
+  .article-folio span { font-family: var(--editorial-serif); font-size: 1.05rem; line-height: 1.3; }
+  .article-folio strong { font-family: var(--editorial-serif); font-size: clamp(3.5rem, 6vw, 5.8rem); font-weight: 400; letter-spacing: -.08em; }
+  .article-folio small { color: var(--line); font-family: var(--editorial-sans); font-size: .6rem; overflow-wrap: anywhere; }
+
+  .article-briefs { display: grid; grid-template-rows: repeat(2, 1fr); }
+  .article-brief { display: grid; align-content: start; padding: 28px 0 24px 30px; }
+  .article-brief + .article-brief { border-top: 1px solid var(--line); }
+  .article-brief h3 { margin: 12px 0; font-family: var(--editorial-serif); font-size: clamp(25px, 2.5vw, 36px); font-weight: 600; letter-spacing: -.035em; line-height: 1.16; }
+  .article-brief p { margin: 0; color: var(--muted); font-size: 11px; }
+
+  .article-actions { margin-top: 18px; }
+  .article-stream { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-bottom: 1px solid var(--ink); }
+  .article-entry { display: grid; align-content: start; padding: 32px 30px 32px 0; border-bottom: 1px solid var(--line); }
+  .article-entry:nth-child(even) { padding-inline: 30px 0; border-left: 1px solid var(--line); }
+  .article-entry > a { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 18px; }
+  .article-entry > a > b { color: var(--muted); font-family: var(--editorial-sans); font-size: .72rem; font-weight: 400; }
+  .article-entry__copy h3 { margin: 10px 0; font-family: var(--editorial-serif); font-size: clamp(23px, 2vw, 31px); font-weight: 600; letter-spacing: -.03em; line-height: 1.17; }
+  .article-entry__copy p { display: -webkit-box; margin: 0; overflow: hidden; color: var(--muted); font-family: var(--editorial-serif); font-size: 13px; line-height: 1.6; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+  .article-entry:hover h3, .article-brief:hover h3, .article-lead:hover h3 { color: var(--accent); }
+
+  .article-empty { padding: 90px 0; border-block: 1px solid var(--line); text-align: center; color: var(--muted); }
+
+  .article-guide__heading { margin: 0 0 50px; font-family: var(--editorial-serif); font-size: clamp(52px, 7vw, 94px); font-weight: 600; letter-spacing: -.055em; line-height: .95; }
+  .article-guide__grid { display: grid; grid-template-columns: 1.1fr .9fr 1fr; border-top: 1px solid var(--line); }
+  .article-guide__grid section { padding: 26px 46px 0 0; }
+  .article-guide__grid section + section { padding-left: 30px; border-left: 1px solid var(--line); }
+  .article-guide__grid h3 { margin: 0 0 14px; color: var(--accent); font-size: 13px; }
+  .article-guide__grid p { margin: 0; color: var(--muted); font-family: var(--editorial-serif); font-size: 17px; line-height: 1.65; }
+
+  @media (max-width: 900px) {
+    .article-stream { grid-template-columns: 1fr; }
+    .article-entry:nth-child(even) { padding-inline: 0; border-left: 0; }
+  }
+
+  @media (max-width: 700px) {
+    .article-heading { display: block; }
+    .article-heading > div { display: block; }
+    .article-heading h2 { font-size: 52px; }
+    .article-heading p { margin-top: 8px; }
+    .article-headlines { grid-template-columns: 1fr; }
+    .article-lead { padding: 18px 0 26px; border-right: 0; }
+    .article-lead__copy h3 { font-size: 38px; }
+    .article-lead__copy p { font-size: 14px; }
+    .article-briefs { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto; border-top: 1px solid var(--line); }
+    .article-brief { padding: 18px 14px 24px 0; }
+    .article-brief + .article-brief { padding-inline: 14px 0; border-top: 0; border-left: 1px solid var(--line); }
+    .article-brief h3 { font-size: 23px; }
+    .article-entry { padding: 24px 0; }
+    .article-entry > a { grid-template-columns: 34px minmax(0, 1fr); gap: 12px; }
+    .article-entry__copy h3 { font-size: 23px; }
+    .article-entry__copy p { -webkit-line-clamp: 2; font-size: 12px; }
+    .article-guide__heading { margin-bottom: 36px; font-size: 54px; }
+    .article-guide__grid { grid-template-columns: 1fr; }
+    .article-guide__grid section { padding: 24px 0; }
+    .article-guide__grid section + section { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+  }
+</style>

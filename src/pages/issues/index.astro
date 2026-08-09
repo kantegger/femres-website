@@ -1,0 +1,14 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import EditorialIssueIndex from "../../components/EditorialIssueIndex.astro";
+import type { Locale } from "../../i18n";
+import { buildIssueIndexView } from "../../lib/issues";
+const currentLocale: Locale = "zh-CN";
+const issues = await buildIssueIndexView(currentLocale);
+const title = "往期 - FemRes";
+const description = "FemRes 以杂志的方式生长：每一期围绕一个女性主义主题。";
+---
+<Layout title={title} description={description} headerVariant="editorial" showMusicPlayer={false}>
+  <EditorialIssueIndex locale={currentLocale} issues={issues} />
+</Layout>

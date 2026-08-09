@@ -1,0 +1,97 @@
+---
+import { getLocalizedPath, type Locale } from "../i18n";
+import type { IssueView } from "../lib/issues";
+
+interface Props {
+  locale: Locale;
+  issues: IssueView[];
+}
+
+const { locale, issues } = Astro.props;
+
+const copy: Record<Locale, {
+  title: string;
+  deck: string;
+  currentIssue: string;
+  pastIssue: string;
+  open: string;
+  items: string;
+}> = {
+  "zh-CN": { title: "往期", deck: "FemRes 以杂志的方式生长：每一期围绕一个女性主义主题，把书籍、电影、论文与声音编进同一个阅读现场。", currentIssue: "本期", pastIssue: "往期", open: "进入本期", items: "份资源" },
+  "zh-TW": { title: "往期", deck: "FemRes 以雜誌的方式生長：每一期圍繞一個女性主義主題，把書籍、電影、論文與聲音編進同一個閱讀現場。", currentIssue: "本期", pastIssue: "往期", open: "進入本期", items: "份資源" },
+  en: { title: "Issues", deck: "FemRes grows like a magazine: each issue gathers books, films, papers and voices around a single feminist theme.", currentIssue: "Current", pastIssue: "Past issue", open: "Open the issue", items: "items" },
+  ja: { title: "バックナンバー", deck: "FemRes は雑誌のように育ちます。各号はひとつのフェミニズムのテーマに、本、映画、論文、声を編み込みます。", currentIssue: "最新号", pastIssue: "バックナンバー", open: "この号を読む", items: "件" },
+  fr: { title: "Numéros", deck: "FemRes grandit comme une revue : chaque numéro rassemble livres, films, articles et voix autour d’un même thème féministe.", currentIssue: "En cours", pastIssue: "Numéro", open: "Ouvrir le numéro", items: "ressources" },
+};
+const labels = copy[locale];
+const issuePath = (slug: string) => getLocalizedPath(`issues/${slug}`, locale);
+---
+
+<main class="issue-index">
+  <header class="issue-index__hero">
+    <h1>{labels.title}</h1>
+    <p>{labels.deck}</p>
+  </header>
+
+  <ol class="issue-index__list">
+    {issues.map((issue) => (
+      <li>
+        <a class="issue-card" href={issuePath(issue.definition.slug)}>
+          <span class="issue-card__number">{String(issue.number).padStart(2, "0")}</span>
+          <div class="issue-card__cover">
+            {issue.cover?.image && <img src={issue.cover.image} alt="" loading="lazy" decoding="async" />}
+          </div>
+          <div class="issue-card__copy">
+            <span class={`issue-card__badge${issue.definition.current ? " issue-card__badge--current" : ""}`}>
+              {issue.definition.current ? labels.currentIssue : labels.pastIssue}
+            </span>
+            <span class="issue-card__theme">{issue.copy.theme}</span>
+            <h2>{issue.copy.title}</h2>
+            <p>{issue.copy.deck}</p>
+            <small>{issue.items.length} {labels.items} · {labels.open} →</small>
+          </div>
+        </a>
+      </li>
+    ))}
+  </ol>
+</main>
+
+<style>
+  .issue-index { min-height: 100dvh; padding-bottom: 80px; color: var(--ink); background: var(--paper); font-family: var(--editorial-sans); }
+  .issue-index__hero, .issue-index__list { width: min(100% - var(--editorial-canvas-gutter), var(--editorial-canvas-width)); margin-inline: auto; }
+
+  .issue-index__hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 60px; align-items: end; padding: 56px 0 46px; }
+  .issue-index__hero h1 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(72px, 10vw, 140px); font-weight: 600; letter-spacing: -.07em; line-height: .85; }
+  .issue-index__hero p { margin: 0 0 10px; color: var(--muted); font-family: var(--editorial-serif); font-size: clamp(16px, 1.7vw, 22px); line-height: 1.6; }
+
+  .issue-index__list { margin-top: 0; padding: 0; list-style: none; border-top: 2px solid var(--ink); }
+  .issue-card { display: grid; grid-template-columns: 60px 190px 1fr; gap: 40px; align-items: center; padding: 34px 0; color: inherit; border-bottom: 1px solid var(--line); }
+  .issue-card__number { color: var(--muted); font-family: Georgia, serif; font-size: 15px; }
+  .issue-card__cover { display: grid; place-items: center; width: 190px; overflow: hidden; background: var(--paper-deep); }
+  .issue-card__cover img { width: 100%; height: auto; transition: transform .35s ease; }
+  .issue-card:hover .issue-card__cover img { transform: scale(1.03); }
+  .issue-card__badge { display: inline-block; padding: 4px 10px; color: var(--muted); border: 1px solid var(--line); font-size: 9px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+  .issue-card__badge--current { color: var(--paper); border-color: var(--accent); background: var(--accent); }
+  .issue-card__theme { margin-left: 12px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+  .issue-card__copy h2 { max-width: 780px; margin: 16px 0 0; font-family: var(--editorial-serif); font-size: clamp(28px, 3.4vw, 46px); font-weight: 600; letter-spacing: -.035em; line-height: 1.12; }
+  .issue-card__copy p { max-width: 640px; margin: 16px 0 0; color: var(--muted); font-size: 13px; line-height: 1.75; }
+  .issue-card__copy small { display: block; margin-top: 20px; color: var(--muted); font-size: 10px; font-weight: 700; }
+  .issue-card:hover h2 { color: var(--accent); }
+  .issue-card:hover small { color: var(--accent); }
+
+  @media (max-width: 800px) {
+    .issue-index__hero { grid-template-columns: 1fr; gap: 24px; }
+    .issue-card { grid-template-columns: 40px 120px 1fr; gap: 20px; }
+    .issue-card__cover { width: 120px; }
+  }
+  @media (max-width: 560px) {
+    .issue-index__hero, .issue-index__list { width: calc(100% - 24px); }
+    .issue-card { grid-template-columns: 88px 1fr; }
+    .issue-card__number { display: none; }
+    .issue-card__cover { width: 88px; }
+    .issue-card__copy h2 { font-size: 26px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .issue-card__cover img { transition: none; }
+  }
+</style>

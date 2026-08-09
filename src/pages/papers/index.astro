@@ -1,0 +1,15 @@
+---
+import EditorialPaperIndex from "../../components/EditorialPaperIndex.astro";
+import Layout from "../../layouts/Layout.astro";
+
+const currentLocale = "zh-CN";
+---
+
+<Layout
+  title="论文 - FemRes"
+  description="汇聚女性主义研究、理论与方法的学术论文索引。"
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <EditorialPaperIndex locale={currentLocale} pathMode="root" />
+</Layout>

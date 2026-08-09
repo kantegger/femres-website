@@ -1,0 +1,111 @@
+---
+import "../i18n/translations";
+import { createT, getLocalizedPath, type Locale } from "../i18n/index";
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = createT(locale);
+const cleanLabel = (label: string) => label.replace(/^[^\p{L}\p{N}]+/u, "");
+const localizedLink = (path: string) =>
+  getLocalizedPath(path.startsWith("/") ? path.slice(1) : path, locale);
+const GITHUB_URL = "https://github.com/kantegger/femres";
+
+const copy: Record<Locale, {
+  line: string;
+  resources: string;
+  project: string;
+  source: string;
+  closing: string;
+  home: string;
+  license: string;
+}> = {
+  "zh-CN": { line: "一份持续生长的女性主义资源与思想期刊。", resources: "资源", project: "项目", source: "查看源代码", closing: "知识需要被保存，也需要不断重新连接。", home: "FemRes 首页", license: "开源 · MIT 许可证" },
+  "zh-TW": { line: "一份持續生長的女性主義資源與思想期刊。", resources: "資源", project: "項目", source: "查看原始碼", closing: "知識需要被保存，也需要不斷重新連接。", home: "FemRes 首頁", license: "開源 · MIT 授權" },
+  en: { line: "A living review of feminist resources and ideas.", resources: "Resources", project: "Project", source: "View source", closing: "Knowledge should be preserved, and continually reconnected.", home: "FemRes home", license: "Open source · MIT License" },
+  ja: { line: "フェミニズムの資料と思想をつなぐ、成長し続けるレビュー。", resources: "資料", project: "プロジェクト", source: "ソースを見る", closing: "知識は保存され、そして何度でも結び直される。", home: "FemRes ホーム", license: "オープンソース · MITライセンス" },
+  fr: { line: "Une revue vivante des ressources et des idées féministes.", resources: "Ressources", project: "Projet", source: "Voir le code", closing: "Le savoir doit être préservé, puis sans cesse reconnecté.", home: "Accueil FemRes", license: "Code source ouvert · Licence MIT" },
+};
+const text = copy[locale];
+---
+
+<footer class="editorial-footer">
+  <div class="editorial-footer__top">
+    <div class="editorial-footer__brand">
+      <a href={localizedLink("")} aria-label={text.home}>FemRes</a>
+      <p>{text.line}</p>
+    </div>
+
+    <nav aria-labelledby="footer-resources-title">
+      <h2 id="footer-resources-title">{text.resources}</h2>
+      <a href={localizedLink("books")}>{cleanLabel(t("footer.links.books"))}</a>
+      <a href={localizedLink("films")}>{cleanLabel(t("footer.links.films"))}</a>
+      <a href={localizedLink("articles")}>{cleanLabel(t("footer.links.articles"))}</a>
+      <a href={localizedLink("videos")}>{cleanLabel(t("footer.links.videos"))}</a>
+      <a href={localizedLink("podcasts")}>{cleanLabel(t("footer.links.podcasts"))}</a>
+      <a href={localizedLink("papers")}>{cleanLabel(t("footer.links.papers"))}</a>
+    </nav>
+
+    <nav aria-labelledby="footer-project-title">
+      <h2 id="footer-project-title">{text.project}</h2>
+      <a href={localizedLink("about")}>{cleanLabel(t("footer.links.about"))}</a>
+      <a href={localizedLink("contact")}>{cleanLabel(t("footer.links.contact"))}</a>
+      <a href={localizedLink("contribute")}>{cleanLabel(t("footer.links.contribute"))}</a>
+      <a href={localizedLink("privacy")}>{cleanLabel(t("footer.links.privacy"))}</a>
+      <a href={localizedLink("terms")}>{cleanLabel(t("footer.links.terms"))}</a>
+      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">{text.source}</a>
+    </nav>
+  </div>
+
+  <div class="editorial-footer__base">
+    <span>© {new Date().getFullYear()} FemRes. <span class="editorial-footer__closing">{text.closing}</span></span>
+    <span>{text.license}</span>
+  </div>
+</footer>
+
+<style>
+  .editorial-footer {
+    --footer-bg: #171614;
+    --footer-ink: #f3efe7;
+    --footer-muted: #aaa39a;
+    --footer-line: #403d38;
+    --footer-accent: #ff514b;
+    padding: 52px max(20px, calc((100vw - var(--editorial-canvas-width)) / 2)) 24px;
+    color: var(--footer-ink);
+    background: var(--footer-bg);
+    font-family: Inter, "Noto Sans SC", sans-serif;
+  }
+
+  .editorial-footer__top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(150px, .6fr) minmax(150px, .6fr);
+    gap: clamp(36px, 6vw, 80px);
+    padding-bottom: 44px;
+  }
+
+  .editorial-footer__brand { padding-top: 18px; }
+  .editorial-footer__brand a { font-family: Inter, sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 800; letter-spacing: -.05em; line-height: 1; }
+  .editorial-footer__brand a:hover { color: var(--footer-accent); }
+  .editorial-footer__brand p { max-width: 470px; margin: 20px 0 0; color: var(--footer-muted); font-family: var(--editorial-serif); font-size: 15px; line-height: 1.65; }
+
+  .editorial-footer nav { display: flex; flex-direction: column; align-items: flex-start; padding-top: 22px; }
+  .editorial-footer nav h2 { margin: 0 0 22px; color: var(--footer-accent); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+  .editorial-footer nav a { padding: 6px 0; border-bottom: 1px solid transparent; color: var(--footer-muted); font-size: 13px; }
+  .editorial-footer nav a:hover { color: var(--footer-ink); border-color: var(--footer-accent); }
+
+  .editorial-footer__base { display: flex; justify-content: space-between; gap: 20px; padding-top: 22px; border-top: 1px solid var(--footer-line); color: var(--footer-muted); font-size: 10px; letter-spacing: .05em; }
+  .editorial-footer__closing { margin-left: .5em; }
+
+  @media (max-width: 760px) {
+    .editorial-footer { padding: 48px 12px 20px; }
+    .editorial-footer__top { grid-template-columns: repeat(2, 1fr); gap: 42px 24px; padding-bottom: 44px; }
+    .editorial-footer__brand { grid-column: 1 / -1; }
+    .editorial-footer__brand a { font-size: 36px; }
+    .editorial-footer__brand p { margin-top: 24px; font-size: 16px; }
+    .editorial-footer nav { padding-top: 14px; border-top: 1px solid var(--footer-line); }
+    .editorial-footer__base { display: block; line-height: 1.8; }
+    .editorial-footer__base span { display: block; }
+  }
+</style>

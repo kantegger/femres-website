@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Check and build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check production dependency security
+        run: npm run test:dependency-security
+
+      - name: Check public snapshot boundary
+        run: npm run test:public-snapshot
+
+      - name: Check database security boundary
+        run: npm run test:db-security
+
+      - name: Check component reachability
+        run: npm run test:architecture
+
+      - name: Check frontend performance contracts
+        run: npm run test:frontend-performance
+
+      - name: Check localization integrity
+        run: npm run test:i18n
+
+      - name: Check SEO contracts
+        run: npm run test:seo
+
+      - name: Check film rating and source metadata
+        run: npm run test:film-metadata
+
+      - name: Check issue media balance
+        run: npm run test:issue-selection
+
+      - name: Run Astro check
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Check generated internal links
+        run: npm run test:links
+
+      - name: Check generated SEO output
+        run: npm run test:seo:generated
+
+      - name: Check frontend performance budget
+        run: npm run test:performance-budget
+
+      - name: Install browser for end-to-end tests
+        run: npx playwright install --with-deps chromium
+
+      - name: Start end-to-end test server
+        run: |
+          npx astro dev --background --host 127.0.0.1
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:4321/en/ > /dev/null && exit 0
+            sleep 1
+          done
+          exit 1
+
+      - name: Run reader flows and accessibility audits
+        run: npm run test:e2e
+
+      - name: Stop end-to-end test server
+        if: always()
+        run: npx astro dev stop

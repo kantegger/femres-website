@@ -1,0 +1,10 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import EditorialTopicIndex from "../../components/EditorialTopicIndex.astro";
+import { createT, type Locale } from "../../i18n";
+const currentLocale:Locale="zh-CN";
+const t=createT(currentLocale);
+---
+<Layout title={`${t("topicsPage.title")} - FemRes`} description={t("topicsPage.subtitle")} headerVariant="editorial" showMusicPlayer={false}>
+  <EditorialTopicIndex locale={currentLocale} pathMode="root" />
+</Layout>

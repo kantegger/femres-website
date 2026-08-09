@@ -1,0 +1,347 @@
+---
+import { ClientRouter } from "astro:transitions";
+import EditorialHeader from "../components/EditorialHeader.astro";
+import EditorialMotion from "../components/EditorialMotion.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+import "../styles/editorial-cleanup.css";
+import "../styles/editorial-motion.css";
+import "../i18n/translations";
+import {
+  getLocaleFromUrl,
+  createT,
+} from "../i18n/index";
+import {
+  SEO_LOCALES,
+  buildAlternateUrls,
+  buildCanonicalUrl,
+  isNoIndexPath,
+  normalizeMetaDescription,
+  removeSeoLocalePrefix,
+} from "../lib/seo.mjs";
+
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string; // 支持自定义封面图
+  imageAlt?: string;
+  indexable?: boolean;
+  ogType?: "website" | "article";
+  headerVariant?: "default" | "editorial";
+  showMusicPlayer?: boolean;
+}
+
+// 获取当前语言和翻译函数
+const locale = getLocaleFromUrl(Astro.url);
+const t = createT(locale);
+
+const {
+  title,
+  description = t("common.siteDescription"),
+  image,
+  imageAlt = title,
+  indexable,
+  ogType,
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+const canonicalUrl = buildCanonicalUrl(currentPath);
+const alternateUrls = buildAlternateUrls(currentPath);
+const shouldIndex = indexable ?? !isNoIndexPath(currentPath);
+const robotsContent = shouldIndex
+  ? "index, follow, max-image-preview:large"
+  : "noindex, follow";
+const metaDescription = normalizeMetaDescription(description);
+const cleanPath = removeSeoLocalePrefix(currentPath);
+const resolvedOgType =
+  ogType ??
+  (/^\/(?:books|films|articles|videos|podcasts|papers|issues)\/[^/]+\/?$/.test(
+    cleanPath,
+  )
+    ? "article"
+    : "website");
+
+// Open Graph Locale 映射
+const ogLocaleMap: Record<string, string> = {
+  "zh-CN": "zh_CN",
+  en: "en_US",
+  ja: "ja_JP",
+  fr: "fr_FR",
+  "zh-TW": "zh_TW",
+};
+const ogLocale = ogLocaleMap[locale] || "en_US";
+
+// 处理 OG 图片
+const ogImage = image
+  ? new URL(image, canonicalUrl).href
+  : new URL("/og-default.jpg", canonicalUrl).href; // 默认或者传入的图片
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={metaDescription} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="msvalidate.01" content="4329F6DB7DECDF1C2A396432B22857FB" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    <script is:inline>
+      (() => {
+        const defaultLocale = "zh-CN";
+        const localeCookie = "femres_locale";
+        const supportedLocales = ["zh-CN", "en", "ja", "fr", "zh-TW"];
+        const prefixedLocales = ["en", "ja", "fr", "zh-TW"];
+        const path = window.location.pathname;
+        const firstSegment = path.split("/").filter(Boolean)[0] || "";
+
+        const isLocale = (value) => supportedLocales.includes(value);
+        const getStoredLocale = () => {
+          const cookieMatch = document.cookie.match(new RegExp(`(?:^|; )${localeCookie}=([^;]*)`));
+          if (cookieMatch) return decodeURIComponent(cookieMatch[1]);
+
+          try {
+            return window.localStorage.getItem(localeCookie);
+          } catch {
+            return null;
+          }
+        };
+        const setStoredLocale = (locale) => {
+          document.cookie = `${localeCookie}=${encodeURIComponent(locale)}; Path=/; Max-Age=31536000; SameSite=Lax`;
+          try {
+            window.localStorage.setItem(localeCookie, locale);
+          } catch {
+            // Storage can be unavailable in private or restricted contexts.
+          }
+        };
+        const stripLocalePrefix = (pathname) => {
+          const segment = pathname.split("/").filter(Boolean)[0] || "";
+          if (!isLocale(segment)) return pathname;
+
+          return pathname.slice(`/${segment}`.length) || "/";
+        };
+        const localizedPath = (basePath, locale) => {
+          const normalizedBase = basePath.startsWith("/") ? basePath : `/${basePath}`;
+          if (locale === defaultLocale) return normalizedBase;
+
+          return `/${locale}${normalizedBase === "/" ? "" : normalizedBase}`;
+        };
+        const cleanSearch = (params) => {
+          params.delete("locale");
+          const search = params.toString();
+          return search ? `?${search}` : "";
+        };
+        const replaceWithLocale = (locale, params = new URLSearchParams(window.location.search)) => {
+          const targetPath = localizedPath(stripLocalePrefix(path), locale);
+          window.location.replace(`${targetPath}${cleanSearch(params)}${window.location.hash}`);
+        };
+        const getBrowserLocale = () => {
+          const languages = navigator.languages?.length ? navigator.languages : [navigator.language];
+
+          for (const language of languages) {
+            const tag = language.toLowerCase();
+            if (tag === "zh-tw" || tag === "zh-hk" || tag === "zh-mo" || tag === "zh-hant") return "zh-TW";
+            if (tag === "zh-cn" || tag === "zh-sg" || tag === "zh-hans" || tag === "zh") return "zh-CN";
+            if (tag === "en" || tag.startsWith("en-")) return "en";
+            if (tag === "ja" || tag.startsWith("ja-")) return "ja";
+            if (tag === "fr" || tag.startsWith("fr-")) return "fr";
+          }
+
+          return defaultLocale;
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const requestedLocale = params.get("locale");
+
+        if (isLocale(requestedLocale)) {
+          setStoredLocale(requestedLocale);
+          replaceWithLocale(requestedLocale, params);
+          return;
+        }
+
+        if (firstSegment === defaultLocale) {
+          setStoredLocale(defaultLocale);
+          replaceWithLocale(defaultLocale, params);
+          return;
+        }
+
+        if (prefixedLocales.includes(firstSegment)) {
+          setStoredLocale(firstSegment);
+          return;
+        }
+
+        const preferredLocale = isLocale(getStoredLocale()) ? getStoredLocale() : getBrowserLocale();
+        if (preferredLocale && preferredLocale !== defaultLocale) {
+          setStoredLocale(preferredLocale);
+          replaceWithLocale(preferredLocale, params);
+        }
+      })();
+    </script>
+
+    {/* Google Fonts */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+JP:wght@500;600;700&family=Noto+Serif+SC:wght@500;600;700&family=Noto+Serif+TC:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    {/* Robots Control */}
+    <meta name="robots" content={robotsContent} />
+
+    {/* Canonical Tag */}
+    <link rel="canonical" href={canonicalUrl} />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {/* Alternate language links (Absolute URLs) */}
+    {shouldIndex && SEO_LOCALES.map((alternateLocale) => (
+      <link
+        rel="alternate"
+        hreflang={alternateLocale}
+        href={alternateUrls[alternateLocale]}
+      />
+    ))}
+    {shouldIndex && (
+      <link rel="alternate" hreflang="x-default" href={alternateUrls["zh-CN"]} />
+    )}
+
+    {/* Open Graph / Facebook */}
+    <meta property="og:type" content={resolvedOgType} />
+    <meta property="og:site_name" content="FemRes" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:locale" content={ogLocale} />
+    {SEO_LOCALES.filter((alternateLocale) => alternateLocale !== locale).map(
+      (alternateLocale) => (
+        <meta property="og:locale:alternate" content={ogLocaleMap[alternateLocale]} />
+      ),
+    )}
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={imageAlt} />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={metaDescription} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+
+    <ClientRouter />
+    <slot name="head" />
+  </head>
+  <body
+    class="min-h-screen transition-colors flex flex-col"
+  >
+    <EditorialHeader locale={locale} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+    <EditorialMotion />
+  </body>
+</html>
+
+<style>
+  html {
+    /* 默认基础字体 (英文/混合) */
+    font-family:
+      "Inter", "Noto Sans SC", "Noto Sans TC", "Noto Sans JP", system-ui,
+      sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  /* 简体中文专用 */
+  html[lang^="zh-CN"],
+  html[lang^="zh-Hans"] {
+    font-family:
+      "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+
+  /* 繁体中文专用 - 解决细瘦问题 */
+  html[lang^="zh-TW"],
+  html[lang^="zh-Hant"] {
+    font-family:
+      "Inter", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  }
+
+  /* 日文专用 - 解决歪斜/衬线回退问题 */
+  html[lang^="ja"] {
+    font-family:
+      "Inter", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  }
+
+  /* 法文 (复用基础设置，确保西文用 Inter) */
+  html[lang^="fr"] {
+    font-family: "Inter", system-ui, sans-serif;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+</style>
+
+<script is:inline>
+  function initTheme() {
+    // 获取存储的主题或系统偏好
+    const storedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+
+    // 确定初始主题
+    const isDark = storedTheme === "dark" || (!storedTheme && prefersDark);
+
+    // 应用主题
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+
+    return isDark;
+  }
+
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.contains("dark");
+
+    if (isDark) {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    }
+  }
+
+  // 立即初始化主题（防止闪烁）
+  initTheme();
+
+  // 处理视图转换后的主题状态保持
+  document.addEventListener("astro:after-swap", initTheme);
+
+  // 页面加载完成（包括初始加载和视图转换后）绑定事件
+  document.addEventListener("astro:page-load", function () {
+    // 确保主题状态正确
+    initTheme();
+
+    document.querySelectorAll("[data-theme-toggle]").forEach((themeToggle) => {
+      themeToggle.removeEventListener("click", toggleTheme);
+      themeToggle.addEventListener("click", toggleTheme);
+    });
+  });
+</script>

@@ -1,0 +1,27 @@
+---
+export const prerender = true;
+
+import Layout from "../../../layouts/Layout.astro";
+import EditorialBookDetail from "../../../components/EditorialBookDetail.astro";
+import SchemaMarkup from "../../../components/seo/SchemaMarkup.astro";
+import { getLocalizedCollectionDetailPaths } from "../../../lib/content";
+import { nonDefaultDetailLocales, type SupportedDetailLocale } from "../../../lib/localeDetails";
+
+export async function getStaticPaths() {
+  return getLocalizedCollectionDetailPaths("books", nonDefaultDetailLocales, "book", "allBooks");
+}
+
+const { book, locale, allBooks } = Astro.props;
+const currentLocale = locale as SupportedDetailLocale;
+---
+
+<Layout
+  title={`${book.data.title} - ${book.data.author} - FemRes`}
+  description={book.data.description}
+  image={book.data.coverImage}
+  headerVariant="editorial"
+  showMusicPlayer={false}
+>
+  <SchemaMarkup slot="head" type="Book" data={book.data} />
+  <EditorialBookDetail book={book} allBooks={allBooks} locale={currentLocale} />
+</Layout>

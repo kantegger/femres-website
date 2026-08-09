@@ -1,0 +1,132 @@
+---
+import { createT, getLocalizedPath, type Locale } from "../i18n";
+import { encodeTopicForUrl, getTopicTranslation } from "../i18n/topicsUtils";
+import { EDITORIAL_CONTENT_TYPE_ORDER } from "../lib/contentTypeOrder";
+import { getTopicTypeLabels } from "../lib/topicPages";
+import type { IssueView } from "../lib/issues";
+import EditorialTopicRows from "./EditorialTopicRows.astro";
+
+interface Props {
+  locale: Locale;
+  issue: IssueView;
+}
+
+const { locale, issue } = Astro.props;
+const t = createT(locale);
+const typeLabels = getTopicTypeLabels(t);
+
+const copy: Record<Locale, {
+  back: string;
+  currentIssue: string;
+  coverStory: string;
+  threads: string;
+  contents: string;
+  items: string;
+  empty: string;
+}> = {
+  "zh-CN": { back: "全部期号", currentIssue: "本期", coverStory: "封面故事", threads: "本期线索", contents: "本期内容", items: "份资源", empty: "这一期仍在等待它的第一份内容。" },
+  "zh-TW": { back: "全部期號", currentIssue: "本期", coverStory: "封面故事", threads: "本期線索", contents: "本期內容", items: "份資源", empty: "這一期仍在等待它的第一份內容。" },
+  en: { back: "All issues", currentIssue: "Current issue", coverStory: "Cover story", threads: "Issue threads", contents: "In this issue", items: "items", empty: "This issue is still waiting for its first work." },
+  ja: { back: "すべての号", currentIssue: "最新号", coverStory: "カバーストーリー", threads: "今号の手がかり", contents: "今号の内容", items: "件", empty: "この号には、まだ最初の資料がありません。" },
+  fr: { back: "Tous les numéros", currentIssue: "Numéro en cours", coverStory: "En couverture", threads: "Fils du numéro", contents: "Dans ce numéro", items: "ressources", empty: "Ce numéro attend encore sa première ressource." },
+};
+const labels = copy[locale];
+const issueNumber = ({
+  "zh-CN": `第 ${String(issue.number).padStart(2, "0")} 期`,
+  "zh-TW": `第 ${String(issue.number).padStart(2, "0")} 期`,
+  en: `No. ${String(issue.number).padStart(2, "0")}`,
+  ja: `第${String(issue.number).padStart(2, "0")}号`,
+  fr: `Nº ${String(issue.number).padStart(2, "0")}`,
+} as Record<Locale, string>)[locale];
+const issuesPath = getLocalizedPath("issues", locale);
+const topicPath = (topic: string) => getLocalizedPath(`topics/${encodeTopicForUrl(topic)}`, locale);
+const coverLink = issue.cover
+  ? getLocalizedPath(`${{ book: "books", article: "articles", film: "films", video: "videos", podcast: "podcasts", paper: "papers" }[issue.cover.contentType]}/${issue.cover.cleanSlug}`, locale)
+  : undefined;
+const visibleTypes = EDITORIAL_CONTENT_TYPE_ORDER.filter((contentType) => issue.contentByType[contentType].length > 0);
+---
+
+<main class="issue-detail">
+  <header class="issue-detail__hero">
+    <nav aria-label={t("common.breadcrumb")}><a href={issuesPath}>{labels.back}</a><span>/</span><strong>{issueNumber} · {issue.copy.theme}</strong></nav>
+    <div class="issue-detail__intro">
+      <span class="issue-detail__number">{String(issue.number).padStart(2, "0")}{issue.definition.current && <em>{labels.currentIssue}</em>}<small>{issue.copy.theme}</small></span>
+      <h1>{issue.copy.title}</h1>
+      <p>{issue.copy.deck}</p>
+      <div class="issue-detail__threads">
+        <span>{labels.threads}</span>
+        {issue.definition.topics.map((topic) => <a href={topicPath(topic)}>{getTopicTranslation(topic, locale)}</a>)}
+      </div>
+    </div>
+    {issue.cover && coverLink && (
+      <a class="issue-detail__cover" href={coverLink}>
+        <span>{labels.coverStory}</span>
+        <div>{issue.cover.image && <img src={issue.cover.image} alt="" loading="eager" decoding="async" />}</div>
+        <strong>{issue.cover.title}</strong>
+      </a>
+    )}
+  </header>
+
+  <section class="issue-detail__contents" aria-labelledby="issue-contents-title">
+    <header>
+      <h2 id="issue-contents-title">{labels.contents}</h2>
+      <p>{issue.items.length} {labels.items}</p>
+    </header>
+    {visibleTypes.length > 0 ? visibleTypes.map((contentType) => {
+      const items = issue.contentByType[contentType];
+      return (
+        <section class="issue-detail__section">
+          <h3><span>{typeLabels[contentType]}</span><small>{items.length}</small></h3>
+          <EditorialTopicRows items={items} locale={locale} labels={typeLabels} preserveImageRatio />
+        </section>
+      );
+    }) : <p class="issue-detail__empty">{labels.empty}</p>}
+  </section>
+</main>
+
+<style>
+  .issue-detail { min-height: 100dvh; padding-bottom: 78px; color: var(--ink); background: var(--paper); font-family: var(--editorial-sans); }
+  .issue-detail__hero, .issue-detail__contents { width: min(100% - var(--editorial-canvas-gutter), var(--editorial-canvas-width)); margin-inline: auto; }
+
+  .issue-detail__hero { display: grid; grid-template-columns: 1.25fr .75fr; gap: 40px 80px; padding: 52px 0 58px; }
+  .issue-detail__hero > nav { grid-column: 1 / -1; display: flex; gap: 10px; color: var(--muted); font-size: 10px; }
+  .issue-detail__hero > nav a:hover { color: var(--accent); }
+  .issue-detail__number { display: flex; align-items: center; gap: 14px; color: var(--accent); font-family: Georgia, serif; font-size: 15px; }
+  .issue-detail__number em { padding: 4px 10px; color: var(--paper); background: var(--accent); font: 800 9px/1 var(--editorial-sans); font-style: normal; letter-spacing: .14em; text-transform: uppercase; }
+  .issue-detail__number small { color: var(--muted); font-family: var(--editorial-sans); font-size: 11px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+  .issue-detail__intro h1 { max-width: 900px; margin: 22px 0 0; font-family: var(--editorial-serif); font-size: clamp(38px, 5.6vw, 76px); font-weight: 600; letter-spacing: -.04em; line-height: 1.04; }
+  .issue-detail__intro > p { max-width: 650px; margin: 24px 0 0; color: var(--muted); font-family: var(--editorial-serif); font-size: clamp(16px, 1.7vw, 21px); line-height: 1.65; }
+  .issue-detail__threads { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: baseline; margin-top: 34px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; }
+  .issue-detail__threads > span { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .issue-detail__threads a { border-bottom: 1px solid var(--line); }
+  .issue-detail__threads a:hover { color: var(--accent); border-color: var(--accent); }
+
+  .issue-detail__cover { align-self: end; display: block; max-width: 320px; color: inherit; justify-self: end; }
+  .issue-detail__cover > span { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .issue-detail__cover > div { display: grid; place-items: center; margin-top: 12px; overflow: hidden; background: var(--paper-deep); }
+  .issue-detail__cover img { width: 100%; height: auto; transition: transform .35s ease; }
+  .issue-detail__cover:hover img { transform: scale(1.03); }
+  .issue-detail__cover strong { display: block; margin-top: 12px; font-family: var(--editorial-serif); font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .issue-detail__cover:hover strong { color: var(--accent); }
+
+  .issue-detail__contents { padding: 44px 0 20px; border-top: 2px solid var(--ink); }
+  .issue-detail__contents > header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 38px; }
+  .issue-detail__contents > header h2 { margin: 0; font-family: var(--editorial-serif); font-size: clamp(46px, 6vw, 82px); font-weight: 600; letter-spacing: -.05em; }
+  .issue-detail__contents > header p { margin: 0; color: var(--muted); font-size: 10px; }
+  .issue-detail__section { margin-bottom: 56px; }
+  .issue-detail__section > h3 { display: flex; align-items: baseline; gap: 14px; margin: 0 0 20px; font-family: var(--editorial-serif); font-size: 30px; font-weight: 600; }
+  .issue-detail__section > h3 small { color: var(--muted); font-family: var(--editorial-sans); font-size: 10px; }
+  .issue-detail__empty { padding: 80px 0; color: var(--muted); text-align: center; }
+
+  @media (max-width: 800px) {
+    .issue-detail__hero { grid-template-columns: 1fr; }
+    .issue-detail__cover { justify-self: start; }
+  }
+  @media (max-width: 620px) {
+    .issue-detail__hero, .issue-detail__contents { width: calc(100% - 24px); }
+    .issue-detail__intro h1 { font-size: 34px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .issue-detail__cover img { transition: none; }
+  }
+</style>

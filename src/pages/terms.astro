@@ -1,0 +1,23 @@
+---
+import EditorialLegalDocument from "../components/EditorialLegalDocument.astro";
+import { getEntry, render } from "astro:content";
+
+const currentLocale = "zh-CN";
+
+// For default locale (zh-CN), use file without suffix: terms.md
+const entry = await getEntry('pages', 'terms');
+if (!entry) {
+  return Astro.redirect('/404');
+}
+const { Content } = await render(entry);
+---
+
+<EditorialLegalDocument
+  locale={currentLocale}
+  kind="terms"
+  title={entry.data.title}
+  intro={entry.data.intro}
+  lastUpdated={entry.data.lastUpdated}
+>
+  <Content />
+</EditorialLegalDocument>
