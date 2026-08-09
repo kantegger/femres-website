@@ -144,8 +144,8 @@ For recurring engineering-health work, see [MAINTENANCE.md](MAINTENANCE.md).
 Create `.env.local` file:
 
 ```env
-# Database (Neon Postgres)
-DATABASE_URL=postgresql://user:password@host/database?sslmode=require
+# Database (Supabase Postgres)
+DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:5432/postgres
 # Optional strict SSL verification for database endpoints with trusted CA support
 # DATABASE_SSL_REJECT_UNAUTHORIZED=true
 
